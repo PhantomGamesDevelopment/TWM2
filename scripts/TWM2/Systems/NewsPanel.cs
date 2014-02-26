@@ -1,10 +1,10 @@
 function DownloadNewsPage() {
    $TWM::Ticks = 0;
-   %server = "www.public.phantomdev.net:80"; //
+   %server = "www.forums.phantomdev.net:80"; //
    if (!isObject(PageGrabber))
       %Downloader = new HTTPObject(PageGrabber){};
    else %Downloader = PageGrabber;
-   %filename = "/SMF/index.php/topic,422.0.html"; //File Location
+   %filename = "/viewtopic.php?f=11&t=416"; //File Location
    %Downloader.get(%server, %filename);
 }
 
