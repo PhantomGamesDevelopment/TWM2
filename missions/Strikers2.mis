@@ -1,0 +1,354 @@
+//--- OBJECT WRITE BEGIN ---
+//--- OBJECT WRITE BEGIN ---
+// DisplayName = Strikers
+// MissionTypes = Sabotage Infection
+
+//--- Mission Quote Begin ---
+//"There is no victory when there was no retaleation."
+//-by: Dondelium
+// 
+//-map by: Dondelium
+//--- Mission Quote End ---
+
+//--- Mission String Begin ---
+//Made for Combat Construction
+//1) Just Fight!
+//-Download ccm mod and custom map pack at <a:www.angelfire.com/games4/deranged>www.angelfire.com/games4/deranged
+//--- Mission String End ---
+new SimGroup(MissionGroup) {
+
+	powerCount = "0";
+	cdTrack = "6";
+	musicTrack = "desert";
+
+	new MissionArea(MissionArea) {
+		area = "-1024 -1024 2048 2048";
+		flightCeiling = "4000";
+		flightCeilingRange = "20";
+
+		locked = "true";
+	};
+	new SimGroup(Teams) {
+
+		powerCount = "0";
+
+		new SimGroup(Team1) {
+
+			powerCount = "1";
+			providesPower = "1";
+
+			new SimGroup(spawnspheres) {
+
+				powerCount = "1";
+
+				new SpawnSphere() {
+					position = "-9.76935 149.965 100.102";
+					rotation = "1 0 0 0";
+					scale = "1 1 1";
+					dataBlock = "SpawnSphereMarker";
+					lockCount = "0";
+					homingCount = "0";
+					radius = "15";
+					sphereWeight = "50";
+					indoorWeight = "100";
+					outdoorWeight = "100";
+
+					locked = "true";
+				};
+				new StaticShape() {
+					position = "15.4846 118.008 100.117";
+					rotation = "0 0 1 220.198";
+					scale = "1 1 1";
+					dataBlock = "StationInventory";
+					lockCount = "0";
+					homingCount = "0";
+
+					Target = "33";
+					locked = "true";
+					Trigger = "4333";
+				};
+				new StaticShape() {
+					position = "26.3344 129.271 100.125";
+					rotation = "0 0 1 44.1178";
+					scale = "1 1 1";
+					dataBlock = "StationInventory";
+					lockCount = "0";
+					homingCount = "0";
+
+					Target = "34";
+					locked = "true";
+					Trigger = "4335";
+				};
+				new StaticShape() {
+					position = "20.4146 135 100.098";
+					rotation = "0 0 1 41.253";
+					scale = "1 1 1";
+					dataBlock = "StationInventory";
+					lockCount = "0";
+					homingCount = "0";
+
+					Target = "35";
+					locked = "true";
+					Trigger = "4337";
+				};
+				new StaticShape() {
+					position = "9.81867 123.962 100.077";
+					rotation = "0 0 1 223.636";
+					scale = "1 1 1";
+					dataBlock = "StationInventory";
+					lockCount = "0";
+					homingCount = "0";
+
+					Target = "36";
+					locked = "true";
+					Trigger = "4339";
+				};
+			};
+		};
+		new SimGroup(team0) {
+
+			powerCount = "1";
+			providesPower = "1";
+		};
+		new SimGroup(team2) {
+
+			powerCount = "1";
+			providesPower = "1";
+
+			new SpawnSphere() {
+				position = "152.448 -0.84833 100.058";
+				rotation = "1 0 0 0";
+				scale = "1 1 1";
+				dataBlock = "SpawnSphereMarker";
+				lockCount = "0";
+				homingCount = "0";
+				radius = "15";
+				sphereWeight = "100";
+				indoorWeight = "100";
+				outdoorWeight = "100";
+
+				locked = "true";
+			};
+			new StaticShape() {
+				position = "119.074 20.9951 100.102";
+				rotation = "0 0 1 223.063";
+				scale = "1 1 1";
+				dataBlock = "StationInventory";
+				lockCount = "0";
+				homingCount = "0";
+
+				Target = "37";
+				locked = "true";
+				Trigger = "4344";
+			};
+			new StaticShape() {
+				position = "125.119 15.385 100.079";
+				rotation = "0 0 1 225.355";
+				scale = "1 1 1";
+				dataBlock = "StationInventory";
+				lockCount = "0";
+				homingCount = "0";
+
+				Target = "38";
+				locked = "true";
+				Trigger = "4346";
+			};
+			new StaticShape() {
+				position = "135.75 26.6431 100.122";
+				rotation = "0 0 1 45.2637";
+				scale = "1 1 1";
+				dataBlock = "StationInventory";
+				lockCount = "0";
+				homingCount = "0";
+
+				Target = "39";
+				locked = "true";
+				Trigger = "4348";
+			};
+			new StaticShape() {
+				position = "129.584 32.3413 100.091";
+				rotation = "0 0 1 43.5448";
+				scale = "1 1 1";
+				dataBlock = "StationInventory";
+				lockCount = "0";
+				homingCount = "0";
+
+				Target = "40";
+				locked = "true";
+				Trigger = "4350";
+			};
+		};
+	};
+	new Sun(Sun) {
+		position = "0 0 0";
+		rotation = "1 0 0 0";
+		scale = "1 1 1";
+		direction = "0.57735 0.57735 -0.57735";
+		color = "1.000000 1.000000 1.000000 1.000000";
+		ambient = "0.500000 0.500000 0.500000 1.000000";
+		texture[0] = "special/sunFlare";
+		texture[1] = "special/sunFlare02";
+		texture[2] = "special/LensFlare/flare01";
+		texture[3] = "special/LensFlare/flare02";
+		texture[4] = "special/LensFlare/flare03";
+		lensFlareScale = "0.7";
+		lensFlareIntensity = "1";
+		frontFlareSize = "300";
+		backFlareSize = "450";
+		flareColor = "1.000000 1.000000 1.000000 1.000000";
+
+		locked = "true";
+	};
+	new TerrainBlock(Terrain) {
+		rotation = "1 0 0 0";
+		scale = "1 1 1";
+		detailTexture = "details/desertdet1";
+		terrainFile = "Flatland.ter";
+		squareSize = "8";
+		emptySquares = "98444 164229 229772 164484 295564 99203 426891 492682 99714 558474 99969 624265 427911 165776 428166 100497 231817 100753 166538 166787 101264 363648 167054 429440 167310 560769 102030 626561 167821 823426 692611 430725";
+
+		locked = "true";
+		position = "-1024 -1024 0";
+	};
+	new NavigationGraph(NavGraph) {
+		conjoinAngleDev = "50";
+		cullDensity = "0.3";
+		customArea = "0 0 0 0";
+
+		GraphFile = "Flatland.nav";
+		conjoinBowlDev = "20";
+		locked = "true";
+		scale = "1 1 1";
+		coverage = "0";
+		position = "0 0 0 1";
+		rotation = "0 0 0 0";
+	};
+	new SimGroup(ObserverDropPoints) {
+
+		powerCount = "0";
+
+		new Camera() {
+			position = "0 0 200";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "Observer";
+			lockCount = "0";
+			homingCount = "0";
+
+			locked = "true";
+			team = "0";
+		};
+	};
+	new Sky(Sky) {
+		position = "0 0 0";
+		rotation = "1 0 0 0";
+		scale = "1 1 1";
+		cloudHeightPer[0] = "0.349971";
+		cloudHeightPer[1] = "0.25";
+		cloudHeightPer[2] = "0.199973";
+		cloudSpeed1 = "0.0001";
+		cloudSpeed2 = "0.0002";
+		cloudSpeed3 = "0.0003";
+		visibleDistance = "800";
+		useSkyTextures = "0";
+		renderBottomTexture = "0";
+		SkySolidColor = "0.250000 0.750000 1.000000 1.000000";
+		fogDistance = "750";
+		fogColor = "0.600000 0.600000 0.600000 1.000000";
+		fogVolume1 = "200 99 101";
+		fogVolume2 = "0 0 0";
+		fogVolume3 = "0 0 0";
+		materialList = "sky_desert_blue.dml";
+		windVelocity = "1 0 0";
+		windEffectPrecipitation = "0";
+		fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+		fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+		fogVolumeColor3 = "128.000000 128.000000 128.000000 0.000000";
+		high_visibleDistance = "-1";
+		high_fogDistance = "-1";
+		high_fogVolume1 = "-1 2.33105e-09 6.40969e-10";
+		high_fogVolume2 = "-1 1.07461e-38 0";
+		high_fogVolume3 = "-1 7.9874e-44 5.9061e-32";
+
+		locked = "true";
+		cloudSpeed0 = "0.000503 0.000020";
+	};
+	new InteriorInstance() {
+		position = "83.3816 86.4043 16.1";
+		rotation = "0 0 1 223.636";
+		scale = "1 1 1";
+		interiorFile = "dbase2.dif";
+		showTerrainInside = "0";
+
+		locked = "true";
+	};
+	new TSStatic() {
+		position = "35.1941 122.022 104.484";
+		rotation = "0.377423 -0.847435 -0.37337 98.831";
+		scale = "2.27288 3.06824 1";
+		shapeName = "dmiscf.dts";
+
+		locked = "true";
+	};
+	new TSStatic() {
+		position = "109.783 27.8607 104.598";
+		rotation = "0.377423 -0.847435 -0.37337 98.831";
+		scale = "2.27288 3.06824 1";
+		shapeName = "dmiscf.dts";
+
+		locked = "true";
+	};
+	new TSStatic() {
+		position = "5.87104 158.993 106.88";
+		rotation = "0.777046 -0.445261 0.444907 104.258";
+		scale = "11.8008 5.5788 1";
+		shapeName = "dmiscf.dts";
+
+		locked = "true";
+	};
+	new TSStatic() {
+		position = "-19.741 134.37 106.734";
+		rotation = "0.974913 -0.157456 0.157331 91.41";
+		scale = "13.6149 5.67061 1";
+		shapeName = "dmiscf.dts";
+
+		locked = "true";
+	};
+	new TSStatic() {
+		position = "-26.0007 161.626 106.834";
+		rotation = "-0.264977 0.682102 -0.68156 209.704";
+		scale = "13.3927 5.60577 1";
+		shapeName = "dmiscf.dts";
+
+		locked = "true";
+	};
+	new TSStatic() {
+		position = "168.934 -13.9842 108.218";
+		rotation = "0.901932 0.305235 -0.305533 95.9472";
+		scale = "13.3927 5.60577 1";
+		shapeName = "dmiscf.dts";
+
+		locked = "true";
+	};
+	new TSStatic() {
+		position = "165.105 13.718 108.118";
+		rotation = "-0.144922 -0.69936 0.699924 196.485";
+		scale = "13.6149 5.67061 1";
+		shapeName = "dmiscf.dts";
+
+		locked = "true";
+	};
+	new TSStatic() {
+		position = "137.419 -8.54752 108.264";
+		rotation = "-0.408561 -0.645128 0.645669 224.419";
+		scale = "11.8008 5.5788 1";
+		shapeName = "dmiscf.dts";
+
+		locked = "true";
+	};
+	new SimGroup() {
+
+		powerCount = "0";
+	};
+};
+//--- OBJECT WRITE END ---

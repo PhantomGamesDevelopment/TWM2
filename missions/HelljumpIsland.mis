@@ -1,0 +1,178 @@
+// DisplayName = Beach of Helljump Island
+// MissionTypes = None Helljump
+
+//--- Mission Quote Begin ---
+// Beach OF Highrock Island Required To Play
+// By EEK n IkE.
+//--- Mission Quote End ---
+
+//--- Mission String Begin ---
+//Helljump Mission
+//Don't run for the ocean! You'll drown out there!
+//--- Mission String End ---
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+	musicTrack = "desert";
+	powerCount = "0";
+	cdTrack = "6";
+
+	new MissionArea(MissionArea) {
+		area = "-1744 -2216 3440 3824";
+		flightCeiling = "4000";
+		flightCeilingRange = "20";
+
+		locked = "true";
+	};
+	new SimGroup(Teams) {
+
+		powerCount = "0";
+
+		new SimGroup(Team1) {
+
+			powerCount = "0";
+
+			new SimGroup(spawnspheres) {
+
+				powerCount = "0";
+
+				new SpawnSphere() {
+					position = "-791.454 499.031 523.269";
+					rotation = "1 0 0 0";
+					scale = "1 1 1";
+					dataBlock = "SpawnSphereMarker";
+					lockCount = "0";
+					homingCount = "0";
+					radius = "100";
+					sphereWeight = "100";
+					indoorWeight = "100";
+					outdoorWeight = "100";
+				};
+			};
+		};
+		new SimGroup(team0) {
+
+			powerCount = "1";
+			providesPower = "1";
+
+		};
+	};
+	new Sun(Sun) {
+		position = "0 0 0";
+		rotation = "1 0 0 0";
+		scale = "1 1 1";
+		direction = "0.57735 0.57735 -0.57735";
+		color = "1.000000 1.000000 1.000000 1.000000";
+		ambient = "0.500000 0.500000 0.500000 1.000000";
+		texture[0] = "special/sunFlare";
+		texture[1] = "special/sunFlare02";
+		texture[2] = "special/LensFlare/flare01";
+		texture[3] = "special/LensFlare/flare02";
+		texture[4] = "special/LensFlare/flare03";
+		lensFlareScale = "0.7";
+		lensFlareIntensity = "1";
+		frontFlareSize = "300";
+		backFlareSize = "450";
+		flareColor = "1.000000 1.000000 1.000000 1.000000";
+
+		locked = "true";
+	};
+	new TerrainBlock(Terrain) {
+		rotation = "1 0 0 0";
+		scale = "1 1 1";
+		detailTexture = "details/desertdet1";
+		terrainFile = "ISLANDbeach.ter";
+		squareSize = "8";
+
+		locked = "true";
+		position = "-1024 -1024 0";
+	};
+	new NavigationGraph(NavGraph) {
+		conjoinAngleDev = "50";
+		cullDensity = "0.3";
+		customArea = "0 0 0 0";
+
+		GraphFile = "Flatland.nav";
+		scale = "1 1 1";
+		locked = "true";
+		conjoinBowlDev = "20";
+		position = "0 0 0 1";
+		coverage = "0";
+		rotation = "0 0 0 0";
+	};
+	new SimGroup(ObserverDropPoints) {
+
+		powerCount = "0";
+
+		new Camera() {
+			position = "-411.34 734.036 534.261";
+			rotation = "-0.0803515 -0.163301 0.983299 231.638";
+			scale = "1 1 1";
+			dataBlock = "Observer";
+			lockCount = "0";
+			homingCount = "0";
+
+			locked = "false";
+			team = "0";
+		};
+	};
+	new Sky(Sky) {
+		position = "0 0 0";
+		rotation = "1 0 0 0";
+		scale = "1 1 1";
+		cloudHeightPer[0] = "0.349971";
+		cloudHeightPer[1] = "0.25";
+		cloudHeightPer[2] = "0.199973";
+		cloudSpeed1 = "0.0001";
+		cloudSpeed2 = "0.0002";
+		cloudSpeed3 = "0.0003";
+		visibleDistance = "800";
+		useSkyTextures = "1";
+		renderBottomTexture = "0";
+		SkySolidColor = "0.250000 0.750000 1.000000 1.000000";
+		fogDistance = "750";
+		fogColor = "0.700000 0.800000 0.900000 1.000000";
+		fogVolume1 = "200 99 101";
+		fogVolume2 = "0 0 0";
+		fogVolume3 = "0 0 0";
+		materialList = "SOM_TR2_StonedBlue.dml";
+		windVelocity = "1 0 0";
+		windEffectPrecipitation = "0";
+		fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+		fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+		fogVolumeColor3 = "128.000000 128.000000 128.000000 0.000000";
+		high_visibleDistance = "-1";
+		high_fogDistance = "-1";
+		high_fogVolume1 = "-1 2.33105e-09 6.40969e-10";
+		high_fogVolume2 = "-1 1.07461e-38 0";
+		high_fogVolume3 = "-1 7.9874e-44 5.9061e-32";
+
+		locked = "true";
+		cloudSpeed0 = "0.000503 0.000020";
+	};
+	new WaterBlock() {
+		position = "-272 456 178.128";
+		rotation = "1 0 0 0";
+		scale = "2048 2048 69";
+		liquidType = "OceanWater";
+		density = "1";
+		viscosity = "15";
+		waveMagnitude = "2";
+		surfaceTexture = "LiquidTiles/icebound_water";
+		surfaceOpacity = "0.7";
+		envMapTexture = "LiquidTiles/archipelago_emap_cloudsground";
+		envMapIntensity = "0.4";
+		removeWetEdges = "0";
+
+		textureSize = "32 32";
+		floodFill = "1";
+		extent = "100 100 10";
+		seedPoints = "0 0 1 0 1 1 0 1";
+		params3 = "1.21 -0.61 0.13 -0.33";
+		params2 = "0.39 0.39 0.2 0.133";
+		params0 = "0.32 -0.67 0.066 0.5";
+		params1 = "0.63 -2.41 0.33 0.21";
+	};
+};
+//--- OBJECT WRITE END ---
