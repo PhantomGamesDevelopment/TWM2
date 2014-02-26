@@ -4,7 +4,7 @@ Total Warfare Mod 2
 Total Warfare Mod 2 for Tribes 2, Conversion mod built on a base mix of Construction .69a and CCM. Tribes 2 is a pre 1.0 game of the Torque Game Engine.
 
 Web Sites/Pages:
-* https://github.com/Phantom139/TWM2/ : Official Git Repostitory
+* https://github.com/PhantomGamesDevelopment/TWM2/ : Official Git Repostitory
 * http://www.phantomdev.net - http://www.tacticaluprising.phantomdev.net - OFFICIAL SITES
 * http://www.moddb.com/mods/total-warfare-mod-2-advanced-warfare
 * http://www.moddb.com/groups/twm-development-team
@@ -46,7 +46,7 @@ to obtain your GUID. Then modify the line: $TWM2::HostGUID = "SetMeUp";, to matc
 
 MOD DEVELOPMENT LOG:
 3.8 -> 3.9:
-* Community Led Version (Add Changes From GitHub here: https://github.com/Phantom139/TWM2/)
+* Community Led Version (Add Changes From GitHub here: https://github.com/PhantomGamesDevelopment/TWM2/)
 
 3.7 -> 3.8:
 * Addressed a problem in the TCPQueryList that would cause some transfers to deadlock and never complete
