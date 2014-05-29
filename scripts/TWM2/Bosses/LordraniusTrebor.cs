@@ -1,3 +1,35 @@
+datablock HoverVehicleData(TreborTank) : CentaurVehicle {
+   spawnOffset = "0 0 4";
+   canControl = true;
+   floatingGravMag = 4.5;
+
+   catagory = "Vehicles";
+   shapeFile = "vehicle_grav_tank.dts";
+   multipassenger = false;
+   computeCRC = true;
+   renderWhenDestroyed = false;
+   
+   mountPose[0] = sitting;
+   numMountPoints = 0;  // <-- Ignore this
+   isProtectedMountPoint[0] = true;
+
+   maxDamage = 100.15;
+   destroyedLevel = 100.15;
+
+   isShielded = true;
+   rechargeRate = 1.0;
+   energyPerDamagePoint = 135;
+   maxEnergy = 400;
+   minJetEnergy = 15;
+   jetEnergyDrain = 2.0;
+
+   targetNameTag = 'Centaur';
+   targetTypeTag = 'MK III';
+   
+   damageScale[$DamageType::Bullet] = 0.10;  //I deny you shrike n0bs
+   ShieldDamageScale[$DamageType::Bullet] = 0.01;  //I deny you shrike n0bs
+};
+
 function StartTrebor(%pos){
 	%team = 6;
 	%rotation = "1 0 0 0";

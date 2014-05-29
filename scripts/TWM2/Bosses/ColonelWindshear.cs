@@ -109,6 +109,50 @@ function DroneFindNearestPilot(%radius, %drone) {
    return %closestClient;
 }
 
+
+datablock SeekerProjectileData(BossMissiles)
+{
+   casingShapeName     = "weapon_missile_casement.dts";
+   projectileShapeName = "weapon_missile_projectile.dts";
+   hasDamageRadius     = true;
+   indirectDamage      = 0.1;
+   damageRadius        = 6.0;
+   radiusDamageType    = $DamageType::MissileTurret;
+   kickBackStrength    = 500;
+
+   flareDistance = 200;
+   flareAngle    = 30;
+   minSeekHeat   = 0.0;
+
+   explosion           = "MissileExplosion";
+   velInheritFactor    = 1.0;
+
+   splash              = MissileSplash;
+   baseEmitter         = MortarSmokeEmitter;
+   delayEmitter        = MissileFireEmitter;
+   puffEmitter         = MissilePuffEmitter;
+
+   lifetimeMS          = 15000; // z0dd - ZOD, 4/14/02. Was 6000
+   muzzleVelocity      = 12.0;
+   maxVelocity         = 225.0; // z0dd - ZOD, 4/14/02. Was 80.0
+   turningSpeed        = 50.0;
+   acceleration        = 100.0;
+
+   proximityRadius     = 4;
+
+   terrainAvoidanceSpeed = 100;
+   terrainScanAhead      = 50;
+   terrainHeightFail     = 50;
+   terrainAvoidanceRadius = 150;
+
+   useFlechette = true;
+   flechetteDelayMs = 225;
+   casingDeb = FlechetteDebris;
+};
+
+
+
+
 function WindshearAttacks(%drone) {
    if(!isObject(%drone)) {
       return;
@@ -216,7 +260,6 @@ function WindshearAttack_FUNC(%att, %args) {
          FlareSet.add(%p2);
          MissionCleanup.add(%p1);
          MissionCleanup.add(%p2);
-         
       case "HeatLoop":
          %t = getWord(%args, 0);
          %v = getWord(%args, 1);
@@ -230,7 +273,6 @@ function WindshearAttack_FUNC(%att, %args) {
          %v++;
          %t.setHeat(100);
          schedule(100, 0, "WindshearAttack_FUNC", "HeatLoop", %t SPC %v);
-         
       case "MissileDrop":
          %t = getWord(%args, 0);
          %m = getWord(%args, 1);
@@ -239,7 +281,6 @@ function WindshearAttack_FUNC(%att, %args) {
          %m.setObjectTarget(%t);
          //HeatLoop(%t,0);
          WindshearAttack_FUNC("HeatLoop", %t SPC 0);
-         
       case "SidewinderLaunch":
          %d = getWord(%args, 0);
          %t = getWord(%args, 1);

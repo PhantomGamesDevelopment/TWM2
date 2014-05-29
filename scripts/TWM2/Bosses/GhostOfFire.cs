@@ -1,6 +1,411 @@
-//Ghost of Fire
-//Phantom139
-//Ported From TWM1
+//DBs
+datablock ParticleData(GhostflameParticle)
+{
+   dragCoeffiecient     = 0.0;
+   gravityCoefficient   = -0.1;
+   inheritedVelFactor   = 0.1;
+
+   lifetimeMS           = 500;
+   lifetimeVarianceMS   = 50;
+
+   textureName          = "particleTest";
+
+   spinRandomMin = -10.0;
+   spinRandomMax = 10.0;
+
+   colors[0]     = "0 1 0 0.4";
+   colors[1]     = "0 1 0 0.3";
+   colors[2]     = "0 1 0 0.0";
+   sizes[0]      = 2.0;
+   sizes[1]      = 1.0;
+   sizes[2]      = 0.8;
+   times[0]      = 0.0;
+   times[1]      = 0.6;
+   times[2]      = 1.0;
+};
+
+datablock ParticleEmitterData(GhostflameEmitter)
+{
+   ejectionPeriodMS = 3;
+   periodVarianceMS = 0;
+
+   ejectionOffset = 0.2;
+   ejectionVelocity = 10.0;
+   velocityVariance = 0.0;
+
+   thetaMin         = 0.0;
+   thetaMax         = 10.0;
+
+   particles = "GhostflameParticle";
+};
+
+datablock LinearFlareProjectileData(GhostFlameboltMain)
+{
+   projectileShapeName = "turret_muzzlepoint.dts";
+   scale               = "1.0 1.0 1.0";
+   faceViewer          = true;
+   directDamage        = 0.05;
+   hasDamageRadius     = true;
+   indirectDamage      = 0.1;
+   damageRadius        = 4.0;
+   kickBackStrength    = 0.0;
+   radiusDamageType    = $DamageType::Plasma;
+
+   explosion           = "ThrowerExplosion";
+   splash              = PlasmaSplash;
+
+   baseEmitter        = GhostflameEmitter;
+
+   dryVelocity       = 50.0; // z0dd - ZOD, 7/20/02. Faster plasma projectile. was 55
+   wetVelocity       = -1;
+   velInheritFactor  = 0.3;
+   fizzleTimeMS      = 250;
+   lifetimeMS        = 30000;
+   explodeOnDeath    = false;
+   reflectOnWaterImpactAngle = 0.0;
+   explodeOnWaterImpact      = true;
+   deflectionOnWaterImpact   = 0.0;
+   fizzleUnderwaterMS        = -1;
+
+   //activateDelayMS = 100;
+   activateDelayMS = -1;
+
+   size[0]           = 0.2;
+   size[1]           = 0.5;
+   size[2]           = 0.1;
+
+
+   numFlares         = 35;
+   flareColor        = "1 0.18 0.03";
+   flareModTexture   = "flaremod";
+   flareBaseTexture  = "flarebase";
+
+	sound        = PlasmaProjectileSound;
+   fireSound    = FlamethrowerFireSound;
+   wetFireSound = PlasmaFireWetSound;
+
+   hasLight    = true;
+   lightRadius = 10.0;
+   lightColor  = "0.94 0.03 0.12";
+};
+
+datablock ParticleData(NapalmExplosionParticle)
+{
+   dragCoefficient      = 2;
+   gravityCoefficient   = 0.2;
+   inheritedVelFactor   = 0.2;
+   constantAcceleration = 0.0;
+   lifetimeMS           = 450;
+   lifetimeVarianceMS   = 150;
+   textureName          = "particleTest";
+   colors[0]     = "1 0 0";
+   colors[1]     = "1 0 0";
+   sizes[0]      = 0.5;
+   sizes[1]      = 2;
+};
+
+datablock ParticleEmitterData(NapalmExplosionEmitter)
+{
+   ejectionPeriodMS = 7;
+   periodVarianceMS = 0;
+   ejectionVelocity = 5;
+   velocityVariance = 1.0;
+   ejectionOffset   = 0.0;
+   thetaMin         = 0;
+   thetaMax         = 60;
+   phiReferenceVel  = 0;
+   phiVariance      = 360;
+   overrideAdvances = false;
+   particles = "NapalmExplosionParticle";
+};
+
+datablock ExplosionData(NapalmExplosion)
+{
+   explosionShape = "effect_plasma_explosion.dts";
+   soundProfile   = plasmaExpSound;
+   particleEmitter = NapalmExplosionEmitter;
+   particleDensity = 150;
+   particleRadius = 1.25;
+   faceViewer = true;
+
+   sizes[0] = "3.0 3.0 3.0";
+   sizes[1] = "3.0 3.0 3.0";
+   times[0] = 0.0;
+   times[1] = 1.5;
+};
+
+//--------------------------------------
+//Napalm projectile
+//--------------------------------------
+datablock LinearProjectileData(NapalmShot)
+{
+   projectileShapeName = "mortar_projectile.dts";
+   emitterDelay        = -1;
+   directDamage        = 0.0;
+   hasDamageRadius     = true;
+   indirectDamage      = 0.5;
+   damageRadius        = 20.0;
+   radiusDamageType    = $DamageType::Plasma;
+   kickBackStrength    = 3000;
+
+   explosion           = "NapalmExplosion";
+//   underwaterExplosion = "UnderwaterNapalmExplosion";
+   velInheritFactor    = 0.5;
+//   splash              = NapalmSplash;
+   depthTolerance      = 10.0; // depth at which it uses underwater explosion
+
+   baseEmitter         = MissileFireEmitter;
+   bubbleEmitter       = GrenadeBubbleEmitter;
+
+   grenadeElasticity = 0.15;
+   grenadeFriction   = 0.4;
+   armingDelayMS     = 2000;
+   muzzleVelocity    = 63.7;
+   drag              = 0.1;
+
+   sound          = MortarProjectileSound;
+
+   hasLight    = true;
+   lightRadius = 4;
+   lightColor  = "1.00 0.9 1.00";
+
+   hasLightUnderwaterColor = true;
+   underWaterLightColor = "0.05 0.075 0.2";
+
+   dryVelocity       = 90;
+   wetVelocity       = 50;
+   velInheritFactor  = 0.5;
+   fizzleTimeMS      = 5000;
+   lifetimeMS        = 2700;
+   explodeOnDeath    = true;
+   reflectOnWaterImpactAngle = 15.0;
+   explodeOnWaterImpact      = true;
+   deflectionOnWaterImpact   = 0.0;
+   fizzleUnderwaterMS        = 5000;
+
+};
+
+datablock PlayerData(GhostFireArmor) : MediumPlayerDamageProfile
+{
+   emap = true;
+
+   className = Armor;
+   shapeFile = "medium_male.dts";
+   cameraMaxDist = 3;
+   computeCRC = true;
+
+   debrisShapeName = "debris_player.dts";
+   debris = HumanRedPlayerDebris;
+
+   canObserve = true;
+   cmdCategory = "Clients";
+   cmdIcon = CMDPlayerIcon;
+   cmdMiniIconName = "commander/MiniIcons/com_player_grey";
+
+   hudImageNameFriendly[0] = "gui/hud_playertriangle";
+   hudImageNameEnemy[0] = "gui/hud_playertriangle_enemy";
+   hudRenderModulated[0] = true;
+
+   hudImageNameFriendly[1] = "commander/MiniIcons/com_flag_grey";
+   hudImageNameEnemy[1] = "commander/MiniIcons/com_flag_grey";
+   hudRenderModulated[1] = true;
+   hudRenderAlways[1] = true;
+   hudRenderCenter[1] = true;
+   hudRenderDistance[1] = true;
+
+   hudImageNameFriendly[2] = "commander/MiniIcons/com_flag_grey";
+   hudImageNameEnemy[2] = "commander/MiniIcons/com_flag_grey";
+   hudRenderModulated[2] = true;
+   hudRenderAlways[2] = true;
+   hudRenderCenter[2] = true;
+   hudRenderDistance[2] = true;
+
+   aiAvoidThis = true;
+
+   minLookAngle = -1.5;
+   maxLookAngle = 1.5;
+   maxFreelookAngle = 3.0;
+
+   mass = 70;
+   drag = 0.3;
+   maxdrag = 0.5;
+   density = 10;
+   maxDamage = 500.0;
+   maxEnergy =  400;
+   repairRate = 0.0053;
+   energyPerDamagePoint = 75.0; // shield energy required to block one point of damage
+
+   rechargeRate = 0.456;
+   jetForce = 21.22 * 230;
+   underwaterJetForce = 25.22 * 130 * 1.5;
+   underwaterVertJetFactor = 1.5;
+   jetEnergyDrain = 4.0;
+   underwaterJetEnergyDrain =  1.0;
+   minJetEnergy = 10;
+   maxJetHorizontalPercentage = 0.8;
+
+   runForce = 60 * 150;
+   runEnergyDrain = 0;
+   minRunEnergy = 0;
+   maxForwardSpeed = 18;
+   maxBackwardSpeed = 18;
+   maxSideSpeed = 18;
+
+   maxUnderwaterForwardSpeed = 10.5;
+   maxUnderwaterBackwardSpeed = 9.5;
+   maxUnderwaterSideSpeed = 9.5;
+
+   recoverDelay = 4;
+   recoverRunForceScale = 0.7;
+
+   // heat inc'ers and dec'ers
+   heatDecayPerSec      = 1.0 / 5.0; // takes 4 seconds to clear heat sig.
+   heatIncreasePerSec   = 1.0 / 2.0; // takes 3.0 seconds of constant jet to get full heat sig.
+
+   jumpForce = 8.3 * 130;
+   jumpEnergyDrain = 0;
+   minJumpEnergy = 0;
+   jumpSurfaceAngle = 75;
+   jumpDelay = 0;
+
+   // Controls over slope of runnable/jumpable surfaces
+   runSurfaceAngle  = 85;
+   jumpSurfaceAngle = 85;
+
+   minJumpSpeed = 25;
+   maxJumpSpeed = 35;
+
+   horizMaxSpeed = 70;
+   horizResistSpeed = 28;
+   horizResistFactor = 0.32;
+   maxJetForwardSpeed = 18;
+
+   upMaxSpeed = 80;
+   upResistSpeed = 30;
+   upResistFactor = 0.23;
+
+   minImpactSpeed = 45;
+   speedDamageScale = 0.006;
+
+   jetSound = ArmorJetSound;
+   wetJetSound = ArmorWetJetSound;
+
+   jetEmitter = FlammerArmorJetEmitter; //Pyro jets
+   jetEffect = HumanMediumArmorJetEffect;
+
+   boundingBox = "1.45 1.45 2.4";
+   pickupRadius = 0.75;
+
+   // damage location details
+   boxNormalHeadPercentage       = 0.83;
+   boxNormalTorsoPercentage      = 0.49;
+   boxHeadLeftPercentage         = 0;
+   boxHeadRightPercentage        = 1;
+   boxHeadBackPercentage         = 0;
+   boxHeadFrontPercentage        = 1;
+
+   //Foot Prints
+   decalData   = MediumMaleFootprint;
+   decalOffset = 0.35;
+
+   footPuffEmitter = LightPuffEmitter;
+   footPuffNumParts = 15;
+   footPuffRadius = 0.25;
+
+   dustEmitter = LiftoffDustEmitter;
+
+   splash = PlayerSplash;
+   splashVelocity = 4.0;
+   splashAngle = 67.0;
+   splashFreqMod = 300.0;
+   splashVelEpsilon = 0.60;
+   bubbleEmitTime = 0.4;
+   splashEmitter[0] = PlayerFoamDropletsEmitter;
+   splashEmitter[1] = PlayerFoamEmitter;
+   splashEmitter[2] = PlayerBubbleEmitter;
+   mediumSplashSoundVelocity = 10.0;
+   hardSplashSoundVelocity = 20.0;
+   exitSplashSoundVelocity = 5.0;
+
+   footstepSplashHeight = 0.35;
+   //Footstep Sounds
+   LFootSoftSound       = LFootMediumSoftSound;
+   RFootSoftSound       = RFootMediumSoftSound;
+   LFootHardSound       = LFootMediumHardSound;
+   RFootHardSound       = RFootMediumHardSound;
+   LFootMetalSound      = LFootMediumMetalSound;
+   RFootMetalSound      = RFootMediumMetalSound;
+   LFootSnowSound       = LFootMediumSnowSound;
+   RFootSnowSound       = RFootMediumSnowSound;
+   LFootShallowSound    = LFootMediumShallowSplashSound;
+   RFootShallowSound    = RFootMediumShallowSplashSound;
+   LFootWadingSound     = LFootMediumWadingSound;
+   RFootWadingSound     = RFootMediumWadingSound;
+   LFootUnderwaterSound = LFootMediumUnderwaterSound;
+   RFootUnderwaterSound = RFootMediumUnderwaterSound;
+   LFootBubblesSound    = LFootMediumBubblesSound;
+   RFootBubblesSound    = RFootMediumBubblesSound;
+   movingBubblesSound   = ArmorMoveBubblesSound;
+   waterBreathSound     = WaterBreathMaleSound;
+
+   impactSoftSound      = ImpactMediumSoftSound;
+   impactHardSound      = ImpactMediumHardSound;
+   impactMetalSound     = ImpactMediumMetalSound;
+   impactSnowSound      = ImpactMediumSnowSound;
+
+   skiSoftSound         = SkiAllSoftSound;
+   skiHardSound         = SkiAllHardSound;
+   skiMetalSound        = SkiAllMetalSound;
+   skiSnowSound         = SkiAllSnowSound;
+
+   impactWaterEasy      = ImpactMediumWaterEasySound;
+   impactWaterMedium    = ImpactMediumWaterMediumSound;
+   impactWaterHard      = ImpactMediumWaterHardSound;
+
+   groundImpactMinSpeed    = 10.0;
+   groundImpactShakeFreq   = "4.0 4.0 4.0";
+   groundImpactShakeAmp    = "1.0 1.0 1.0";
+   groundImpactShakeDuration = 0.8;
+   groundImpactShakeFalloff = 10.0;
+
+   exitingWater         = ExitingWaterMediumSound;
+
+   maxWeapons = 2;            // Max number of different weapons the player can have
+   maxGrenades = 1;           // Max number of different grenades the player can have
+   maxMines = 1;              // Max number of different mines the player can have
+
+   damageScale[$DamageType::plasma] = 0.05;
+   damageScale[$DamageType::Burn] = 0.05;
+   damageScale[$DamageType::Bullet] = 0.10;  //I deny you shrike n0bs
+
+   // Inventory restrictions
+    max[RepairKit]          = 4;
+	max[Mine]			    = 0;
+	max[ZapMine]			= 0;
+	max[CrispMine]			= 5;
+	max[flamerAmmoPack]		= 1;
+	max[Deagle]				= 1;
+	max[SPistol]			= 1;
+	max[Pistol]				= 1;
+	max[PistolAmmo]			= 10;
+	max[Pistolclip]			= 8;
+ 	max[PulsePhaser]	    = 1;
+	max[flamer]				= 1;
+	max[flamerAmmo]			= 0;
+	max[Napalm]				= 1;
+	max[NapalmAmmo]			= 20;
+	max[melee]				= 1;
+	max[BOV]				= 1;
+	max[SOmelee]			= 1;
+	max[IncindinaryGrenade]	= 7;
+    max[Beacon]             = 3;
+   // -END
+
+   observeParameters = "0.5 4.5 4.5";
+
+   shieldEffectScale = "0.7 0.7 1.0";
+};
+//
 
 function StartGhostFire(%pos) {
 	%Ghost = new player(){

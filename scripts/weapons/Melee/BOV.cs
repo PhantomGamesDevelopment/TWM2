@@ -189,61 +189,63 @@ function BOVImage::onFire(%data, %obj, %node) {
 }
 
 function BOVhit::onCollision(%data, %projectile, %targetObject, %modifier, %position, %normal) {
-   if(%targetObject.isBoss) {
-      %targetObject.playShieldEffect("1 1 1");
-      MessageClient(%projectile.sourceObject.client, 'MsgDeflect', "The Boss Deflects The Swipe");
-      return;
-   }
-   if(%targetObject.rapierShield) {
-      MessageClient(%projectile.sourceObject.client, 'MsgDeflect', "The Target Is Immortal.");
-      return;
-   }
-   %source = %projectile.SourceObject;
-   %hitObj = %targetObject;
+    if(%targetObject.isBoss) {
+       %targetObject.playShieldEffect("1 1 1");
+       MessageClient(%projectile.sourceObject.client, 'MsgDeflect', "The Boss Deflects The Swipe");
+       return;
+    }
+    if(%targetObject.rapierShield) {
+       MessageClient(%projectile.sourceObject.client, 'MsgDeflect', "The Target Is Immortal.");
+       return;
+    }
+    %source = %projectile.SourceObject;
+    %hitObj = %targetObject;
 
-   %muzzlePos = %source.getMuzzlePoint(0);
-   %muzzleVec = %source.getMuzzleVector(0);
+    %muzzlePos = %source.getMuzzlePoint(0);
+    %muzzleVec = %source.getMuzzleVector(0);
 
-   // extra damage for head shot or less for close range shots
-   if(!(%hitObj.getType() & ($TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType)) && (%hitObj.getDataBlock().getClassName() $= "PlayerData")) {
-      if(%hitObj.getDataBlock().getClassName() $= "PlayerData") {
-         // Now we see if we hit from behind...
-         %forwardVec = %hitobj.getForwardVector();
-         %objDir2D   = getWord(%forwardVec, 0) @ " " @ getWord(%forwardVec,1) @ " " @ "0.0";
-         %objPos     = %hitObj.getPosition();
-         %dif        = VectorSub(%objPos, %muzzlePos);
-         %dif        = getWord(%dif, 0) @ " " @ getWord(%dif, 1) @ " 0";
-         %dif        = VectorNormalize(%dif);
-         %dot        = VectorDot(%dif, %objDir2D);
-         // 120 Deg angle test...
-         // 1.05 == 60 degrees in radians
-         if (%dot >= mCos(1.05)) {
-            // Rear hit
-            if(%source.isAlive()) {
+	// extra damage for head shot or less for close range shots
+	if(!(%hitObj.getType() & ($TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType)) &&
+        (%hitObj.getDataBlock().getClassName() $= "PlayerData")) {
+
+         if(%hitObj.getDataBlock().getClassName() $= "PlayerData") {
+            // Now we see if we hit from behind...
+            %forwardVec = %hitobj.getForwardVector();
+            %objDir2D   = getWord(%forwardVec, 0) @ " " @ getWord(%forwardVec,1) @ " " @ "0.0";
+            %objPos     = %hitObj.getPosition();
+            %dif        = VectorSub(%objPos, %muzzlePos);
+            %dif        = getWord(%dif, 0) @ " " @ getWord(%dif, 1) @ " 0";
+            %dif        = VectorNormalize(%dif);
+            %dot        = VectorDot(%dif, %objDir2D);
+
+            // 120 Deg angle test...
+            // 1.05 == 60 degrees in radians
+            if (%dot >= mCos(1.05)) {
+               // Rear hit
                %source.applyRepair("0.45"); //we get a bonus repair for rear
+               if(%source.team == %hitObj.team && !$TeamDamage) {
+                  ServerPlay3d(BOVHitSound, %targetObject.getPosition());
+                  return; //stops shredding
+               }
+               %source.cannotuseBOV = 1;
+               if(!%hitObj.IsinvincibleC) {
+                  DoBOVRearKill(%source, %hitObj, 0);
+               }
+               return;
             }
-            if(%source.team == %hitObj.team && !$TeamDamage) {
-               ServerPlay3d(BOVHitSound, %targetObject.getPosition());
-               return; //stops shredding
-            }
-            %source.cannotuseBOV = 1;
-            if(!%hitObj.IsinvincibleC) {
-               DoBOVRearKill(%source, %hitObj, 0);
-            }
-            return;
          }
-      }
-      ServerPlay3d(BOVHitSound, %targetObject.getPosition());
-      //The Blade Only Works On Players
-      %targetObject.damage(%projectile.sourceObject, %position, %data.directDamage, %data.directDamageType);
-      if(%source.isAlive()) {
-         %source.applyRepair("0.15"); //15%
-      }
-      if(%targetObject.client !$= "") { //a Player.. goodie
-         if(%targetObject.getState() $= "dead") {
-            MessageAll('MessageAll', "\c0"@%targetObject.client.namebase@" was stabbed by "@%source.client.namebase@"'s Sword.");
-         }
-      }
+
+    ServerPlay3d(BOVHitSound, %targetObject.getPosition());
+    //The Blade Only Works On Players
+    %targetObject.damage(%projectile.sourceObject, %position, %data.directDamage, %data.directDamageType);
+       if(isObject(%source) || %source.getState() !$= "dead") {
+       %source.applyRepair("0.15"); //15%
+       }
+       if(%targetObject.client !$= "") { //a Player.. goodie
+          if(%targetObject.getState() $= "dead") {
+             MessageAll('MessageAll', "\c0"@%targetObject.client.namebase@" was stabbed by "@%source.client.namebase@"'s Sword.");
+          }
+       }
    }
 }
 

@@ -1,5 +1,145 @@
 //DBS
+datablock PlayerData(LightningGhostArmor) : MediumMaleHumanArmor       /// ooooo scary
+{
+   boundingBox = "1.63 1.63 2.6";
+   maxDamage = 550.0;
+   minImpactSpeed = 35;
+   shapeFile = "medium_male.dts";
 
+   debrisShapeName = "bio_player_debris.dts";
+
+   //Foot Prints
+   decalData   = HeavyBiodermFootprint;
+   decalOffset = 0.4;
+
+   waterBreathSound = WaterBreathBiodermSound;
+
+   damageScale[$DamageType::Bullet] = 0.10;  //I deny you shrike n0bs
+
+	max[RepairKit]			= 0;
+	max[Mine]				= 0;
+	max[Grenade]			= 0;
+	max[SmokeGrenade]			= 0;
+	max[BeaconSmokeGrenade]		= 0;
+	max[Blaster]			= 0;
+	max[Plasma]				= 0;
+	max[PlasmaAmmo]			= 0;
+	max[Disc]				= 0;
+	max[DiscAmmo]			= 0;
+	max[SniperRifle]			= 0;
+	max[GrenadeLauncher]		= 0;
+	max[GrenadeLauncherAmmo]	= 0;
+	max[Mortar]				= 0;
+	max[MortarAmmo]			= 0;
+	max[MissileLauncher]		= 0;
+	max[MissileLauncherAmmo]	= 0;
+	max[Chaingun]			= 0;
+	max[ChaingunAmmo]			= 0;
+	max[RepairGun]			= 0;
+	max[CloakingPack]			= 0;
+	max[SensorJammerPack]		= 0;
+	max[EnergyPack]			= 0;
+	max[RepairPack]			= 0;
+	max[ShieldPack]			= 0;
+	max[AmmoPack]			= 0;
+	max[SatchelCharge]		= 0;
+	max[MortarBarrelPack]		= 0;
+	max[MissileBarrelPack]		= 0;
+	max[AABarrelPack]			= 0;
+	max[PlasmaBarrelPack]		= 0;
+	max[ELFBarrelPack]		= 0;
+	max[artillerybarrelpack]	= 0;
+	max[MedPack]			= 0;
+	max[InventoryDeployable]	= 0;
+	max[MotionSensorDeployable]	= 0;
+	max[PulseSensorDeployable]	= 0;
+	max[TurretOutdoorDeployable]	= 0;
+	max[TurretIndoorDeployable]	= 0;
+	max[FlashGrenade]			= 0;
+	max[ConcussionGrenade]		= 0;
+	max[FlareGrenade]			= 0;
+	max[TargetingLaser]		= 0;
+	max[ELFGun]				= 0;
+	max[ShockLance]			= 0;
+	max[CameraGrenade]		= 0;
+	max[Beacon]				= 0;
+	max[flamerAmmoPack]		= 0;
+	max[ParachutePack]		= 0;
+	max[ConstructionTool]		= 0;
+	max[MergeTool]			= 0;
+	max[NerfGun]			= 0;
+	max[NerfBallLauncher]		= 0;
+	max[NerfBallLauncherAmmo]	= 0;
+	max[SuperChaingun]		= 0;
+	max[SuperChaingunAmmo]		= 0;
+	max[RPChaingun]			= 0;
+	max[RPChaingunAmmo]		= 0;
+	max[MGClip]				= 0;
+	max[LSMG]				= 0;
+	max[LSMGAmmo]			= 0;
+	max[LSMGClip]			= 0;
+	max[snipergun]			= 0;
+	max[snipergunAmmo]		= 0;
+	max[Bazooka]			= 0;
+	max[BazookaAmmo]			= 0;
+	max[BunkerBuster]				= 0;
+	max[MG42]				= 0;
+	max[MG42Ammo]			= 0;
+	max[SPistol]			= 0;
+	max[Pistol]				= 0;
+	max[PistolAmmo]			= 0;
+	max[Pistolclip]			= 0;
+	max[flamer]				= 0;
+	max[flamerAmmo]			= 0;
+	max[AALauncher]			= 0;
+	max[AALauncherAmmo]		= 0;
+	max[melee]				= 0;
+	max[SOmelee]			= 0;
+	max[KriegRifle]			= 0;
+	max[KriegAmmo]			= 0;
+	max[Rifleclip]			= 0;
+	max[Shotgun]			= 0;
+	max[ShotgunAmmo]			= 0;
+	max[ShotgunClip]			= 0;
+	max[RShotgun]			= 0;
+	max[RShotgunAmmo]			= 0;
+	max[RShotgunClip]			= 0;
+	max[LMissileLauncher]		= 0;
+	max[LMissileLauncherAmmo]	= 0;
+	max[HRPChaingun]			= 0;
+	max[RPGAmmo]			= 0;
+	max[RPGItem]			= 0;
+	max[spineDeployable]		= 0;
+	max[mspineDeployable]		= 0;
+	max[wWallDeployable]		= 0;
+	max[floorDeployable]		= 0;
+	max[WallDeployable]		= 0;
+      max[DoorDeployable]           = 0;
+	max[TurretLaserDeployable]	= 0;
+	max[TurretMissileRackDeployable]= 0;
+	max[DiscTurretDeployable]	= 0;
+	max[EnergizerDeployable]	= 0;
+	max[TreeDeployable]		= 0;
+	max[CrateDeployable]		= 0;
+	max[DecorationDeployable]	= 0;
+	max[LogoProjectorDeployable]	= 0;
+	max[LightDeployable]		= 0;
+	max[TripwireDeployable]		= 0;
+	max[TelePadPack]			= 0;
+	max[TurretBasePack]		= 0;
+	max[LargeInventoryDeployable]	= 0;
+	max[GeneratorDeployable]	= 0;
+	max[SolarPanelDeployable]	= 0;
+	max[SwitchDeployable]		= 0;
+	max[MediumSensorDeployable]	= 0;
+	max[LargeSensorDeployable]	= 0;
+	max[SpySatelliteDeployable]	= 0;
+	max[JumpadDeployable]		= 0;
+	max[EscapePodDeployable]	= 0;
+	max[ForceFieldDeployable]	= 0;
+	max[GravityFieldDeployable]	= 0;
+      max[VehiclePadPack]		= 0;
+};
 
 //CREATION
 

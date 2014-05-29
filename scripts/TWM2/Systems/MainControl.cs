@@ -1,5 +1,5 @@
 //TWM2 Functions
-$TWM2::Version = 3.9;
+$TWM2::Version = 3.8;
 
 function FormatTWM2Time(%time) {
    %min = MFloor(%time / 60);
@@ -619,9 +619,6 @@ $ProjectileSeek["GhostFlameboltMain", "CancelList"] = "FlareGrenadeProj";
 
 $ProjectileSeek["RapierShieldForwardProjectile", "ProjectileControls"] = "8 10 10 1";
 $ProjectileSeek["RapierShieldForwardProjectile", "CancelList"] = "FlareGrenadeProj";
-
-$ProjectileSeek["PhotonMissileProj", "ProjectileControls"] = "8 10 10 1";
-$ProjectileSeek["PhotonMissileProj", "CancelList"] = "FlareGrenadeProj";
 
 function createSeekingProjectile(%projectile, %pType, %iPos, %iDir, %source, %target, %seekActivation) {
    %proj = spawnprojectile(%projectile, %pTYpe, %iPos, %iDir, %source);
