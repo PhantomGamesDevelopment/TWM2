@@ -161,8 +161,7 @@ function GameConnection::GiveBossAward(%client, %bossName) {
    
    %ratio = %damageCount / %maxHP;
    
-   //%award = mFloor(($TWM2::BossXPAward[%bossName] * %ratio) / %scriptController.bossDefeatCount[%bossName]);
-   %award = $TWM2::BossXPAward[%bossName] / %scriptController.bossDefeatCount[%bossName];
+   %award = mFloor(($TWM2::BossXPAward[%bossName] * %ratio) / %scriptController.bossDefeatCount[%bossName]);
    GainExperience(%client, %award, ""@%bossName@" defeated, congratulations! ");
    CheckBossChallenge(%client, %bossName);
 }
@@ -435,7 +434,6 @@ function GenerateBossChallengeMenu(%client, %tag, %index) {
 }
 
 //Load The Boss Files
-exec("scripts/TWM2/Bosses/BossDatablocks.cs");
 exec("scripts/TWM2/Bosses/LordYvex.cs");
 exec("scripts/TWM2/Bosses/ColonelWindshear.cs");
 exec("scripts/TWM2/Bosses/GhostOfLightning.cs");

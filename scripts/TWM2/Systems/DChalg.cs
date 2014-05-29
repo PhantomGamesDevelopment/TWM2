@@ -691,9 +691,6 @@ function loadChallengeData(%client) {
 
 //file update
 function updateChallengeFile(%client) {
-   if($Server::StopUpdates) {
-      return;
-   }
    if(!isSet(%client) || !ClientGroup.isMember(%client)) {
       return;
    }
@@ -728,7 +725,7 @@ function updateChallengeFile(%client) {
       //
       echo("Daily Challenge File Expired for "@%client@", preparing new file.");
       //
-      %client.resetAttemps++;
+      %client.resetAtttempts++;
       if(%client.resetAttemps >= 3) {
          error("Client "@%client@" reset attempts > 3, disabling challenge interpreter");
          %client.cannotReset = 1;

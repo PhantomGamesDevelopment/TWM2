@@ -5,6 +5,11 @@ $TWM2::DisabledMissionTypes = "";  //Horde\tHorde4
 
 $ScoreHudInventory::Active = 0; //0 returns the inv. hud to the normal one
 
+//PGD Connect has been removed from www.phantomdev.net. I will restore it if mod
+// support returns to it's original status, for the time being, this GVar will
+// disable the PGD Connect stuff, allowing the mod to function without it.
+$TWM2::PGDConnectDisabled = 1;
+
 //CHAT BOT
 //Now you can control 'Cynthia', or whatever you wish on naming it
 $ChatBot::Name = "Cynthia";   //The Name of the Bot

@@ -374,7 +374,7 @@ function GeneratePrestigeChallengeMenu(%client, %tag, %index) {
       %index++;
    }
    else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Phantom's Vengeance - Reach Officer Level 9.");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "Phantom's Vengeance - Reach The Final Officer Level(9).");
       %index++;
    }
    //

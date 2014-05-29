@@ -44,6 +44,110 @@ datablock AudioProfile(ShockLanceMissSound)
 //--------------------------------------------------------------------------
 // Particle data
 //--------------------------------------------------------------------------
+datablock ParticleData(ShockParticle)
+{
+   dragCoeffiecient     = 0.0;
+   gravityCoefficient   = -0.0;
+   inheritedVelFactor   = 0.0;
+
+   lifetimeMS           = 1000;
+   lifetimeVarianceMS   = 0;
+
+   textureName          = "particleTest";
+
+   useInvAlpha = false;
+   spinRandomMin = -100.0;
+   spinRandomMax = 100.0;
+
+   numParts = 50;
+   
+   animateTexture = true;
+   framesPerSec = 26;
+
+   animTexName[00]       = "special/Explosion/exp_0002";
+   animTexName[01]       = "special/Explosion/exp_0004";
+   animTexName[02]       = "special/Explosion/exp_0006";
+   animTexName[03]       = "special/Explosion/exp_0008";
+   animTexName[04]       = "special/Explosion/exp_0010";
+   animTexName[05]       = "special/Explosion/exp_0012";
+   animTexName[06]       = "special/Explosion/exp_0014";
+   animTexName[07]       = "special/Explosion/exp_0016";
+   animTexName[08]       = "special/Explosion/exp_0018";
+   animTexName[09]       = "special/Explosion/exp_0020";
+   animTexName[10]       = "special/Explosion/exp_0022";
+   animTexName[11]       = "special/Explosion/exp_0024";
+   animTexName[12]       = "special/Explosion/exp_0026";
+   animTexName[13]       = "special/Explosion/exp_0028";
+   animTexName[14]       = "special/Explosion/exp_0030";
+   animTexName[15]       = "special/Explosion/exp_0032";
+   animTexName[16]       = "special/Explosion/exp_0034";
+   animTexName[17]       = "special/Explosion/exp_0036";
+   animTexName[18]       = "special/Explosion/exp_0038";
+   animTexName[19]       = "special/Explosion/exp_0040";
+   animTexName[20]       = "special/Explosion/exp_0042";
+   animTexName[21]       = "special/Explosion/exp_0044";
+   animTexName[22]       = "special/Explosion/exp_0046";
+   animTexName[23]       = "special/Explosion/exp_0048";
+   animTexName[24]       = "special/Explosion/exp_0050";
+   animTexName[25]       = "special/Explosion/exp_0052";
+
+	
+   colors[0]     = "0.5   0.5  1.0 1.0";
+   colors[1]     = "0.5   0.5  1.0 0.5";
+   colors[2]     = "0.25  0.25 1.0 0.0";
+   sizes[0]      = 0.5;
+   sizes[1]      = 0.5;
+   sizes[2]      = 0.5;
+   times[0]      = 0.0;
+   times[1]      = 0.5;
+   times[2]      = 1.0;
+};
+
+datablock ParticleEmitterData(ShockParticleEmitter)
+{
+   ejectionPeriodMS = 1;
+   periodVarianceMS = 0;
+
+   ejectionVelocity = 0.25;
+   velocityVariance = 0.0;
+
+   thetaMin         = 0.0;
+   thetaMax         = 30.0;
+
+   particles = "ShockParticle";
+};
+
+//--------------------------------------------------------------------------
+// Shockwave
+//--------------------------------------------------------------------------
+datablock ShockwaveData( ShocklanceHit )
+{
+   width = 0.5;
+   numSegments = 20;
+   numVertSegments = 1;
+   velocity = 0.25;
+   acceleration = 1.0;
+   lifetimeMS = 600;
+   height = 0.1;
+   verticalCurve = 0.5;
+
+   mapToTerrain = false;
+   renderBottom = false;
+   orientToNormal = true;
+
+   texture[0] = "special/shocklanceHit";
+   texture[1] = "special/gradient";
+   texWrap = 3.0;
+
+   times[0] = 0.0;
+   times[1] = 0.5;
+   times[2] = 1.0;
+
+   colors[0] = "1.0 1.0 1.0 1.0";
+   colors[1] = "1.0 1.0 1.0 0.5";
+   colors[2] = "1.0 1.0 1.0 0.0";
+};
+
 
 //--------------------------------------
 // Projectile
@@ -78,6 +182,43 @@ datablock ShockLanceProjectileData(BasicShocker)
    startWidth[1] = 0.3;
    endWidth[1] = 0.6;
    
+   texture[0] = "special/shockLightning01";
+   texture[1] = "special/shockLightning02";
+   texture[2] = "special/shockLightning03";
+   texture[3] = "special/ELFBeam";
+
+   emitter[0] = ShockParticleEmitter;
+};
+
+datablock ShockLanceProjectileData(GoLShocker) {
+   directDamage        = 0.45;
+   radiusDamageType    = $DamageType::ShockLance;
+   kickBackStrength    = 2500;
+   velInheritFactor    = 0;
+   sound               = "";
+
+   zapDuration = 1.0;
+   impulse = 1800;
+   boltLength = 50.0;
+   extension = 50.0;            // script variable indicating distance you can shock people from
+   lightningFreq = 25.0;
+   lightningDensity = 3.0;
+   lightningAmp = 0.25;
+   lightningWidth = 0.05;
+
+   shockwave = ShocklanceHit;
+
+   boltSpeed[0] = 2.0;
+   boltSpeed[1] = -0.5;
+
+   texWrap[0] = 1.5;
+   texWrap[1] = 1.5;
+
+   startWidth[0] = 0.3;
+   endWidth[0] = 0.6;
+   startWidth[1] = 0.3;
+   endWidth[1] = 0.6;
+
    texture[0] = "special/shockLightning01";
    texture[1] = "special/shockLightning02";
    texture[2] = "special/shockLightning03";

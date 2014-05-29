@@ -246,7 +246,7 @@ function GetNextGunshipPoint(%obj) {
          %zPosToGo = getWord(%groundPos, 2) + getWord(%tpos, 2);
          %posToGo = getWords(%posToGo1, 0, 1) SPC %zPosToGo;
          //End 2.7 modification
-         if($HarbinsWrath::PointVec[%obj.goPoint] $= "") {
+         if(%obj.GoPoint >= 4) {
             %obj.GoPoint = 0;
          }
          //echo("Go to "@%posToGo@"");

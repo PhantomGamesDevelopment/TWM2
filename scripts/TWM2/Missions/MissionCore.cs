@@ -187,8 +187,7 @@ function CreateTWM2Mission(%client, %mission) {
       //this group holds our mission aspects
    };
    
-   echo("TWM2: Activating Mission Package: "@%mission);
-   activatePackage("TWM2Mission_"@%mission@"");
+   activatePackage("TWM2Mission_"@%missionname@"");
    %group.initiateSettings();
    
    %group.schedule(%group.timeToBegin * 1000, "StartTWM2MissionTimer");
