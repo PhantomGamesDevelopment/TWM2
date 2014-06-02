@@ -167,7 +167,9 @@ function runRankUpdateLoop(%client, %j, %continue) {
          //UpdateRankFile(%client);
          SaveClientFile(%client);
          //
-         PrepareUpload(%client);
+         if(!$TWM2::PGDConnectDisabled) {
+            PrepareUpload(%client);
+         }
          %j = 1;
          runRankUpdateLoop(%client, %j, 0);
       }

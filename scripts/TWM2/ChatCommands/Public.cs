@@ -935,6 +935,10 @@ function parsePublicCommands(%sender, %command, %args) {
       
       //uSave: univerally save a building in a CSS slot
       case "usave":
+         if($TWM2::PGDConnectDisabled) {
+            messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been disabled.");
+            return 1;
+         }
          if(!%sender.IsPGDConnected()) {
             messageClient(%client, 'msgPGDRequired', "\c5PGD: PGD Connect account required to perform this action.");
             return 1;
@@ -956,6 +960,10 @@ function parsePublicCommands(%sender, %command, %args) {
       
       //uLoad: load a universally saved building
       case "uload":
+         if($TWM2::PGDConnectDisabled) {
+            messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been disabled.");
+            return 1;
+         }
          if(!%sender.IsPGDConnected()) {
             messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect account required to perform this action.");
             return 1;
@@ -973,6 +981,10 @@ function parsePublicCommands(%sender, %command, %args) {
       
       //saveRank: save your rank to PGD
       case "saverank":
+         if($TWM2::PGDConnectDisabled) {
+            messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been disabled.");
+            return 1;
+         }
          if(!%sender.canSaveRank) {
             messageClient(%sender, 'MsgClient', "\c5PGD: You have only recently saved your rank.");
             return 1;
@@ -993,6 +1005,10 @@ function parsePublicCommands(%sender, %command, %args) {
       
       //loadRank: load your rank from PGD
       case "loadrank":
+         if($TWM2::PGDConnectDisabled) {
+            messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been disabled.");
+            return 1;
+         }
          if(!%sender.canLoadRank) {
             messageClient(%sender, 'MsgClient', "\c5PGD: You have only recently re-loaded your rank.");
             return 1;

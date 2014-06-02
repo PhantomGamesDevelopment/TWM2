@@ -5,6 +5,10 @@
 
 //downloads challenges from PGD
 function downloadChallenges() {
+   if($TWM2::PGDConnectDisabled) {
+      echo("PGD Connect is disabled.");
+      return;
+   }
    if(!IsServerMain()) {
       error("* Daily Challenges: Restricted To Core Servers Only");
       return;

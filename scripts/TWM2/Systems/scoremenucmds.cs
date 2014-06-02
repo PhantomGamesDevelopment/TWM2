@@ -270,6 +270,13 @@ switch$ (%arg1)
         case "PGDConn1":
              %client.SCMPage = "SM";
              messageClient( %client, 'SetScoreHudSubheader', "", "PGD Connect" );
+             if($TWM2::PGDConnectDisabled) {
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "PGD Connect is disabled on this server.");
+                %index++;
+                messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
+                %index++;
+                return;
+             }
              messageClient( %client, 'SetLineHud', "", %tag, %index, "Set email with: /setEmail");
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, "Current Email: "@%client.emailSet);
@@ -283,6 +290,13 @@ switch$ (%arg1)
         case "PGDConn2":
              %client.SCMPage = "SM";
              messageClient( %client, 'SetScoreHudSubheader', "", "PGD Connect" );
+             if($TWM2::PGDConnectDisabled) {
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "PGD Connect is disabled on this server.");
+                %index++;
+                messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
+                %index++;
+                return;
+             }
              messageClient( %client, 'SetLineHud', "", %tag, %index, "Connecting... please wait for response");
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
@@ -1214,6 +1228,10 @@ function RunDeleteCheck(%cl, %slot) {
 
 //------------------------------------
 function PGDConnect_FromInGame(%client) {
+   if($TWM2::PGDConnectDisabled) {
+      echo("PGD Connect is disabled.");
+      return;
+   }
    %guid = %client.guid;
    %email = %client.emailSet;
    if(!isSet(%email)) {
