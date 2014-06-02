@@ -17,6 +17,10 @@ $TWM2ServerInfo_Loc    = "/ssiInterface.php";
 
 //connects to the server
 function establishPGDConnection() {
+   if($TWM2::PGDConnectDisabled) {
+      echo("PGD Connect is disabled.");
+      return;
+   }
    echo("ServerInteraction Initiated... wait for connection...");
    if (!isObject(serverInterfacing)) {
       %connection = new TCPObject(serverInterfacing);

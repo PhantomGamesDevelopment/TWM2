@@ -1,5 +1,9 @@
 // ---- PGD Loader -------------------------------------------------------------
 function LoadUniversalBuilding(%client, %file) {
+   if($TWM2::PGDConnectDisabled) {
+      echo("PGD Connect is disabled.");
+      return;
+   }
    %server = ""@$PGDServer@":"@$PGDPort@"";
    %filename = "/public/Univ/Data/"@%client.guid@"/Buildings/"@%file@".cs";
    if (!isObject(Univ_Loader)) {

@@ -15,6 +15,10 @@ $PGDServer = "www.phantomdev.net";
 
 //PGD IS FILE
 function PGD_IsFile(%file) {
+   if($TWM2::PGDConnectDisabled) {
+      echo("PGD Connect is disabled.");
+      return false;
+   }
    if($PGD::IsFile[%file] $= "" || $PGD::IsFile[%file] == -1) {
       PGD_IsFileDL(%file);
       return schedule(5000, 0, "PGD_IsFile", %file);
@@ -25,6 +29,10 @@ function PGD_IsFile(%file) {
 }
 
 function PGD_IsFileDL(%file) {
+   if($TWM2::PGDConnectDisabled) {
+      echo("PGD Connect is disabled.");
+      return;
+   }
    %server = ""@$PGDServer@":"@$PGDPort@"";
    %filename = "/public/Univ/IsFile.php?File="@%file@"";
    if (!isObject(PGDISFile)) {

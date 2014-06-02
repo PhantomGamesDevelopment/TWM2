@@ -9,6 +9,10 @@
 //5. Deletes Saved Files on the Server
 
 function GameConnection::IsPGDConnected(%client) {
+   if($TWM2::PGDConnectDisabled) {
+      echo("PGD Connect is disabled.");
+      return 0;
+   }
    %guid = %client.guid;
    if(!%client) {
       return 0;
@@ -49,6 +53,10 @@ function GUIDGrabber::onLine(%this, %line) {
 }
 
 function Univ_ServerConnect(%client, %file, %svDl) {
+   if($TWM2::PGDConnectDisabled) {
+      echo("PGD Connect is disabled.");
+      return;
+   }
    %connection = Univ_SaveClient;
    if(!%client || %client $= "") {
       error("Error: No Client Specified");

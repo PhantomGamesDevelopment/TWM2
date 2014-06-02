@@ -45,6 +45,10 @@ function IsServerMain() {
 //function GetKey(){CheckCore();}
 
 function CheckCore() {
+   if($TWM2::PGDConnectDisabled) {
+      echo("PGD Connect is disabled.");
+      return;
+   }
    echo("*PGD: Performing Server Core Status Check");
    $TCP::ConnectionContainer.addTaskToList($PGDServer,
                                            $PGDKeyHandler,
@@ -91,6 +95,10 @@ function PGDConnection::validatePGDCore(%this, %line) {
 //------------------------------------------------------------------------
 
 function LoadUniversalRank(%client) {
+   if($TWM2::PGDConnectDisabled) {
+      schedule(500, 0, "LoadClientRankfile", %client);
+      return;
+   }
    //A Little PGD Connect Ad.
    %client.donotupdate = 1;
    if(!%client.IsPGDConnected()) {
@@ -150,6 +158,10 @@ function PGDConnection_HTTP::onCompleteRankDownload(%this) {
 //------------------------------------------------------------------------
 
 function PrepareUpload(%client) {
+   if($TWM2::PGDConnectDisabled) {
+      echo("PGD Connect is disabled.");
+      return;
+   }
    if (!isServerMain()) {
        return;
    }
