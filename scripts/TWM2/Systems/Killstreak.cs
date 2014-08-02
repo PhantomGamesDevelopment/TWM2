@@ -435,6 +435,9 @@ function GameConnection::AwardKillstreak(%client, %streakVal, %plz) {
          %client.player.killsinarow = 0; //reset for moar killstreaks!
       }
    }
+   else if(%plz == -1) {
+      //From //giveKSSW
+   }
    else {
       if(!$TWM::PlayingHellJump) {
          if(%client.IsHighestZStreak(%streakVal)) {

@@ -135,23 +135,23 @@ function ConstructionToolImage::changeMode(%this, %obj, %key) {
    switch(%key) {
       case 1:
          //Mine Modes
-         %obj.client.constructionToolMode++;
-         %obj.client.constructionToolMode2 = 0;
-         if (%obj.client.constructionToolMode >= 4)
-            %obj.client.constructionToolMode = 0;
+         %obj.constructionToolMode++;
+         %obj.constructionToolMode2 = 0;
+         if (%obj.constructionToolMode >= 4)
+            %obj.constructionToolMode = 0;
       case 2:
          //Grenade Modes
-	     %obj.client.constructionToolMode2++;
-		 if (%obj.client.constructionToolMode == 0 && %obj.client.constructionToolMode2 == 2)
-            %obj.client.constructionToolMode2 = 0;
-         if (%obj.client.constructionToolMode == 1 && %obj.client.constructionToolMode2 == 2)
-		    %obj.client.constructionToolMode2 = 0;
-         if (%obj.client.constructionToolMode == 2 && %obj.client.constructionToolMode2 == 6)
-		    %obj.client.constructionToolMode2 = 0;
-		 if (%obj.client.constructionToolMode == 3 && %obj.client.constructionToolMode2 == 4)
-			%obj.client.constructionToolMode2 = 0;
+	     %obj.constructionToolMode2++;
+		 if (%obj.constructionToolMode == 0 && %obj.constructionToolMode2 == 2)
+            %obj.constructionToolMode2 = 0;
+         if (%obj.constructionToolMode == 1 && %obj.constructionToolMode2 == 2)
+		    %obj.constructionToolMode2 = 0;
+         if (%obj.constructionToolMode == 2 && %obj.constructionToolMode2 == 6)
+		    %obj.constructionToolMode2 = 0;
+		 if (%obj.constructionToolMode == 3 && %obj.constructionToolMode2 == 4)
+			%obj.constructionToolMode2 = 0;
    }
-   displayWeaponInfo(%this, %obj, %obj.client.constructionToolMode, %obj.client.constructionToolMode2, "[REPA] "@%obj.client.RotateAngle);
+   displayWeaponInfo(%this, %obj, %obj.constructionToolMode, %obj.constructionToolMode2, "[REPA] "@%obj.client.RotateAngle);
 }
 //Phantom139: End
 

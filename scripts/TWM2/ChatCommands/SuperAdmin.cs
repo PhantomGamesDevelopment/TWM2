@@ -269,18 +269,24 @@ function parseSuperAdminCommands(%sender, %command, %args) {
             messageclient(%sender, 'MsgClient', '\c2No such player.');
             return 1;
          }
+         
+         if(!isSet(%target.ksListInstance)) {
+            %target.ksListInstance = initList();
+         }
+         %cAmt = 0;
+         
          %sw = getWord(%args,1);
          switch$(%sw) {
             case "UAV":
-               %target.HasUAV = 1;
+               %target.AwardKillstreak(1, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a UAV Recon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a UAV Beacon.");
             case "Airstrike":
-               %target.HasAirstrike = 1;
+               %target.AwardKillstreak(2, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" an airstrike beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you an airstrike.");
             case "UAMS":
-               %target.HasGM = 1;
+               %target.AwardKillstreak(3, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a UAMS beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a UAMS Strike.");
             case "UnlimUAMS":
@@ -288,7 +294,7 @@ function parseSuperAdminCommands(%sender, %command, %args) {
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a fully loaded UAMS.");
                CreateMissileSat(%target, 1);
             case "Helicopter":
-               %target.HasHeli = 1;
+               %target.AwardKillstreak(4, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Helicopter beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Helicopter beacon.");
             case "HeliGunner":
@@ -296,7 +302,7 @@ function parseSuperAdminCommands(%sender, %command, %args) {
                messageClient(%sender, 'MsgClient', "\c2You made "@%target.namebase@" a chopper gunner.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" has granted you Helicopter Gunner Access.");
             case "Harbingers":
-               %target.HasHarbinsWrath = 1;
+               %target.AwardKillstreak(9, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Harbinger's Wrath beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Harbinger's Wrath beacon.");
             case "UnlimHarbin":
@@ -308,51 +314,51 @@ function parseSuperAdminCommands(%sender, %command, %args) {
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you AC-130 gunship support.");
                startAC130(%target, 1, 1);
             case "GunHeli":
-               %target.HasGunshipHeli = 1;
+               %target.AwardKillstreak(7, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Gunship Helicopter beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Gunship Helicopter beacon.");
             case "Apache":
-               %target.HasChopperGunner = 1;
+               %target.AwardKillstreak(10, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" an Apache Gunner beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you an Apache Gunner beacon.");
             case "Artillery":
-               %target.HasArtillery = 1;
+               %target.AwardKillstreak(12, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Centaur Artillery beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Centaur Artillery beacon.");
             case "Nuke":
-               %target.HasNuke = 1;
+               %target.AwardKillstreak(14, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Nuclear Strike beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Nuclear Strike beacon.");
             case "ZBomb":
-               %target.HasZBomb = 1;
+               %target.AwardKillstreak(15, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Zombie-Bomb beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Zombie-Bomb beacon.");
             case "Harrier":
-               %target.HasHarrier = 1;
+               %target.AwardKillstreak(5, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Harrier Airstrike beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Harrier Airstrike beacon.");
             case "Stealth":
-               %target.HasSlthAirstrike = 1;
+               %target.AwardKillstreak(8, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Stealth Airstrike beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Stealth Airstrike beacon.");
             case "AC130":
-               %target.HasAcGunner = 1;
+               %target.AwardKillstreak(11, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" an AC-130 beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you an AC-130 beacon.");
             case "SatNuke":
-               %target.HasOLS = 1;
+               %target.AwardKillstreak(6, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Orbital Laser Strike beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Orbital Laser Strike beacon.");
             case "Fission":
-               %target.HasFission = 1;
+               %target.AwardKillstreak(16, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Fission Bomb :D.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Fission Bomb :D.");
             case "EMP":
-               %target.HasMassEMP = 1;
+               %target.AwardKillstreak(13, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Mass EMP Beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Mass EMP Beacon.");
             case "Napalm":
-               %target.HasNapalmHarrier = 1;
+               %target.AwardKillstreak(17, -1);
                messageClient(%sender, 'MsgClient', "\c2You gave "@%target.namebase@" a Napalm Airstrike beacon.");
                messageClient(%target, 'MsgClient', "\c2"@%sender.namebase@" gave you a Napalm Airstrike beacon.");
             default:

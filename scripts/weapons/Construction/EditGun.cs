@@ -102,19 +102,18 @@ datablock ShapeBaseImageData(EditGunImage) {
 
 function EditGunImage::onMount(%this, %obj, %slot) {
    Parent::onMount(%this, %obj, %slot);
-   DispEditorToolInfo(%obj);
-   if(!isSet(%obj.client.EditPMode)) {
-      %obj.client.EditPMode = 0;
+   if(!isSet(%obj.EditPMode)) {
+      %obj.EditPMode = 0;
    }
-   if(!isSet(%obj.client.EditSMode)) {
-      %obj.client.EditSMode = 0;
+   if(!isSet(%obj.EditSMode)) {
+      %obj.EditSMode = 0;
    }
    //Phantom139: Added
    %obj.hasMineModes = 1;
    %obj.hasGrenadeModes = 1;
    //Phantom139: End
    %obj.UsingEditTool = true;
-   displayWeaponInfo(%this, %obj, %obj.client.EditPMode, %obj.client.EditSMode);
+   displayWeaponInfo(%this, %obj, %obj.EditPMode, %obj.EditSMode);
 }
 
 function EditGunImage::onunmount(%this,%obj,%slot) {
@@ -160,25 +159,25 @@ function EditGunImage::changeMode(%this, %obj, %key) {
    switch(%key) {
       case 1:
          //Mine Modes
-         %obj.client.EditPMode++;
-         %obj.client.EditSMode = 0;
-         if (%obj.client.EditPMode >= 5)
-            %obj.client.EditPMode = 0;
+         %obj.EditPMode++;
+         %obj.EditSMode = 0;
+         if (%obj.EditPMode >= 5)
+            %obj.EditPMode = 0;
       case 2:
          //Grenade Modes
-	     %obj.client.EditSMode++;
-		 if (%obj.client.EditPMode == 0 && %obj.client.EditSMode == 21)
-            %obj.client.EditSMode = 0;
-         if (%obj.client.EditPMode == 1 && %obj.client.EditSMode == 21)
-		    %obj.client.EditSMode = 0;
-         if (%obj.client.EditPMode == 2 && %obj.client.EditSMode == 5)
-		    %obj.client.EditSMode = 0;
-		 if (%obj.client.EditPMode == 3 && %obj.client.EditSMode == 4)
-			%obj.client.EditSMode = 0;
-	     if (%obj.client.EditPMode == 4 && %obj.client.EditSMode == 2)
-		    %obj.client.EditSMode = 0;
+	     %obj.EditSMode++;
+		 if (%obj.EditPMode == 0 && %obj.EditSMode == 21)
+            %obj.EditSMode = 0;
+         if (%obj.EditPMode == 1 && %obj.EditSMode == 21)
+		    %obj.EditSMode = 0;
+         if (%obj.EditPMode == 2 && %obj.EditSMode == 5)
+		    %obj.EditSMode = 0;
+		 if (%obj.EditPMode == 3 && %obj.EditSMode == 4)
+			%obj.EditSMode = 0;
+	     if (%obj.EditPMode == 4 && %obj.EditSMode == 2)
+		    %obj.EditSMode = 0;
    }
-   displayWeaponInfo(%this, %obj, %obj.client.EditPMode, %obj.client.EditSMode);
+   displayWeaponInfo(%this, %obj, %obj.EditPMode, %obj.EditSMode);
 }
 
 //Editor Tool Functioning
