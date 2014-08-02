@@ -261,21 +261,6 @@ $Ranks::MinPoints[61] = 3000000;
 $Ranks::NewRank[61] = "Master Commander";
 $Ranks::RankTag[61] = "[MCmdr]";
 $Rank::RankCount = 61;
-$canRecalcTop5 = 1;
-
-//--------------------------------------
-//Misc
-//--------------------------------------
-
-function getNumberOfWords(%path){
-   %number = 0;
-   for(%i = 0; %i < 1000; %i++){
-	if(getWord(%path,%i) !$= "")
-	   %number++;
-	else
-	   return %number;
-   }
-}
 
 //TOP RANKS
 function findTopRanks() {
@@ -345,35 +330,6 @@ function SortTopRanks(%dlOBJ) {
       $Rank::TopRank[%i] = ""@%RankName@"";
    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function DoNameChangeChecks(%client) {
    if(!$TWM2::UseRankTags) {

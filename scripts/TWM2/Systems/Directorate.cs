@@ -32,29 +32,8 @@ function LoadClientFile(%client) {
    %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
    exec(%file);
    ClientContainer(%client);
-   Patch35FileTo36(%client); //check if they need to be patched to the new 3.6 system
    //
    loadChallengeData(%client);
    loadSettings(%client);
    %client.storeCreate();
-}
-
-//TWM2 3.5 -> 3.6
-function Patch35FileTo36(%client) {
-   %container = %client.container;
-   %rank = NameToID("TWM2Client_"@%client.guid);
-   %chal = NameToID("CCD_"@%client.guid);
-   %sett = NameToID("ClientSettings"@%client.guid);
-   //begin patch
-   if(!%container.isMember(%rank)) {
-      %container.add(%rank);
-   }
-   if(!%container.isMember(%chal)) {
-      %container.add(%chal);
-   }
-   if(!%container.isMember(%sett)) {
-      %container.add(%sett);
-   }
-   //save new file
-   SaveClientFile(%client);
 }

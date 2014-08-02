@@ -44,24 +44,6 @@ function CreateClientRankFile(%client) {
    MessageAll('WelcomeTheNoob',"\c4"@$ChatBot::Name@": Welcome To Total Warfare Mod For The First Time "@%client.namebase@".");
 }
 
-//Phantom139: This function is no longer necessary :)
-//function UpdateRankFile(%client) {
-//   if(%client.donotupdate) {
-//      echo("Stopped rank update on "@%client@", server denies access (probably loading univ rank)");
-//      return;
-//   }
-//   echo("Updating "@%client.namebase@"'s Rank File");
-//   %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
-//
-//   %scriptController = %client.TWM2Core;
-//   %scriptController.save(%file);
-//
-//   echo("Update complete");
-//   exec(%file);
-//
-//   checkForXPAwards(%client);
-//}
-
 function LoadClientRankfile(%client) {
    %client.donotupdate = 0;
    echo("Attempting To Load "@%client.namebase@"'s Ranks File");
