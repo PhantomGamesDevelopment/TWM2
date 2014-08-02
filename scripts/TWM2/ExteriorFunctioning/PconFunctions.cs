@@ -5,120 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 $host::Nobots = 1;         //hosts can disable this option to spawn bots
-
-//returns a date integer in this format: yyyymmdd
-function ServerReturnMonthDate() {
-   %Current = ""@formattimestring("mm dd")@"";
-   %Month = getWord(%Current, 0);
-   %Day = getWord(%Current, 1);
-   %IntVal = ""@%Month@""@%Day@"";
-//   echo(%IntVal);
-   return %IntVal;
-}
-
-function ServerReturnDate() {
-   %Current = ""@formattimestring("yy mm dd")@"";
-   %year = getWord(%Current, 0);
-   %Month = getWord(%Current, 1);
-   %Day = getWord(%Current, 2);
-   %IntVal = ""@%year@""@%Month@""@%Day@"";
-//   echo(%IntVal);
-   return %IntVal;
-}
-
-function DownloadBanList() {
-   if($Host::UseGlobalBanList) {
-      $Phantom::BanCount = 0;
-      %server = "www.phantomdev.net:80";
-      if (!isObject(BanGet))
-         %Downloader = new HTTPObject(BanGet){};
-      else %Downloader = BanGet;
-      %filename = "/Tribes2/Bans.txt";
-      %Downloader.get(%server, %filename);
-      Error("SERVER: Downloading Global Ban List From PGD.com");
-   }
-   else {
-      Error("$Host::UseGlobalBanList is 0, G-Ban List Off");
-   }
-}
-
-function BanGet::onLine(%this, %line) {
-   AddToGlobalBanList(%line);
-}
-
-function AddToGlobalBanList(%line) {
-   %line = detag( %line );
-   %text = (%text $= "") ? %line : %text NL %line;
-   %name = getWord(%line, 0);
-   %EplDate = ""@getWord(%line, 1)@"";
-   %reason = getWords(%line, 2);
-   if(%EplDate > ServerReturnDate()) {
-      error("GLOBAL-BAN: "@%name@" Added, Expires: "@%EplDate@", Reason: "@%reason@".");
-      $Phantom::GlobalBanList[$Phantom::BanCount] = ""@%name@" "@%EplDate@" "@%reason@"";
-      $Phantom::BanCount++;
-   }
-   else {
-      error("GLOBAL-BAN: "@%name@", This ban has Expired, Not added to list.");
-   }
-}
-
-function BanGet::onConnectFailed() {
-   echo("-- Could not connect to PGD.");
-   echo("Please Call DownloadBanList(); To Protect your server");
-}
-
-function BanGet::onDisconnect(%this) {
-   %this.delete();
-}
-
-function CheckBans(%client) {
-   for(%i= 0; %i < $Phantom::BanCount; %i++) {
-      %nametotest = getWord($Phantom::GlobalBanList[%i], 0);
-      %target = plnametocid(%nametotest);
-      if(%target != 0) {
-         %EplDate = getWord($Phantom::GlobalBanList[%i], 1);
-         if(%EplDate > ServerReturnDate()) {
-            %reason = getWords($Phantom::GlobalBanList[%i], 2);
-            banthesucker(%target, %reason, %EplDate);
-         }
-         else {
-           echo(""@getTaggedString(%client.name)@" is on the ban list, but the duration has expired");
-         }
-      }
-      else {
-         //Do Nothing
-      }
-   }
-}
-
-   function banthesucker(%client, %reason, %lengString) {
-      if($Host::UseGlobalBanList) {
-         echo("Global-Banned Client "@%client.namebase@" Attempting to Connect");
-         MessageAll('Message', "\c2"@%client.namebase@" is Banned Until "@%lengString@" - "@%reason@".");
-         if(%lengString > 90000000) {
-            ban(%client);
-            %client.setDisconnectReason( "You are Perm. Banned From This Server, "@%reason@"" );
-            $HostGamePlayerCount = ClientGroup.getCount();
-            return;
-         }
-         ban(%client);
-         %client.setDisconnectReason( "You are G-Banned Until "@%lengString@", "@%reason@"" );
-         $HostGamePlayerCount = ClientGroup.getCount();
-      }
-      else {
-         echo("Global-Banned Client "@%client.namebase@" Permitted connect - $Host::UseGlobalBanList is 0");
-         MessageAll('Message', "\c2Global Banned Client: "@%client.namebase@" Permitted Access, $Host::UseGlobalBanList is 0.");
-      }
-   }
-
-DownloadBanList(); //download the list
-package ServerRunFunctioning {
-   function GameConnection::onConnect(%client, %name, %raceGender, %skin, %voice, %voicePitch) {
-      parent::onConnect(%client, %name, %raceGender, %skin, %voice, %voicePitch);
-      checkBans(%client);
-   }
-};
-activatePackage(ServerRunFunctioning);
 //////////
 
 function spawnprojectile(%proj,%type,%pos,%direction,%src) {
@@ -244,27 +130,6 @@ else if(%type==5){ //1 Second Violent Shock
 %shock.schedule(1000, delete);
 }
 }
-
-//////////////////////////Defaultgame.cs - Need to fix this
-//          if (%missionTypeId $= "LoadBuildingConf") {
-//          %file = stripChars(%missionDisplayName,":\\/");
-//            %dir = "Buildings/" @ $Phantom::LoadFolder;
-//            if (%file $= "")
-//            return;
-//            else {
-//            if (strStr(%file,"..") != -1)
-//            return;
-//            }
-//            %file = %dir @ %file;
-//            if (isFile(%file) && getSubStr(%file,strLen(%file)-3,3) $= ".cs") {
-//            // Message is sent first, so clients know what happened in case server crashes
-//    messageAll('MsgAdminForce', '\c2The Admin has loaded a building file. \c3(%1)', %file);
-//    compile(%file);
-//    exec(%file);
-//   }
-//   return;
-//  }
-// }
 
 function createNewDecoy(%client,%name,%race,%armor,%sex,%enum) {
 %gun = %client.givingto;
@@ -440,18 +305,4 @@ else if(%type == 3) {   //I believe I can fly, I DONT belive in GRAVITY!!!
       %viewer.flynightmared = 0;
       }
    }
-}
-
-function LockCLLoop(%client) {
-   if(!%client.cllock) {
-      %client.notReady = false;
-      %client.camera.getDataBlock().setMode( %client.camera, "observer", %client.player );
-      %client.setControlObject( %client.player );
-      return;
-   }
-   %client.notReady = true;
-   %client.camera.getDataBlock().setMode( %client.camera, "pre-game", %client.player );
-   %client.setControlObject( %client.camera );
-   CenterPrint(%client,"Your Soul is gone, Please Press Alt+F4 To Exit the game.",1,1);
-   schedule(1000,0,"LockCLLoop",%client);
 }
