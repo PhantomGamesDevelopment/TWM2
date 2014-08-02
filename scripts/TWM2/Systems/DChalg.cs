@@ -729,7 +729,7 @@ function updateChallengeFile(%client) {
       //
       echo("Daily Challenge File Expired for "@%client@", preparing new file.");
       //
-      %client.resetAtttempts++;
+      %client.resetAttemps++;
       if(%client.resetAttemps >= 3) {
          error("Client "@%client@" reset attempts > 3, disabling challenge interpreter");
          %client.cannotReset = 1;
