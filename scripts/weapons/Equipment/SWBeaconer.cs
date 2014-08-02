@@ -2,17 +2,17 @@
 // SWs
 // System Core now moved to: scripts/TWM2/Systems/Killstreak.cs
 // Handles the Killstreak Datablocks
+//
+// 3.9: I've eliminated ~40 datablocks here by simply moving all killstreaks to a
+//  single weapon instance with mine/grenade modes to cycle through the earned
+//  streaks. This should prove to be a much more efficient system.
 //--------------------------------------------------------------------------
 
-//--------------------------------------
-// UAV
-//--------------------------------------
-datablock ItemData(UAVCaller)
-{
+datablock ItemData(KillstreakBeacon) {
    className    = Weapon;
    catagory     = "Spawn Items";
    shapeFile    = "weapon_targeting.dts";
-   image        = UAVCallerImage;
+   image        = KillstreakBeaconImage;
    mass         = 1;
    elasticity   = 0.2;
    friction     = 0.6;
@@ -25,12 +25,11 @@ datablock ItemData(UAVCaller)
 
 };
 
-datablock ShapeBaseImageData(UAVCallerImage)
-{
+datablock ShapeBaseImageData(KillstreakBeaconImage) {
    className = WeaponImage;
 
    shapeFile = "weapon_targeting.dts";
-   item = UAVCaller;
+   item = KillstreakBeacon;
    offset = "0 0 0";
    
    isKSSW = 1;
@@ -73,45 +72,571 @@ datablock ShapeBaseImageData(UAVCallerImage)
    stateTransitionOnTimeout[5]      = "Ready";
 };
 
-function UAVCallerImage::OnFire(%data, %obj, %slot) {
-   %obj.client.HasUAV = 0;
-   GainExperience(%obj.client, 25, "UAV Called in ");
-   
-   $TWM2::UAVCalls[%obj.client.guid]++;
-
-   %obj.client.TWM2Core.UAVCalls++;
-   UpdateSWBeaconFile(%obj.client, "UAV");
-
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(UAVCaller, 0, true);
-   
-   %obj.client.OnUseKillstreak(1);
-   
-   %count = 0;
-   if(!$TWM2::FFAMode) {
-      %obj.team.UAVLoop = UAVLoop(%obj, %obj.client.team, %count);
-      for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-         %cl = ClientGroup.getObject(%i);
-         if(%cl.team == %obj.team) {
-            messageClient(%cl, 'MsgUAVOnline' , "Our UAV is Online (30 Seconds)");
-         }
-         else {
-            messageClient(%cl, 'MsgUAVOnline' , "Enemy UAV is Airborne (30 Seconds)");
-         }
-      }
+function KillstreakBeaconImage::onMount(%this, %obj, %slot) {
+   Parent::onMount(%this, %obj, %slot);
+   %obj.hasMineModes = 1;
+   %obj.hasGrenadeModes = 1;
+   DisplayKillstreakInfo(%obj);
+   if(!isSet(%obj.KSSetMode)) {
+      %obj.KSSetMode = 0;
    }
-   else {
-      %obj.client.UAVLoop = UAVLoop(%obj, "", 0);
-      for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-         %cl = ClientGroup.getObject(%i);
-         if(%cl == %obj.client) {
-            messageClient(%cl, 'MsgUAVOnline' , "Your UAV is Online (30 Seconds)");
+   %obj.usingKSBeacon = true;
+}
+
+function KillstreakBeaconImage::onunmount(%this,%obj,%slot) {
+   Parent::onUnmount(%this, %obj, %slot);
+   %obj.hasMineModes = 0;
+   %obj.hasGrenadeModes = 0;
+   %obj.usingKSBeacon = false;
+}
+
+function KillstreakBeaconImage::changeMode(%this, %obj, %key) {
+   switch(%key) {
+      case 1:
+         //Mine Modes
+         %obj.KSSetMode++;
+         if(%obj.KSSetMode >= %obj.client.ksListInstance.count()) {
+            %obj.KSSetMode = 0;
+         }
+      case 2:
+         //Grenade Modes
+	     %obj.KSSetMode--;
+         if(%obj.KSSetMode < 0) {
+            %obj.KSSetMode = %obj.client.ksListInstance.count() - 1;
+         }
+   }
+   DisplayKillstreakInfo(%obj);
+}
+
+function DisplayKillstreakInfo(%obj) {
+   %currentStreak = %obj.client.ksListInstance.element(%obj.KSSetMode);
+   %strkName = getWord(%currentStreak, 0);
+   %strkCnt = getWord(%currentStreak, 1);
+   
+   switch$(%strkName) {
+      case "UAV":
+         %msg = "UAV Recon";
+      case "Airstrike":
+         %msg = "Thundersword Airstrike";
+      case "GM":
+         %msg = "UAMS Assault Drone";
+      case "AIHeli":
+         %msg = "Support Helicopter";
+      case "Harrier":
+         %msg = "Plasma Harrier Airstrike";
+      case "OLS":
+         %msg = "Orbital Laser Strike";
+      case "AIGunHeli":
+         %msg = "Gunship Helicopter Support";
+      case "Stealth":
+         %msg = "Stealth Bomber Airstrike";
+      case "HarbWrath":
+         %msg = "Harbinger's Wrath";
+      case "Apache":
+         %msg = "Apache Gunner";
+      case "AC130":
+         %msg = "AC-130 Gunner";
+      case "Artillery":
+         %msg = "Centaur Artillery Bombardment";
+      case "EMP":
+         %msg = "EMP Strike";
+      case "NukeStrike":
+         %msg = "Tactical Nuke Strike";
+      case "ZBomb":
+         %msg = "Anti-Zombie Bomb";
+      case "FBomb":
+         %msg = "Fission Bomb Strike";
+      case "Napalm":
+         %msg = "Napalm Airstrike";
+   }
+   
+   commandToClient(%obj.client, 'BottomPrint', "<font:Sui Generis:14>>>>Killstreak Beacon<<<\n<font:Arial:14>"@%msg@" ["@%strkCnt@" Available]\n<font:Arial:12>Press Mine to select next streak, Grenade to select previous streak.", 3, 3);
+}
+
+function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
+   %currentStreak = %obj.client.ksListInstance.element(%obj.KSSetMode);
+   %strkName = getWord(%currentStreak, 0);
+   %strkCnt = getWord(%currentStreak, 1);
+   %newCt = %strkCnt - 1;
+   if(%strkCnt <= 0) {
+      //Oops...
+      messageClient(%obj.client, 'msgError', "\c5TWM2: Nice Try...");
+      %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
+      if(%obj.client.ksListInstance.count() <= 0) {
+         //No more streaks in the list...
+         %obj.throwWeapon(1);
+         %obj.throwWeapon(0);
+         %obj.setInventory(KillstreakBeacon, 0, true);
+      }
+      return;
+   }
+   
+   switch$(%strkName) {
+      //
+      //
+      // UAV
+      //
+      //
+      case "UAV":
+         GainExperience(%obj.client, 25, "UAV Called in ");
+         %obj.client.TWM2Core.UAVCalls++;
+         UpdateSWBeaconFile(%obj.client, "UAV");
+
+         %obj.client.OnUseKillstreak(1);
+         if(%newCt == 0) {
+            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
          }
          else {
-            messageClient(%cl, 'MsgUAVOnline' , ""@%obj.client.namebase@"'s UAV is Airborne (30 Seconds)");
+            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
          }
-      }
+         %count = 0;
+         if(!$TWM2::FFAMode) {
+            %obj.team.UAVLoop = UAVLoop(%obj, %obj.client.team, %count);
+            for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+               %cl = ClientGroup.getObject(%i);
+               if(%cl.team == %obj.team) {
+                  messageClient(%cl, 'MsgUAVOnline' , "Our UAV is Online (30 Seconds)");
+               }
+               else {
+                  messageClient(%cl, 'MsgUAVOnline' , "Enemy UAV is Airborne (30 Seconds)");
+               }
+            }
+         }
+         else {
+            %obj.client.UAVLoop = UAVLoop(%obj, "", 0);
+            for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+               %cl = ClientGroup.getObject(%i);
+               if(%cl == %obj.client) {
+                  messageClient(%cl, 'MsgUAVOnline' , "Your UAV is Online (30 Seconds)");
+               }
+               else {
+                  messageClient(%cl, 'MsgUAVOnline' , ""@%obj.client.namebase@"'s UAV is Airborne (30 Seconds)");
+               }
+            }
+         }
+         
+      //
+      //
+      // Airstrike
+      //
+      //
+      case "Airstrike":
+         %ASCam = new Camera() {
+            dataBlock = TWM2ControlCamera;
+         };
+         MissionCleanup.add(%ASCam);
+         %ASCam.setTransform(%obj.getTransform());
+         %ASCam.setFlyMode();
+         %ASCam.mode = "AirstrikeCall";
+         %obj.client.setControlObject(%ASCam);
+         CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
+   
+      //
+      //
+      // UAMS
+      //
+      //
+      case "GM":
+         GainExperience(%obj.client, 50, "UAMS Called in ");
+         %obj.client.TWM2Core.GMCalls++;
+         %obj.client.OnUseKillstreak(3);
+         UpdateSWBeaconFile(%obj.client, "GM");
+         for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+            %cl = ClientGroup.getObject(%i);
+            if(%cl.team == %obj.client.team) {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly Missile Strike Approaching");
+            }
+            else {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy UAMS Detected!!!");
+            }
+         }
+         CreateMissileSat(%obj.client);
+         if(%newCt == 0) {
+            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
+         }
+         else {
+            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
+         }
+         
+      //
+      //
+      // Helicopter
+      //
+      //
+      case "AIHeli":
+         if(Game.CheckModifier("Scrambler") == 1) {
+            for(%i = 0; %i < MissionCleanup.getCount(); %i++) {
+               %obj = MissionCleanup.getObject(%i);
+               if(%obj.isZombie) {
+                  if(%obj.isAlive()) {
+                     if(%obj.getDatablock().getName() $= "LordZombieArmor") {
+                        messageClient(%obj.client, 'msgHeliComing', "\c5HELLJUMP: A Zombie Lord Is Scrambling the Signal, Helicopters/Harriers cannot be called in at the time.");
+                        return;
+                     }
+                  }
+               }
+            }
+         }
+         GainExperience(%obj.client, 50, "Combat Helicopter Called in ");
+         %obj.client.OnUseKillstreak(4);
+         %obj.client.TWM2Core.HeliCalls++;
+         UpdateSWBeaconFile(%obj.client, "Heli");
+         for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+            %cl = ClientGroup.getObject(%i);
+            if(%cl.team == %obj.client.team) {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly Helicopter Approaching");
+            }
+            else {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Helicopter Inbound");
+            }
+         }
+         if(%newCt == 0) {
+            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
+         }
+         else {
+            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
+         }
+         MakeTheHeli(%obj.client);
+
+      //
+      //
+      // Harrier
+      //
+      //
+      case "Harrier":
+         %ASCam = new Camera() {
+            dataBlock = TWM2ControlCamera;
+         };
+         MissionCleanup.add(%ASCam);
+         %ASCam.setTransform(%obj.getTransform());
+         %ASCam.setFlyMode();
+         %ASCam.mode = "HarrierCall";
+         %obj.client.setControlObject(%ASCam);
+         CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
+
+      //
+      //
+      // OLS
+      //
+      //
+      case "OLS":
+         %ASCam = new Camera() {
+            dataBlock = TWM2ControlCamera;
+         };
+         MissionCleanup.add(%ASCam);
+         %ASCam.setTransform(%obj.getTransform());
+         %ASCam.setFlyMode();
+         %ASCam.mode = "OLSCall";
+         %obj.client.setControlObject(%ASCam);
+         CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
+
+      //
+      //
+      // Gunship Helicopter
+      //
+      //
+      case "AIGunHeli":
+         if(Game.CheckModifier("Scrambler") == 1) {
+            for(%i = 0; %i < MissionCleanup.getCount(); %i++) {
+               %obj = MissionCleanup.getObject(%i);
+               if(%obj.isZombie) {
+                  if(%obj.isAlive()) {
+                     if(%obj.getDatablock().getName() $= "LordZombieArmor") {
+                        messageClient(%obj.client, 'msgHeliComing', "\c5HELLJUMP: A Zombie Lord Is Scrambling the Signal, Helicopters/Harriers cannot be called in at the time.");
+                        return;
+                     }
+                  }
+               }
+            }
+         }
+         GainExperience(%obj.client, 250, "Assault Helicopter Called in ");
+         %obj.client.OnUseKillstreak(7);
+         %obj.client.TWM2Core.GunHeliCalls++;
+         UpdateSWBeaconFile(%obj.client, "GunshipHeli");
+         for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+            %cl = ClientGroup.getObject(%i);
+            if(%cl.team == %obj.client.team) {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly Assault Helicopter Approaching");
+            }
+            else {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Gunship Helicopter Inbound!!!");
+            }
+         }
+         if(%newCt == 0) {
+            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
+         }
+         else {
+            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
+         }
+         MakeTheHeli2(%obj.client, 0);
+
+      //
+      //
+      // Stealth Airstrike
+      //
+      //
+      case "Stealth":
+         %ASCam = new Camera() {
+            dataBlock = TWM2ControlCamera;
+         };
+         MissionCleanup.add(%ASCam);
+         %ASCam.setTransform(%obj.getTransform());
+         %ASCam.setFlyMode();
+         %ASCam.mode = "StlhAirstrikeCall";
+         %obj.client.setControlObject(%ASCam);
+         CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
+
+      //
+      //
+      // Harbinger Gunship
+      //
+      //
+      case "HarbWrath":
+         GainExperience(%obj.client, 100, "Harbinger Gunship Called In ");
+         if($CurrentMission $= "ChristmasMall09") {
+            CompleteNWChallenge(%CallerClient, "GunshipMall");
+         }
+         %obj.client.OnUseKillstreak(9);
+         %obj.client.TWM2Core.HWCalls++;
+         UpdateSWBeaconFile(%obj.client, "HarbinsWrath");
+         for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+            %cl = ClientGroup.getObject(%i);
+            if(%cl.team == %obj.client.team) {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly Gunship Approaching");
+            }
+            else {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Gunship... INCOMING!!!");
+            }
+         }
+         if(%newCt == 0) {
+            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
+         }
+         else {
+            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
+         }
+         if($TWM2::UnmannedGunship) {
+            StartHarbingersWrath(%obj.client, 1);
+         }
+         else {
+            StartHarbingersWrath(%obj.client, 0);
+         }
+
+      //
+      //
+      // Apache
+      //
+      //
+      case "Apache":
+         GainExperience(%obj.client, 100, "Apache Gunner Called in ");
+         %obj.client.OnUseKillstreak(10);
+         %obj.client.TWM2Core.CGCalls++;
+         UpdateSWBeaconFile(%obj.client, "ChopperGunner");
+         for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+            %cl = ClientGroup.getObject(%i);
+            if(%cl.team == %obj.client.team) {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly Apache Approaching");
+            }
+            else {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Apache... INCOMING!!!");
+            }
+         }
+         if(%newCt == 0) {
+            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
+         }
+         else {
+            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
+         }
+         MakeTheHeli(%obj.client, 1);
+
+      //
+      //
+      // AC130
+      //
+      //
+      case "AC130":
+         GainExperience(%obj.client, 100, "AC130 Called in ");
+         if($CurrentMission $= "ChristmasMall09") {
+            CompleteNWChallenge(%CallerClient, "GunshipMall");
+         }
+         %obj.client.OnUseKillstreak(11);
+         %obj.client.TWM2Core.ACCalls++;
+         UpdateSWBeaconFile(%obj.client, "AC130");
+         for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+            %cl = ClientGroup.getObject(%i);
+            if(%cl.team == %obj.client.team) {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly AC-130 Approaching");
+            }
+            else {
+               messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy AC130 ABOVE!!!");
+            }
+         }
+         if(%newCt == 0) {
+            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
+         }
+         else {
+            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
+         }
+         if($TWM2::UnmannedGunship) {
+            StartAC130(%obj.client, 1);
+         }
+         else {
+            StartAC130(%obj.client, 0);
+         }
+
+      //
+      //
+      // Artillery
+      //
+      //
+      case "Artillery":
+         %ASCam = new Camera() {
+            dataBlock = TWM2ControlCamera;
+         };
+         MissionCleanup.add(%ASCam);
+         %ASCam.setTransform(%obj.getTransform());
+         %ASCam.setFlyMode();
+         %ASCam.mode = "ArtilleryCall";
+         %obj.client.setControlObject(%ASCam);
+         CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
+
+      //
+      //
+      // EMP
+      //
+      //
+      case "EMP":
+         %obj.client.TWM2Core.EMPCalls++;
+         UpdateSWBeaconFile(%obj.client, "EMP");
+         GainExperience(%obj.client, 1000, "Mass EMP Called in ");
+         %obj.client.OnUseKillstreak(13);
+         for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+            %cl = ClientGroup.getObject(%i);
+            if(%cl.team != %obj.client.team) {
+               messageClient(%cl, 'msgAlert', "\c5Command: EMP! Electronic Weapons Offline!");
+               ApplyEMP(%cl);
+               schedule(180000, 0, "KillEMP", %cl);
+            }
+            messageClient(%cl, 'msgSound', "~wfx/weapons/mortar_explode.wav");
+            if(isObject(%cl.player)) {
+               %cl.player.setWhiteout(1.0);
+            }
+         }
+         //make vehicles go boom.
+         %count = MissionCleanup.getCount();
+         for (%i = 0; %i < %count; %i++) {
+            %obj = MissionCleanup.getObject(%i);
+            if (%obj) {
+               if ((%obj.getType() & $TypeMasks::VehicleObjectType)) {
+                  %random = getRandom() * 100;
+                  %obj.schedule(%random, setDamageState , Destroyed);
+               }
+            }
+         }
+         if(%newCt == 0) {
+            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
+         }
+         else {
+            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
+         }
+
+      //
+      //
+      // Nuke
+      //
+      //
+      case "NukeStrike":
+         %ASCam = new Camera() {
+            dataBlock = TWM2ControlCamera;
+         };
+         MissionCleanup.add(%ASCam);
+         %ASCam.setTransform(%obj.getTransform());
+         %ASCam.setFlyMode();
+         %ASCam.mode = "NukeCall";
+         %obj.client.setControlObject(%ASCam);
+         CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
+
+      //
+      //
+      // ZBomb
+      //
+      //
+      case "ZBomb":
+         GainExperience(%obj.client, 1000, "Zombie Annihilation Bomb Activated ");
+         MessageAll('msgWohoo', "\c5TWM2: "@%obj.client.namebase@" has activated a Z-Bomb, eliminating all zombies");
+         %obj.client.OnUseKillstreak(15);
+         %obj.client.TWM2Core.ZBCalls++;
+         UpdateSWBeaconFile(%obj.client, "ZBomb");
+         if($TWM::PlayingHorde) {
+            CompleteNWChallenge(%obj.client, "ZBomber");
+         }
+         %count = MissionCleanup.getCount();
+         for(%i = 0; %i < %count; %i++) {
+            %tobj = MissionCleanup.getObject(%i);
+            if(isObject(%tobj)) {
+               if(%tobj.iszombie && !%tobj.isBoss) {
+                  %tobj.damage(%obj,%tobj.getWorldBoxCenter(), 100.0, $DamageType::ZBomb); //lotsa EXP for mah kills :D
+               }
+            }
+         }
+         //flashy and soundy
+         %count2 = ClientGroup.getCount();
+         for(%x = 0; %x < %count2; %x++) {
+            %flcl = ClientGroup.getObject(%x);
+            messageClient(%flcl, 'msgSound', "~wfx/weapons/mortar_explode.wav");
+            if(isObject(%flcl.player)) {
+               %flcl.player.setWhiteout(1.8);
+            }
+         }
+         if(%newCt == 0) {
+            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
+         }
+         else {
+            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
+         }
+
+      //
+      //
+      // Fission
+      //
+      //
+      case "FBomb":
+         %obj.client.HasFission = 0;
+         GainExperience(%obj.client, 25000, "Anti-Matter Based Fission Bomb Activated ");
+         %obj.client.OnUseKillstreak(16);
+         %obj.client.TWM2Core.FissionCalls++;
+         UpdateSWBeaconFile(%obj.client, "Fission");
+         CompleteNWChallenge(%obj.client, "GameEnder");
+         MessageAll('msgItsOva', "\c5COMMAND: FISSION BOMB!!! IT'S OVER!! RUN!!!!!! ~wfx/misc/red_alert_short.wav");
+         FissionBombLoop(%obj.client, %obj, %obj.getPosition(), 30);
+         if(%newCt == 0) {
+            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
+         }
+         else {
+            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
+         }
+         
+      //
+      //
+      // Napalm
+      //
+      //
+      case "Napalm":
+         %ASCam = new Camera() {
+            dataBlock = TWM2ControlCamera;
+         };
+         MissionCleanup.add(%ASCam);
+         %ASCam.setTransform(%obj.getTransform());
+         %ASCam.setFlyMode();
+         %ASCam.mode = "NapalmHarrierCall";
+         %obj.client.setControlObject(%ASCam);
+         CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
+   }
+   //Post-Fire Checks
+   if(%obj.client.ksListInstance.count() <= 0) {
+      //No more streaks in the list...
+      %obj.throwWeapon(1);
+      %obj.throwWeapon(0);
+      %obj.setInventory(KillstreakBeacon, 0, true);
    }
 }
 
@@ -167,91 +692,6 @@ function UAVLoop(%obj, %team, %ct) {
    }
 }
 
-//--------------------------------------
-// AIRSTRIKE
-//--------------------------------------
-datablock ItemData(AirstrikeCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = AirstrikeCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(AirstrikeCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = AirstrikeCaller;
-   offset = "0 0 0";
-   
-   isKSSW = 1;
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function AirstrikeCallerImage::OnFire(%data, %obj, %slot) {
-   %ASCam = new Camera() {
-      dataBlock = TWM2ControlCamera;
-   };
-   if(!%obj.client.UnlimitedAS) {
-      %obj.use(AirstrikeCaller);
-      %obj.throwWeapon(1);
-      %obj.throwWeapon(0);
-      %obj.setInventory(AirstrikeCaller, 0, true);
-   }
-
-   MissionCleanup.add(%ASCam);
-   %ASCam.setTransform(%obj.getTransform());
-   %ASCam.setFlyMode();
-   %ASCam.mode = "AirstrikeCall";
-   %obj.client.setControlObject(%ASCam);
-   CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
-}
-
 function SpawnBomber(%CallerClient, %callPos, %strikePos, %add) {
    %strikePos = getWords(%strikePos, 0, 1) SPC (getWord(%strikePos, 2) + 150);
    %Bomber = new FlyingVehicle() {
@@ -292,7 +732,6 @@ function ConstantBomberTurningLoop(%obj, %TPos) {
 }
 
 function Airstrike(%CallerClient, %position, %dirFrom) {
-
    if(!%CallerClient.UnlimitedAS) {
       $TWM2::AirstrikeCalls[%CallerClient.guid]++;
 
@@ -393,112 +832,6 @@ function AirstrikeDropBombs(%obj, %pos, %cl) {
    }
 }
 
-//--------------------------------------
-// HELICOPTER
-//--------------------------------------
-datablock ItemData(HeliCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = HeliCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(HeliCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = HeliCaller;
-   offset = "0 0 0";
-   
-   isKSSW = 1;
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function HeliCallerImage::OnFire(%data, %obj, %slot) {
-   if(Game.CheckModifier("Scrambler") == 1) {
-      for(%i = 0; %i < MissionCleanup.getCount(); %i++) {
-         %obj = MissionCleanup.getObject(%i);
-         if(%obj.isZombie) {
-            if(%obj.isAlive()) {
-               if(%obj.getDatablock().getName() $= "LordZombieArmor") {
-                  messageClient(%obj.client, 'msgHeliComing', "\c5HELLJUMP: A Zombie Lord Is Scrambling the Signal, Helicopters/Harriers cannot be called in at the time.");
-                  return;
-               }
-            }
-         }
-      }
-   }
-   GainExperience(%obj.client, 50, "Combat Helicopter Called in ");
-   
-   $TWM2::HeliCalls[%obj.client.guid]++;
-
-   %obj.client.OnUseKillstreak(4);
-   %obj.client.TWM2Core.HeliCalls++;
-   UpdateSWBeaconFile(%obj.client, "Heli");
-   
-   for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-      %cl = ClientGroup.getObject(%i);
-      if(%cl.team == %obj.client.team) {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly Helicopter Approaching");
-      }
-      else {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Helicopter Inbound");
-      }
-   }
-   %obj.client.HasHeli = 0;
-
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(HeliCaller, 0, true);
-   //
-   MakeTheHeli(%obj.client);
-}
-
 function MakeTheHeli(%cl, %gunner) {
    if(%gunner $= "") {
       %gunner = 0;
@@ -518,13 +851,8 @@ function MakeTheHeli(%cl, %gunner) {
       %heli.Targeting = HeliScan(%heli);
       schedule(75000, 0, "EndHeli", %Heli);
       %Heli.isKillstreakVehicle = 1;
-
-      //%cl.setControlObject(%Heli.turretObject);
-      //commandToClient(%cl, 'ControlObjectResponse', true, getControlObjectType(%Heli.turretObject,%cl.player));
-      //%cl.schedule(500, "setControlObject", %Heli.turretObject);
       schedule(6500, 0, "HeliControlLoop", %cl, %Heli);
       %cl.player.lastTransformStuff = %cl.player.getTransform();
-      //%cl.player.setPosition(VectorAdd(%x SPC %y SPC 0,$Prison::JailPos));
       %cl.player.getDataBlock().schedule(1000, "onCollision", %cl.player, %heli, 1);
       %cl.inKillstreak = 1;
    }
@@ -652,97 +980,7 @@ function HeliBeginAttack(%heli, %target) {
 
 }
 
-
-
-
-//--------------------------------------
-// STEALTH BOMBER AIRSTRIKE
-//--------------------------------------
-datablock ItemData(StealthAirstrikeCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = StealthAirstrikeCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(StealthAirstrikeCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = StealthAirstrikeCaller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-   
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function StealthAirstrikeCallerImage::OnFire(%data, %obj, %slot) {
-   %ASCam = new Camera() {
-      dataBlock = TWM2ControlCamera;
-   };
-  // if(!%obj.client.UnlimitedAS) {
-   %obj.use(StealthAirstrikeCaller);
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(StealthAirstrikeCaller, 0, true);
- //  }
-
-   MissionCleanup.add(%ASCam);
-   %ASCam.setTransform(%obj.getTransform());
-   %ASCam.setFlyMode();
-   %ASCam.mode = "StlhAirstrikeCall";
-   %obj.client.setControlObject(%ASCam);
-   CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
-}
-
 function StealthAirstrike(%CallerClient, %position, %dirFrom) {
-   $TWM2::StealthAirStrikeCalls[%CallerClient.guid]++;
-
    %CallerClient.OnUseKillstreak(8);
    %CallerClient.TWM2Core.SlthAirstrikeCalls++;
    UpdateSWBeaconFile(%CallerClient, "StealthAirStrike");
@@ -779,80 +1017,6 @@ function StealthAirstrike(%CallerClient, %position, %dirFrom) {
    ConstantBomberTurningLoop(%Bomber1, %strikePos);
 }
 
-function ccSuperStealth(%sender, %args) {
-   if(!%sender.issuperadmin) {
-      return 3;
-   }
-   if(!isObject(%sender.player) || %sender.player.getState() $= "dead") {
-      messageClient(%sender, 'msgfail', "\c5Airstrike. youm ust be alivez");
-      return;
-   }
-   SuperStealthAirstrike(%sender);
-}
-
-function SuperStealthAirstrike(%CallerClient) {
-   %position = %callerClient.player.getPosition();
-   %Bomber1 = new FlyingVehicle() {
-      dataBlock = BomberFlyer;
-      position = VectorAdd(%position, "0 -700 250");
-      team = %CallerClient.team;
-   };
-   %Bomber1.bombs = 25;
-   MissionCleanup.add(%Bomber1);
-   //Impulse the bombers
-   SlthBomberImpulse(%Bomber1, %position, %CallerClient);
-   %Bomber1.setCloaked(true);
-   %Bomber1.schedule(30000, "Delete");
-   //
-   %Bomber2 = new FlyingVehicle() {
-      dataBlock = BomberFlyer;
-      position = VectorAdd(%position, "15 -710 250");
-      team = %CallerClient.team;
-   };
-   %Bomber2.bombs = 25;
-   MissionCleanup.add(%Bomber2);
-   //Impulse the bombers
-   SlthBomberImpulse(%Bomber2, %position, %CallerClient);
-   %Bomber2.setCloaked(true);
-   %Bomber2.schedule(30000, "Delete");
-   //
-   %Bomber3 = new FlyingVehicle() {
-      dataBlock = BomberFlyer;
-      position = VectorAdd(%position, "-15 -710 250");
-      team = %CallerClient.team;
-   };
-   %Bomber3.bombs = 25;
-   MissionCleanup.add(%Bomber3);
-   //Impulse the bombers
-   SlthBomberImpulse(%Bomber3, %position, %CallerClient);
-   %Bomber3.setCloaked(true);
-   %Bomber3.schedule(30000, "Delete");
-   //
-   %Bomber4 = new FlyingVehicle() {
-      dataBlock = BomberFlyer;
-      position = VectorAdd(%position, "15 -725 250");
-      team = %CallerClient.team;
-   };
-   %Bomber4.bombs = 25;
-   MissionCleanup.add(%Bomber4);
-   //Impulse the bombers
-   SlthBomberImpulse(%Bomber4, %position, %CallerClient);
-   %Bomber4.setCloaked(true);
-   %Bomber4.schedule(30000, "Delete");
-   //
-   %Bomber5 = new FlyingVehicle() {
-      dataBlock = BomberFlyer;
-      position = VectorAdd(%position, "-15 -725 250");
-      team = %CallerClient.team;
-   };
-   %Bomber5.bombs = 25;
-   MissionCleanup.add(%Bomber5);
-   //Impulse the bombers
-   SlthBomberImpulse(%Bomber5, %position, %CallerClient);
-   %Bomber5.setCloaked(true);
-   %Bomber5.schedule(30000, "Delete");
-}
-
 function SlthBomberImpulse(%obj, %pos, %cl) {
    if(!isObject(%obj)) {
       return;
@@ -868,405 +1032,6 @@ function SlthBomberImpulse(%obj, %pos, %cl) {
       AirstrikeDropBombs(%obj, %pos, %cl);
    }
    schedule(500, 0, "SlthBomberImpulse", %obj, %pos, %cl);
-}
-
-
-
-
-
-
-
-
-//--------------------------------------
-// UAMS
-//--------------------------------------
-datablock ItemData(GMCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = GMCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(GMCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = GMCaller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-   
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function GMCallerImage::OnFire(%data, %obj, %slot) {
-   GainExperience(%obj.client, 50, "UAMS Called in ");
-
-   $TWM2::GMCalls[%obj.client.guid]++;
-
-   %obj.client.TWM2Core.GMCalls++;
-   %obj.client.OnUseKillstreak(3);
-   UpdateSWBeaconFile(%obj.client, "GM");
-
-   for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-      %cl = ClientGroup.getObject(%i);
-      if(%cl.team == %obj.client.team) {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly Missile Strike Approaching");
-      }
-      else {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy UAMS Detected!!!");
-      }
-   }
-   %obj.client.HasGM = 0;
-
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(GMCaller, 0, true);
-   //
-   CreateMissileSat(%obj.client);
-}
-
-//--------------------------------------
-// Harbinger's Wrath
-//--------------------------------------
-
-datablock ItemData(HarbinsWrathCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = HarbinsWrathCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(HarbinsWrathCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = HarbinsWrathCaller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-   
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function HarbinsWrathCallerImage::OnFire(%data, %obj, %slot) {
-   GainExperience(%obj.client, 100, "Harbinger Gunship Called In ");
-   
-   if($CurrentMission $= "ChristmasMall09") {
-      CompleteNWChallenge(%CallerClient, "GunshipMall");
-   }
-
-   $TWM2::HarbinsWrathCalls[%obj.client.guid]++;
-
-   %obj.client.OnUseKillstreak(9);
-   %obj.client.TWM2Core.HWCalls++;
-   UpdateSWBeaconFile(%obj.client, "HarbinsWrath");
-
-   for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-      %cl = ClientGroup.getObject(%i);
-      if(%cl.team == %obj.client.team) {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly Gunship Approaching");
-      }
-      else {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Gunship... INCOMING!!!");
-      }
-   }
-   %obj.client.HasHarbinsWrath = 0;
-
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(HarbinsWrathCaller, 0, true);
-   //
-   if($TWM2::UnmannedGunship) {
-      StartHarbingersWrath(%obj.client, 1);
-   }
-   else {
-      StartHarbingersWrath(%obj.client, 0);
-   }
-}
-
-
-
-
-
-
-
-//AC130
-datablock ItemData(AC130Caller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = AC130CallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(AC130CallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = AC130Caller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-   
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function AC130CallerImage::OnFire(%data, %obj, %slot) {
-   GainExperience(%obj.client, 100, "AC130 Called in ");
-
-   if($CurrentMission $= "ChristmasMall09") {
-      CompleteNWChallenge(%CallerClient, "GunshipMall");
-   }
-
-   $TWM2::AC130Calls[%obj.client.guid]++;
-
-   %obj.client.OnUseKillstreak(11);
-   %obj.client.TWM2Core.ACCalls++;
-   UpdateSWBeaconFile(%obj.client, "AC130");
-
-   for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-      %cl = ClientGroup.getObject(%i);
-      if(%cl.team == %obj.client.team) {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly AC-130 Approaching");
-      }
-      else {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy AC130 ABOVE!!!");
-      }
-   }
-   %obj.client.HasAcGunner = 0;
-
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(AC130Caller, 0, true);
-   //
-   if($TWM2::UnmannedGunship) {
-      StartAC130(%obj.client, 1);
-   }
-   else {
-      StartAC130(%obj.client, 0);
-   }
-}
-
-datablock ItemData(ChopperGunnerCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = ChopperGunnerCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(ChopperGunnerCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = ChopperGunnerCaller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-   
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function ChopperGunnerCallerImage::OnFire(%data, %obj, %slot) {
-   GainExperience(%obj.client, 100, "Apache Gunner Called in ");
-
-   $TWM2::ChopperGunnerCalls[%obj.client.guid]++;
-
-   %obj.client.OnUseKillstreak(10);
-   %obj.client.TWM2Core.CGCalls++;
-   UpdateSWBeaconFile(%obj.client, "ChopperGunner");
-
-   for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-      %cl = ClientGroup.getObject(%i);
-      if(%cl.team == %obj.client.team) {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly Apache Approaching");
-      }
-      else {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Apache... INCOMING!!!");
-      }
-   }
-   %obj.client.HasChopperGunner = 0;
-
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(ChopperGunnerCaller, 0, true);
-   //
-   MakeTheHeli(%obj.client, 1);
 }
 
 //--------------------------------------
@@ -1303,103 +1068,15 @@ datablock GrenadeProjectileData(AStrikeColliderShell) {
    lightColor  = "0.05 0.2 0.05";
 };
 
-datablock ItemData(ArtilleryCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = ArtilleryCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(ArtilleryCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = ArtilleryCaller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-   
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function ArtilleryCallerImage::OnFire(%data, %obj, %slot) {
-   %ASCam = new Camera() {
-      dataBlock = TWM2ControlCamera;
-   };
-   //if(!%obj.client.UnlimitedAS) {
-      %obj.use(ArtilleryCaller);
-      %obj.throwWeapon(1);
-      %obj.throwWeapon(0);
-      %obj.setInventory(ArtilleryCaller, 0, true);
-   //}
-
-   MissionCleanup.add(%ASCam);
-   %ASCam.setTransform(%obj.getTransform());
-   %ASCam.setFlyMode();
-   %ASCam.mode = "ArtilleryCall";
-   %obj.client.setControlObject(%ASCam);
-   CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
-}
-
 function Artillery(%CallerClient, %position) {
-
-  // if(!%CallerClient.UnlimitedAS) {
-      $TWM2::ArtilleryCalls[%CallerClient.guid]++;
-
-      %CallerClient.OnUseKillstreak(12);
-      %CallerClient.TWM2Core.ArtyCalls++;
-      UpdateSWBeaconFile(%CallerClient, "Artillery");
-  // }
+   %CallerClient.OnUseKillstreak(12);
+   %CallerClient.TWM2Core.ArtyCalls++;
+   UpdateSWBeaconFile(%CallerClient, "Artillery");
    if(ServerReturnMonthDate() $= "1221") {
       CompleteNWChallenge(%CallerClient, "SoulsticeBombard");
    }
    %mainUpPos = vectoradd(%position, "0 0 400");// main pos
-   for(%i=0;%i<25;%i++) {
+   for(%i = 0; %i < 25; %i++) {
       schedule(350*%i, 0, MessageAll, 'msgFiah', "~wfx/powered/turret_mortar_fire.wav");
       %mainUpPos = vectoradd(%mainUpPos, "0 0 "@(300+(%i*75))@"");   //increment by 100 each time
       %final = vectoradd(%mainUpPos,GetRandomPosition(30,1));
@@ -1412,232 +1089,21 @@ function Artillery(%CallerClient, %position) {
    }
 }
 
-//--------------------------------------
-// Nuke
-//--------------------------------------
-datablock ItemData(NukeCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = NukeCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(NukeCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = NukeCaller;
-   offset = "0 0 0";
-   
-   isKSSW = 1;
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function NukeCallerImage::OnFire(%data, %obj, %slot) {
-   %ASCam = new Camera() {
-      dataBlock = TWM2ControlCamera;
-   };
-   //if(!%obj.client.UnlimitedAS) {
-      %obj.use(NukeCaller);
-      %obj.throwWeapon(1);
-      %obj.throwWeapon(0);
-      %obj.setInventory(NukeCaller, 0, true);
-   //}
-
-   MissionCleanup.add(%ASCam);
-   %ASCam.setTransform(%obj.getTransform());
-   %ASCam.setFlyMode();
-   %ASCam.mode = "NukeCall";
-   %obj.client.setControlObject(%ASCam);
-   CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
-}
-
 function Nuke(%CallerClient, %position) {
    awardClient(%callerClient, "24");
    if(ServerReturnMonthDate() $= "0101") {
       CompleteNWChallenge(%CallerClient, "NewYears");
    }
-  // if(!%CallerClient.UnlimitedAS) {
-      $TWM2::NukeCalls[%CallerClient.guid]++;
-
-      %CallerClient.OnUseKillstreak(14);
-      %CallerClient.TWM2Core.NukeCalls++;
-      UpdateSWBeaconFile(%CallerClient, "Nuke");
-  // }
+   %CallerClient.OnUseKillstreak(14);
+   %CallerClient.TWM2Core.NukeCalls++;
+   UpdateSWBeaconFile(%CallerClient, "Nuke");
    %mainUpPos = vectoradd(%position, "0 0 400");// main pos
-      %Shell1 = new SeekerProjectile() {
-         dataBlock        = ShoulderNuclear;
-         initialPosition  = %mainUpPos;
-         initialDirection = "0 0 -5";   // this will hit first
-      };
-      %Shell1.sourceObject = %CallerClient.player;
-  // }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//--------------------------------------
-// HELICOPTER
-//--------------------------------------
-datablock ItemData(GunshipHeliCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = GunshipHeliCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(GunshipHeliCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = GunshipHeliCaller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-   
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function GunshipHeliCallerImage::OnFire(%data, %obj, %slot) {
-   if(Game.CheckModifier("Scrambler") == 1) {
-      for(%i = 0; %i < MissionCleanup.getCount(); %i++) {
-         %obj = MissionCleanup.getObject(%i);
-         if(%obj.isZombie) {
-            if(%obj.isAlive()) {
-               if(%obj.getDatablock().getName() $= "LordZombieArmor") {
-                  messageClient(%obj.client, 'msgHeliComing', "\c5HELLJUMP: A Zombie Lord Is Scrambling the Signal, Helicopters/Harriers cannot be called in at the time.");
-                  return;
-               }
-            }
-         }
-      }
-   }
-   GainExperience(%obj.client, 250, "Assault Helicopter Called in ");
-
-   $TWM2::GunshipHeliCalls[%obj.client.guid]++;
-
-   %obj.client.OnUseKillstreak(7);
-   
-   %obj.client.TWM2Core.GunHeliCalls++;
-   UpdateSWBeaconFile(%obj.client, "GunshipHeli");
-
-   for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-      %cl = ClientGroup.getObject(%i);
-      if(%cl.team == %obj.client.team) {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Friendly Assault Helicopter Approaching");
-      }
-      else {
-         messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Gunship Helicopter Inbound!!!");
-      }
-   }
-   %obj.client.HasGunshipHeli = 0;
-
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(GunshipHeliCaller, 0, true);
-   //
-   MakeTheHeli2(%obj.client, 0);
+   %Shell1 = new SeekerProjectile() {
+      dataBlock        = ShoulderNuclear;
+      initialPosition  = %mainUpPos;
+      initialDirection = "0 0 -5";   // this will hit first
+   };
+   %Shell1.sourceObject = %CallerClient.player;
 }
 
 //this one functions for gunship helicopters and harriers
@@ -1772,106 +1238,7 @@ function GunshipHeliBeginAttack(%heli, %target) {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-//--------------------------------------
-// HARRIER AIRSTRIKE
-//--------------------------------------
-datablock ItemData(HarrierAirstrikeCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = HarrierAirstrikeCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(HarrierAirstrikeCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = HarrierAirstrikeCaller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-   
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function HarrierAirstrikeCallerImage::OnFire(%data, %obj, %slot) {
-   %ASCam = new Camera() {
-      dataBlock = TWM2ControlCamera;
-   };
-   //if(!%obj.client.UnlimitedAS) {
-      %obj.use(AirstrikeCaller);
-      %obj.throwWeapon(1);
-      %obj.throwWeapon(0);
-      %obj.setInventory(HarrierAirstrikeCaller, 0, true);
-   //}
-
-   MissionCleanup.add(%ASCam);
-   %ASCam.setTransform(%obj.getTransform());
-   %ASCam.setFlyMode();
-   %ASCam.mode = "HarrierCall";
-   %obj.client.setControlObject(%ASCam);
-   CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
-}
-
 function HarrierAirstrike(%CallerClient, %position, %dirFrom) {
-
-   $TWM2::HarrierAirstrikeCalls[%CallerClient.guid]++;
-
    %CallerClient.OnUseKillstreak(5);
    %CallerClient.TWM2Core.HarrierCalls++;
    UpdateSWBeaconFile(%CallerClient, "HarrierAirStrike");
@@ -1943,209 +1310,6 @@ function HarrierBomberImpulse(%obj, %pos, %cl, %ammoleft) {
    schedule(500, 0, "HarrierBomberImpulse", %obj, %pos, %cl, %ammoleft);
 }
 
-//--------------------------------------
-// ZBomb
-//--------------------------------------
-datablock ItemData(ZBombCaller)
-{
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = ZBombCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(ZBombCallerImage)
-{
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = ZBombCaller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-   
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function ZBombCallerImage::OnFire(%data, %obj, %slot) {
-   %obj.client.HasZBomb = 0;
-   GainExperience(%obj.client, 1000, "Zombie Annihilation Bomb Activated ");
-   MessageAll('msgWohoo', "\c5TWM2: "@%obj.client.namebase@" has activated a Z-Bomb, eliminating all zombies");
-
-   $TWM2::ZBombCalls[%obj.client.guid]++;
-
-   %obj.client.OnUseKillstreak(15);
-   
-   %obj.client.TWM2Core.ZBCalls++;
-   UpdateSWBeaconFile(%obj.client, "ZBomb");
-
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(ZBombCaller, 0, true);
-
-   if($TWM::PlayingHorde) {
-      CompleteNWChallenge(%obj.client, "ZBomber");
-   }
-
-   %count = MissionCleanup.getCount();
-   for(%i = 0; %i < %count; %i++) {
-      %tobj = MissionCleanup.getObject(%i);
-      if(isObject(%tobj)) {
-         if(%tobj.iszombie && !%tobj.isBoss) {
-            %tobj.damage(%obj,%tobj.getWorldBoxCenter(), 100.0, $DamageType::ZBomb); //lotsa EXP for mah kills :D
-         }
-         else {
-            continue;
-         }
-      }
-   }
-   //flashy and soundy
-   %count2 = ClientGroup.getCount();
-   for(%x = 0; %x < %count2; %x++) {
-      %flcl = ClientGroup.getObject(%x);
-      messageClient(%flcl, 'msgSound', "~wfx/weapons/mortar_explode.wav");
-      if(isObject(%flcl.player)) {
-         %flcl.player.setWhiteout(1.8);
-      }
-   }
-}
-
-
-
-
-
-
-
-
-
-
-datablock ItemData(FissionBombCaller)
-{
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = FissionBombCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(FissionBombCallerImage)
-{
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = FissionBombCaller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-   
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function FissionBombCallerImage::OnFire(%data, %obj, %slot) {
-   %obj.client.HasFission = 0;
-   GainExperience(%obj.client, 25000, "Anti-Matter Based Fission Bomb Activated ");
-   %obj.client.OnUseKillstreak(16);
-   
-   %obj.client.TWM2Core.FissionCalls++;
-   UpdateSWBeaconFile(%obj.client, "Fission");
-   
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(FissionBombCaller, 0, true);
-   
-   CompleteNWChallenge(%obj.client, "GameEnder");
-   
-   MessageAll('msgItsOva', "\c5COMMAND: FISSION BOMB!!! IT'S OVER!! RUN!!!!!! ~wfx/misc/red_alert_short.wav");
-   FissionBombLoop(%obj.client, %obj, %obj.getPosition(), 30);
-}
-
 function FissionBombLoop(%client, %caller, %strikePos, %ticks) {
    if(%ticks == 10) {
       schedule(500, 0,spawnprojectile,VegenorFireMeteor,GrenadeProjectile, vectorAdd(%strikePos ,"0 0 700"), "0 0 -1");
@@ -2170,8 +1334,7 @@ function FissionBombLoop(%client, %caller, %strikePos, %ticks) {
 
 //
 //EMIITAHS and PARTICLES
-datablock ShockwaveData(HyperDevProj2Shockwave)
-{
+datablock ShockwaveData(HyperDevProj2Shockwave) {
    width = 10;
    numSegments = 60;
    numVertSegments = 1;
@@ -2198,8 +1361,7 @@ datablock ShockwaveData(HyperDevProj2Shockwave)
    renderBottom = true;
 };
 
-datablock ExplosionData(HyperDev2SubExplosion1)
-{
+datablock ExplosionData(HyperDev2SubExplosion1) {
    explosionShape = "disc_explosion.dts";
    faceViewer           = true;
 
@@ -2216,8 +1378,7 @@ datablock ExplosionData(HyperDev2SubExplosion1)
 
 };
 
-datablock ExplosionData(HyperDev2SubExplosion2)
-{
+datablock ExplosionData(HyperDev2SubExplosion2) {
    explosionShape = "disc_explosion.dts";
    faceViewer           = true;
 
@@ -2233,8 +1394,7 @@ datablock ExplosionData(HyperDev2SubExplosion2)
    times[1] = 1.0;
 };
 
-datablock ExplosionData(HyperDev2SubExplosion3)
-{
+datablock ExplosionData(HyperDev2SubExplosion3) {
    explosionShape = "disc_explosion.dts";
    faceViewer           = true;
    delayMS = 0;
@@ -2248,15 +1408,13 @@ datablock ExplosionData(HyperDev2SubExplosion3)
 
 };
 
-datablock AudioProfile(HyperDevCannonExplosionSound2)
-{
-	filename = "fx/explosions/explosion.xpl23.wav";
-	description = AudioBIGExplosion3d;
+datablock AudioProfile(HyperDevCannonExplosionSound2) {
+   filename = "fx/explosions/explosion.xpl23.wav";
+   description = AudioBIGExplosion3d;
    preload = true;
 };
 
-datablock ExplosionData(HyperDevCannonExplosion2)
-{
+datablock ExplosionData(HyperDevCannonExplosion2) {
    soundProfile   = HyperDevCannonExplosionSound2;
 
    shockwave[0] = HyperDevCannonShockwave2;
@@ -2319,8 +1477,7 @@ datablock ParticleEmitterData(HyperDevCannonBaseEmitter) {
 	particles = "HyperDevSmokeParticle";
 };
 
-datablock ShockwaveData(HyperDevProjShockwave)
-{
+datablock ShockwaveData(HyperDevProjShockwave) {
    width = 7.0;
    numSegments = 16;
    numVertSegments = 16;
@@ -2397,91 +1554,7 @@ datablock LinearFlareProjectileData(HyperDevestatorBeam) {
 
 };
 
-//--------------------------------------
-// AIRSTRIKE
-//--------------------------------------
-datablock ItemData(OLSCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = OLSCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(OLSCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = OLSCaller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-   
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function OLSCallerImage::OnFire(%data, %obj, %slot) {
-   %ASCam = new Camera() {
-      dataBlock = TWM2ControlCamera;
-   };
-   %obj.use(OLSCaller);
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(OLSCaller, 0, true);
-
-   MissionCleanup.add(%ASCam);
-   %ASCam.setTransform(%obj.getTransform());
-   %ASCam.setFlyMode();
-   %ASCam.mode = "OLSCall";
-   %obj.client.setControlObject(%ASCam);
-   CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
-}
-
 function OrbitalLaserStrike(%CallerClient, %position) {
-
    %CallerClient.OnUseKillstreak(6);
    %CallerClient.TWM2Core.SatNukeCalls++;
    UpdateSWBeaconFile(%obj.client, "SatNuke");
@@ -2496,206 +1569,7 @@ function OrbitalLaserStrike(%CallerClient, %position) {
    MissionCleanup.add(%p);
 }
 
-
-
-
-
-
-
-//--------------------------------------
-// MASS EMP
-//--------------------------------------
-datablock ItemData(MassEMPCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = MassEMPCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(MassEMPCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = MassEMPCaller;
-   offset = "0 0 0";
-   
-   isKSSW = 1;
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function MassEMPCallerImage::OnFire(%data, %obj, %slot) {
-   %obj.use(MassEMPCaller);
-   %obj.throwWeapon(1);
-   %obj.throwWeapon(0);
-   %obj.setInventory(MassEMPCaller, 0, true);
-   
-   %obj.client.TWM2Core.EMPCalls++;
-   UpdateSWBeaconFile(%obj.client, "EMP");
-
-   GainExperience(%obj.client, 1000, "Mass EMP Called in ");
-   %obj.client.OnUseKillstreak(13);
-
-   %obj.client.HasMassEMP = 0;
-   for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-      %cl = ClientGroup.getObject(%i);
-      if(%cl.team != %obj.client.team) {
-         messageClient(%cl, 'msgAlert', "\c5Command: EMP! Electronic Weapons Offline!");
-         ApplyEMP(%cl);
-         schedule(180000, 0, "KillEMP", %cl);
-      }
-      messageClient(%cl, 'msgSound', "~wfx/weapons/mortar_explode.wav");
-      if(isObject(%cl.player)) {
-         %cl.player.setWhiteout(1.0);
-      }
-   }
-   //make vehicles go boom.
-   %count = MissionCleanup.getCount();
-   for (%i=0;%i<%count;%i++) {
-	  %obj = MissionCleanup.getObject(%i);
-	  if (%obj) {
-	     if ((%obj.getType() & $TypeMasks::VehicleObjectType)) {
-	        %random = getRandom() * 100;
-	        %obj.schedule(%random, setDamageState , Destroyed);
-	     }
-      }
-   }
-}
-
-
-//--------------------------------------
-// NAPALM AIRSTRIKE
-//--------------------------------------
-datablock ItemData(NapalmHarrierAirstrikeCaller) {
-   className    = Weapon;
-   catagory     = "Spawn Items";
-   shapeFile    = "weapon_targeting.dts";
-   image        = NapalmHarrierAirstrikeCallerImage;
-   mass         = 1;
-   elasticity   = 0.2;
-   friction     = 0.6;
-   pickupRadius = 2;
-	pickUpName = "a targeting laser rifle";
-
-   computeCRC = true;
-   isKSSW = 1;
-
-};
-
-datablock ShapeBaseImageData(NapalmHarrierAirstrikeCallerImage) {
-   className = WeaponImage;
-
-   shapeFile = "weapon_targeting.dts";
-   item = NapalmHarrierAirstrikeCaller;
-   offset = "0 0 0";
-
-   projectile = BasicTargeter;
-   projectileType = TargetProjectile;
-   deleteLastProjectile = true;
-
-   isKSSW = 1;
-
-	usesEnergy = true;
-	minEnergy = 3;
-
-   stateName[0]                     = "Activate";
-   stateSequence[0]                 = "Activate";
-	stateSound[0]                    = TargetingLaserSwitchSound;
-   stateTimeoutValue[0]             = 0.5;
-   stateTransitionOnTimeout[0]      = "ActivateReady";
-
-   stateName[1]                     = "ActivateReady";
-   stateTransitionOnAmmo[1]         = "Ready";
-   stateTransitionOnNoAmmo[1]       = "NoAmmo";
-
-   stateName[2]                     = "Ready";
-   stateTransitionOnNoAmmo[2]       = "NoAmmo";
-   stateTransitionOnTriggerDown[2]  = "Fire";
-
-   stateName[3]                     = "Fire";
-	stateEnergyDrain[3]              = 3;
-   stateFire[3]                     = true;
-   stateAllowImageChange[3]         = false;
-   stateScript[3]                   = "onFire";
-   stateTransitionOnTriggerUp[3]    = "Deconstruction";
-   stateTransitionOnNoAmmo[3]       = "Deconstruction";
-   stateSound[3]                    = TargetingLaserPaintSound;
-
-   stateName[4]                     = "NoAmmo";
-   stateTransitionOnAmmo[4]         = "Ready";
-
-   stateName[5]                     = "Deconstruction";
-   stateScript[5]                   = "deconstruct";
-   stateTransitionOnTimeout[5]      = "Ready";
-};
-
-function NapalmHarrierAirstrikeCallerImage::OnFire(%data, %obj, %slot) {
-   %ASCam = new Camera() {
-      dataBlock = TWM2ControlCamera;
-   };
-   //if(!%obj.client.UnlimitedAS) {
-      %obj.use(NapalmAirstrikeCaller);
-      %obj.throwWeapon(1);
-      %obj.throwWeapon(0);
-      %obj.setInventory(NapalmHarrierAirstrikeCaller, 0, true);
-   //}
-
-   MissionCleanup.add(%ASCam);
-   %ASCam.setTransform(%obj.getTransform());
-   %ASCam.setFlyMode();
-   %ASCam.mode = "NapalmHarrierCall";
-   %obj.client.setControlObject(%ASCam);
-   CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
-}
-
 function NapalmHarrierAirstrike(%CallerClient, %position, %dirFrom) {
-
-   $TWM2::NapalmHarrierAirstrikeCalls[%CallerClient.guid]++;
-
    %CallerClient.OnUseKillstreak(5);
    %CallerClient.TWM2Core.NapalmHarrierCalls++;
    UpdateSWBeaconFile(%CallerClient, "NapalmHarrierAirStrike");

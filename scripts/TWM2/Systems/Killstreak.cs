@@ -295,62 +295,14 @@ function GameConnection::isActiveStreak(%client, %val) {
 }
 
 function GiveTWM2Weapons(%client) {
-    if(%client.HasUAV) {
-       %client.player.setInventory(UAVCaller, 1, true);
-    }
-    if(%client.HasAirstrike) {
-       %client.player.setInventory(AirstrikeCaller, 1, true);
-    }
-    if(%client.HasHeli) {
-       %client.player.setInventory(HeliCaller, 1, true);
-    }
     if(%client.HasAmmoDrop) {
        %client.player.setInventory(AmmoDropCaller, 1, true);
-    }
-    if(%client.HasGM) {
-       %client.player.setInventory(GMCaller, 1, true);
-    }
-    if(%client.HasHarbinsWrath) {
-       %client.player.setInventory(HarbinsWrathCaller, 1, true);
-    }
-    if(%client.HasChopperGunner) {
-       %client.player.setInventory(ChopperGunnerCaller, 1, true);
-    }
-    if(%client.HasSlthAirstrike) {
-       %client.player.setInventory(StealthAirstrikeCaller, 1, true);
-    }
-    if(%client.HasArtillery) {
-       %client.player.setInventory(ArtilleryCaller, 1, true);
-    }
-    if(%client.HasAcGunner) {
-       %client.player.setInventory(AC130Caller, 1, true);
-    }
-    if(%client.HasNuke) {
-       %client.player.setInventory(NukeCaller, 1, true);
-    }
-    if(%client.HasOLS) {
-       %client.player.setInventory(OLSCaller, 1, true);
-    }
-    if(%client.HasZBomb) {
-       %client.player.setInventory(ZBombCaller, 1, true);
-    }
-    if(%client.HasGunshipHeli) {
-       %client.player.setInventory(GunshipHeliCaller, 1, true);
-    }
-    if(%client.HasHarrier) {
-       %client.player.setInventory(HarrierAirstrikeCaller, 1, true);
-    }
-    if(%client.HasFission) {
-       %client.player.setInventory(FissionBombCaller, 1, true);
     }
     if(%client.HasFullTeamRespawn) {
        %client.player.setInventory(FullTeamRespawnCaller, 1, true);
     }
-    if(%client.HasMassEMP) {
-       %client.player.setInventory(MassEMPCaller, 1, true);
-    }
-    if(%client.HasNapalmHarrier) {
-       %client.player.setInventory(NapalmHarrierAirstrikeCaller, 1, true);
+    if(%client.ksListInstance.count() > 0) {
+       %client.player.setInventory(KillstreakBeacon, 1, true);
     }
     if(!%client.isconfiscated) {
 	   if (%client.isAdmin) {
@@ -370,75 +322,114 @@ function GameConnection::AwardKillstreak(%client, %streakVal, %plz) {
    if(!%client.isActiveStreak(%streakVal) && ($Killstreak::Setting != 2) && !$TWM::PlayingHelljump) {
       return;
    }
+   if(!%client.ksListInstance) {
+      %client.ksListInstance = initList();
+   }
+   %client.player.setInventory(KillstreakBeacon, 1, true);
+   %cAmt = 0;
    switch(%streakVal) {
       case 1:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: UAV Recon at Your Disposal.");
-         %client.HasUAV = 1; //heh, now we can use it if we die
-         %client.player.setInventory(UAVCaller, 1, true);
+         if(%client.ksListInstance.find("UAV") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("UAV"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("UAV", "UAV "@%cAmt+1);
       case 2:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Airstrike Standing By.");
-         %client.HasAirstrike = 1; //heh, now we can use it if we die
-         %client.player.setInventory(AirstrikeCaller, 1, true);
+         if(%client.ksListInstance.find("Airstrike") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("Airstrike"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("Airstrike", "Airstrike "@%cAmt+1);
       case 3:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Guided Missile Strike Standing By.");
-         %client.HasGM = 1; //heh, now we can use it if we die
-         %client.player.setInventory(GMCaller, 1, true);
+         if(%client.ksListInstance.find("GM") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("GM"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("GM", "GM "@%cAmt+1);
       case 4:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Helicopter at your disposal.");
-         %client.HasHeli = 1; //heh, now we can use it if we die
-         %client.player.setInventory(HeliCaller, 1, true);
+         if(%client.ksListInstance.find("AIHeli") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("AIHeli"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("AIHeli", "AIHeli "@%cAmt+1);
       case 5:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Plasma Harrier Strike at your disposal.");
-         %client.HasHarrier = 1; //heh, now we can use it if we die
-         %client.player.setInventory(HarrierAirstrikeCaller, 1, true);
+         if(%client.ksListInstance.find("Harrier") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("Harrier"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("Harrier", "Harrier "@%cAmt+1);
       case 6:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Satellite Strike at your disposal.");
-         %client.HasOLS = 1; //heh, now we can use it if we die
-         %client.player.setInventory(OLSCaller, 1, true);
+         if(%client.ksListInstance.find("OLS") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("OLS"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("OLS", "OLS "@%cAmt+1);
       case 7:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Gunship Helicopter at your disposal.");
-         %client.HasGunshipHeli = 1; //heh, now we can use it if we die
-         %client.player.setInventory(GunshipHeliCaller, 1, true);
+         if(%client.ksListInstance.find("AIGunHeli") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("AIGunHeli"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("AIGunHeli", "AIGunHeli "@%cAmt+1);
       case 8:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Stealth Bomber at your disposal.");
-         %client.HasSlthAirstrike = 1; //heh, now we can use it if we die
-         %client.player.setInventory(StealthAirstrikeCaller, 1, true);
+         if(%client.ksListInstance.find("Stealth") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("Stealth"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("Stealth", "Stealth "@%cAmt+1);
       case 9:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Harbinger's Wrath Standing By.");
-         %client.HasHarbinsWrath = 1; //heh, now we can use it if we die
-         %client.player.setInventory(HarbinsWrathCaller, 1, true);
+         if(%client.ksListInstance.find("HarbWrath") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("HarbWrath"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("HarbWrath", "HarbWrath "@%cAmt+1);
       case 10:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Apache Gunner Standing By.");
-         %client.HasChopperGunner = 1; //heh, now we can use it if we die
-         %client.player.setInventory(ChopperGunnerCaller, 1, true);
+         if(%client.ksListInstance.find("Apache") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("Apache"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("Apache", "Apache "@%cAmt+1);
       case 11:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: AC-130 Gunner Standing By.");
-         %client.HasAcGunner = 1; //heh, now we can use it if we die
-         %client.player.setInventory(AC130Caller, 1, true);
+         if(%client.ksListInstance.find("AC130") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("AC130"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("AC130", "AC130 "@%cAmt+1);
       case 12:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Centaur Bombardment Standing By.");
-         %client.HasArtillery = 1; //heh, now we can use it if we die
-         %client.player.setInventory(ArtilleryCaller, 1, true);
+         if(%client.ksListInstance.find("Artillery") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("Artillery"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("Artillery", "Artillery "@%cAmt+1);
       case 13:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Mass EMP Standing By.");
-         %client.HasMassEMP = 1; //heh, now we can use it if we die
-         %client.player.setInventory(MassEMPCaller, 1, true);
+         if(%client.ksListInstance.find("EMP") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("EMP"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("EMP", "EMP "@%cAmt+1);
       case 14:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Nuclear Strike Standing By.");
-         %client.HasNuke = 1; //heh, now we can use it if we die
-         %client.player.setInventory(NukeCaller, 1, true);
+         if(%client.ksListInstance.find("NukeStrike") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("NukeStrike"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("NukeStrike", "NukeStrike "@%cAmt+1);
       case 15:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Zombie Bomb Standing By... wait... holy fuck, you got "@$Killstreak::Kills["ZBomb", 1]@" zombie kills without dying!?!?");
-         %client.HasZBomb = 1; //heh, now we can use it if we die
-         %client.player.setInventory(ZBombCaller, 1, true);
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Zombie Bomb Standing By.");
+         if(%client.ksListInstance.find("ZBomb") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("ZBomb"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("ZBomb", "ZBomb "@%cAmt+1);
       case 16:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Fission Bomb Ready... Obliterate everyone!!!");
-         %client.HasFission = 1; //heh, now we can use it if we die
-         %client.player.setInventory(FissionBombCaller, 1, true);
+         if(%client.ksListInstance.find("FBomb") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("FBomb"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("FBomb", "FBomb "@%cAmt+1);
       case 17:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Napalm Airstrike at your disposal.");
-         %client.HasNapalmHarrier = 1; //heh, now we can use it if we die
-         %client.player.setInventory(NapalmHarrierAirstrikeCaller, 1, true);
+         if(%client.ksListInstance.find("Napalm") != -1) {
+            %cAmt = getWord(getField(%client.ksListInstance.find("Napalm"), 0), 1);
+         }
+         %client.ksListIntance.advancedAdd("Napalm", "Napalm "@%cAmt+1);
    }
    if(%plz == 0) {
       if(%client.IsHighestPLStreak(%streakVal)) {
