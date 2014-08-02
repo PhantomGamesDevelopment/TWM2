@@ -54,7 +54,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(!%client.HasAirstrike && !%client.UnlimitedAS) {
+               if(%client.ksListInstance.find("Airstrike") == -1 && !%client.UnlimitedAS) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -79,7 +79,13 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
                      if(!%client.UnlimitedAS) {
-                        %client.HasAirstrike = 0;
+                        %newCt = getField(%client.ksListInstance.find("Airstrike"), 1) - 1;
+                        if(%newCt == 0) {
+                           %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("Airstrike"), 1));
+                        }
+                        else {
+                           %client.ksListInstance.set(getField(%client.ksListInstance.find("Airstrike"), 1), "Airstrike" SPC %newCt);
+                        }
                         GainExperience(%client, 35, "Airstrike called in ");
                      }
                      bottomPrint(%client, "Coordinates Confirmed, Calling In Airstrike", 5, 2);
@@ -95,7 +101,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(!%client.HasHarrier) {
+               if(%client.ksListInstance.find("Harrier") == -1) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -117,7 +123,13 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     %client.HasHarrier = 0;
+                     %newCt = getField(%client.ksListInstance.find("Harrier"), 1) - 1;
+                     if(%newCt == 0) {
+                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("Harrier"), 1));
+                     }
+                     else {
+                        %client.ksListInstance.set(getField(%client.ksListInstance.find("Harrier"), 1), "Harrier" SPC %newCt);
+                     }
                      GainExperience(%client, 150, "Harrier Airstrike called in ");
                      messageTeam(%client.team, 'MsgAirstrike', "\c5TWM2: "@%client.namebase@"'s Harrier Airstrike is Approaching.");
                      bottomPrint(%client, "Coordinates Confirmed, Calling In Harriers", 5, 2);
@@ -132,7 +144,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(!%client.HasNapalmHarrier) {
+               if(%client.ksListInstance.find("Napalm") == -1) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -154,7 +166,13 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     %client.HasNapalmHarrier = 0;
+                     %newCt = getField(%client.ksListInstance.find("Napalm"), 1) - 1;
+                     if(%newCt == 0) {
+                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("Napalm"), 1));
+                     }
+                     else {
+                        %client.ksListInstance.set(getField(%client.ksListInstance.find("Napalm"), 1), "Napalm" SPC %newCt);
+                     }
                      GainExperience(%client, 350, "Napalm Airstrike called in ");
                      messageTeam(%client.team, 'MsgAirstrike', "\c5TWM2: "@%client.namebase@"'s Napalm Airstrike is coming in hot.");
                      bottomPrint(%client, "Coordinates Confirmed, Calling In Strike Fighters", 5, 2);
@@ -169,7 +187,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(!%client.HasOLS) {
+               if(%client.ksListInstance.find("OLS") == -1) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -183,7 +201,13 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     %client.HasOLS = 0;
+                     %newCt = getField(%client.ksListInstance.find("OLS"), 1) - 1;
+                     if(%newCt == 0) {
+                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("OLS"), 1));
+                     }
+                     else {
+                        %client.ksListInstance.set(getField(%client.ksListInstance.find("OLS"), 1), "OLS" SPC %newCt);
+                     }
                      GainExperience(%client, 350, "Orbital Laser Strike Called In ");
                      messageTeam(%client.team, 'MsgAirstrike', "\c5TWM2: "@%client.namebase@"'s Laser Strike is Incoming.");
                      bottomPrint(%client, "Coordinates Confirmed, Spinning Laser Cannon", 5, 2);
@@ -198,7 +222,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(!%client.HasSlthAirstrike) {
+               if(%client.ksListInstance.find("Stealth") == -1) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -220,7 +244,13 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     %client.HasSlthAirstrike = 0;
+                     %newCt = getField(%client.ksListInstance.find("Stealth"), 1) - 1;
+                     if(%newCt == 0) {
+                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("Stealth"), 1));
+                     }
+                     else {
+                        %client.ksListInstance.set(getField(%client.ksListInstance.find("Stealth"), 1), "Stealth" SPC %newCt);
+                     }
                      GainExperience(%client, 150, "Stealth Bomber Airstrike called in ");
                      bottomPrint(%client, "Coordinates Confirmed, Calling In Stealth Bomber", 5, 2);
                      StealthAirstrike(%client, %position, %direction);
@@ -234,7 +264,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(!%client.HasArtillery) {
+               if(%client.ksListInstance.find("Artillery") == -1) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -248,10 +278,14 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     //if(!%client.UnlimitedAS) {
-                        %client.HasArtillery = 0;
-                        GainExperience(%client, 250, "Artillery called in ");
-                     //}
+                     %newCt = getField(%client.ksListInstance.find("Artillery"), 1) - 1;
+                     if(%newCt == 0) {
+                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("Artillery"), 1));
+                     }
+                     else {
+                        %client.ksListInstance.set(getField(%client.ksListInstance.find("Artillery"), 1), "Artillery" SPC %newCt);
+                     }
+                     GainExperience(%client, 250, "Artillery called in ");
                      bottomPrint(%client, "Coordinates Confirmed, Calling In Artillery", 5, 2);
                      messageTeam(%client.team, 'MsgAirstrike', "\c5TWM2: Artillery Called In From "@%client.namebase@"");
                      Artillery(%client, %position);
@@ -265,7 +299,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(!%client.HasNuke) {
+               if(%client.ksListInstance.find("NukeStrike") == -1) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -279,10 +313,14 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     //if(!%client.UnlimitedAS) {
-                        %client.HasNuke = 0;
-                        GainExperience(%client, 500, "Nuclear Missile called in ");
-                     //}
+                     %newCt = getField(%client.ksListInstance.find("NukeStrike"), 1) - 1;
+                     if(%newCt == 0) {
+                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("NukeStrike"), 1));
+                     }
+                     else {
+                        %client.ksListInstance.set(getField(%client.ksListInstance.find("NukeStrike"), 1), "NukeStrike" SPC %newCt);
+                     }
+                     GainExperience(%client, 500, "Nuclear Missile called in ");
                      bottomPrint(%client, "Coordinates Confirmed, Launching Missile", 5, 2);
                      messageAll('msgDanger', "\c5TWM2 ALERT: "@%client.namebase@" has activated a nuclear missile!!! ~wfx/misc/red_alert.wav");
                      Nuke(%client, %position);

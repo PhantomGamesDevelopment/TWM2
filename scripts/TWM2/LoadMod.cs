@@ -8,6 +8,7 @@ Error("********************************************");
                                                    //Mod Systems
 exec("serverControl.cs");                          //Server Settings
 
+exec("scripts/TWM2/Systems/List.cs");               //List Instance
 exec("scripts/TWM2/Systems/Directorate.cs");        //Client Container Objects
 exec("scripts/TWM2/Systems/AdvancedRankSystem.cs"); //Adv. Ranks
 exec("scripts/TWM2/Systems/MainControl.cs");        //TWM2 Core Functions
