@@ -156,146 +156,18 @@ function ShapeBase::throw(%this,%data)
 }
 
 function ShapeBase::use(%this, %data) {
-//	if(%data.class $= "Weapon")
-//		error("ShapeBase::use " @ %data);
 	if(%data $= Grenade) {
-		// Weapon modes
-
-                //[most] 'ey lets do some unification here.. :D
-                if(%this.getMountedImage(0) && GetWord($weaponSettings1[%this.getMountedImage(0).getName()],0)) {
-                  if (!(GetSimTime() > (%this.grenadeModeTime + 100))) 
-                     return;
-                  %this.grenadeModeTime = getSimTime(); //not 'that' unified.. ;)
-
-                  return %this.getMountedImage(0).ChangeMode(%this,1,2); //looksie.. 2 stands for weapons (level 1)
-                  
-                }
-
-                //[most]
-        if (%this.getMountedImage(0) !$= "") {
-		   if (%this.getMountedImage(0).getname() $= "MergeToolImage") {
-		      %this.client.MTSubMode++;
-			  if (%this.client.MTMode == 0 && %this.client.MTSubMode == 2)
-                 %this.client.MTSubMode = 0;
-			  if (%this.client.MTMode == 1 && %this.client.MTSubMode == 2)
-				 %this.client.MTSubMode = 0;
-			  if (%this.client.MTMode == 2 && %this.client.MTSubMode == 8)
-				 %this.client.MTSubMode = 0;
-			  if (%this.client.MTMode == 3 && %this.client.MTSubMode == 6)
-				 %this.client.MTSubMode = 0;
-			  if (%this.client.MTMode == 4 && %this.client.MTSubMode == 2)
-				 %this.client.MTSubMode = 0;
-
-			  MTShowStatus(%this.client);
-			  return;
-		  }
-       }
-       //end of modifier modes
-       
-		if (%this.usingConstructionTool == 1 && getSimTime() > (%this.grenadeModeTime + 100) && %this.performing == 0) {
-			%this.grenadeModeTime = getSimTime();
-			if (%this.constructionToolMode == 0) {
-				if (%this.constructionToolMode2 == 1) {
-					%this.constructionToolMode2 = 0;
-					bottomPrint(%this.client,"Normal deconstruction",2,1);
-					return;
-				}
-				else {
-					%this.constructionToolMode2 = 1;
-					bottomPrint(%this.client,"Cascading deconstruction",2,1);
-					return;
-				}
-			}
-			else if (%this.constructionToolMode == 1) {
-                if(%this.client.RotateAngle $= "") {
-                   %this.client.RotateAngle = 22.5;
-                }
-				if (%this.constructionToolMode2 == 1) {
-					%this.constructionToolMode2 = 0;
-					bottomPrint(%this.client,"Rotate push ("@mfloor(%this.client.RotateAngle)@" Degrees)",2,1);
-					return;
-				}
-				else {
-					%this.constructionToolMode2 = 1;
-					bottomPrint(%this.client,"Rotate pull ("@mfloor(%this.client.RotateAngle)@" Degrees)",2,1);
-					return;
-				}
-			}
-			else if (%this.constructionToolMode == 2) {
-				if (%this.constructionToolMode2 == 5) {
-					%this.constructionToolMode2 = 0;
-					bottomPrint(%this.client,"Select target as center of rotation",2,1);
-					return;
-				}
-				else if (%this.constructionToolMode2 == 0) {
-					%this.constructionToolMode2 = 1;
-					bottomPrint(%this.client,"Select objects to rotate",2,1);
-					return;
-				}
-				else if (%this.constructionToolMode2 == 1) {
-					%this.constructionToolMode2 = 2;
-					bottomPrint(%this.client,"Select rotation speed",2,1);
-					return;
-				}
-				else if (%this.constructionToolMode2 == 2) {
-					%this.constructionToolMode2 = 3;
-					bottomPrint(%this.client,"Apply rotation",2,1);
-					return;
-				}
-				else if (%this.constructionToolMode2 == 3) {
-					%this.constructionToolMode2 = 4;
-					bottomPrint(%this.client,"Display selection",2,1);
-					return;
-				}
-				else {
-					%this.constructionToolMode2 = 5;
-					bottomPrint(%this.client,"Clear list",2,1);
-					return;
-				}
-			}
-			else {
-				if (%this.constructionToolMode2 == 3) {
-					%this.constructionToolMode2 = 0;
-					bottomPrint(%this.client,"Toggle generator power state",2,1);
-					return;
-				}
-				else if (%this.constructionToolMode2 == 0) {
-					%this.constructionToolMode2 = 1;
-					bottomPrint(%this.client,"Increase current frequency",2,1);
-					return;
-				}
-				else if (%this.constructionToolMode2 == 1) {
-					%this.constructionToolMode2 = 2;
-					bottomPrint(%this.client,"Decrease current frequency",2,1);
-					return;
-				}
-				else {
-					%this.constructionToolMode2 = 3;
-					bottomPrint(%this.client,"Read power state",2,1);
-					return;
-				}
-			}
-		}
-        if(%this.UsingEditTool == 1) {
-           ChangeEditGunMode(%this, %data, 2); //Secondary Modes
+        //[3.9] Phantom139: Stripped out all of the x specific stuff here in favor of a cleaner system
+        if(%this.hasGrenadeModes) {
+           //2: Grenade Modes
+           if(getSimTime() > (%this.changeModeTime + $WeaponModes::SwitchDelay)) {
+              %this.getMountedImage($WeaponSlot).changeMode(%this, 2);
+              %this.changeModeTime = getSimTime();
+           }
+           if(%this.changingModeBlocksUse) {
+              return;
+           }
         }
-		if (%this.usingSuperChaingun == 1) {
-			if (!(getSimTime() > (%this.grenadeModeTime + 100)))
-			return;
-			%this.grenadeModeTime = getSimTime();
-			if (%this.superChaingunMode == 1) {
-				if ($Ion::StopIon == 1) {
-					$Ion::StopIon = 0;
-					displaySCGStatus(%this);
-					return;
-				}
-				else {
-					$Ion::StopIon = 1;
-					displaySCGStatus(%this);
-					return;
-				}
-			}
-		}
 		// figure out which grenade type you're using
 		for(%x = 0; $InvGrenade[%x] !$= ""; %x++) {
 			if(%this.inv[$NameToInv[$InvGrenade[%x]]] > 0) {
@@ -447,73 +319,17 @@ function ShapeBase::use(%this, %data) {
 	}
 	// Weapon modes
 	if (%data $= "Mine") {
-
-                 //[most] 'ey lets do some more unification here.. :D
-                if(%this.getMountedImage(0) && GetWord($weaponSettings2[%this.getMountedImage(0).getName()],0)) {
-                  if(!GetSimTime() > (%this.grenadeModeTime + 100))
-                     return;
-                %this.grenadeModeTime = getSimTime(); //not 'that' unified.. ;)
-
-                return %this.getMountedImage(0).ChangeMode(%this,1,3); //looksie.. 3 stands for weapons (level 2)
-                }
-
-                //[most]
-        //modifier tool
-        if (%this.getMountedImage(0) !$= "") {
-		   if (%this.getMountedImage(0).getname() $= "MergeToolImage") {
-			   %this.client.MTMode++;
-			   %this.client.MTSubMode = 0;
-			   if (%this.client.MTMode >= 5)
-				   %this.client.MTMode = 0;
-
-			   MTShowStatus(%this.client);
-			   return;
-		   }
+        //[3.9] Phantom139: Stripped out all of the x specific stuff here in favor of a cleaner system
+        if(%this.hasMineModes) {
+           //1: Mine Modes
+           if(getSimTime() > (%this.changeModeTime + $WeaponModes::SwitchDelay)) {
+              %this.getMountedImage($WeaponSlot).changeMode(%this, 1);
+              %this.changeModeTime = getSimTime();
+           }
+           if(%this.changingModeBlocksUse) {
+              return;
+           }
         }
-        //end modifier tool
-		if (%this.usingConstructionTool == 1 && getSimTime() > (%this.mineModeTime + 100) && %this.performing == 0) {
-			%this.mineModeTime = getSimTime();
-			if (%this.constructionToolMode == 3) {
-				%this.constructionToolMode = 0;
-				bottomPrint(%this.client,"Construction Tool mode set to deconstruct",2,1);
-			}
-			else if (%this.constructionToolMode == 0) {
-				%this.constructionToolMode = 1;
-                if(%this.client.RotateAngle $= "") {
-                   %this.client.RotateAngle = 22.5;
-                }
-				bottomPrint(%this.client,"Construction Tool mode set to rotate ("@%this.client.RotateAngle@" Degrees)",2,1);
-			}
-			else if (%this.constructionToolMode == 1) {
-				%this.constructionToolMode = 2;
-				bottomPrint(%this.client,"Construction Tool mode set to advanced rotate",2,1);
-			}
-			else {
-				%powerFreq = %this.powerFreq;
-				if (%powerFreq < 1 || %powerFreq > upperPowerFreq(%this) || !%powerFreq)
-					%powerFreq = 1;
-				%this.powerFreq = %powerFreq;
-				%this.constructionToolMode = 3;
-				bottomPrint(%this.client,"Construction Tool mode set to power management\nPower frequency currently set to: " @ %this.powerFreq,2,2);
-			}
-			%this.constructionToolMode2 = 0;
-			return;
-		}
-        if(%this.UsingEditTool == 1) {
-           ChangeEditGunMode(%this, %data, 1); //Primary Modes
-        }
-		if (%this.usingSuperChaingun == 1) {
-			if (!(getSimTime() > (%this.mineModeTime + 100)))
-				return;
-			%this.mineModeTime = getSimTime();
-                        %this.superChaingunMode++;
-			if (%this.superChaingunMode > 6 - (5 * $host::nopulseSCG)) {
-				%this.superChaingunMode = 0;				
-			}
-                        displaySCGStatus(%this);			
-			%this.superChaingunMode2 = 0;
-			return;
-		}
 	}
 	// default case
 	if (isObject(%data)) {

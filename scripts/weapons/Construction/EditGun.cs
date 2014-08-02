@@ -109,13 +109,21 @@ function EditGunImage::onMount(%this, %obj, %slot) {
    if(!isSet(%obj.EditSMode)) {
       %obj.EditSMode = 0;
    }
+   //Phantom139: Added
+   %obj.hasMineModes = 1;
+   %obj.hasGrenadeModes = 1;
+   //Phantom139: End
    %obj.UsingEditTool = true;
+   displayWeaponInfo(%this, %obj, %obj.client.EditPMode, %obj.client.EditSMode);
 }
 
-function EditGunImage::onunmount(%this,%obj,%slot)
-{
-Parent::onUnmount(%this, %obj, %slot);
-%obj.UsingEditTool = false;
+function EditGunImage::onunmount(%this,%obj,%slot) {
+   Parent::onUnmount(%this, %obj, %slot);
+   %obj.UsingEditTool = false;
+   //Phantom139: Added
+   %obj.hasMineModes = 0;
+   %obj.hasGrenadeModes = 0;
+   //Phantom139: End
 }
 
 function EditGunImage::onFire(%data, %obj, %slot) {
@@ -148,190 +156,29 @@ function EditGunImage::onFire(%data, %obj, %slot) {
    }
 }
 
-function EditGunImage::onMount(%this, %obj, %slot) {
-   Parent::onMount(%this, %obj, %slot);
-   DispEditorToolInfo(%obj);
-   if(!isSet(%obj.EditPMode)) {
-      %obj.EditPMode = 0;
-   }
-   if(!isSet(%obj.EditSMode)) {
-      %obj.EditSMode = 0;
-   }
-   %obj.UsingEditTool = true;
-
-}
-
-function EditGunImage::onunmount(%this, %obj, %slot) {
-   Parent::onUnmount(%this, %obj, %slot);
-   %obj.UsingEditTool = false;
-}
-
-function DispEditorToolInfo(%obj) {
-   switch(%obj.EditPMode) {
-      case 0:
-         %primary = "Pad Swapping";
-         switch(%obj.EditSMode) {
-            case 0:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Blue Pad - [LSB] - MSB<spop>", 5, 3);
-            case 1:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: LSB - [MSB] - Walkway<spop>", 5, 3);
-            case 2:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: MSB - [Walkway] - Medium Floor <spop>", 5, 3);
-            case 3:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Walkway - [Medium Floor] - Dark Pad<spop>", 5, 3);
-            case 4:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Medium Floor - [Dark Pad] - V-Pad<spop>", 5, 3);
-            case 5:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Dark Pad - [V-Pad] - C.1 Backpack<spop>", 5, 3);
-             case 6:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: V-Pad - [C.1 Backpack] - C.2 Small Containment<spop>", 5, 3);
-             case 7:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.1 Backpack - [C.2 Small Containment] - C.3 Large Containment<spop>", 5, 3);
-             case 8:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.2 Small Containment - [C.3 Large Containment] - C.4 Compressor<spop>", 5, 3);
-             case 9:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.3 Large Containment - [C.4 Compressor] - C.5 Tubes<spop>", 5, 3);
-             case 10:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.4 Compressor - [C.5 Tubes] - C.6 Quantium Bat.<spop>", 5, 3);
-             case 11:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.5 Tubes - [C.6 Quantium Bat.] - C.7 Proton Acc.<spop>", 5, 3);
-             case 12:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.6 Quantium Bat. - [C.7 Proton Acc.] - C.8 Cargo Crate<spop>", 5, 3);
-             case 13:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.7 Proton Acc. - [C.8 Cargo Crate] - C.9 Mag Cooler<spop>", 5, 3);
-             case 14:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.8 Cargo Crate - [C.9 Mag Cooler] - C.10 Recycle Unit<spop>", 5, 3);
-             case 15:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.9 Mag Cooler - [C.10 Recycle Unit] - C.11 Fuel Canister<spop>", 5, 3);
-             case 16:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.10 Recycle Unit - [C.11 Fuel Canister] - C.12 Wooden Box<spop>", 5, 3);
-             case 17:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.11 Fuel Canister - [C.12 Wooden Box] - C.13 Plasma Router<spop>", 5, 3);
-             case 18:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.12 Wooden Box - [C.13 Plasma Router] - Statue Base<spop>", 5, 3);
-             case 19:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: C.13 Plasma Router - [Statue Base] - Blue Pad<spop>", 5, 3);
-             case 20:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: [Pad Swap] - FF Swap - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Statue Base - [Blue Pad] - LSB<spop>", 5, 3);
-         }
+function EditGunImage::changeMode(%this, %obj, %key) {
+   switch(%key) {
       case 1:
-         %primary = "Force-Field Swapping";
-         switch(%obj.EditSMode) {
-            case 0:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: All Pass Yellow - [Solid White] - Solid Red<spop>", 5, 3);
-            case 1:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Solid White - [Solid Red] - Solid Green<spop>", 5, 3);
-            case 2:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Solid Red - [Solid Green] - Solid Blue<spop>", 5, 3);
-            case 3:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Solid Green - [Solid Blue] - Solid Cyan<spop>", 5, 3);
-            case 4:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Solid Blue - [Solid Cyan] - Solid Magenta<spop>", 5, 3);
-            case 5:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Solid Cyan - [Solid Magenta] - Solid Yellow<spop>", 5, 3);
-            case 6:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Solid Magenta - [Solid Yellow] - Team Pass White<spop>", 5, 3);
-            case 7:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Solid Yellow - [Team Pass White] - Team Pass Red<spop>", 5, 3);
-            case 8:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Team Pass White - [Team Pass Red] - Team Pass Green<spop>", 5, 3);
-            case 9:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Team Pass Red - [Team Pass Green] - Team Pass Blue<spop>", 5, 3);
-            case 10:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Team Pass Green - [Team Pass Blue] - Team Pass Cyan<spop>", 5, 3);
-            case 11:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Team Pass Blue - [Team Pass Cyan] - Team Pass Magenta<spop>", 5, 3);
-            case 12:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Team Pass Cyan - [Team Pass Magenta] - Team Pass Yellow<spop>", 5, 3);
-            case 13:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Team Pass Magenta - [Team Pass Yellow] - All Pass White<spop>", 5, 3);
-            case 14:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: Team Pass Yellow - [All Pass White] - All Pass Red<spop>", 5, 3);
-            case 15:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: All Pass White - [All Pass Red] - All Pass Green<spop>", 5, 3);
-            case 16:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: All Pass Red - [All Pass Green] - All Pass Blue<spop>", 5, 3);
-            case 17:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: All Pass Green - [All Pass Blue] - All Pass Cyan<spop>", 5, 3);
-            case 18:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: All Pass Blue - [All Pass Cyan] - All Pass Magenta<spop>", 5, 3);
-            case 19:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: All Pass Cyan - [All Pass Magenta] - All Pass Yellow<spop>", 5, 3);
-            case 20:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - [FF Swap] - Barrel Swap - Cloak/Fade - Delete Objects \n  Grenade: All Pass Magenta - [All Pass Yellow] - Solid White<spop>", 5, 3);
-         }
+         //Mine Modes
+         %obj.client.EditPMode++;
+         %obj.client.EditSMode = 0;
+         if (%obj.client.EditPMode >= 5)
+            %obj.client.EditPMode = 0;
       case 2:
-         %primary = "Turret Barrel Swapping";
-         switch(%obj.EditSMode) {
-            case 0:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - FF Swap - [Barrel Swap] - Cloak/Fade - Delete Objects \n  Grenade: Mortar - [Anti Air] - Missile<spop>", 5, 3);
-            case 1:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - FF Swap - [Barrel Swap] - Cloak/Fade - Delete Objects \n  Grenade: Anti Air - [Missile] - Plasma<spop>", 5, 3);
-            case 2:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - FF Swap - [Barrel Swap] - Cloak/Fade - Delete Objects \n  Grenade: Missile - [Plasma] - ELF<spop>", 5, 3);
-            case 3:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - FF Swap - [Barrel Swap] - Cloak/Fade - Delete Objects \n  Grenade: Plasma - [ELF] - Mortar<spop>", 5, 3);
-            case 4:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - FF Swap - [Barrel Swap] - Cloak/Fade - Delete Objects \n  Grenade: ELF - [Mortar] - Anti Air<spop>", 5, 3);
-         }
-      case 3:
-         switch(%obj.EditSMode) {
-            case 0:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - FF Swap - Barrel Swap - [Cloak/Fade] - Delete Objects \n  Grenade: [Cloak] - UnCloak - Fade - UnFade <spop>", 5, 3);
-            case 1:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - FF Swap - Barrel Swap - [Cloak/Fade] - Delete Objects \n  Grenade: Cloak - [UnCloak] - Fade - UnFade <spop>", 5, 3);
-            case 2:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - FF Swap - Barrel Swap - [Cloak/Fade] - Delete Objects \n  Grenade: Cloak - UnCloak - [Fade] - UnFade <spop>", 5, 3);
-            case 3:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - FF Swap - Barrel Swap - [Cloak/Fade] - Delete Objects \n  Grenade: Cloak - UnCloak - Fade - [UnFade] <spop>", 5, 3);
-         }
-      case 4:
-         switch(%obj.EditSMode) {
-            case 0:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - FF Swap - Barrel Swap - Cloak/Fade - [Delete Objects] \n  Grenade: [Single] - Cascade <spop>", 5, 3);
-            case 1:
-               commandToClient( %obj.client, 'BottomPrint', "<spush>[{Manipulator}] - Phantom139 \n Mine: Pad Swap - FF Swap - Barrel Swap - Cloak/Fade - [Delete Objects] \n  Grenade: Single - [Cascade] <spop>", 5, 3);
-         }
+         //Grenade Modes
+	     %obj.client.EditSMode++;
+		 if (%obj.client.EditPMode == 0 && %obj.client.EditSMode == 21)
+            %obj.client.EditSMode = 0;
+         if (%obj.client.EditPMode == 1 && %obj.client.EditSMode == 21)
+		    %obj.client.EditSMode = 0;
+         if (%obj.client.EditPMode == 2 && %obj.client.EditSMode == 5)
+		    %obj.client.EditSMode = 0;
+		 if (%obj.client.EditPMode == 3 && %obj.client.EditSMode == 4)
+			%obj.client.EditSMode = 0;
+	     if (%obj.client.EditPMode == 4 && %obj.client.EditSMode == 2)
+		    %obj.client.EditSMode = 0;
    }
-}
-
-function ChangeEditGunMode(%this, %data, %PriSec) {  //This Is Easier To use
-   if(%PriSec == 1) {    //Primary
-      if (!(getSimTime() > (%this.mineModeTime + 100)))
-         return;
-      %this.mineModeTime = getSimTime();
-      %this.EditPMode++;
-      %this.EditSMode = 0;    //Reset Secondary Mode TO Prevent Errors
-      if (%this.EditPMode > 4) {
-         %this.EditPMode = 0;
-      }
-      DispEditorToolInfo(%this);
-      return;
-   }
-   else {            //Secondary
-      if (!(getSimTime() > (%this.grenadeModeTime + 100)))
-         return;
-      %this.grenadeModeTime = getSimTime();
-      %this.EditSMode++;
-      //Check Primaries
-      if(%this.EditPMode == 0 && %this.EditSMode > 20) {
-         %this.EditSMode = 0;
-      }
-      else if(%this.EditPMode == 1 && %this.EditSMode > 20) {
-         %this.EditSMode = 0;
-      }
-      else if(%this.EditPMode == 2 && %this.EditSMode > 4) {
-         %this.EditSMode = 0;
-      }
-      else if(%this.EditPMode == 3 && %this.EditSMode > 3) {
-         %this.EditSMode = 0;
-      }
-      else if(%this.EditPMode == 4 && %this.EditSMode > 1) {
-         %this.EditSMode = 0;
-      }
-      DispEditorToolInfo(%this);
-      return;
-   }
+   displayWeaponInfo(%this, %obj, %obj.client.EditPMode, %obj.client.EditSMode);
 }
 
 //Editor Tool Functioning

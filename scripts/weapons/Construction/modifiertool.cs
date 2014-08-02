@@ -545,91 +545,56 @@ function MergeToolImage::onFire(%data,%obj,%slot)
 
 function MergeToolImage::onMount(%this,%obj,%slot)
 {
+    if(%obj.MTMode $= "")
+       %obj.MTMode = 0;
+    if(%obj.MTSubMode $= "")
+       %obj.MTSubMode = 0;
     %obj.usingMTelec = 1;
+    //Phantom139: Added
+    %obj.hasMineModes = 1;
+    %obj.hasGrenadeModes = 1;
+    //Phantom139: End
 	Parent::onMount(%this, %obj, %slot);
 	%obj.mountImage(MergeToolImage, 0);
-	MTShowStatus(%obj.client);
+    displayWeaponInfo(%this, %obj, %obj.client.MTMode, %obj.client.MTSubMode, "[REPA] "@%obj.client.MoveSetting);
 }
 
 function MergeToolImage::onUnmount(%this,%obj,%slot)
 {
 	Parent::onUnmount(%this, %obj, %slot);
     %obj.usingMTelec = 0;
+    //Phantom139: Added
+    %obj.hasMineModes = 0;
+    %obj.hasGrenadeModes = 0;
+    //Phantom139: End
 }
 
-function MTShowStatus(%client)
-{
-	if (%client.MTMode $= "")
-		%client.MTMode = 0;
-	if (%client.MTSubMode $= "")
-		%client.MTSubMode = 0;
-
-	switch (%client.MTMode)
-	{
-		case 0:
-			switch (%client.MTSubMode)
-			{
-				case 0:
-					%status = "<font:Arial:14>Mode: Merge. Fire the tool at two pieces. If possible, they will merge. Tolerance: " @ $ElecMod::MergeTool::Tolerance @ " meters.";
-				case 1:
-					%status = "<font:Arial:14>Mode: Merge. Fire the tool at two pieces. If possible, they will merge. Tolerance: " @ $ElecMod::MergeTool::HighTolerance @ " meters.";
-			}
-		case 1:
-			switch (%client.MTSubMode)
-			{
-				case 0:
-					%status = "<font:Arial:14>Mode: Isometric. Fire the tool at a piece to isometrically rotate them. Rotate: Default.";
-				case 1:
-					%status = "<font:Arial:14>Mode: Isometric. Fire the tool at a piece to isometrically rotate them. Rotate: Z Axis.";
-			}
-		case 2:
-			switch (%client.MTSubMode)
-			{
-				case 0:
-					%status = "<font:Arial:14>Mode: Split. Fire at a piece to split it in half. Axis: Automatic.";
-				case 1:
-					%status = "<font:Arial:14>Mode: Split. Fire at a piece to split it on crosshair. Axis: Automatic.";
-				case 2:
-					%status = "<font:Arial:14>Mode: Split. Fire at a piece to split it in half. Axis: X.";
-				case 3:
-					%status = "<font:Arial:14>Mode: Split. Fire at a piece to split it in half. Axis: Y.";
-				case 4:
-					%status = "<font:Arial:14>Mode: Split. Fire at a piece to split it in half. Axis: Z.";
-				case 5:
-					%status = "<font:Arial:14>Mode: Split. Fire at a piece to split it on crosshair. Axis: X.";
-				case 6:
-					%status = "<font:Arial:14>Mode: Split. Fire at a piece to split it on crosshair. Axis: Y.";
-				case 7:
-					%status = "<font:Arial:14>Mode: Split. Fire at a piece to split it on crosshair. Axis: Z.";
-			}
-       case 3:
-          if(%client.MoveSetting $= "") {
-             %client.MoveSetting = 0.1;
-          }
-			switch (%client.MTSubMode) {
-               case 0:
-					%status = "<font:Arial:14>Mode: Nudge. Fire at a piece to move it. Nudge "@%client.MoveSetting@"M +X Axis.";
-               case 1:
-					%status = "<font:Arial:14>Mode: Nudge. Fire at a piece to move it. Nudge "@%client.MoveSetting@"M -X Axis.";
-               case 2:
-					%status = "<font:Arial:14>Mode: Nudge. Fire at a piece to move it. Nudge "@%client.MoveSetting@"M +Y Axis.";
-               case 3:
-					%status = "<font:Arial:14>Mode: Nudge. Fire at a piece to move it. Nudge "@%client.MoveSetting@"M -Y Axis.";
-               case 4:
-					%status = "<font:Arial:14>Mode: Nudge. Fire at a piece to move it. Nudge "@%client.MoveSetting@"M +Z Axis.";
-               case 5:
-					%status = "<font:Arial:14>Mode: Nudge. Fire at a piece to move it. Nudge "@%client.MoveSetting@"M -Z Axis.";
-            }
-       case 4:
-			switch (%client.MTSubMode) {
-               case 0:
-					%status = "<font:Arial:14>Mode: Full Scale. Fire at a piece to scale it. Grow .01M.";
-               case 1:
-					%status = "<font:Arial:14>Mode: Full Scale. Fire at a piece to scale it. Shrink .01M.";
-            }
-	}
-	CommandToClient(%client, 'BottomPrint', "<font:Sui Generis:14>>>>M/I/S Tool<<<\n<font:Arial:14>" @ %status @ "\nCoded by Electricutioner.", 3, 3 );
+//Phantom139: Added Weapon Mode Code Here.
+function MergeToolImage::changeMode(%this, %obj, %key) {
+   switch(%key) {
+      case 1:
+         //Mine Modes
+         %obj.client.MTMode++;
+         %obj.client.MTSubMode = 0;
+         if (%obj.client.MTMode >= 5)
+            %obj.client.MTMode = 0;
+      case 2:
+         //Grenade Modes
+	     %obj.client.MTSubMode++;
+		 if (%obj.client.MTMode == 0 && %obj.client.MTSubMode == 2)
+            %obj.client.MTSubMode = 0;
+         if (%obj.client.MTMode == 1 && %obj.client.MTSubMode == 2)
+		    %obj.client.MTSubMode = 0;
+         if (%obj.client.MTMode == 2 && %obj.client.MTSubMode == 8)
+		    %obj.client.MTSubMode = 0;
+		 if (%obj.client.MTMode == 3 && %obj.client.MTSubMode == 6)
+			%obj.client.MTSubMode = 0;
+	     if (%obj.client.MTMode == 4 && %obj.client.MTSubMode == 2)
+		    %obj.client.MTSubMode = 0;
+   }
+   displayWeaponInfo(%this, %obj, %obj.client.MTMode, %obj.client.MTSubMode, "[REPA] "@%obj.client.MoveSetting);
 }
+//Phantom139: End
 
 //Split code begins here.
 //The goal of this is to be a semi-inverse of the merge...
