@@ -73,6 +73,14 @@ datablock ShapeBaseImageData(KillstreakBeaconImage) {
 };
 
 function KillstreakBeaconImage::onMount(%this, %obj, %slot) {
+   if(!isSet(%obj.client.ksListInstance)) {
+      %obj.client.ksListInstance = initList();
+   }
+   if(%obj.client.ksListInstance.count() <= 0) {
+      %obj.throwWeapon(1);
+      %obj.throwWeapon(0);
+      %obj.setInventory(KillstreakBeacon, 0, true);
+   }
    Parent::onMount(%this, %obj, %slot);
    %obj.hasMineModes = 1;
    %obj.hasGrenadeModes = 1;

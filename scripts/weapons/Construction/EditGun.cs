@@ -103,11 +103,11 @@ datablock ShapeBaseImageData(EditGunImage) {
 function EditGunImage::onMount(%this, %obj, %slot) {
    Parent::onMount(%this, %obj, %slot);
    DispEditorToolInfo(%obj);
-   if(!isSet(%obj.EditPMode)) {
-      %obj.EditPMode = 0;
+   if(!isSet(%obj.client.EditPMode)) {
+      %obj.client.EditPMode = 0;
    }
-   if(!isSet(%obj.EditSMode)) {
-      %obj.EditSMode = 0;
+   if(!isSet(%obj.client.EditSMode)) {
+      %obj.client.EditSMode = 0;
    }
    //Phantom139: Added
    %obj.hasMineModes = 1;

@@ -322,10 +322,9 @@ function GameConnection::AwardKillstreak(%client, %streakVal, %plz) {
    if(!%client.isActiveStreak(%streakVal) && ($Killstreak::Setting != 2) && !$TWM::PlayingHelljump) {
       return;
    }
-   if(!%client.ksListInstance) {
+   if(!isSet(%client.ksListInstance)) {
       %client.ksListInstance = initList();
    }
-   %client.player.setInventory(KillstreakBeacon, 1, true);
    %cAmt = 0;
    switch(%streakVal) {
       case 1:
@@ -443,6 +442,7 @@ function GameConnection::AwardKillstreak(%client, %streakVal, %plz) {
          }
       }
    }
+   %client.player.setInventory(KillstreakBeacon, 1, true);
 }
 
 //Modified 12-17-09 to take into consideration of hosts changing the kill values

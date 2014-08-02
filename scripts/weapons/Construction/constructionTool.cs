@@ -221,10 +221,10 @@ function ConstructionToolImage::onMount(%this,%obj,%slot) {
 	%obj.errMsgSent = false;
 	%obj.client.setWeaponsHudActive(%this.item);
 	%obj.usingConstructionTool = true;
-	if (!%obj.constructionToolMode)
-		%obj.constructionToolMode = 0;
-	if (!%obj.constructionToolMode2)
-		%obj.constructionToolMode2 = 0;
+	if (!isSet(%obj.client.constructionToolMode))
+		%obj.client.constructionToolMode = 0;
+	if (!isSet(%obj.client.constructionToolMode2))
+		%obj.client.constructionToolMode2 = 0;
     //Phantom139: Added
     %obj.hasMineModes = 1;
     %obj.hasGrenadeModes = 1;
