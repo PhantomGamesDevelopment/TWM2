@@ -126,6 +126,35 @@ datablock ShapeBaseImageData(ConstructionToolImage) {
 	stateTransitionOnTimeout[5] = "ActivateReady";
 };
 
+//Phantom139: Added Weapon Mode Code Here.
+function ConstructionToolImage::changeMode(%this, %obj, %key) {
+   if(%obj.performing) {
+      commandToClient(%obj.client, 'bottomPrint', "Construction Tool\nCannot Change Modes While Performing.", 3, 3);
+      return;
+   }
+   switch(%key) {
+      case 1:
+         //Mine Modes
+         %obj.client.constructionToolMode++;
+         %obj.client.constructionToolMode2 = 0;
+         if (%obj.client.constructionToolMode >= 4)
+            %obj.client.constructionToolMode = 0;
+      case 2:
+         //Grenade Modes
+	     %obj.client.constructionToolMode2++;
+		 if (%obj.client.constructionToolMode == 0 && %obj.client.constructionToolMode2 == 2)
+            %obj.client.constructionToolMode2 = 0;
+         if (%obj.client.constructionToolMode == 1 && %obj.client.constructionToolMode2 == 2)
+		    %obj.client.constructionToolMode2 = 0;
+         if (%obj.client.constructionToolMode == 2 && %obj.client.constructionToolMode2 == 6)
+		    %obj.client.constructionToolMode2 = 0;
+		 if (%obj.client.constructionToolMode == 3 && %obj.client.constructionToolMode2 == 4)
+			%obj.client.constructionToolMode2 = 0;
+   }
+   displayWeaponInfo(%this, %obj, %obj.client.constructionToolMode, %obj.client.constructionToolMode2, "[REPA] "@%obj.client.RotateAngle);
+}
+//Phantom139: End
+
 function ConstructionToolImage::onActivate(%this,%obj,%slot) {
 }
 
@@ -186,6 +215,9 @@ function ConstructionToolImage::onMount(%this,%obj,%slot) {
 		%curWeap = ( %obj.getMountedImage($WeaponSlot) == 0 ) ? "" : %obj.getMountedImage($WeaponSlot).getName().item.pickUpName;
 		BottomPrint(%obj.client, "Now using " @ %curWeap, 2, 1 );
 	}
+    if(%obj.client.RotateAngle $= "") {
+       %obj.client.RotateAngle = 22.5;
+    }
 	%obj.errMsgSent = false;
 	%obj.client.setWeaponsHudActive(%this.item);
 	%obj.usingConstructionTool = true;
@@ -193,6 +225,10 @@ function ConstructionToolImage::onMount(%this,%obj,%slot) {
 		%obj.constructionToolMode = 0;
 	if (!%obj.constructionToolMode2)
 		%obj.constructionToolMode2 = 0;
+    //Phantom139: Added
+    %obj.hasMineModes = 1;
+    %obj.hasGrenadeModes = 1;
+    //Phantom139: End
 	WeaponImage::onMount(%this,%obj,%slot);
 }
 
@@ -203,6 +239,10 @@ function ConstructionToolImage::onUnmount(%data, %obj, %slot) {
 		stopPerforming(%obj);
 		messageClient(%player.client, 'msgClient', '\c2Construction Tool stopped.');
 	}
+    //Phantom139: Added
+    %obj.hasMineModes = 0;
+    %obj.hasGrenadeModes = 0;
+    //Phantom139: End
 	%obj.errMsgSent = false;
 	Parent::deconstruct(%data, %obj, %slot);
 	WeaponImage::onUnmount(%data, %obj, %slot);

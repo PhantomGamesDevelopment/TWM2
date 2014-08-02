@@ -214,28 +214,32 @@ function SuperChaingunImage::onMount(%this,%obj,%slot) {
 		%obj.superChaingunMode = 0;
 	if (!%obj.superChaingunMode2)
 		%obj.superChaingunMode2 = 0;
-	displaySCGStatus(%obj);
+    %obj.hasMineModes = 1;
+    %obj.hasGrenadeModes = 1;
+    displayWeaponInfo(%this, %obj, %obj.client.superChaingunMode, %obj.client.superChaingunMode2);
 	WeaponImage::onMount(%this,%obj,%slot);
 }
 
 function SuperChaingunImage::onUnmount(%data, %obj, %slot) {
 	%obj.usingSuperChaingun = false;
+    %obj.hasMineModes = 0;
+    %obj.hasGrenadeModes = 0;
 	WeaponImage::onUnmount(%data, %obj, %slot);
 }
 
-function displaySCGStatus(%obj) {
-	if (%obj.superChaingunMode == 1)
-		bottomPrint(%obj.client,"<spush><font:Sui Generis:14>>>>Super Chain Gun<<<<spop>\n<spush><font:Arial:14>Ions. Progression: " @ ($Ion::StopIon ? "disabled" : "enabled") @ ".<spop>",2,2);
-	else if (%obj.superChaingunMode == 2)
-		bottomPrint(%obj.client,"<spush><font:Sui Generis:14>>>>Super Chain Gun<<<<spop>\n<spush><font:Arial:14>Repair Pulse.<spop>",2,2);
-	else if (%obj.superChaingunMode == 3)
-		bottomPrint(%obj.client,"<spush><font:Sui Generis:14>>>>Super Chain Gun<<<<spop>\n<spush><font:Arial:14>Cloak Pulse.<spop>",2,2);
-	else if (%obj.superChaingunMode == 4)
-		bottomPrint(%obj.client,"<spush><font:Sui Generis:14>>>>Super Chain Gun<<<<spop>\n<spush><font:Arial:14>Deconstruction Pulse<spop>",2,2);
-        else if (%obj.superChaingunMode == 5)
-		bottomPrint(%obj.client,"<spush><font:Sui Generis:14>>>>Super Chain Gun<<<<spop>\n<spush><font:Arial:14>Electro-static Pulse.<spop>",2,2);
-        else if (%obj.superChaingunMode == 6)
-		bottomPrint(%obj.client,"<spush><font:Sui Generis:14>>>>Super Chain Gun<<<<spop>\n<spush><font:Arial:14>Morph Pulse.<spop>",2,2);
-	else
-		bottomPrint(%obj.client,"<spush><font:Sui Generis:14>>>>Super Chain Gun<<<<spop>\n<spush><font:Arial:14>Rapid fire bullets.<spop>",2,2);
+function SuperChaingunImage::changeMode(%this, %obj, %key) {
+   switch(%key) {
+      case 1:
+         //Mine Modes
+         %obj.client.superChaingunMode++;
+         %obj.client.superChaingunMode2 = 0;
+         if (%obj.client.superChaingunMode > 6 - (5 * $host::nopulseSCG))
+            %obj.client.superChaingunMode = 0;
+      case 2:
+         //Grenade Modes
+	     %obj.client.superChaingunMode2++;
+		 if (%obj.client.superChaingunMode == 1 && %obj.client.superChaingunMode2 == 2)
+            %obj.client.superChaingunMode2 = 0;
+   }
+   displayWeaponInfo(%this, %obj, %obj.client.superChaingunMode, %obj.client.superChaingunMode2);
 }
