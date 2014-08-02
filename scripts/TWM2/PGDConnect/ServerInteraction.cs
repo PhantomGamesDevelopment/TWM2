@@ -11,9 +11,9 @@
 //                    :  Servers: [CORE] [SATELITE]
 // ============================================================
 
-$Generic_Rank_Cap      = 75000;          //if we cannot get a valid connection
-$TWM2Core_Interface    = "www.phantomdev.net" TAB "www.tacticaluprising.phantomdev.net"; //don't touch, server connections
-$TWM2ServerInfo_Loc    = "/ssiInterface.php";
+$Generic_Rank_Cap      = 3000000;          //if we cannot get a valid connection
+$TWM2Core_Interface    = "www.phantomdev.net" TAB "www.public.phantomdev.net"; //don't touch, server connections
+$TWM2ServerInfo_Loc    = "/Univ/ssiInterface.php";
 
 //connects to the server
 function establishPGDConnection() {
