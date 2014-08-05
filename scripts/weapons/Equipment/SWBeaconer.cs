@@ -18,7 +18,7 @@ datablock ItemData(KillstreakBeacon) {
    friction     = 0.6;
    pickupRadius = 2;
 	pickUpName = "a targeting laser rifle";
- 
+
    isKSSW = 1;
 
    computeCRC = true;
@@ -31,7 +31,7 @@ datablock ShapeBaseImageData(KillstreakBeaconImage) {
    shapeFile = "weapon_targeting.dts";
    item = KillstreakBeacon;
    offset = "0 0 0";
-   
+
    isKSSW = 1;
 
    projectile = BasicTargeter;
@@ -120,7 +120,7 @@ function DisplayKillstreakInfo(%obj) {
    %currentStreak = %obj.client.ksListInstance.element(%obj.KSSetMode);
    %strkName = getWord(%currentStreak, 0);
    %strkCnt = getWord(%currentStreak, 1);
-   
+
    switch$(%strkName) {
       case "UAV":
          %msg = "UAV Recon";
@@ -157,7 +157,7 @@ function DisplayKillstreakInfo(%obj) {
       case "Napalm":
          %msg = "Napalm Airstrike";
    }
-   
+
    commandToClient(%obj.client, 'BottomPrint', "<font:Sui Generis:14>>>>Killstreak Beacon<<<\n<font:Arial:14>"@%msg@" ["@%strkCnt@" Available]\n<font:Arial:12>Press Mine to select next streak, Grenade to select previous streak.", 3, 3);
 }
 
@@ -178,7 +178,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       }
       return;
    }
-   
+
    switch$(%strkName) {
       //
       //
@@ -222,7 +222,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
                }
             }
          }
-         
+
       //
       //
       // Airstrike
@@ -238,7 +238,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
          %ASCam.mode = "AirstrikeCall";
          %obj.client.setControlObject(%ASCam);
          CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
-   
+
       //
       //
       // UAMS
@@ -265,7 +265,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
          else {
             %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
          }
-         
+
       //
       //
       // Helicopter
@@ -622,7 +622,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
          else {
             %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
          }
-         
+
       //
       //
       // Napalm
@@ -728,7 +728,7 @@ function ConstantBomberTurningLoop(%obj, %TPos) {
    %SwapA = -1 * getWord(%target, 0);
    %TVector = getWord(%target, 1)@" "@%SwapA@" 0";
    %obj.setRotation(fullrot("0 0 0",%TVector));
-   
+
    %dist = vectorDist(%TPos, %BPos);
    if(%dist < 75) {
       %obj.ReachedDest = 1;
@@ -747,7 +747,7 @@ function Airstrike(%CallerClient, %position, %dirFrom) {
       %CallerClient.TWM2Core.AirstrikeCalls++;
       UpdateSWBeaconFile(%CallerClient, "AirStrike");
    }
-   
+
    //new stuff TWM2 2.6
    //%dirFrom = Spawn Position of Aircraft
    %THeight = getTerrainHeight(%dirFrom);
@@ -844,7 +844,7 @@ function MakeTheHeli(%cl, %gunner) {
    if(%gunner $= "") {
       %gunner = 0;
    }
-   
+
    if(%gunner) {
       %Heli = new FlyingVehicle() {
          dataBlock = ApacheHelicopter;
@@ -961,7 +961,7 @@ function HeliBeginAttack(%heli, %target) {
       %heli.Targeting = schedule(500, 0, "HeliScan", %heli);
       return;
    }
-   
+
    schedule(500, 0, "HeliBeginAttack", %heli, %target);
 	%clpos = %target.getPosition();
     if(vectorDist(%clpos, %pos) < 125) {
@@ -1129,7 +1129,7 @@ function MakeTheHeli2(%cl, %harrier) {
       %Heli.doneAttack = 0;
       //
       %Heli.team = %cl.team;
-      
+
       %heli.canFireMissiles = 1;
 
       %heli.Targeting = GunshipHeliScan(%heli);
