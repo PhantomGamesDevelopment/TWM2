@@ -73,10 +73,7 @@ datablock ShapeBaseImageData(KillstreakBeaconImage) {
 };
 
 function KillstreakBeaconImage::onMount(%this, %obj, %slot) {
-   if(!isSet(%obj.client.ksListInstance)) {
-      %obj.client.ksListInstance = initList();
-   }
-   if(%obj.client.ksListInstance.count() <= 0) {
+   if(getWordCount(%obj.client.streakList()) == 0) {
       %obj.throwWeapon(1);
       %obj.throwWeapon(0);
       %obj.setInventory(KillstreakBeacon, 0, true);
@@ -103,74 +100,41 @@ function KillstreakBeaconImage::changeMode(%this, %obj, %key) {
       case 1:
          //Mine Modes
          %obj.KSSetMode++;
-         if(%obj.KSSetMode >= %obj.client.ksListInstance.count()) {
+         if(%obj.KSSetMode >= getWordCount(%obj.client.streakList())) {
             %obj.KSSetMode = 0;
          }
       case 2:
          //Grenade Modes
 	     %obj.KSSetMode--;
          if(%obj.KSSetMode < 0) {
-            %obj.KSSetMode = %obj.client.ksListInstance.count() - 1;
+            %obj.KSSetMode = getWordCount(%obj.client.streakList());
          }
    }
    DisplayKillstreakInfo(%obj);
 }
 
 function DisplayKillstreakInfo(%obj) {
-   %currentStreak = %obj.client.ksListInstance.element(%obj.KSSetMode);
-   %strkName = getWord(%currentStreak, 0);
-   %strkCnt = getWord(%currentStreak, 1);
+   %streakList = %obj.client.streakList();
+   %currentStreak = getWord(%streakList, %obj.KSSetMode);
+   %strkName = getField($Killstreak[%currentStreak], 0);
+   %strkCnt = %obj.client.streakCount[%currentStreak];
 
-   switch$(%strkName) {
-      case "UAV":
-         %msg = "UAV Recon";
-      case "Airstrike":
-         %msg = "Thundersword Airstrike";
-      case "GM":
-         %msg = "UAMS Assault Drone";
-      case "AIHeli":
-         %msg = "Support Helicopter";
-      case "Harrier":
-         %msg = "Plasma Harrier Airstrike";
-      case "OLS":
-         %msg = "Orbital Laser Strike";
-      case "AIGunHeli":
-         %msg = "Gunship Helicopter Support";
-      case "Stealth":
-         %msg = "Stealth Bomber Airstrike";
-      case "HarbWrath":
-         %msg = "Harbinger's Wrath";
-      case "Apache":
-         %msg = "Apache Gunner";
-      case "AC130":
-         %msg = "AC-130 Gunner";
-      case "Artillery":
-         %msg = "Centaur Artillery Bombardment";
-      case "EMP":
-         %msg = "EMP Strike";
-      case "NukeStrike":
-         %msg = "Tactical Nuke Strike";
-      case "ZBomb":
-         %msg = "Anti-Zombie Bomb";
-      case "FBomb":
-         %msg = "Fission Bomb Strike";
-      case "Napalm":
-         %msg = "Napalm Airstrike";
-   }
-
-   commandToClient(%obj.client, 'BottomPrint', "<font:Sui Generis:14>>>>Killstreak Beacon<<<\n<font:Arial:14>"@%msg@" ["@%strkCnt@" Available]\n<font:Arial:12>Press Mine to select next streak, Grenade to select previous streak.", 3, 3);
+   commandToClient(%obj.client, 'BottomPrint', "<font:Sui Generis:14>>>>Killstreak Beacon<<<\n<font:Arial:14>"@%strkName@" ["@%strkCnt@" Available]\n<font:Arial:12>Press Mine to select next streak, Grenade to select previous streak.", 3, 3);
 }
 
 function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
-   %currentStreak = %obj.client.ksListInstance.element(%obj.KSSetMode);
-   %strkName = getWord(%currentStreak, 0);
-   %strkCnt = getWord(%currentStreak, 1);
+   %streakList = %obj.client.streakList();
+   %currentStreak = getWord(%streakList, %obj.KSSetMode);
+   %strkName = getField($Killstreak[%currentStreak], 0);
+   %strkCnt = %obj.client.streakCount[%currentStreak];
    %newCt = %strkCnt - 1;
+   
+   echo("KSBeacon::Fire("@%data@", "@%obj@", "@%slot@"): "@%strkName@" "@%strkCnt@" => "@%newCt);
    if(%strkCnt <= 0) {
       //Oops...
       messageClient(%obj.client, 'msgError', "\c5TWM2: Nice Try...");
-      %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
-      if(%obj.client.ksListInstance.count() <= 0) {
+      //%obj.client.streakCount[%currentStreak]--;
+      if(getWordCount(%obj.client.streakList()) == 0) {
          //No more streaks in the list...
          %obj.throwWeapon(1);
          %obj.throwWeapon(0);
@@ -179,24 +143,19 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       return;
    }
 
-   switch$(%strkName) {
+   switch(%currentStreak) {
       //
       //
       // UAV
       //
       //
-      case "UAV":
+      case 1:
          GainExperience(%obj.client, 25, "UAV Called in ");
          %obj.client.TWM2Core.UAVCalls++;
          UpdateSWBeaconFile(%obj.client, "UAV");
 
          %obj.client.OnUseKillstreak(1);
-         if(%newCt == 0) {
-            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
-         }
-         else {
-            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
-         }
+         %obj.client.streakCount[%currentStreak]--;
          %count = 0;
          if(!$TWM2::FFAMode) {
             %obj.team.UAVLoop = UAVLoop(%obj, %obj.client.team, %count);
@@ -228,7 +187,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // Airstrike
       //
       //
-      case "Airstrike":
+      case 2:
          %ASCam = new Camera() {
             dataBlock = TWM2ControlCamera;
          };
@@ -244,7 +203,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // UAMS
       //
       //
-      case "GM":
+      case 3:
          GainExperience(%obj.client, 50, "UAMS Called in ");
          %obj.client.TWM2Core.GMCalls++;
          %obj.client.OnUseKillstreak(3);
@@ -259,19 +218,15 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
             }
          }
          CreateMissileSat(%obj.client);
-         if(%newCt == 0) {
-            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
-         }
-         else {
-            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
-         }
+         %obj.client.streakCount[%currentStreak]--;
+
 
       //
       //
       // Helicopter
       //
       //
-      case "AIHeli":
+      case 4:
          if(Game.CheckModifier("Scrambler") == 1) {
             for(%i = 0; %i < MissionCleanup.getCount(); %i++) {
                %obj = MissionCleanup.getObject(%i);
@@ -298,12 +253,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
                messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Helicopter Inbound");
             }
          }
-         if(%newCt == 0) {
-            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
-         }
-         else {
-            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
-         }
+         %obj.client.streakCount[%currentStreak]--;
          MakeTheHeli(%obj.client);
 
       //
@@ -311,7 +261,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // Harrier
       //
       //
-      case "Harrier":
+      case 5:
          %ASCam = new Camera() {
             dataBlock = TWM2ControlCamera;
          };
@@ -327,7 +277,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // OLS
       //
       //
-      case "OLS":
+      case 6:
          %ASCam = new Camera() {
             dataBlock = TWM2ControlCamera;
          };
@@ -343,7 +293,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // Gunship Helicopter
       //
       //
-      case "AIGunHeli":
+      case 7:
          if(Game.CheckModifier("Scrambler") == 1) {
             for(%i = 0; %i < MissionCleanup.getCount(); %i++) {
                %obj = MissionCleanup.getObject(%i);
@@ -370,12 +320,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
                messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Gunship Helicopter Inbound!!!");
             }
          }
-         if(%newCt == 0) {
-            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
-         }
-         else {
-            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
-         }
+         %obj.client.streakCount[%currentStreak]--;
          MakeTheHeli2(%obj.client, 0);
 
       //
@@ -383,7 +328,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // Stealth Airstrike
       //
       //
-      case "Stealth":
+      case 8:
          %ASCam = new Camera() {
             dataBlock = TWM2ControlCamera;
          };
@@ -399,7 +344,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // Harbinger Gunship
       //
       //
-      case "HarbWrath":
+      case 9:
          GainExperience(%obj.client, 100, "Harbinger Gunship Called In ");
          if($CurrentMission $= "ChristmasMall09") {
             CompleteNWChallenge(%CallerClient, "GunshipMall");
@@ -416,12 +361,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
                messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Gunship... INCOMING!!!");
             }
          }
-         if(%newCt == 0) {
-            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
-         }
-         else {
-            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
-         }
+         %obj.client.streakCount[%currentStreak]--;
          if($TWM2::UnmannedGunship) {
             StartHarbingersWrath(%obj.client, 1);
          }
@@ -434,7 +374,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // Apache
       //
       //
-      case "Apache":
+      case 10:
          GainExperience(%obj.client, 100, "Apache Gunner Called in ");
          %obj.client.OnUseKillstreak(10);
          %obj.client.TWM2Core.CGCalls++;
@@ -448,12 +388,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
                messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy Apache... INCOMING!!!");
             }
          }
-         if(%newCt == 0) {
-            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
-         }
-         else {
-            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
-         }
+         %obj.client.streakCount[%currentStreak]--;
          MakeTheHeli(%obj.client, 1);
 
       //
@@ -461,7 +396,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // AC130
       //
       //
-      case "AC130":
+      case 11:
          GainExperience(%obj.client, 100, "AC130 Called in ");
          if($CurrentMission $= "ChristmasMall09") {
             CompleteNWChallenge(%CallerClient, "GunshipMall");
@@ -478,12 +413,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
                messageClient(%cl, 'msgHeliComing', "\c5TWM2: Enemy AC130 ABOVE!!!");
             }
          }
-         if(%newCt == 0) {
-            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
-         }
-         else {
-            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
-         }
+         %obj.client.streakCount[%currentStreak]--;
          if($TWM2::UnmannedGunship) {
             StartAC130(%obj.client, 1);
          }
@@ -496,7 +426,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // Artillery
       //
       //
-      case "Artillery":
+      case 12:
          %ASCam = new Camera() {
             dataBlock = TWM2ControlCamera;
          };
@@ -512,7 +442,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // EMP
       //
       //
-      case "EMP":
+      case 13:
          %obj.client.TWM2Core.EMPCalls++;
          UpdateSWBeaconFile(%obj.client, "EMP");
          GainExperience(%obj.client, 1000, "Mass EMP Called in ");
@@ -540,19 +470,14 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
                }
             }
          }
-         if(%newCt == 0) {
-            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
-         }
-         else {
-            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
-         }
+         %obj.client.streakCount[%currentStreak]--;
 
       //
       //
       // Nuke
       //
       //
-      case "NukeStrike":
+      case 14:
          %ASCam = new Camera() {
             dataBlock = TWM2ControlCamera;
          };
@@ -568,7 +493,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
       // ZBomb
       //
       //
-      case "ZBomb":
+      case 15:
          GainExperience(%obj.client, 1000, "Zombie Annihilation Bomb Activated ");
          MessageAll('msgWohoo', "\c5TWM2: "@%obj.client.namebase@" has activated a Z-Bomb, eliminating all zombies");
          %obj.client.OnUseKillstreak(15);
@@ -595,19 +520,14 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
                %flcl.player.setWhiteout(1.8);
             }
          }
-         if(%newCt == 0) {
-            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
-         }
-         else {
-            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
-         }
+         %obj.client.streakCount[%currentStreak]--;
 
       //
       //
       // Fission
       //
       //
-      case "FBomb":
+      case 16:
          %obj.client.HasFission = 0;
          GainExperience(%obj.client, 25000, "Anti-Matter Based Fission Bomb Activated ");
          %obj.client.OnUseKillstreak(16);
@@ -616,19 +536,14 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
          CompleteNWChallenge(%obj.client, "GameEnder");
          MessageAll('msgItsOva', "\c5COMMAND: FISSION BOMB!!! IT'S OVER!! RUN!!!!!! ~wfx/misc/red_alert_short.wav");
          FissionBombLoop(%obj.client, %obj, %obj.getPosition(), 30);
-         if(%newCt == 0) {
-            %obj.client.ksListInstance.removeElement(getField(%obj.client.ksListInstance.find(%strkName), 1));
-         }
-         else {
-            %obj.client.ksListInstance.set(getField(%obj.client.ksListInstance.find(%strkName), 1), %strkName SPC %newCt);
-         }
+         %obj.client.streakCount[%currentStreak]--;
 
       //
       //
       // Napalm
       //
       //
-      case "Napalm":
+      case 17:
          %ASCam = new Camera() {
             dataBlock = TWM2ControlCamera;
          };
@@ -640,7 +555,7 @@ function KillstreakBeaconImage::OnFire(%data, %obj, %slot) {
          CameraMessageLoop(%obj.client, %ASCam, %ASCam.mode);
    }
    //Post-Fire Checks
-   if(%obj.client.ksListInstance.count() <= 0) {
+   if(getWordCount(%obj.client.streakList()) == 0) {
       //No more streaks in the list...
       %obj.throwWeapon(1);
       %obj.throwWeapon(0);

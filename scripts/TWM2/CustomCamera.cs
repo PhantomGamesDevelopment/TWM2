@@ -54,7 +54,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(%client.ksListInstance.find("Airstrike") == -1 && !%client.UnlimitedAS) {
+               if(%client.streakCount[2] <= 0 && !%client.UnlimitedAS) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -79,18 +79,19 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
                      if(!%client.UnlimitedAS) {
-                        %newCt = getField(%client.ksListInstance.find("Airstrike"), 1) - 1;
-                        if(%newCt == 0) {
-                           %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("Airstrike"), 1));
-                        }
-                        else {
-                           %client.ksListInstance.set(getField(%client.ksListInstance.find("Airstrike"), 1), "Airstrike" SPC %newCt);
-                        }
+                        %client.streakCount[2]--;
                         GainExperience(%client, 35, "Airstrike called in ");
                      }
                      bottomPrint(%client, "Coordinates Confirmed, Calling In Airstrike", 5, 2);
                      messageTeam(%client.team, 'MsgAirstrike', "\c5TWM2: Airstrike Called In From "@%client.namebase@"");
                      Airstrike(%client, %position, %direction);
+                     //Post-Fire Checks
+                     if(getWordCount(%client.streakList()) == 0 && !%client.UnlimitedAS) {
+                        //No more streaks in the list...
+                        %obj.throwWeapon(1);
+                        %obj.throwWeapon(0);
+                        %obj.setInventory(KillstreakBeacon, 0, true);
+                     }
                   }
                   else {
                      bottomPrint(%client, "Player Object Required", 5, 2);
@@ -101,7 +102,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(%client.ksListInstance.find("Harrier") == -1) {
+               if(%client.streakCount[5] <= 0) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -123,17 +124,18 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     %newCt = getField(%client.ksListInstance.find("Harrier"), 1) - 1;
-                     if(%newCt == 0) {
-                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("Harrier"), 1));
-                     }
-                     else {
-                        %client.ksListInstance.set(getField(%client.ksListInstance.find("Harrier"), 1), "Harrier" SPC %newCt);
-                     }
+                     %client.streakCount[5]--;
                      GainExperience(%client, 150, "Harrier Airstrike called in ");
                      messageTeam(%client.team, 'MsgAirstrike', "\c5TWM2: "@%client.namebase@"'s Harrier Airstrike is Approaching.");
                      bottomPrint(%client, "Coordinates Confirmed, Calling In Harriers", 5, 2);
                      HarrierAirstrike(%client, %position, %direction);
+                     //Post-Fire Checks
+                     if(getWordCount(%client.streakList()) == 0) {
+                        //No more streaks in the list...
+                        %obj.throwWeapon(1);
+                        %obj.throwWeapon(0);
+                        %obj.setInventory(KillstreakBeacon, 0, true);
+                     }
                   }
                   else {
                      bottomPrint(%client, "Player Object Required", 5, 2);
@@ -144,7 +146,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(%client.ksListInstance.find("Napalm") == -1) {
+               if(%client.streakCount[17] <= 0) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -166,17 +168,18 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     %newCt = getField(%client.ksListInstance.find("Napalm"), 1) - 1;
-                     if(%newCt == 0) {
-                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("Napalm"), 1));
-                     }
-                     else {
-                        %client.ksListInstance.set(getField(%client.ksListInstance.find("Napalm"), 1), "Napalm" SPC %newCt);
-                     }
+                     %client.streakCount[17]--;
                      GainExperience(%client, 350, "Napalm Airstrike called in ");
                      messageTeam(%client.team, 'MsgAirstrike', "\c5TWM2: "@%client.namebase@"'s Napalm Airstrike is coming in hot.");
                      bottomPrint(%client, "Coordinates Confirmed, Calling In Strike Fighters", 5, 2);
                      NapalmHarrierAirstrike(%client, %position, %direction);
+                     //Post-Fire Checks
+                     if(getWordCount(%client.streakList()) == 0) {
+                        //No more streaks in the list...
+                        %obj.throwWeapon(1);
+                        %obj.throwWeapon(0);
+                        %obj.setInventory(KillstreakBeacon, 0, true);
+                     }
                   }
                   else {
                      bottomPrint(%client, "Player Object Required", 5, 2);
@@ -187,7 +190,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(%client.ksListInstance.find("OLS") == -1) {
+               if(%client.streakCount[6] <= 0) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -201,17 +204,18 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     %newCt = getField(%client.ksListInstance.find("OLS"), 1) - 1;
-                     if(%newCt == 0) {
-                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("OLS"), 1));
-                     }
-                     else {
-                        %client.ksListInstance.set(getField(%client.ksListInstance.find("OLS"), 1), "OLS" SPC %newCt);
-                     }
+                     %client.streakCount[6]--;
                      GainExperience(%client, 350, "Orbital Laser Strike Called In ");
                      messageTeam(%client.team, 'MsgAirstrike', "\c5TWM2: "@%client.namebase@"'s Laser Strike is Incoming.");
                      bottomPrint(%client, "Coordinates Confirmed, Spinning Laser Cannon", 5, 2);
                      OrbitalLaserStrike(%client, %position);
+                     //Post-Fire Checks
+                     if(getWordCount(%client.streakList()) == 0) {
+                        //No more streaks in the list...
+                        %obj.throwWeapon(1);
+                        %obj.throwWeapon(0);
+                        %obj.setInventory(KillstreakBeacon, 0, true);
+                     }
                   }
                   else {
                      bottomPrint(%client, "Player Object Required", 5, 2);
@@ -222,7 +226,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(%client.ksListInstance.find("Stealth") == -1) {
+               if(%client.streakCount[8] <= 0) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -244,16 +248,17 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     %newCt = getField(%client.ksListInstance.find("Stealth"), 1) - 1;
-                     if(%newCt == 0) {
-                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("Stealth"), 1));
-                     }
-                     else {
-                        %client.ksListInstance.set(getField(%client.ksListInstance.find("Stealth"), 1), "Stealth" SPC %newCt);
-                     }
+                     %client.streakCount[8]--;
                      GainExperience(%client, 150, "Stealth Bomber Airstrike called in ");
                      bottomPrint(%client, "Coordinates Confirmed, Calling In Stealth Bomber", 5, 2);
                      StealthAirstrike(%client, %position, %direction);
+                     //Post-Fire Checks
+                     if(getWordCount(%client.streakList()) == 0) {
+                        //No more streaks in the list...
+                        %obj.throwWeapon(1);
+                        %obj.throwWeapon(0);
+                        %obj.setInventory(KillstreakBeacon, 0, true);
+                     }
                   }
                   else {
                      bottomPrint(%client, "Player Object Required", 5, 2);
@@ -264,7 +269,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(%client.ksListInstance.find("Artillery") == -1) {
+               if(%client.streakCount[12] <= 0) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -278,17 +283,18 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     %newCt = getField(%client.ksListInstance.find("Artillery"), 1) - 1;
-                     if(%newCt == 0) {
-                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("Artillery"), 1));
-                     }
-                     else {
-                        %client.ksListInstance.set(getField(%client.ksListInstance.find("Artillery"), 1), "Artillery" SPC %newCt);
-                     }
+                     %client.streakCount[12]--;
                      GainExperience(%client, 250, "Artillery called in ");
                      bottomPrint(%client, "Coordinates Confirmed, Calling In Artillery", 5, 2);
                      messageTeam(%client.team, 'MsgAirstrike', "\c5TWM2: Artillery Called In From "@%client.namebase@"");
                      Artillery(%client, %position);
+                     //Post-Fire Checks
+                     if(getWordCount(%client.streakList()) == 0) {
+                        //No more streaks in the list...
+                        %obj.throwWeapon(1);
+                        %obj.throwWeapon(0);
+                        %obj.setInventory(KillstreakBeacon, 0, true);
+                     }
                   }
                   else {
                      bottomPrint(%client, "Player Object Required", 5, 2);
@@ -299,7 +305,7 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
          //press JET
          if (%trigger == 3) {
                //Can we Call in this airstrike?
-               if(%client.ksListInstance.find("NukeStrike") == -1) {
+               if(%client.streakCount[14] <= 0) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
@@ -313,17 +319,18 @@ function TWM2ControlCamera::onTrigger(%data,%obj,%trigger,%state) {
                   if(isObject(%client.player)) {
                      %obj.schedule(1000, "delete");
                      %client.setControlObject(%client.player);
-                     %newCt = getField(%client.ksListInstance.find("NukeStrike"), 1) - 1;
-                     if(%newCt == 0) {
-                        %client.ksListInstance.removeElement(getField(%client.ksListInstance.find("NukeStrike"), 1));
-                     }
-                     else {
-                        %client.ksListInstance.set(getField(%client.ksListInstance.find("NukeStrike"), 1), "NukeStrike" SPC %newCt);
-                     }
+                     %client.streakCount[14]--;
                      GainExperience(%client, 500, "Nuclear Missile called in ");
                      bottomPrint(%client, "Coordinates Confirmed, Launching Missile", 5, 2);
                      messageAll('msgDanger', "\c5TWM2 ALERT: "@%client.namebase@" has activated a nuclear missile!!! ~wfx/misc/red_alert.wav");
                      Nuke(%client, %position);
+                     //Post-Fire Checks
+                     if(getWordCount(%client.streakList()) == 0) {
+                        //No more streaks in the list...
+                        %obj.throwWeapon(1);
+                        %obj.throwWeapon(0);
+                        %obj.setInventory(KillstreakBeacon, 0, true);
+                     }
                   }
                   else {
                      bottomPrint(%client, "Player Object Required", 5, 2);
