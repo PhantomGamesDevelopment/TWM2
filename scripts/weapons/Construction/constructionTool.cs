@@ -135,6 +135,7 @@ function ConstructionToolImage::changeMode(%this, %obj, %key) {
    switch(%key) {
       case 1:
          //Mine Modes
+<<<<<<< HEAD
          %obj.client.constructionToolMode++;
          %obj.client.constructionToolMode2 = 0;
          if (%obj.client.constructionToolMode >= 4)
@@ -152,6 +153,25 @@ function ConstructionToolImage::changeMode(%this, %obj, %key) {
 			%obj.client.constructionToolMode2 = 0;
    }
    displayWeaponInfo(%this, %obj, %obj.client.constructionToolMode, %obj.client.constructionToolMode2, "[REPA] "@%obj.client.RotateAngle);
+=======
+         %obj.constructionToolMode++;
+         %obj.constructionToolMode2 = 0;
+         if (%obj.constructionToolMode >= 4)
+            %obj.constructionToolMode = 0;
+      case 2:
+         //Grenade Modes
+	     %obj.constructionToolMode2++;
+		 if (%obj.constructionToolMode == 0 && %obj.constructionToolMode2 == 2)
+            %obj.constructionToolMode2 = 0;
+         if (%obj.constructionToolMode == 1 && %obj.constructionToolMode2 == 2)
+		    %obj.constructionToolMode2 = 0;
+         if (%obj.constructionToolMode == 2 && %obj.constructionToolMode2 == 6)
+		    %obj.constructionToolMode2 = 0;
+		 if (%obj.constructionToolMode == 3 && %obj.constructionToolMode2 == 4)
+			%obj.constructionToolMode2 = 0;
+   }
+   displayWeaponInfo(%this, %obj, %obj.constructionToolMode, %obj.constructionToolMode2, "[REPA] "@%obj.client.RotateAngle);
+>>>>>>> origin/development
 }
 //Phantom139: End
 
@@ -221,10 +241,17 @@ function ConstructionToolImage::onMount(%this,%obj,%slot) {
 	%obj.errMsgSent = false;
 	%obj.client.setWeaponsHudActive(%this.item);
 	%obj.usingConstructionTool = true;
+<<<<<<< HEAD
 	if (!%obj.constructionToolMode)
 		%obj.constructionToolMode = 0;
 	if (!%obj.constructionToolMode2)
 		%obj.constructionToolMode2 = 0;
+=======
+	if (!isSet(%obj.client.constructionToolMode))
+		%obj.client.constructionToolMode = 0;
+	if (!isSet(%obj.client.constructionToolMode2))
+		%obj.client.constructionToolMode2 = 0;
+>>>>>>> origin/development
     //Phantom139: Added
     %obj.hasMineModes = 1;
     %obj.hasGrenadeModes = 1;

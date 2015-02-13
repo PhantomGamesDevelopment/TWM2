@@ -3,6 +3,15 @@ function InitiateBoss(%Boss, %name) {
       error("SERVER: Cannot initiate boss, in horde/helljump");
       return;
    }
+   
+   if(!isObject($TWM2::BossManager)) {
+      $TWM2::BossManager = new scriptObject() {
+         class = "BossManager";
+      };
+   }
+   $TWM2::BossManager.bossKills = 0;
+   $TWM2::BossManager.bossObject = %Boss;
+   $TWM2::BossManager.activeBoss = %name;
 
    $TWM2::BossGoing = 1;
    switch$(%name) {
@@ -21,9 +30,9 @@ function InitiateBoss(%Boss, %name) {
       case "Vardison1":
          %print = "<color:FF0000>BOSS BATTLE \n LORD VARDISON";
       case "Vardison2":
-         %print = "<color:FF0000>!DANGER! \n VARDISON HAS TRANSFORMED \n AIR FORM";
+         %print = "<color:FF0000>BOSS ALERT \n LORD VARDISON HAS ENTERED HIS SECOND FORM";
       case "Vardison3":
-         %print = "<color:FF0000>!DANGER! \n VARDISON HAS TRANSFORMED AGAIN \n DEMON FORM";
+         %print = "<color:FF0000>BOSS ALERT \n LORD VARDISON HAS ENTERED HIS FINAL FORM";
       case "Trebor":
          %print = "<color:FF0000>BOSS BATTLE \n LORDRANIUS TREVOR";
       case "Stormrider":
@@ -49,11 +58,11 @@ function InitiateBoss(%Boss, %name) {
 }
 
 function BossCheckUp(%boss, %name) {
+   %percentage = (mFloor(%boss.getDamageLeft()*100) / mFloor(%boss.getMaxDamage()*100)) * 100;
+   MessageAll('MsgSPCurrentObjective1', "", "Boss Battle: "@$TWM2::BossName[%name]@" [Boss Kill Count: "@$TWM2::BossManager.bossKills@"]");
+   MessageAll('MsgSPCurrentObjective2', "", "Boss HP: "@mFloor(%boss.getDamageLeft()*100)@"/"@mFloor(%boss.getMaxDamage()*100)@" ("@%percentage@"%)");
 
-   MessageAll('MsgSPCurrentObjective1', "", "Boss Battle: "@$TWM2::BossName[%name]@"");
-   MessageAll('MsgSPCurrentObjective2', "", "Boss HP: "@mFloor(%boss.getDamageLeft()*100)@"/"@mFloor(%boss.getMaxDamage()*100)@"");
-
-   if(%name !$= "CnlWindshear" && %name !$= "Vardison2" && %name !$= "Trebor" && %name !$= "Stormrider") {
+   if(%name !$= "CnlWindshear" && %name !$= "Trebor" && %name !$= "Stormrider") {
       if(!isObject(%boss) || %boss.getState() $= "dead") {
          if(%name $= "Vardison1") {
             %count = ClientGroup.getCount();
@@ -61,7 +70,16 @@ function BossCheckUp(%boss, %name) {
                %cl = ClientGroup.getObject(%i);
                recordAction(%cl, "BOSS", "Vardison1");
             }
-            StartVardison2(%boss.getPosition());
+            SpawnVardison2(%boss.getPosition());
+            return;
+         }
+         if(%name $= "Vardison2") {
+            %count = ClientGroup.getCount();
+            for(%i = 0; %i < %count; %i++) {
+               %cl = ClientGroup.getObject(%i);
+               recordAction(%cl, "BOSS", "Vardison2");
+            }
+            SpawnVardison3(%boss.getPosition());
             return;
          }
          //the boss has been defeated, horrah!!!
@@ -81,17 +99,6 @@ function BossCheckUp(%boss, %name) {
    }
    else {
       if(!isObject(%boss)) {
-         //the boss has been defeated, horrah!!!
-         if(%name $= "Vardison2") {
-			//but not quite so xD
-            %count = ClientGroup.getCount();
-            for(%i = 0; %i < %count; %i++) {
-               %cl = ClientGroup.getObject(%i);
-               recordAction(%cl, "BOSS", "Vardison2");
-            }
-            StartVardison3("0 0 200");
-            return;
-         }
          %count = ClientGroup.getCount();
          for(%i = 0; %i < %count; %i++) {
             %cl = ClientGroup.getObject(%i);
@@ -167,11 +174,27 @@ function GameConnection::GiveBossAward(%client, %bossName) {
 }
 
 function FindValidTarget(%boss, %counter) {   //This is usefull
-   %client = ClientGroup.getObject(GetRandom()*ClientGroup.getCount());
-   if(!isObject(%client.player) || %client.player.getState() $= "dead" || %boss == %client.player) {
-      return schedule(500,0,"FindValidTarget", %boss, %counter++); //Keep Looking;
+   if(%counter $= "") {
+      %counter = 10; //10 attempts
    }
-   return %client; //target is good
+   for(%i = 0; %i < %counter; %i++) {
+      %test = ClientGroup.getObject(getRandom(0, ClientGroup.getCount()));
+      if(isObject(%test)) {
+         %tPL = %test.getControlObject();
+         if(isObject(%tPL)) {
+            if(isPlayer(%tPL)) {
+               if(%tPL.getState() !$= "dead") {
+                  //Got one!
+                  return %test;
+               }
+            }
+            else {
+               return %test;
+            }
+         }
+      }
+   }
+   return -1; //Found nothing.
 }
 
 function CheckBossChallenge(%client, %boss) {
@@ -430,7 +453,44 @@ function GenerateBossChallengeMenu(%client, %tag, %index) {
       %index++;
    }
    //
+   if(%client.CheckNWChallengeCompletion("VardEasy")) {
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "The Standard Experience - Done");
+      %index++;
+   }
+   else {
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "The Standard Experience - Defeat Lord Vardison on Easy Difficulty");
+      %index++;
+   }
+   if(%client.CheckNWChallengeCompletion("VardNorm")) {
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "Demon Hunter - Done");
+      %index++;
+   }
+   else {
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "Demon Hunter - Defeat Lord Vardison on Normal Difficulty");
+      %index++;
+   }
+   if(%client.CheckNWChallengeCompletion("VardHard")) {
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "Master Demon Slayer - Done");
+      %index++;
+   }
+   else {
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "Master Demon Slayer - Defeat Lord Vardison on Hard Difficulty");
+      %index++;
+   }
+   if(%client.CheckNWChallengeCompletion("VardWtf")) {
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "God of the Shadow Realm - Done [You are a freaking boss master]");
+      %index++;
+   }
+   else {
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "God of the Shadow Realm - Against all odds, emerge victorious against WTF difficulty Lord Vardison");
+      %index++;
+   }
+   //
    return %index;
+}
+
+function BossManager::addKill(%this, %tObj) {
+   %this.bossKills++;
 }
 
 //Load The Boss Files

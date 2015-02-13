@@ -545,10 +545,17 @@ function MergeToolImage::onFire(%data,%obj,%slot)
 
 function MergeToolImage::onMount(%this,%obj,%slot)
 {
+<<<<<<< HEAD
     if(%obj.MTMode $= "")
        %obj.MTMode = 0;
     if(%obj.MTSubMode $= "")
        %obj.MTSubMode = 0;
+=======
+    if(%obj.client.MTMode $= "")
+       %obj.client.MTMode = 0;
+    if(%obj.client.MTSubMode $= "")
+       %obj.client.MTSubMode = 0;
+>>>>>>> origin/development
     %obj.usingMTelec = 1;
     //Phantom139: Added
     %obj.hasMineModes = 1;

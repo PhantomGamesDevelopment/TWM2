@@ -831,7 +831,7 @@ function parsePublicCommands(%sender, %command, %args) {
          }
          else if (!isBoss(strlwr(%Boss))) {
             messageclient(%sender, 'MsgClient', '\c2Invalid Boss Name.');
-            messageclient(%sender, 'MsgClient', '\c2Bosses: Yvex, CnlWindshear, GOL, GOF, Stormrider, DAVardison.');
+            messageclient(%sender, 'MsgClient', '\c2Bosses: Yvex, CnlWindshear, GOL, GOF, Stormrider.');
             messageclient(%sender, 'MsgClient', '\c2GenVeg, LordRog, Insignia, Trebor, Vardison, ShadeLord.');
             return 1;
          }

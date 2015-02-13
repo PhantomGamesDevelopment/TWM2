@@ -216,7 +216,11 @@ function SuperChaingunImage::onMount(%this,%obj,%slot) {
 		%obj.superChaingunMode2 = 0;
     %obj.hasMineModes = 1;
     %obj.hasGrenadeModes = 1;
+<<<<<<< HEAD
     displayWeaponInfo(%this, %obj, %obj.client.superChaingunMode, %obj.client.superChaingunMode2);
+=======
+    displayWeaponInfo(%this, %obj, %obj.superChaingunMode, %obj.superChaingunMode2);
+>>>>>>> origin/development
 	WeaponImage::onMount(%this,%obj,%slot);
 }
 
@@ -231,6 +235,7 @@ function SuperChaingunImage::changeMode(%this, %obj, %key) {
    switch(%key) {
       case 1:
          //Mine Modes
+<<<<<<< HEAD
          %obj.client.superChaingunMode++;
          %obj.client.superChaingunMode2 = 0;
          if (%obj.client.superChaingunMode > 6 - (5 * $host::nopulseSCG))
@@ -242,4 +247,19 @@ function SuperChaingunImage::changeMode(%this, %obj, %key) {
             %obj.client.superChaingunMode2 = 0;
    }
    displayWeaponInfo(%this, %obj, %obj.client.superChaingunMode, %obj.client.superChaingunMode2);
+=======
+         %obj.superChaingunMode++;
+         %obj.superChaingunMode2 = 0;
+         if (%obj.superChaingunMode > 6 - (5 * $host::nopulseSCG))
+            %obj.superChaingunMode = 0;
+      case 2:
+         //Grenade Modes
+	     %obj.superChaingunMode2++;
+         if(%obj.superChaingunMode != 1)
+            %obj.superChaingunMode2 = 0;
+		 if (%obj.superChaingunMode == 1 && %obj.superChaingunMode2 == 2)
+            %obj.superChaingunMode2 = 0;
+   }
+   displayWeaponInfo(%this, %obj, %obj.superChaingunMode, %obj.superChaingunMode2);
+>>>>>>> origin/development
 }

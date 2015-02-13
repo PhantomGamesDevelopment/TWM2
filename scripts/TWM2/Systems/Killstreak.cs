@@ -18,6 +18,31 @@ $Killstreak[15] = "Z-Bomb\t-1\t"@$Killstreak::Kills["ZBomb", 1]@"\tWipe out all 
 $Killstreak[16] = "Fission Bomb\t"@$Killstreak::Kills["Fission", 0]@"\t-1\t(Matches) End the game with an explosive bang.";
 $Killstreak[17] = "Napalm Airstrike\t"@$Killstreak::Kills["Napalm", 0]@"\t"@$Killstreak::Kills["Napalm", 1]@"\tQuick destructive airstrike with remaining fire.";
 
+//Phantom: V3.9: Order the streaks based on killcounts...
+function OrderStreaks() {
+   echo("Ordering Killstreak List...");
+   for(%i = 1; %i <= $KillstreakCount; %i++) {
+      %cur = getField($Killstreak[%i], 1);
+      
+      %temp = $Killstreak[%i];
+      $OrderedKillstreak[%i] = $Killstreak[%i];
+      
+      for(%x = 1; %x <= %i; %x++) {
+         %mine = getField($Killstreak[%x], 1);
+         //This streak has a lower count, sift it down
+         if(%mine < %cur) {
+            $OrderedKillstreak[%i] = $Killstreak[%x];
+            $OrderedKillstreak_CONVINDX[%i] = %x;
+            $OrderedKillstreak[%x] = %temp;
+            $OrderedKillstreak_CONVINDX[%x] = %i;
+         }
+      }
+   }
+   echo("Complete...");
+   for(%r = 1; %r <= $KillstreakCount; %r++) {
+      echo(""@%r@": "@$OrderedKillstreak[%r]@" => "@$OrderedKillstreak_CONVINDX[%r]);
+   }
+}
 
 function GetStreakDescrip(%val) {
    %desc = getField($Killstreak[%val], 3);
@@ -301,7 +326,11 @@ function GiveTWM2Weapons(%client) {
     if(%client.HasFullTeamRespawn) {
        %client.player.setInventory(FullTeamRespawnCaller, 1, true);
     }
+<<<<<<< HEAD
     if(%client.ksListInstance.count() > 0) {
+=======
+    if(getWordCount(%client.streakList()) > 0) {
+>>>>>>> origin/development
        %client.player.setInventory(KillstreakBeacon, 1, true);
     }
     if(!%client.isconfiscated) {
@@ -309,6 +338,21 @@ function GiveTWM2Weapons(%client) {
           %client.player.setInventory(SuperChaingun,1,true);
 	   }
     }
+}
+
+function GameConnection::streakList(%client) {
+   %total = "";
+   for(%i = 1; %i <= $KillstreakCount; %i++) {
+      if(%client.streakCount[%i] > 0) {
+         if(%total $= "") {
+            %total = %i;
+         }
+         else {
+            %total = %total @ " " @ %i;
+         }
+      }
+   }
+   return %total;
 }
 
 function GameConnection::AwardKillstreak(%client, %streakVal, %plz) {
@@ -319,7 +363,7 @@ function GameConnection::AwardKillstreak(%client, %streakVal, %plz) {
    if($Killstreak::Setting == 4) {
       return;
    }
-   if(!%client.isActiveStreak(%streakVal) && ($Killstreak::Setting != 2) && !$TWM::PlayingHelljump) {
+   if(%plz != -1 && (!%client.isActiveStreak(%streakVal) && ($Killstreak::Setting != 2) && !$TWM::PlayingHelljump)) {
       return;
    }
    if(!%client.ksListInstance) {
@@ -330,6 +374,7 @@ function GameConnection::AwardKillstreak(%client, %streakVal, %plz) {
    switch(%streakVal) {
       case 1:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: UAV Recon at Your Disposal.");
+<<<<<<< HEAD
          if(%client.ksListInstance.find("UAV") != -1) {
             %cAmt = getWord(getField(%client.ksListInstance.find("UAV"), 0), 1);
          }
@@ -430,11 +475,49 @@ function GameConnection::AwardKillstreak(%client, %streakVal, %plz) {
             %cAmt = getWord(getField(%client.ksListInstance.find("Napalm"), 0), 1);
          }
          %client.ksListIntance.advancedAdd("Napalm", "Napalm "@%cAmt+1);
+=======
+      case 2:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Airstrike Standing By.");
+      case 3:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Guided Missile Strike Standing By.");
+      case 4:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Helicopter at your disposal.");
+      case 5:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Plasma Harrier Strike at your disposal.");
+      case 6:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Satellite Strike at your disposal.");
+      case 7:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Gunship Helicopter at your disposal.");
+      case 8:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Stealth Bomber at your disposal.");
+      case 9:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Harbinger's Wrath Standing By.");
+      case 10:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Apache Gunner Standing By.");
+      case 11:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: AC-130 Gunner Standing By.");
+      case 12:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Centaur Bombardment Standing By.");
+      case 13:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Mass EMP Standing By.");
+      case 14:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Nuclear Strike Standing By.");
+      case 15:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Zombie Bomb Standing By.");
+      case 16:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Fission Bomb Ready... Obliterate everyone!!!");
+      case 17:
+         MessageClient(%client, 'MsgZKill', "\c5TWM2: Napalm Airstrike at your disposal.");
+>>>>>>> origin/development
    }
+   %client.streakCount[%streakVal]++;
    if(%plz == 0) {
       if(%client.IsHighestPLStreak(%streakVal)) {
          %client.player.killsinarow = 0; //reset for moar killstreaks!
       }
+   }
+   else if(%plz == -1) {
+      //From //giveKSSW
    }
    else {
       if(!$TWM::PlayingHellJump) {
@@ -443,6 +526,7 @@ function GameConnection::AwardKillstreak(%client, %streakVal, %plz) {
          }
       }
    }
+   %client.player.setInventory(KillstreakBeacon, 1, true);
 }
 
 //Modified 12-17-09 to take into consideration of hosts changing the kill values
