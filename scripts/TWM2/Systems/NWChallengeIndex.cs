@@ -80,6 +80,10 @@ $Challenge::Info["Treb3"] = "Tank Halter\t2\t10000\tNone";
 $Challenge::Info["Vard1"] = "Shining Star\t2\t3500\tNone";
 $Challenge::Info["Vard2"] = "Glare The Dark\t2\t7000\tNone";
 $Challenge::Info["Vard3"] = "Outevil The Wicked\t2\t12500\tLord Vardison Recruitable Ally";
+$Challenge::Info["VardEasy"] = "The Standard Experience\t2\t7000\tNone";
+$Challenge::Info["VardNorm"] = "Demon Hunter\t2\t1500\tNone";
+$Challenge::Info["VardHard"] = "Master Demon Slayer\t2\t25000\tNone";
+$Challenge::Info["VardWtf"] = "God of the Shadow Realm\t2\t50000\tNone";
 //Blacklist
 $Challenge::Info["Acceptance"] = "Acceptance\t3\t1000\tNone";
 $Challenge::Info["ListHit"] = "Hitlister of The List\t3\t2500\tNone";

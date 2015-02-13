@@ -286,8 +286,6 @@ function BossFullname(%BossAbbr)
             return "Ghost of Fire";
        case "vardison":
             return "Lord Vardison";
-       case "davardison":
-            return "Dark Archmage Vardison";
        case "shadelord":
             return "The Shade Lord";
    }
@@ -316,8 +314,6 @@ function isBoss(%Boss)
        case "trebor":
             return 1;
        case "vardison":
-            return 1;
-       case "davardison":
             return 1;
        case "shadelord":
             return 1;

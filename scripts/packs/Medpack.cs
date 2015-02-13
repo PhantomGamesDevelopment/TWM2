@@ -235,7 +235,7 @@ function Medrepair(%obj, %targets){
    if(%obj.isreping == 0)
 	return;
   if(%targets !$= ""){
-   %numtrgs = getNumberOfWords(%targets);
+   %numtrgs = getWordCount(%targets);
    for(%i = 0; %i < %numtrgs; %i++){
 	%target = getWord(%targets, %i);
 	if(vectorDist(%obj.getWorldBoxCenter(), %target.getWorldBoxCenter()) <= 10 && %target.getDamageLevel() > 0.0){
@@ -267,7 +267,7 @@ function Medrepair(%obj, %targets){
 function MedstopRepair(%obj){
    %obj.isreping = 0;
    if(%obj.reptargets !$= ""){
-      %numtrgs = getNumberOfWords(%obj.reptargets);
+      %numtrgs = getWordCount(%obj.reptargets);
       for(%i = 0; %i < %numtrgs; %i++){
 	   %target = getWord(%obj.reptargets, %i);
 	   if(%target.reping == 1){
@@ -303,6 +303,10 @@ function checkrevive(%obj){
     }
 	if(%Tobj.kibbled == 1){
 	   messageclient(%obj.client, 'MsgClient', "\c2This body is destroyed.");
+	   return;
+	}
+    if(%Tobj.isBoss == 1){
+	   messageclient(%obj.client, 'MsgClient', "\c2ARE YOU INSANE!?!??! YEAH... LETS JUST REVIVE THE DAMNED BOSS THAT JUST REKT YOU ABOUT 100 TIMES!!!!");
 	   return;
 	}
     if(%Tobj.infected || %Tobj.isZombie) {

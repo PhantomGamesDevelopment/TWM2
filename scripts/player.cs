@@ -3585,6 +3585,17 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
 
    //now call the "onKilled" function if the client was... you know...
    if(%targetObject.getState() $= "Dead") {
+      //Is there a boss going?
+      if(!%targetObject.isZombie && !%targetObject.isBossMinion) {
+         if($TWM2::BossGoing) {
+            //Chalk up the kill count :P
+            $TWM2::BossManager.addKill(%targetObject);
+         }
+      }
+      if(%targetObject.isVardisonMinion) {
+         $TWM2::VardisonManager.minionCount--;
+      }
+   
       if($TWM2::PlayingSabo) {
          if(Game.Bomb.Carrier == %targetObject) {
             if(%damageType == $DamageType::FellOff) {

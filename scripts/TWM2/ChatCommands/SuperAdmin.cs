@@ -143,10 +143,6 @@ function parseSuperAdminCommands(%sender, %command, %args) {
                %pos = VectorAdd(%sender.player.getPosition(), "0 0 5");
                StartVardison1(%pos);
                MessageAll('MsgAdminForce', "\c3"@%sender.namebase@"\c2 spawned Lord Vardison, go hide noobs.");
-            case "DAVardison":
-               %pos = VectorAdd(%sender.player.getPosition(), "0 0 5");
-               StartDAVardison(%pos);
-               MessageAll('MsgAdminForce', "\c3"@%sender.namebase@"\c2 spawned Dark Archmage Vardison, run in fear n0bs.");
             case "ShadeLord":
                %pos = VectorAdd(%sender.player.getPosition(), "0 0 5");
                SpawnShadeLord(%pos);
@@ -155,7 +151,7 @@ function parseSuperAdminCommands(%sender, %command, %args) {
                messageclient(%sender, 'MsgClient', '\c2Invalid Boss Name.');
                messageclient(%sender, 'MsgClient', '\c2Bosses: Yvex, CnlWindshear, GhostOfLightning.');
                messageclient(%sender, 'MsgClient', '\c2GenVegenor, LordRog, Insignia, Trebor, Vardison.');
-               messageclient(%sender, 'MsgClient', '\c2Stormrider, GhostOfFire, ShadeLord, DAVardison.');
+               messageclient(%sender, 'MsgClient', '\c2Stormrider, GhostOfFire, ShadeLord.');
          }
          return 1;
       

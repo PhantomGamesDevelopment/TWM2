@@ -182,10 +182,10 @@ function ZPCreateZombie(%obj){
 function StartAZombie(%pos, %type){
    if(!isObject(Game)) {
       error("UE Blocked...");
-      return;
+      return -1;
    }
    if($Game::ZombieCount > $TWM2::MaxZombies || !$TWM2::CanSpawnZ) {
-      return;
+      return -1;
    }
    //
    if(%type $= "") {
