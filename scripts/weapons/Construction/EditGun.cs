@@ -113,11 +113,7 @@ function EditGunImage::onMount(%this, %obj, %slot) {
    %obj.hasGrenadeModes = 1;
    //Phantom139: End
    %obj.UsingEditTool = true;
-<<<<<<< HEAD
-   displayWeaponInfo(%this, %obj, %obj.client.EditPMode, %obj.client.EditSMode);
-=======
    displayWeaponInfo(%this, %obj, %obj.EditPMode, %obj.EditSMode);
->>>>>>> origin/development
 }
 
 function EditGunImage::onunmount(%this,%obj,%slot) {
@@ -163,27 +159,6 @@ function EditGunImage::changeMode(%this, %obj, %key) {
    switch(%key) {
       case 1:
          //Mine Modes
-<<<<<<< HEAD
-         %obj.client.EditPMode++;
-         %obj.client.EditSMode = 0;
-         if (%obj.client.EditPMode >= 5)
-            %obj.client.EditPMode = 0;
-      case 2:
-         //Grenade Modes
-	     %obj.client.EditSMode++;
-		 if (%obj.client.EditPMode == 0 && %obj.client.EditSMode == 21)
-            %obj.client.EditSMode = 0;
-         if (%obj.client.EditPMode == 1 && %obj.client.EditSMode == 21)
-		    %obj.client.EditSMode = 0;
-         if (%obj.client.EditPMode == 2 && %obj.client.EditSMode == 5)
-		    %obj.client.EditSMode = 0;
-		 if (%obj.client.EditPMode == 3 && %obj.client.EditSMode == 4)
-			%obj.client.EditSMode = 0;
-	     if (%obj.client.EditPMode == 4 && %obj.client.EditSMode == 2)
-		    %obj.client.EditSMode = 0;
-   }
-   displayWeaponInfo(%this, %obj, %obj.client.EditPMode, %obj.client.EditSMode);
-=======
          %obj.EditPMode++;
          %obj.EditSMode = 0;
          if (%obj.EditPMode >= 5)
@@ -203,7 +178,6 @@ function EditGunImage::changeMode(%this, %obj, %key) {
 		    %obj.EditSMode = 0;
    }
    displayWeaponInfo(%this, %obj, %obj.EditPMode, %obj.EditSMode);
->>>>>>> origin/development
 }
 
 //Editor Tool Functioning

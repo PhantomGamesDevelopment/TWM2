@@ -326,11 +326,7 @@ function GiveTWM2Weapons(%client) {
     if(%client.HasFullTeamRespawn) {
        %client.player.setInventory(FullTeamRespawnCaller, 1, true);
     }
-<<<<<<< HEAD
-    if(%client.ksListInstance.count() > 0) {
-=======
     if(getWordCount(%client.streakList()) > 0) {
->>>>>>> origin/development
        %client.player.setInventory(KillstreakBeacon, 1, true);
     }
     if(!%client.isconfiscated) {
@@ -366,116 +362,9 @@ function GameConnection::AwardKillstreak(%client, %streakVal, %plz) {
    if(%plz != -1 && (!%client.isActiveStreak(%streakVal) && ($Killstreak::Setting != 2) && !$TWM::PlayingHelljump)) {
       return;
    }
-   if(!%client.ksListInstance) {
-      %client.ksListInstance = initList();
-   }
-   %client.player.setInventory(KillstreakBeacon, 1, true);
-   %cAmt = 0;
    switch(%streakVal) {
       case 1:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: UAV Recon at Your Disposal.");
-<<<<<<< HEAD
-         if(%client.ksListInstance.find("UAV") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("UAV"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("UAV", "UAV "@%cAmt+1);
-      case 2:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Airstrike Standing By.");
-         if(%client.ksListInstance.find("Airstrike") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("Airstrike"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("Airstrike", "Airstrike "@%cAmt+1);
-      case 3:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Guided Missile Strike Standing By.");
-         if(%client.ksListInstance.find("GM") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("GM"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("GM", "GM "@%cAmt+1);
-      case 4:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Helicopter at your disposal.");
-         if(%client.ksListInstance.find("AIHeli") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("AIHeli"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("AIHeli", "AIHeli "@%cAmt+1);
-      case 5:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Plasma Harrier Strike at your disposal.");
-         if(%client.ksListInstance.find("Harrier") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("Harrier"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("Harrier", "Harrier "@%cAmt+1);
-      case 6:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Satellite Strike at your disposal.");
-         if(%client.ksListInstance.find("OLS") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("OLS"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("OLS", "OLS "@%cAmt+1);
-      case 7:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Gunship Helicopter at your disposal.");
-         if(%client.ksListInstance.find("AIGunHeli") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("AIGunHeli"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("AIGunHeli", "AIGunHeli "@%cAmt+1);
-      case 8:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Stealth Bomber at your disposal.");
-         if(%client.ksListInstance.find("Stealth") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("Stealth"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("Stealth", "Stealth "@%cAmt+1);
-      case 9:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Harbinger's Wrath Standing By.");
-         if(%client.ksListInstance.find("HarbWrath") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("HarbWrath"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("HarbWrath", "HarbWrath "@%cAmt+1);
-      case 10:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Apache Gunner Standing By.");
-         if(%client.ksListInstance.find("Apache") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("Apache"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("Apache", "Apache "@%cAmt+1);
-      case 11:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: AC-130 Gunner Standing By.");
-         if(%client.ksListInstance.find("AC130") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("AC130"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("AC130", "AC130 "@%cAmt+1);
-      case 12:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Centaur Bombardment Standing By.");
-         if(%client.ksListInstance.find("Artillery") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("Artillery"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("Artillery", "Artillery "@%cAmt+1);
-      case 13:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Mass EMP Standing By.");
-         if(%client.ksListInstance.find("EMP") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("EMP"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("EMP", "EMP "@%cAmt+1);
-      case 14:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Nuclear Strike Standing By.");
-         if(%client.ksListInstance.find("NukeStrike") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("NukeStrike"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("NukeStrike", "NukeStrike "@%cAmt+1);
-      case 15:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Zombie Bomb Standing By.");
-         if(%client.ksListInstance.find("ZBomb") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("ZBomb"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("ZBomb", "ZBomb "@%cAmt+1);
-      case 16:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Fission Bomb Ready... Obliterate everyone!!!");
-         if(%client.ksListInstance.find("FBomb") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("FBomb"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("FBomb", "FBomb "@%cAmt+1);
-      case 17:
-         MessageClient(%client, 'MsgZKill', "\c5TWM2: Napalm Airstrike at your disposal.");
-         if(%client.ksListInstance.find("Napalm") != -1) {
-            %cAmt = getWord(getField(%client.ksListInstance.find("Napalm"), 0), 1);
-         }
-         %client.ksListIntance.advancedAdd("Napalm", "Napalm "@%cAmt+1);
-=======
       case 2:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Airstrike Standing By.");
       case 3:
@@ -508,7 +397,6 @@ function GameConnection::AwardKillstreak(%client, %streakVal, %plz) {
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Fission Bomb Ready... Obliterate everyone!!!");
       case 17:
          MessageClient(%client, 'MsgZKill', "\c5TWM2: Napalm Airstrike at your disposal.");
->>>>>>> origin/development
    }
    %client.streakCount[%streakVal]++;
    if(%plz == 0) {
