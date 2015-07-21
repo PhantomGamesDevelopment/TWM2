@@ -1730,3 +1730,45 @@ function VardisonManager::cooldownOff(%this, %Boss, %type) {
          %Boss.busy = false;
    }
 }
+
+function ShadowOrb::damageObject(%data, %targetObject, %sourceObject, %position, %amount, %damageType) {
+   if(%sourceObject && %targetObject.isEnabled()) {
+      if(%sourceObject.client) {
+         %targetObject.lastDamagedBy = %sourceObject.client;
+         %targetObject.lastDamagedByTeam = %sourceObject.client.team;
+         %targetObject.damageTimeMS = GetSimTime();
+      }
+      else {
+         %targetObject.lastDamagedBy = %sourceObject;
+         %targetObject.lastDamagedByTeam = %sourceObject.team;
+         %targetObject.damageTimeMS = GetSimTime();
+      }
+   }
+   if (%data.isShielded) {
+      %amount = %data.checkShields(%targetObject, %position, %amount, %damageType);
+   }
+   %damageScale = %data.damageScale[%damageType];
+   if(%damageScale !$= "") {
+      %amount *= %damageScale;
+   }
+   if (!$TeamDamage && !%targetObject.getDataBlock().deployedObject) {
+      if(isObject(%sourceObject)) {
+         if(%sourceObject.getDataBlock().catagory $= "Vehicles") {
+            %attackerTeam = getVehicleAttackerTeam(%sourceObject);
+         }
+         else {
+            %attackerTeam = %sourceObject.team;
+         }
+      }
+      if ((%targetObject.getTarget() != -1) && isTargetFriendly(%targetObject.getTarget(), %attackerTeam)) {
+         %curDamage = %targetObject.getDamageLevel();
+         %availableDamage = %targetObject.getDataBlock().disabledLevel - %curDamage - 0.05;
+         if (%amount > %availableDamage) {
+            %amount = %availableDamage;
+         }
+      }
+   }
+   if (%amount > 0) {
+      %targetObject.applyDamage(%amount);
+   }
+}
