@@ -503,6 +503,9 @@ function ShadowOrb::onDestroyed(%this, %obj, %prevState) {
    if (%obj.isRemoved) {
       return;
    }
+   if(isObject(%obj.waypoint)) {
+      %obj.waypoint.schedule(500, "delete");
+   }
    if(isObject($TWM2::VardisonManager.OrbSFX)) {
       $TWM2::VardisonManager.OrbSFX.schedule(500, "delete");
    }
@@ -1650,6 +1653,13 @@ function VardisonManager::summonOrb(%this, %boss) {
    setTargetSensorGroup(%orb.target, 30);
    setTargetName(%orb.target, addtaggedstring("\c7Shadow Rift"));
    
+   %orb.waypoint = new WayPoint() {
+      position = %orb.getPosition();
+      dataBlock = "WayPointMarker";
+      team = %boss.Team;
+      name = "Shadow Rift";
+   };
+   
    //SFX
    $TWM2::VardisonManager.OrbSFX = new ParticleEmissionDummy(){
       position = %orb.getPosition();
@@ -1705,6 +1715,7 @@ function VardisonManager::orbDestroyed(%this) {
    %boss = %this.Vardison;
    %boss.rapierShield = false;
    %boss.busy = false; //<-- let think() resume...
+   MessageAll('msgDeath', "\c2The Shadow Rift has been Shattered...");
 }
 
 function VardisonManager::cooldownOff(%this, %Boss, %type) {

@@ -182,7 +182,12 @@ function canAttackPlayer(%client) {
 }
 
 function ZgetFacingDirection(%zombie,%closestClient,%pos){
-   %clpos = %closestClient.getPosition();
+   if(isObject(%closestClient)) {
+      %clpos = %closestClient.getPosition();
+   }
+   else {
+      %clpos = RMPG();
+   }
    %vector = vectorNormalize(vectorSub(%clpos, %pos));
    %v1 = getword(%vector, 0);
    %v2 = getword(%vector, 1);
