@@ -468,11 +468,11 @@ datablock PlayerData(VardisonStageThreeArmor) : LightMaleHumanArmor {
 };
 
 datablock StaticShapeData(ShadowOrb) : StaticShapeDamageProfile {
-	className = "logoprojector";
-	shapeFile = "pack_deploy_sensor_motion.dts";
+	className = "Generator";
+	shapeFile = "station_generator_large.dts";
 
-	maxDamage      = 10.0;
-	destroyedLevel = 10.0;
+	maxDamage      = 2.0;
+	destroyedLevel = 2.0;
 	disabledLevel  = 0.3;
 
 	isShielded = false;
@@ -1660,6 +1660,8 @@ function VardisonManager::summonOrb(%this, %boss) {
       name = "Shadow Rift";
    };
    
+   %orb.startfade(1, 0, true);
+   
    //SFX
    $TWM2::VardisonManager.OrbSFX = new ParticleEmissionDummy(){
       position = %orb.getPosition();
@@ -1694,6 +1696,9 @@ function VardisonManager::orbKill(%this, %boss, %orb) {
    };
    %wipeEmit.schedule(500, "delete");
    //Delete the orb & it's effects
+   if(isObject(%obj.waypoint)) {
+      %obj.waypoint.schedule(500, "delete");
+   }
    if(isObject($TWM2::VardisonManager.OrbSFX)) {
       $TWM2::VardisonManager.OrbSFX.schedule(500, "delete");
    }
