@@ -168,6 +168,7 @@ function CreateTWM2Mission(%client, %mission) {
    %playerlimit = $Mission::VarSet[%mission, "PlayerLimit"];
    %playerreq = $Mission::VarSet[%mission, "PlayerReq"];
    %missionname = GetField($Mission::VarSet[%mission, "TaskDetails"], 0);
+   messageClient(%client, 'msgNope', "\c5MISSION: Issuing request to initiate mission: "@%missionname@".");
    %group = new ScriptObject(TWM2Mission) {
       class = "TWM2MissionClass";
    
@@ -187,7 +188,7 @@ function CreateTWM2Mission(%client, %mission) {
       //this group holds our mission aspects
    };
    
-   activatePackage("TWM2Mission_"@%missionname@"");
+   activatePackage("TWM2Mission_"@%mission@"");
    %group.initiateSettings();
    
    %group.schedule(%group.timeToBegin * 1000, "StartTWM2MissionTimer");
@@ -301,8 +302,8 @@ function TWM2MissionClass::TWM2MissionTimerLoop(%group) {
       }
    }
    //
-   %min = getField(FormatTWM2Time(%group.timer), 0);
-   %sec = getField(FormatTWM2Time(%group.timer), 1);
+   %min = getField(TWM2Lib_MainControl("FormatTWM2Time", %group.timer), 0);
+   %sec = getField(TWM2Lib_MainControl("FormatTWM2Time", %group.timer), 1);
    //
    for(%i = 1; %i <= %group.Participants; %i++) {
       if(%group.ParticipantAlive[%i]) {
@@ -347,7 +348,7 @@ function TWM2MissionClass::EndTWM2Mission(%group) {
    }
    //
    
-   deactivatePackage("TWM2Mission_"@%group.MissionName@"");
+   deactivatePackage("TWM2Mission_"@%group.mission@"");
    
    CleanGroupAspects(NameToID("TWM2MissionAspectsGroup"));
    for(%i = 1; %i <= %group.Participants; %i++) {

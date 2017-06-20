@@ -588,7 +588,7 @@ function Yvexmovetotarget(%zombie){
    if(%z < -300) {
       %zombie.startFade(400, 0, true);
       %zombie.startFade(1000, 0, false);
-      %zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), getRandomPosition(25, 1)));
+      %zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
       %zombie.setVelocity("0 0 0");
       MessageAll('msgYvexAttack', "\c4"@$TWM2::ZombieName[7]@": I shall not fall to my end!");
    }
@@ -682,7 +682,7 @@ function YvexAttack_FUNC(%att, %args) {
                messageall('YvexMsg',"\c4"@$TWM2::ZombieName[7]@": Take out the enemy, ALL OF THEM!");
          }
          for(%i = 0; %i < 5; %i++) {
-            %pos = vectoradd(%z.getPosition(), getRandomPosition(10,1));
+            %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
             %fpos = vectoradd("0 0 5",%pos);
             StartAZombie(%fpos, %type);
          }

@@ -484,11 +484,11 @@ function SabotageGame::pickTeamSpawn(%game, %team) {
    if(%team == 1) {
       if(!isObject(%game.TeamObjective[1])) {
       //stops the pre-game fall
-      %pos = vectorAdd($SabotageGame::ObjectiveLocation1[$CurrentMission],GetRandomPosition(5,1));
+      %pos = vectorAdd($SabotageGame::ObjectiveLocation1[$CurrentMission], TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
       %pos = vectorAdd(%pos,"0 0 5");
       }
       else {
-      %pos = vectorAdd(%game.TeamObjective[1].getPosition(),GetRandomPosition(5,1));
+      %pos = vectorAdd(%game.TeamObjective[1].getPosition(), TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
       %pos = vectorAdd(%pos,"0 0 4");
       }
       return %pos;
@@ -496,11 +496,11 @@ function SabotageGame::pickTeamSpawn(%game, %team) {
    else if(%team == 2) {
       if(!isObject(%game.TeamObjective[2])) {
       //stops the pre-game fall
-      %pos = vectorAdd($SabotageGame::ObjectiveLocation2[$CurrentMission],GetRandomPosition(5,1));
+      %pos = vectorAdd($SabotageGame::ObjectiveLocation2[$CurrentMission], TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
       %pos = vectorAdd(%pos,"0 0 5");
       }
       else {
-      %pos = vectorAdd(%game.TeamObjective[2].getPosition(),GetRandomPosition(5,1));
+      %pos = vectorAdd(%game.TeamObjective[2].getPosition(), TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
       %pos = vectorAdd(%pos,"0 0 4");
       }
       return %pos;
@@ -594,7 +594,7 @@ function GenerateSabotageChallengeMenu(%client, %tag, %index) {
       %index++;
    }
    else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Bomb Disarmed - Disarm a enemy bomb.");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "Bomb Disarmed - Disarm an enemy bomb.");
       %index++;
    }
    //
@@ -621,7 +621,7 @@ function GenerateSabotageChallengeMenu(%client, %tag, %index) {
       %index++;
    }
    else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Three For Five - Win 3 Rounds Of Sabotage.");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "Three For Five - Win 3 Rounds Of Sabotage in a match.");
       %index++;
    }
    //

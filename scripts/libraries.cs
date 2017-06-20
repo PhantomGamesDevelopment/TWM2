@@ -318,6 +318,7 @@ $expertsettings["Zspawn"] = 1;
 $expertsetting["Zspawn",0] = "continual spawn";
 $expertsetting["Zspawn",1] = "spawn once";
 
-$packSettings["spawn"] = 1;
-$packSetting["spawn",0] = "Personal";
-$packSetting["spawn",1] = "Team";
+$packSettings["spawn"] = 2;
+$packSetting["spawn", 0] = "Personal";
+$packSetting["spawn", 1] = "Team";
+$packSetting["spawn", 2] = "Radial (Team 20m Radius Spawn)";

@@ -1,17 +1,6 @@
-// ============================================================
-// Project            :  TWM2
-// File               :  .\scripts\TWM2\PGDConnect\ServerInteraction.cs
-// Copyright          :  2010, Phantom Games Development
-// Author             :  Robert Fritzen (Phantom139)
-// Created on         :  Tuesday, November 02, 2010 9:15 AM
-//
-// Editor             :  TorqueDev v. 1.2.3430.42233
-//
-// Description        :  Handles the server interactions with PGD
-//                    :  Servers: [CORE] [SATELITE]
-// ============================================================
+//ServerInteraction.cs
+//Updated TWM2 3.9a, removed depricated EXP Cap commands
 
-$Generic_Rank_Cap      = 3000000;          //if we cannot get a valid connection
 $TWM2Core_Interface    = "www.phantomdev.net" TAB "www.public.phantomdev.net"; //don't touch, server connections
 $TWM2ServerInfo_Loc    = "/Univ/ssiInterface.php";
 
@@ -70,31 +59,26 @@ function serverInterfacing::onLine(%this, %line) {
    }
    //read necessary data
    switch$(getWord(%line, 0)) {
-      case "SetEXPCap":
-	     $EXPCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] = getWord(%line, 1);
-		 echo("PGD: Daily Rank Cap Has Been Set To: "@getWord(%line, 1)@"");
-		 for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-	        %client = ClientGroup.getObject(%i);
-			%client.TWM2Core.noMoreEXP[sha1sum(formattimestring("yymmdd"))] = 0;
-	     }
-	  case "ApplyDevList":
-	     %list = getWords(%line, 1);
-		 %list = strreplace(%list, "TAB", "\t"); //boom! 
-		 for(%i = 0; %i < getFieldCount(%list); %i++) {
-			%FieldGUID = getSubStr(getField(%list, %i), 0, strstr(getField(%list, %i), ":"));
+      case "ApplyDevList":
+         %list = getWords(%line, 1);
+         %list = strreplace(%list, "TAB", "\t"); //boom! 
+         for(%i = 0; %i < getFieldCount(%list); %i++) {
+	    %FieldGUID = getSubStr(getField(%list, %i), 0, strstr(getField(%list, %i), ":"));
             %FieldLEVEL = getSubStr(getField(%list, %i), strLen(%FieldGUID) + 1, strLen(getField(%list, %i)));
-		    $DeveloperList[%i] = %FieldGUID;
-			$DeveloperLevel[%i] = %FieldLEVEL;
-			echo("Developers "@%i@": "@$DeveloperList[%i]@" -> "@$DeveloperLevel[%i]@"");
-		 }
-	  case "SetHighRank":
-	     $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] = getWord(%line, 1);
-		 echo("PGD: Highest Rank Set To "@getWord(%line, 1)@"");
-	  case "SetHighOfficer":
-	     $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] = getWord(%line, 1);
-		 echo("PGD: Highest Officer Rank Set To "@getWord(%line, 1)@"");	
-	  case "SetEXPMultiplier":
-	     $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB FormatTWM2Time(formattimestring("yymmdd")))] = getWord(%line, 1);
-		 echo("PGD: EXP Multiplier is now: "@getWord(%line, 1)@"");			
+	    $DeveloperList[%i] = %FieldGUID;
+	    $DeveloperLevel[%i] = %FieldLEVEL;
+	    echo("Developers "@%i@": "@$DeveloperList[%i]@" -> "@$DeveloperLevel[%i]@"");
+         }
+      case "SetHighRank":
+	 $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] = getWord(%line, 1);
+         echo("PGD: Highest Rank Set To "@getWord(%line, 1)@"");
+      case "SetHighOfficer":
+	 $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] = getWord(%line, 1);
+	 echo("PGD: Highest Officer Rank Set To "@getWord(%line, 1)@"");	
+      case "SetEXPMultiplier":
+	 $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB TWM2Lib_MainControl("FormatTWM2Time" , formattimestring("yymmdd")))] = getWord(%line, 1);
+         echo("PGD: EXP Multiplier is now: "@getWord(%line, 1)@"");
+      default:
+         echo("PGD: Depricated command "@getWord(%line, 0)@" issued, ignored...");			
    }
 }

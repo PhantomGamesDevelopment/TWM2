@@ -245,7 +245,7 @@ function SpawnLordRog(%position) {
       Datablock = "LordRogZombieArmor";
    };
    %Cpos = vectorAdd(%position, "0 0 5");
-   MessageAll('MsgDarkraireturn', "\c4"@$TWM2::ZombieName[8]@": I AM ALIVE!!! I SHALL KILL YOU ALL");
+   MessageAll('msgBossAlertreturn', "\c4"@$TWM2::ZombieName[8]@": I AM ALIVE!!! I SHALL KILL YOU ALL");
 
    %zombie.iszombie = 1;
    StartLRAbilities(%zombie);
@@ -285,9 +285,9 @@ function LordRogmovetotarget(%zombie){
    if(%z < -300) {
       %zombie.startFade(400, 0, true);
       %zombie.startFade(1000, 0, false);
-      %zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), getRandomPosition(25, 1)));
+      %zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
       %zombie.setVelocity("0 0 0");
-      MessageAll('msgDarkraiAttack', "\c4"@$TWM2::ZombieName[8]@": You think I will fall to my death!?!?");
+      MessageAll('msgBossAlertAttack', "\c4"@$TWM2::ZombieName[8]@": You think I will fall to my death!?!?");
    }
    %closestDistance = getWord(%closestClient,1);
    %closestClient = getWord(%closestClient,0).Player;
@@ -345,7 +345,7 @@ function LordRogAttack_FUNC(%att, %args) {
          %type = getRandomZombieType("1 2 3 5 9 12 13 15 17");   //omit 4 in place of 17: Demon -> Elite Demon
          messageall('RogMsg',"\c4"@$TWM2::ZombieName[8]@": Attack my target!");
          for(%i = 0; %i < 5; %i++) {
-            %pos = vectoradd(%z.getPosition(), getRandomPosition(10,1));
+            %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
             %fpos = vectoradd("0 0 5",%pos);
             StartAZombie(%fpos, %type);
          }
@@ -435,7 +435,7 @@ function LordRogAttack_FUNC(%att, %args) {
       
       case "MetrosMaul":
          %t = getWord(%args, 0);
-         %fpos = vectoradd(%t.getposition(), getRandomposition(50,0));
+         %fpos = vectoradd(%t.getposition(), TWM2Lib_MainControl("getRandomPosition", 50 TAB 0));
          %pos2 = vectoradd(%fpos, "0 0 700");
          schedule(500, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
          schedule(1000, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
@@ -443,7 +443,7 @@ function LordRogAttack_FUNC(%att, %args) {
       
       case "MeteorOblivion":
          %t = getWord(%args, 0);
-         %fpos = vectoradd(%t.getposition(), getRandomposition(50, 0));
+         %fpos = vectoradd(%t.getposition(), TWM2Lib_MainControl("getRandomPosition", 50 TAB 0));
          %pos2 = vectoradd(%fpos, "0 0 700");
          schedule(500, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
          schedule(1000, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");

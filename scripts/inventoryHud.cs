@@ -986,7 +986,7 @@ function InventoryScreen::updateHud( %this, %client, %tag ) {
       }
 
 //Create - Construction - List
-   if(%client.favorites[0] $= "Purebuild") {
+   if(%client.favorites[0] $= "Purebuild" || %client.favorites[0] $= "Tech") {
 	  if ( %noSniperRifle ) {
 		if ( getFieldCount( %client.depIndex ) )
 			%depList = %client.favorites[getField( %client.depIndex, 0 )];
@@ -1131,7 +1131,7 @@ function InventoryScreen::updateHud( %this, %client, %tag ) {
    %lineCount++;
 
 //Send - Construction - List
-   if(%client.favorites[0] $= "Purebuild") {
+   if(%client.favorites[0] $= "Purebuild" || %client.favorites[0] $= "Tech") {
 	  %client.numFavsCount++;
 	  if ( getField( %depList, 0 ) !$= empty && %noSniperRifle )
 		  %depList = %depList TAB "EMPTY";

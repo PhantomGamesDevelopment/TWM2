@@ -1,69 +1,215 @@
 //TWM2 Functions
-$TWM2::Version = 3.8;
+$TWM2::Version = 3.91;
+$TWM2::ModVersionString = "3.91 {Dev}";
 
-function FormatTWM2Time(%time) {
-   %min = MFloor(%time / 60);
-   %sec = %time % 60;
-   if(%sec < 10) {
-      %sec = "0"@%sec@"";
-   }
-   return %min TAB %sec;
-}
+function TWM2Lib_MainControl(%functionName, %arguments) {
+    switch$(strlwr(%functionName)) {
+        case "clientconnectionfunction":
+            %client = %arguments;
+            $XPArray[%client] = 0;
+            %client.CheckPGDConnect();  // <-- Used for Universal features
+            PGD_IsFileDL("Data/"@%client.guid@"/Ranks/TWM2/Saved.TWMSave");
+            schedule(5000, 0, "LoadUniversalRank", %client);
 
-function CheckGUID(%client) {
-   //
-   if(%client.isSuperAdmin) {
-      %tag = "[SA]";
-   }
-   else if(%client.isAdmin && !%client.isSuperAdmin) {
-      %tag = "[Admin]";
-   }
-   //
-   if(%client.GUID $= $TWM2::HostGUID) {
-      %client.isadmin = 1;
-      %client.issuperadmin = 1;
-      %client.ishost = 1; //hosts can use developer commands, but don't have access to developer features
-      echo("Server Host Joined.");
-      messageall('MsgAdminForce', "\c3The Host Has Joined!");
-      %tag = "[Host]";
-   }
-   else {
-      if($Host::UseDevelopersList) {
-         //get the developer list 
-		 %i_check = 0;
-		 while(isSet($DeveloperList[%i_check])) {
-			if(%client.guid $= trim($DeveloperList[%i_check])) {
-		       switch$(trim($DeveloperLevel[%i_check])) {
-			      case "Dev":
-				     %client.isAdmin = 1;
-					 %client.isSuperAdmin = 1;
-					 %client.isDev = 1;
-					 %client.isPhantom = 1;
-					 %tag = "[Dev]";
-					 echo("Mod Developer Connection");
-				  case "CoDev":
-				     %client.isAdmin = 1;
-				  	 %client.isSuperAdmin = 1;
-				  	 %client.isDev = 1;
-				  	 %tag = "[CoDev]";
-				  	 echo("Mod Co-Developer Connection");
-				  default:
-				     echo("wut? o_o: "@$DeveloperLevel[%i_check]@"");
-			   }
-			   break; //break loop, proceed
-			}
-			%i_check++;
-		 }
-      }
-   }
-   if(%tag !$= "" && !$TWM2::UseRankTags) {
-  	  %name = "\cp\c7" @ %tag @ "\c6" @ %client.namebase @ "\co";
-      MessageAll( 'MsgClientNameChanged', "", %client.name, %name, %client );
-      removeTaggedString(%client.name);
-      %client.name = addTaggedString(%name);
-      setTargetName(%client.target, %client.name);
-   }
-   return;
+            setDefaultInventory(%client);
+            TWM2Lib_MainControl("CheckGUID", %client);
+
+            if ($TWM2::UseRankTags) {
+                schedule(15000, 0, "DoNameChangeChecks", %client);
+            }
+            %client.canSaveRank = 1;
+            %client.canLoadRank = 1;
+            //set the default killstreaks (1, 2, and 4)
+            %client.KillstreakOn[1] = 1;
+            %client.KillstreakOn[2] = 1;
+            %client.KillstreakOn[4] = 1;
+            return;
+
+        case "clientdropfunction_preclientkill":
+            %client = %arguments;
+            SaveClientFile(%client);
+            PrepareUpload(%client);   //universally upload it (if we can)
+            LogConnection(%client, 4);
+            MessageAll('MsgAllPlayers', "\c4"@$ChatBot::Name@": Removing Orphaned Deployables in "@MFloor($TWM2::RemoveOrphansTime / 60)@" Minutes");
+            schedule(1000, 0, "TWM2Lib_MainControl", "RemoveOrphansLoop", 1);
+            return;
+
+        case "clientdropfunction_postclientkill":
+            if ($HostGamePlayerCount == 0 && $TWM2::CloseWhenDone) {
+                quit();
+            }
+            // reset the server if everyone has left the game
+            if ($TWM2::RestartOnEmpty) {
+                if ( $HostGamePlayerCount - $HostGameBotCount == 0 && $Host::Dedicated && !$resettingServer && !$LoadingMission ) {
+                    schedule(0, 0, "resetServerDefaults");
+                }
+            }
+            return;
+
+        case "removeorphansloop":
+            %tick = %arguments;
+            if (%tick > $TWM2::RemoveOrphansTime) {
+                MessageAll('MsgCyn', "\c4"@$ChatBot::Name@": Removing Orphaned Deployables Now.");
+                if (isObject(Game)) {
+                    delOrphanedPieces(true);
+                    Game.removeDepTime = getSimTime() + delOrphanedPieces(true) + 1000;
+                }
+                return;
+            }
+            %tick++;
+            schedule(1000, 0, "TWM2Lib_MainControl", "removeOrphansLoop", %tick);
+            return;
+
+        case "formattwm2time":
+            %time = %arguments;
+            %min = mFloor(%time / 60);
+            %sec = %time % 60;
+            if(%sec < 10) {
+                %sec = "0" @ %sec;
+            }
+            return %min TAB %sec;
+
+        case "checkguid":
+            %client = %arguments;
+            if (%client.isSuperAdmin) {
+                %tag = "[SA]";
+            }
+            else if (%client.isAdmin && !%client.isSuperAdmin) {
+                %tag = "[Admin]";
+            }
+            //
+            if (%client.GUID $= $TWM2::HostGUID) {
+                %client.isadmin = 1;
+                %client.issuperadmin = 1;
+                %client.ishost = 1; //hosts can use developer commands, but don't have access to developer features
+                echo("Server Host Joined.");
+                messageall('MsgAdminForce', "\c3The Host Has Joined!");
+                %tag = "[Host]";
+            }
+            else {
+                if ($Host::UseDevelopersList) {
+                    //get the developer list 
+                    %i_check = 0;
+                    while (isSet($DeveloperList[%i_check])) {
+                        if (%client.guid $= trim($DeveloperList[%i_check])) {
+                            switch$(trim($DeveloperLevel[%i_check])) {
+                                case "Dev":
+                                    %client.isAdmin = 1;
+                                    %client.isSuperAdmin = 1;
+                                    %client.isDev = 1;
+                                    %client.isPhantom = 1;
+                                    %tag = "[Dev]";
+                                    echo("Mod Developer Connection");
+                                case "CoDev":
+                                    %client.isAdmin = 1;
+                                    %client.isSuperAdmin = 1;
+                                    %client.isDev = 1;
+                                    %tag = "[CoDev]";
+                                    echo("Mod Co-Developer Connection");
+                                default:
+                                    echo("wut? o_o: "@$DeveloperLevel[%i_check]@"");
+                            }
+                            break; //break loop, proceed
+                        }
+                        %i_check++;
+                    }
+                }
+            }
+            if (%tag !$= "" && !$TWM2::UseRankTags) {
+                %name = "\cp\c7" @ %tag @ "\c6" @ %client.namebase @ "\co";
+                MessageAll('MsgClientNameChanged', "", %client.name, %name, %client);
+                removeTaggedString(%client.name);
+                %client.name = addTaggedString(%name);
+                setTargetName(%client.target, %client.name);
+            }
+            return;
+
+        case "playertimeloop":
+            %client = %arguments;
+            %scriptController = %client.TWM2Core;
+            %scriptController.gameTime++;
+            if (%scriptController.gameTime >= 1440) {
+                AwardClient(%client, "6");
+            }
+            schedule(60000, 0, "TWM2Lib_MainControl", "PlayerTimeLoop", %client);
+            return;
+
+        case "playtwm2intro":
+            %client = %arguments;
+            BottomPrint(%client, "T", 1, 3);
+            schedule(250, 0, "BottomPrint", %client, "TO", 1, 3);
+            schedule(500, 0, "BottomPrint", %client, "TOT", 1, 3);
+            schedule(750, 0, "BottomPrint", %client, "TOTA", 1, 3);
+            schedule(1000, 0, "BottomPrint", %client, "TOTAL", 1, 3);
+
+            schedule(1750, 0, "BottomPrint", %client, "TOTAL W", 1, 3);
+            schedule(2000, 0, "BottomPrint", %client, "TOTAL WA", 1, 3);
+            schedule(2250, 0, "BottomPrint", %client, "TOTAL WAR", 1, 3);
+            schedule(2500, 0, "BottomPrint", %client, "TOTAL WARF", 1, 3);
+            schedule(2750, 0, "BottomPrint", %client, "TOTAL WARFA", 1, 3);
+            schedule(3000, 0, "BottomPrint", %client, "TOTAL WARFAR", 1, 3);
+            schedule(3250, 0, "BottomPrint", %client, "TOTAL WARFARE", 1, 3);
+
+            schedule(4000, 0, "BottomPrint", %client, "TOTAL WARFARE M", 1, 3);
+            schedule(4250, 0, "BottomPrint", %client, "TOTAL WARFARE MO", 1, 3);
+            schedule(4500, 0, "BottomPrint", %client, "TOTAL WARFARE MOD", 2, 3);
+
+            schedule(6000, 0, "BottomPrint", %client, "TOTAL WARFARE MOD 2", 1, 3);
+            schedule(6700, 0, "BottomPrint", %client, "TOTAL WARFARE MOD 2 \n Advanced", 1, 3);
+            schedule(7500, 0, "BottomPrint", %client, "TOTAL WARFARE MOD 2 \n Advanced Warfare", 5, 3);
+
+            if ($Host::ServerPopup !$= "") {
+                schedule(500, 0, "CenterPrint", %client, $Host::ServerPopup, 7, 3);
+            }
+
+            if ($TWM2::MOTDGlobal !$= "") {
+                schedule(7500, 0, "CenterPrint", %client, "<Color:FFFFFF><Font:Arial:24>PGD MOTD: "@$TWM2::MOTDGlobal, 7, 3);
+            }
+            return;
+
+        case "getrandomposition":
+            %mult = getField(%arguments, 0);
+            %noZ = getField(%arguments, 1);
+
+            %x = getRandom() * %mult;
+            %y = getRandom() * %mult;
+            %z = getRandom() * %mult;
+            %negX = 1;
+            %negY = 1;
+            %negZ = 1;
+            if (%noZ) {
+                %z = 0;
+            }
+            if (getRandom(0, 1) == 1) {
+                %negX = -1;
+            }
+            if (getRandom(0, 1) == 1) {
+                %negY = -1;
+            }
+            if (getRandom(0, 1) == 1) {
+                %negZ = -1;
+            }
+            %rand = %negX * %x SPC %negY * %y SPC %negZ * %z;
+            return %rand;
+
+        case "rmpg":
+            %X = getWord(MissionArea.getArea(), 0);
+            %Y = getWord(MissionArea.getArea(), 1);
+            %W = getWord(MissionArea.getArea(), 2);
+            %H = getWord(MissionArea.getArea(), 3);
+
+            %OppX = ((%X) + (%W));
+            %OppY = ((%Y) + (%H));
+            %Position = getRandom(%X, %OppX) SPC getRandom(%Y, %OppY) SPC 0;
+
+            %Z = getTerrainHeight(%Position);
+            %PositionF = getWord(%Position, 0) SPC getWord(%Position, 1) SPC %Z;
+
+            return %PositionF;
+
+        default:
+            error("TWM2Lib_MainControl(): Error, unknown function "@%functionName@" sent to command.");
+    }
 }
 
 function ListGUIDS() {
@@ -79,48 +225,6 @@ function Cons(%m) {
    StrReplace(%w, "[W]", "~wfx/");
    MessageAll('msgAdmin', "\c5SERVER ADMIN: \c4"@%m@"");
 }
-
-function PlayerTimeLoop(%client) {
-   %scriptController = %client.TWM2Core;
-   %scriptController.gameTime++;
-   if(%scriptController.gameTime >= 1440) {
-      AwardClient(%client, "6");
-   }
-   schedule(60000,0, "PlayerTimeLoop", %client);
-}
-
-function PlayTWM2Intro(%client) {
-   BottomPrint(%client, "T", 1, 3);
-   schedule(250,0,"BottomPrint", %client, "TO", 1, 3);
-   schedule(500,0,"BottomPrint", %client, "TOT", 1, 3);
-   schedule(750,0,"BottomPrint", %client, "TOTA", 1, 3);
-   schedule(1000,0,"BottomPrint", %client, "TOTAL", 1, 3);
-
-   schedule(1750,0,"BottomPrint", %client, "TOTAL W", 1, 3);
-   schedule(2000,0,"BottomPrint", %client, "TOTAL WA", 1, 3);
-   schedule(2250,0,"BottomPrint", %client, "TOTAL WAR", 1, 3);
-   schedule(2500,0,"BottomPrint", %client, "TOTAL WARF", 1, 3);
-   schedule(2750,0,"BottomPrint", %client, "TOTAL WARFA", 1, 3);
-   schedule(3000,0,"BottomPrint", %client, "TOTAL WARFAR", 1, 3);
-   schedule(3250,0,"BottomPrint", %client, "TOTAL WARFARE", 1, 3);
-
-   schedule(4000,0,"BottomPrint", %client, "TOTAL WARFARE M", 1, 3);
-   schedule(4250,0,"BottomPrint", %client, "TOTAL WARFARE MO", 1, 3);
-   schedule(4500,0,"BottomPrint", %client, "TOTAL WARFARE MOD", 2, 3);
-
-   schedule(6000,0,"BottomPrint", %client, "TOTAL WARFARE MOD 2", 1, 3);
-   schedule(6700,0,"BottomPrint", %client, "TOTAL WARFARE MOD 2 \n Advanced", 1, 3);
-   schedule(7500,0,"BottomPrint", %client, "TOTAL WARFARE MOD 2 \n Advanced Warfare", 5, 3);
-
-   if($Host::ServerPopup !$= "") {
-      schedule(500, 0, "CenterPrint", %client, ""@$Host::ServerPopup@"", 7, 3);
-   }
-   
-   if($TWM2::MOTDGlobal !$= "") {
-      schedule(7500, 0, "CenterPrint", %client, "<Color:FFFFFF><Font:Arial:24>PGD MOTD: "@$TWM2::MOTDGlobal@"", 7, 3);
-   }
-}
-
 
 function DefaultGame::ZkillUpdateScore(%game, %client, %implement, %zombie){
    if( %implement $= "" || %implement == 0 || %client $= "") {
@@ -214,42 +318,6 @@ function CureInfection(%player) {
    }
 }
 
-function GetRandomPosition(%mult,%nz) {
-   %x = getRandom()*%mult;
-   %y = getRandom()*%mult;
-   %z = getRandom()*%mult;
-
-   %rndx = getrandom(0,1);
-   %rndy = getrandom(0,1);
-   %rndz = getrandom(0,1);
-
-   if(%nz) {
-      %z = 0;
-   }
-
-   if (%rndx == 1){
-      %negx = -1;
-   }
-   if (%rndx == 0){
-      %negx = 1;
-   }
-   if (%rndy == 1){
-      %negy = -1;
-   }
-   if (%rndy == 0){
-      %negy = 1;
-   }
-   if (%rndz == 1){
-      %negz = -1;
-   }
-   if (%rndz == 0){
-      %negz = 1;
-   }
-
-   %rand = %negx * %x SPC %negy * %y SPC %Negz * %z;
-   return %rand;
-}
-
 function DoMedalCheck(%client, %image) {
    //
    if(%client.isAIControlled()) {
@@ -328,32 +396,6 @@ function updateArmorList(%client, %armorList) {
    return %armorList;
 }
 
-// Shows the number of datablocks in your mod, it's capacity (in limitation to T2's internal limit)
-function datablockInfo() {
-   %blocks = DataBlockGroup.getCount();
-   %effects = 0;
-
-   for(%i = 0; %i < %blocks; %i++) {
-      if(DataBlockGroup.getObject(%i).getClassName() $= "EffectProfile") {
-         %n = DataBlockGroup.getObject(%i).getName();
-         echo(""@%i@". "@%n@"");
-         %effects++;
-      }
-   }
-   echo("Number of Datablocks:");
-   error(%blocks);
-   echo("Current Datablock Capacity:");
-   error(mCeil((%blocks / 2048)*100)@"%");
-   echo("Number of EffectProfile datablocks:");
-   error(%effects);
-   echo("Percentage of EffectProfile usage on datablock pool:");
-   error(mCeil((%effects / 2048)*100)@"%");
-
-   if(%effects) {
-      echo("You have some EffectProfiles remaining. Eliminate them to free up unused datablock space. EffectProfiles are unused Force Feedback datablocks, often attached to sounds. These can be safely removed from all SoundProfile datablocks and removed.");
-   }
-}
-
 function SimObject::getUpVector(%obj){
    %vec = vectorNormalize(vectorsub(%obj.getEdge("0 0 1"),%obj.getEdge("0 0 -1")));
    return %vec;
@@ -371,26 +413,6 @@ function Player::IsAlive(%player) {
    else {
       return false;
    }
-}
-
-package PlayerCountFix {
-   function WeewtyFunctionOfAwesomeness() {
-      %bots = 0;
-      %c = ClientGroup.getCount();
-      $HostGamePlayerCount = %c;
-      for(%i = 0; %i < %c; %i++) {
-         %cl = ClientGroup.getObject(%i);
-         if(%cl.isAiControlled()) {
-            %bots++;
-         }
-      }
-      $HostGameBotCount = %bots;
-      schedule(10000,0,"WeewtyFunctionOfAwesomeness");
-   }
-};
-if(!isActivePackage(PlayerCountFix)) {
-   activatePackage(PlayerCountFix);
-   WeewtyFunctionOfAwesomeness();
 }
 
 function isClientControlledPlayer(%player) {
@@ -431,22 +453,6 @@ function TransferPieces(%owner, %target) {
          %obj.ownerGuid = %target.guid;
       }
    }
-}
-
-function RMPG() {
-   %X = getWord(MissionArea.getArea(), 0);
-   %Y = getWord(MissionArea.getArea(), 1);
-   %W = getWord(MissionArea.getArea(), 2);
-   %H = getWord(MissionArea.getArea(), 3);
-
-   %OppX = ((%X) + (%W));
-   %OppY = ((%Y) + (%H));
-   %Position = getRandom(%X, %OppX) SPC getRandom(%Y, %OppY) SPC 0;
-
-   %Z = getTerrainHeight(%position);
-   %PositionF = getWord(%Position, 0) SPC getWord(%Position, 1) SPC %Z;
-
-   return %PositionF;
 }
 
 function E_Sigma(%from, %to, %formula) {

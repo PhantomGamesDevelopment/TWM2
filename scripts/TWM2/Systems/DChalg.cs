@@ -746,10 +746,7 @@ function GenerateDWMChallengeMenu(%client, %tag, %index) {
    %index++;   
    messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00> Green Indicates An Active Challenge");
    %index++;  
-   messageClient( %client, 'SetLineHud', "", %tag, %index, "10/20/10: Daily Challenges Are Now Active!");
-   %index++;
-   messageClient( %client, 'SetLineHud', "", %tag, %index, "11/3/10: Weekly/Monthly Challenges Are Now Active!");
-   %index++;
+   messageClient( %client, 'SetLineHud', "", %tag, %index, "4/20/16: New Daily Challenge System is Live!");
    for(%i = 1; isSet($Challenges::Challenge[%i]); %i++) {
       %challenge = $Challenges::Challenge[%i];
       %cType = getField(%challenge, 0);

@@ -85,7 +85,7 @@ function WartowerGame::equip(%game, %player) {
 
 function WartowerGame::pickPlayerSpawn(%game, %client, %respawn) {
    %start = $WarTower::SpawnZone[$CurrentMission];
-   %pos = vectorAdd(%start, getRandomPosition(4, 1));
+   %pos = vectorAdd(%start, TWM2Lib_MainControl("getRandomPosition", 4 TAB 1));
    return %pos;
 }
 

@@ -603,12 +603,12 @@ function GOFAttack_FUNC(%att, %args) {
             return;
          }
          %cP = %g.getPosition();
-         %nP = getRandomPosition(55, 0);
+         %nP = TWM2Lib_MainControl("getRandomPosition", 55 TAB 0);
          %nP2 = vectorAdd(%np, "0 0 100");
          %fP = vectorAdd(%cP, %nP2);
          GOFAttack_FUNC("FireBlast", %g TAB %cP);
          %g.setTransform(%fP);
-         messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": ehehehehe.. Burn out...");
+         messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Experience the glorious flames..");
          
       case "Flamecano":
          %g = getWord(%args, 0);
@@ -717,7 +717,7 @@ function GOFDoRandomAttacks(%g) {
       case 2:
          if(isObject(%target.player)) {
             GOFAttack_FUNC("Fireball", %g SPC %target.player);
-            messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Lets see how you dodge this, "@getTaggedString(%target.name)@".");
+            messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Hey "@getTaggedString(%target.name)@", Dodge this!");
          }
          else {
             messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Frightened of this? Good.");
@@ -729,7 +729,7 @@ function GOFDoRandomAttacks(%g) {
             schedule(800, 0, GOFAttack_FUNC, "Fireball", %g SPC %target.player);
             schedule(1200, 0, GOFAttack_FUNC, "Fireball", %g SPC %target.player);
             schedule(1600, 0, GOFAttack_FUNC, "Fireball", %g SPC %target.player);
-            messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Flame Storm "@getTaggedString(%target.name)@", cooked up nicely for you.");
+            messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": I have a Flame Storm cooked up nicely for "@getTaggedString(%target.name)@", enjoy...");
          }
          else {
             messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": I love Fire.. it's Good your scared.");
@@ -741,7 +741,7 @@ function GOFDoRandomAttacks(%g) {
             schedule(800, 0, GOFAttack_FUNC, "FireBlast", %g TAB vectorAdd(%target.player.getPosition(), "0 0 35"));
             schedule(1200, 0, GOFAttack_FUNC, "FireBlast", %g TAB vectorAdd(%target.player.getPosition(), "0 0 40"));
             schedule(1600, 0, GOFAttack_FUNC, "FireBlast", %g TAB vectorAdd(%target.player.getPosition(), "0 0 45"));
-            messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Engage Dictator Strike!!!");
+            messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Hear that, it's the sound of exploding fire ending your life...");
          }
          else {
             messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Frightened Of Fire? Good.");
@@ -771,7 +771,7 @@ function GOFDoRandomAttacks(%g) {
             GOFAttack_FUNC("LaunchSeekfire", %g SPC %target.player SPC 3000);
             GOFAttack_FUNC("LaunchSeekfire", %g SPC %target.player SPC 4500);
             GOFAttack_FUNC("LaunchSeekfire", %g SPC %target.player SPC 6000);
-            messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Clensic Flames Will Persue You "@getTaggedString(%target.name)@", MANY FLAMES!");
+            messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": "@getTaggedString(%target.name)@", I present to you the gift, of cursed flames...");
          }
          else {
             messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Darn, I Love Mega Cursed Fire.");

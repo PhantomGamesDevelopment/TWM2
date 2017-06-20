@@ -5,11 +5,9 @@ Total Warfare Mod 2 for Tribes 2, Conversion mod built on a base mix of Construc
 
 Web Sites/Pages:
 * https://github.com/PhantomGamesDevelopment/TWM2/ : Official Git Repostitory
-* http://www.phantomdev.net - http://www.tacticaluprising.phantomdev.net - OFFICIAL SITES
-* http://www.moddb.com/mods/total-warfare-mod-2-advanced-warfare
-* http://www.moddb.com/groups/twm-development-team
+* http://www.phantomdev.net : Offical Website
 
-Current Version: 3.9 (alpha)
+Current Version: 3.91 {Development}
 
 Credits:
 * Phantom139 (Lead Coder / Mod Developer, Official Host)
@@ -45,8 +43,44 @@ start up the dedicated server. Join it, once in game, type ListGUIDS(); in the s
 to obtain your GUID. Then modify the line: $TWM2::HostGUID = "SetMeUp";, to match your GUID.
 
 MOD DEVELOPMENT LOG:
+3.9 -> 3.91 (In Progress):
+* Lib'd the TWM2 MainControl file to remove some more functions
+* Another boss balancing pass
+* Addressed the bug that would allow Vardison 2.0 to summon infinite minions
+* Addressed the bug with Vardison 2.0 that made his Shadow Rift invincible
+* Removed two un-used game objects that were never completed, the Medal Seal and the UAV Control Panel
+* Removed a few erraneous exec calls to non-existent files in the mod load script
+
 3.8 -> 3.9:
-* Community Led Version (Add Changes From GitHub here: https://github.com/PhantomGamesDevelopment/TWM2/)
+* Progression System Adjustments
+  * Daily EXP Cap removed from the mod
+  * EXP Gain for PvP has been increased (5 -> 15)
+  * Altered EXP gain rates from all zombies based on collected mod data
+* Redesigned Lord Vardison to remove crashing problems
+  * Still three phases to defeat, but all phases have been adjusted
+  * Balanced to be easier, but harder...
+  * Four difficulty options that can be set by a global variable
+* Removed Darch Archmage Vardison (Was even more so prone to crashes)
+* Huge Balancing Pass on Bosses, this primarily focused on boss health, boss speed, and attack damage
+  * Shade Lord:
+    * Reduced Total HP
+	* Reduced Boss Speed
+	* Increased Damage Taken by Fire Weapons
+	* Altered functioning of Shades (Enjoy your new death :P)
+  * Colonel Windshear:
+    * Addressed his "Attitude" Problem
+* Lib'd the Shade Lord down to three functions, recovering ~40 more functions
+* Bosses now track kills, enjoy seeing how "Inefficient" you are ;)
+* Fixed a few issues in the PGD Connect system
+* Added a TCPConnectionList instance to allow for multiple downloads to occur at once
+* Depricated a few unused modules and re-coded a few instances that used these old modules
+* Depricated a good amount of the P-Con External Library
+* Added two new extremely challenging Missions (Surrounded 2.0, and Invasion) 
+* Un-Did the change in 3.7 that caused boss exp rewards to be based upon player input to the fight, now there is a hard 5% damage requirement to earn boss EXP.
+* Adjusted the in-game PGD Connect daily challenge system to accept the new format, still need to work out the server-side end of this system.
+* Fixed some zombie naming issues
+* Addressed the strike fighter chaingun bug
+* Congealed all of the help list commands into /help
 
 3.7 -> 3.8:
 * Addressed a problem in the TCPQueryList that would cause some transfers to deadlock and never complete
@@ -115,11 +149,11 @@ MOD DEVELOPMENT LOG:
 * Updated all PGD Services to point to the new domain.
 
 3.1 -> 3.2:
-* Undoccumented
+* Undocmented
  
 3.0 -> 3.1:
 * Added the Sandstorm MRLS Tank
-* A Few fixes addressed
+* A Few undocmented fixes addressed
 
 2.9 -> 3.0:
 * Modified the PGD Connect Algorith to be a little less required, less conflicts should occur.
@@ -130,14 +164,14 @@ MOD DEVELOPMENT LOG:
 - Added The Wave Highlight System
 - Made it less challenging to get to wave 50.
 * Added The Martyrdom Perk
-* Fixed a bug that allowed admins to get killstreaks with /giveGun
+* Fixed a bug that allowed naughty admins to get killstreaks with /giveGun
 * Drastically increased the Centaur Artillery Strike Damage
 
 2.8 -> 2.9:
 * Fixed a console spam issue with "Commander Stormrider"
 * Removed 2 un-used medals
 * Fixed sniper rifles showing in the inventory list when they are disabled
-* Added 1 reload weapons
+* Added 1 shot reload style weapons
 - Added the Model 1887 Shotgun (Requires Instructive Colonel)
 - See the new shotgun (Model 1887) or the SA2400 for examples
 * Ion Progression removed in Sabotage, Domination, and Wartower game modes
@@ -230,14 +264,14 @@ MOD DEVELOPMENT LOG:
 * Added restrictions to the /VoteBoss Command
 - 1 Boss Vote per hour (even if it fails)
 - Hosts may disable the usage of the command
-* BOSS: Lordranius Trebor's Official EXP Reward Cut in Half to 25000.
+* BOSS: Lordranius Trevor's Official EXP Reward Cut in Half to 25000.
 * Devs/Hosts can now disable chat commands
 * Fixed some of the Spelling errors in the death messages.
 * Top Ranks are now only downloaded from PGD
 * Hosts can disable boss vote / change map votes
 
 2.4 -> 2.5:
-* Scenarios.
+* Scenarios (AKA Missions).
 * Gravity Weapons Removed
 * Patched a few UE Causing aspects with Lord Vardison
 * Added The Shadow Armor
@@ -419,9 +453,9 @@ MOD DEVELOPMENT LOG:
 * PRTCLR-995 Weapon
 * Weapon Challenge System Upgrade
 * KillTrac System Updates
-* BOSS: Lordranius Trebor Added
+* BOSS: Lordranius Trevor Added
 * Fix: Fixed Major Insignia Name, it would display General Vegenor instead of Major Insignia.
-* Lobby Options such as kick.ban can now be perfomed on players that are loading
+* Lobby Options such as kick and ban can now be perfomed on players that are loading
 * Admin options now display the name of the admin instead of "The Admin" (Like in TWM 1)
 * Some new chat commands
 

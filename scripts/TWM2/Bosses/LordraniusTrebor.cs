@@ -319,7 +319,7 @@ function PhaseShift(%tank) {
    %tank.schedule(2500, "setCloaked", false);
    %tank.schedule(2500, "setFrozenState", false);
    %CPos = %tank.getPosition();
-   %rand = getRandomPosition(250, 1);
+   %rand = TWM2Lib_MainControl("getRandomPosition", 250 TAB 1);
    %fin = vectorAdd(%CPos, %rand);
    %xy = getwords(%fin, 0, 1);
    %z = getTerrainHeight(%fin) + 9;

@@ -166,22 +166,10 @@ function DemonMotherThink(%obj){
       return;
    }
    %pos = %obj.getposition();
-   %count = ClientGroup.getCount();
-   %closestClient = -1;
-   %closestDistance = 32767;
-   for(%i = 0; %i < %count; %i++)
-   {
-	%cl = ClientGroup.getObject(%i);
-	if(isObject(%cl.player)){
-	   %testPos = %cl.player.getWorldBoxCenter();
-	   %distance = vectorDist(%pos, %testPos);
-	   if (%distance > 0 && %distance < %closestDistance && %cl.player.isFTD != 1 && %cl.player.iszombie != 1)
-	   {
-	   	%closestClient = %cl;
-	   	%closestDistance = %distance;
-	   }
-	}
-   }
+   %closestClient = ZombieLookForTarget(%zombie);
+   %closestDistance = getWord(%closestClient,1);
+   %closestClient = getWord(%closestClient,0).Player;
+   
    if(%closestClient != -1){
 	%searchobject = %closestclient.player;
 	%dist = vectorDist(%pos,%searchobject.getPosition());
@@ -222,7 +210,7 @@ function DemonMotherThink(%obj){
 		}
 	   }
 	}
-	else if(%dist > 200){
+	else if(%dist > 100){
 	   %rand = getrandom(1,120);
 	   if(%rand == 94)		//please, dont ask why i choose this number, it just poped in my head
 		DemonMotherDemonSpawn(%obj);

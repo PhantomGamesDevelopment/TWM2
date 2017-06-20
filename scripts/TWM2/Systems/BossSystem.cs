@@ -9,7 +9,9 @@ function InitiateBoss(%Boss, %name) {
          class = "BossManager";
       };
    }
-   $TWM2::BossManager.bossKills = 0;
+   if(!%Boss.isMultiPhaseBoss && !%Boss.isFirstPhase) {
+      $TWM2::BossManager.bossKills = 0;
+   }
    $TWM2::BossManager.bossObject = %Boss;
    $TWM2::BossManager.activeBoss = %name;
 
@@ -119,58 +121,63 @@ function GameConnection::GiveBossAward(%client, %bossName) {
    %scriptController = %client.TWM2Core;
    %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
    //you earn less EXP every time you defeat a specific boss, so tread lightly on those defeat counts :)
-   
-   recordAction(%client, "BOSS", %bossName);
-   
-   if(!isSet(%scriptController.bossDefeatCount[%bossName])) {
-      %scriptController.bossDefeatCount[%bossName] = 0;
-   }
-   if(%bossName $= "Yvex") {
-      AwardClient(%client, "1");
-   }
-   else if(%bossName $= "CnlWindshear") {
-      AwardClient(%client, "8");
-   }
-   else if(%bossName $= "GhostOfLightning") {
-      AwardClient(%client, "9");
-   }
-   else if(%bossName $= "Vengenor") {
-      AwardClient(%client, "10");
-   }
-   else if(%bossName $= "LordRog") {
-      AwardClient(%client, "11");
-   }
-   else if(%bossName $= "Insignia") {
-      AwardClient(%client, "12");
-   }
-   else if(%bossName $= "GhostOfFire") {
-      AwardClient(%client, "27");
-   }
-   else if(%bossName $= "Stormrider") {
-      AwardClient(%client, "28");
-   }
-   else if(%bossName $= "ShadeLord") {
-      AwardClient(%client, "30");
-   }
-   //VARDISON
-   else if(%bossName $= "Vardison3") {
-      AwardClient(%client, 13);
-   }
-   else if(%bossName $= "Trebor") {
-      AwardClient(%client, 15);
-   }
-   //rank writing
-   %scriptController.bossDefeatCount[%bossName]++;
-   %scriptController.save(%file);
-   
+    
    %damageCount = %client.damageToBoss;
    %maxHP = $BossMaxHealth[%bossName];
    
-   %ratio = %damageCount / %maxHP;
+   %percentage = (%damageCount / %maxHP) * 100;   
+   if(%percentage > 5) {
+      recordAction(%client, "BOSS", %bossName);
    
-   %award = mFloor(($TWM2::BossXPAward[%bossName] * %ratio) / %scriptController.bossDefeatCount[%bossName]);
-   GainExperience(%client, %award, ""@%bossName@" defeated, congratulations! ");
-   CheckBossChallenge(%client, %bossName);
+      if(!isSet(%scriptController.bossDefeatCount[%bossName])) {
+         %scriptController.bossDefeatCount[%bossName] = 0;
+      }
+      if(%bossName $= "Yvex") {
+         AwardClient(%client, "1");
+      }
+      else if(%bossName $= "CnlWindshear") {
+         AwardClient(%client, "8");
+      }
+      else if(%bossName $= "GhostOfLightning") {
+         AwardClient(%client, "9");
+      }
+      else if(%bossName $= "Vengenor") {
+         AwardClient(%client, "10");
+      }
+      else if(%bossName $= "LordRog") {
+         AwardClient(%client, "11");
+      }
+      else if(%bossName $= "Insignia") {
+         AwardClient(%client, "12");
+      }
+      else if(%bossName $= "GhostOfFire") {
+         AwardClient(%client, "27");
+      }
+      else if(%bossName $= "Stormrider") {
+         AwardClient(%client, "28");
+      }
+      else if(%bossName $= "ShadeLord") {
+         AwardClient(%client, "30");
+      }
+      //VARDISON
+      else if(%bossName $= "Vardison3") {
+         AwardClient(%client, 13);
+      }
+      else if(%bossName $= "Trebor") {
+         AwardClient(%client, 15);
+      }
+      //rank writing
+      %scriptController.bossDefeatCount[%bossName]++;
+      %scriptController.save(%file);
+
+      %award = mFloor($TWM2::BossXPAward[%bossName] / %scriptController.bossDefeatCount[%bossName]);
+      GainExperience(%client, %award, ""@%bossName@" defeated, congratulations! ");
+      CheckBossChallenge(%client, %bossName);
+   }
+   else {
+      MessageClient(%client, 'msgFailed', "\c5Command: The boss was defeated, however your input to the team effort was minimal... you must provide support to your allies in need.");
+      MessageClient(%client, 'msgFailed', "\c2Data: You inflicted "@%percentage@"% damage to the boss, in order to be eligable for rewards, you must inflict at least 5%.");
+   }
 }
 
 function FindValidTarget(%boss, %counter) {   //This is usefull

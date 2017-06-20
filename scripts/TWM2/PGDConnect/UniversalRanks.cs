@@ -105,7 +105,7 @@ function LoadUniversalRank(%client) {
       %client.donotupdate = 0;
       messageClient(%client, 'msgPGDRequired', "\c5PGD: PGD Connect account required to load universal ranks.");
       messageClient(%client, 'msgPGDRequired', "\c5PGD: Sign up for PGD Connect today, It's Fast, Easy, and FREE!");
-      messageClient(%client, 'msgPGDRequired', "\c5See: www.public.phantomdev.net/SMF/ in the PGD Section");
+      messageClient(%client, 'msgPGDRequired', "\c5See: www.forums.phantomdev.net in the Tribes 2 Section");
       messageClient(%client, 'msgPGDRequired', "\c5For more details.");
       schedule(500, 0, "LoadClientRankfile", %client);
       return 1;
@@ -114,7 +114,7 @@ function LoadUniversalRank(%client) {
    if(!PGD_IsFile("Data/"@%client.guid@"/Ranks/TWM2/Saved.TWMSave")) {
       %client.donotupdate = 0;
       messageClient(%client, 'msgPGDRequired', "\c5PGD: PGD Connect confirms you do not have a universal rank.");
-      messageClient(%client, 'msgPGDRequired', "\c5PGD: Play on a main server to start progressing one today!");
+      messageClient(%client, 'msgPGDRequired', "\c5PGD: Play on a |CORE| server to start progressing one today!");
       messageClient(%client, 'msgPGDRequired', "\c5PGD: Loading your local rank file for the time being...");
       schedule(500, 0, "LoadClientRankfile", %client);
       return 1;

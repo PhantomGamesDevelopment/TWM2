@@ -173,7 +173,7 @@ function ZombieLookforTarget(%zombie){
 
 //conditionals, verifies that the zombies can attack this specific player
 function canAttackPlayer(%client) {
-   if(!%client.player.isFTD && !%client.player.iszombie && !%client.player.stealthed) {
+   if(!%client.player.isFTD && !%client.player.iszombie && !%client.player.stealthed && !%client.player.isGoingToDie) {
       return true;
    }
    else {
@@ -186,7 +186,7 @@ function ZgetFacingDirection(%zombie,%closestClient,%pos){
       %clpos = %closestClient.getPosition();
    }
    else {
-      %clpos = RMPG();
+      %clpos = TWM2Lib_MainControl("RMPG");
    }
    %vector = vectorNormalize(vectorSub(%clpos, %pos));
    %v1 = getword(%vector, 0);

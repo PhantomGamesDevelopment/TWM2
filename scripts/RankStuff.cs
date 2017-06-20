@@ -11,7 +11,12 @@ $Prestige::Name[6] = "Glorious ";
 $Prestige::Name[7] = "Ultimate ";
 $Prestige::Name[8] = "Shadowing ";
 $Prestige::Name[9] = "Phantom ";
-$Prestige::Name[10] = "(*) Phantom ";
+$Prestige::Name[10] = "Brutal ";
+$Prestige::Name[11] = "Vengeful ";
+$Prestige::Name[12] = "Spectral ";
+$Prestige::Name[13] = "Noble ";
+$Prestige::Name[14] = "Masterful ";
+$Prestige::Name[15] = "Harbinger ";
 
 $Ranks::MinPoints[0] = 0;
 $Ranks::NewRank[0] = "Private";
@@ -333,7 +338,7 @@ function SortTopRanks(%dlOBJ) {
 
 function DoNameChangeChecks(%client) {
    if(!$TWM2::UseRankTags) {
-      CheckGUID(%client);
+      TWM2Lib_MainControl("CheckGUID", %client);
       return;
    }
    %stillLooking = 1;

@@ -116,7 +116,7 @@ datablock FlyingVehicleData(StrikeFlyer) : ShrikeDamageProfile
    numDmgEmitterAreas = 1;
 
    //
-   max[chaingunAmmo] = 1500;
+   max[MiniChaingunAmmo] = 1500;
    max[MissileLauncherAmmo] = 2;
    max[MortarAmmo] = 3;
 

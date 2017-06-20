@@ -23,7 +23,7 @@ package TWM2Mission_Invasion {
    function TWM2MissionClass::StartTWM2Mis(%group) {
       %sp = "19528 17981 105";
       for(%i = 1; %i <= %group.participants; %i++) {
-         %spF = vectorAdd(%sp, getRandomPosition(5, 1));
+         %spF = vectorAdd(%sp, TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
          %group.participant[%i].player.setPosition(%spF);
          //
          %player = %group.participant[%i].player;

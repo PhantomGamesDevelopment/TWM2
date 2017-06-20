@@ -71,7 +71,7 @@ package loadmodinfo
     messageClient(%client, 'MsgDebriefResult', "", "<Font:Arial Bold:14><Just:CENTER>Total Warfare Mod 2 : Advanced Warfare");
     messageClient(%client, 'MsgDebriefResult', "", "<Font:Arial Bold:14><Just:CENTER>Server Type: "@%STO@"");
 
-    %Credits = "\n<Font:Arial:16>Version "@$TWM2::Version@"" @
+    %Credits = "\n<Font:Arial:16>Version v"@$TWM2::ModVersionString@"" @
                "\n<Font:Arial:14>TWM 2 Developer: Phantom139"@
                "\n<Font:Arial:14>TWM 2 Co-Devs: Dark Dragon DX, DarknessOfLight, Signal360";
 
@@ -127,6 +127,10 @@ package loadmodinfo
     %PGDMsg = "\n<Font:Arial:14>Join the Phantom Games Development community for up to the minute news on TWM2 and our other projects! " @
     "\n http://www.public.phantomdev.net";
     messageClient(%client, 'MsgDebriefAddLine', "", %PGDMsg);
+
+    %gettingStarted = "\n<Font:Arial:14>First time playing TWM2? Use the /help command for a list of chat commands and access the " @
+    "\n Command menu with your [F2] key to get started!";
+    messageClient(%client, 'MsgDebriefAddLine', "", %gettingStarted);
 
    }
 };

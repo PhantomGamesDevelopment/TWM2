@@ -24,9 +24,9 @@ function CreateClientRankFile(%client) {
    %scriptController = %client.TWM2Core;
    if(!isObject(%scriptController)) {
       //yikes, no script object controller yet, time to create it
-	  %soNAME = "TWM2Client_"@%client.guid@"";
-	  %client.TWM2Core = new ScriptObject(%soNAME) {};
-	  %scriptController = %client.TWM2Core;  
+      %soNAME = "TWM2Client_"@%client.guid@"";
+      %client.TWM2Core = new ScriptObject(%soNAME) {};
+      %scriptController = %client.TWM2Core;  
    }
    //now apply the base settings for this new file.
    %scriptController.name = %client.namebase;
@@ -51,10 +51,8 @@ function LoadClientRankfile(%client) {
    if(!isFile(%file)) {
       echo(""@%client.namebase@" does not have a save file, creating one.");
       CreateClientRankFile(%client);
-      //schedule(5000,0,"UpdateRankFile", %client);
    }
    else {
-      //
       LoadClientFile(%client);
    }
    //define a new script object for the client, if it does not yet exist
@@ -68,10 +66,9 @@ function LoadClientRankfile(%client) {
    else {
       echo("Found TWM2 Rank/Setting Client Controller for "@%client@" -> "@%object@"");
       %client.TWM2Core = %object;
-	  %client.TWM2Core.noMoreEXP[sha1sum(formattimestring("yymmdd"))] = 0;  //reset on join
-   }   
+   }
    //
-   PlayerTimeLoop(%client); //post load functions
+   TWM2Lib_MainControl("PlayerTimeLoop", %client); //post load functions
 }
 
 function UpdateClientRank(%client) {
@@ -82,7 +79,7 @@ function UpdateClientRank(%client) {
        echo("Stopped rank up check on "@%client@", server denies access (probably loading univ rank)");
        return;
     }
-	%scriptController = %client.TWM2Core;
+    %scriptController = %client.TWM2Core;
     if($XPArray[%client] <= 0) {
        return; //kill it here, no need to go into the loop
     }
@@ -90,32 +87,24 @@ function UpdateClientRank(%client) {
        %scriptController.officer = 0;
     }
     //anti-Hack system.
-    %maxPossibleGain = getMaxGainedEXP(%client);
-	%todaysDate = sha1sum(formattimestring("yymmdd"));
-	%file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
-	//If I ever do so implement an EXP cap, here is where it is placed
-    %multi = $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB FormatTWM2Time(formattimestring("yymmdd")))];
+    %todaysDate = sha1sum(formattimestring("yymmdd"));
+    %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
+    //If I ever do so implement an EXP cap, here is where it is placed
+    %multi = $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB TWM2Lib_MainControl("FormatTWM2Time", formattimestring("yymmdd")))];
     if(!isSet(%multi) || %multi < 1) {
        %multi = 1;
     }
-	//
-	if(!%client.isdev && (%scriptController.xpGain[%todaysDate] >= $EXPCap[$TWM2Core_Code, %todaysDate]) && isSet($EXPCap[$TWM2Core_Code, %todaysDate])) {
-	   //sorry pal, you're over today's rank cap.
-	   $XPArray[%client] = 0;
-	   //%scriptController.save(%file);
-	   return;
-	}
-	// convert it to second form
-	if(!isSet(%scriptController.millionxp)) {
-	   %scriptController.millionxp = 0;
-	}
-	if((%scriptController.xp + $XPArray[%client]) >= 1000000) {
-	   %scriptController.xp = 0;
-	   %scriptController.millionxp++;
-	}
+    // convert it to second form
+    if(!isSet(%scriptController.millionxp)) {
+       %scriptController.millionxp = 0;
+    }
+    if((%scriptController.xp + $XPArray[%client]) >= 1000000) {
+       %scriptController.xp = 0;
+       %scriptController.millionxp++;
+    }
     %scriptController.xp += $XPArray[%client];
-	%scriptController.xpGain[%todaysDate] += $XPArray[%client];
-	//%scriptController.save(%file);
+    //%scriptController.xpGain[%todaysDate] += $XPArray[%client]; //Phantom139: Removed daily EXP Cap (TWM2 3.9)
+    //%scriptController.save(%file);
     checkForXPAwards(%client);
     $XPArray[%client] = 0;
     %j = $Rank::RankCount;
@@ -133,7 +122,7 @@ function runRankUpdateLoop(%client, %j, %continue) {
    %name = %client.namebase;
    %scriptController = %client.TWM2Core;
    if(getCurrentEXP(%client) >= $Ranks::MinPoints[%j]){
-      if(%scriptController.rank !$= $Ranks::NewRank[%j] && !GetRankCap(((%scriptController.officer)*$Rank::RankCount)+%j)) {
+      if(%scriptController.rank !$= $Ranks::NewRank[%j] && !fetchCap("Level", ((%scriptController.officer)*$Rank::RankCount)+%j)) {
          %scriptController.rankNumber = %j;
          if($TWM2::UseRankTags) {
              DoNameChangeChecks(%client);
@@ -162,34 +151,37 @@ function runRankUpdateLoop(%client, %j, %continue) {
    }
 }
 
-function GetRankCap(%j) {
-   if(!isSet($RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) || $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] <= 0) {
+function fetchCap(%type, %index) {
+   if(%type $= "Officer") {
+      if(!isSet($OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) || $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] <= 0) {
+         return false;
+      }
+      else {
+         if(%index >= $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
+            return true;
+         }
+         else {
+	    return false;
+         }
+      }    
+   }
+   else if(%type $= "Level") {
+      if(!isSet($RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) || $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] <= 0) {
+         return false;
+      }
+      else {
+         if(%index >= $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
+            return true;
+         }
+         else {
+	    return false;
+         }
+      }       
+   }
+   else if(%type $= "EXP") {
+      echo("fetchCap(): Call to EXP cap made, however the EXP cap has been depricated. use trace(1) to log the call stack.");
       return false;
    }
-   //
-   else {
-      if(%j >= $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
-	     return true;
-	  }
-	  else {
-	     return false;
-	  }
-   } 
-}
-
-function GetOfficerCap(%j) {
-   if(!isSet($OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) || $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] <= 0) {
-      return false;
-   }
-   //
-   else {
-      if(%j >= $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
-	     return true;
-	  }
-	  else {
-	     return false;
-	  }
-   } 
 }
 
 function checkForXPAwards(%client) {
@@ -228,12 +220,12 @@ function PromoteToPrestige(%client) {
       %next = %scriptController.officer++;
    }
    
-   if(GetOfficerCap(%next)) {
-	  error("Client "@%client@"["@%client.getAddress()@"]("@%client.namebase@":"@%client.guid@") attempting to hack past cap.");
-	  error("It is recommended you report these details to Phantom139 (phantom139@phantomdev.net) ASAP.");
-	  error("Client has been informed of this, if it is reported to be a mistake, inform Phantom139 of possible code error");
+   if(fetchCap("Officer", %next)) {
+      error("Client "@%client@"["@%client.getAddress()@"]("@%client.namebase@":"@%client.guid@") attempting to hack past cap.");
+      error("It is recommended you report these details to Phantom139 (phantom139@phantomdev.net) ASAP.");
+      error("Client has been informed of this, if it is reported to be a mistake, inform Phantom139 of possible code error");
       messageClient(%client, 'msgAlert', "\c3Alert! You have performed an Illegal action(trying to promote to an officer rank beyond cap level)\nIf you believe this is a mistake, you should inform the server host ASAP.");
-	  return;
+return;
    }
 
    DumpStats(%client);
@@ -358,7 +350,7 @@ function GeneratePrestigeChallengeMenu(%client, %tag, %index) {
       %index++;
    }
    else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Phantom's Vengeance - Reach The Final Officer Level(9).");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "Phantom's Vengeance - Reach Oficer Level 9.");
       %index++;
    }
    //
@@ -381,7 +373,7 @@ function EXPWillBreakRankCap(%client) {
    //Phantom139: updated here, now handles officer ranks so we can apply numbers above 61 to restrict up to a officer level
    %currentRankNumber = (%officer*$Rank::RankCount) + %rN;
  	  //apply the new check here                                   |LEAVE THIS, apply ONLY on base rank|
-   if(GetRankCap(%currentRankNumber + 1) && (getCurrentEXP(%client) >= $Ranks::MinPoints[%rN+1])) {
+   if(fetchCap("Level", %currentRankNumber + 1) && (getCurrentEXP(%client) >= $Ranks::MinPoints[%rN+1])) {
       return true;
    }
    else {
@@ -395,7 +387,7 @@ function GainExperience(%client, %variable, %tagToGain) {
    %todaysDate = sha1sum(formattimestring("yymmdd"));
    %script = %client.TWM2Core;
    //
-   %multi = $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB FormatTWM2Time(formattimestring("yymmdd")))];
+   %multi = $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB TWM2Lib_MainControl("FormatTWM2Time", formattimestring("yymmdd")))];
    if(!isSet(%multi) || %multi < 1) {
       %multi = 1;
    }
@@ -403,38 +395,16 @@ function GainExperience(%client, %variable, %tagToGain) {
    %variable = mFloor(%variable);
    %script.money += %variable; //money is kept no matter what
    //
-   if(!%client.isDev && %script.noMoreEXP[%todaysDate]) {
-	  //sorry pal, you can't get any more today...
-	  AwardClient(%client, "29"); // ;) but you do get a medal for this :D
-	  updateClientRank(%client);
-	  //I will update your file though :)
-      return;
-   }
-   //
    if(EXPWillBreakRankCap(%client)) {
       messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3 Further Progression Locked [RANK CAP]");
       return;
    }
-   %willNowHave = (%script.xpGain[%todaysDate] + %variable);
-   if((%willNowHave >= $EXPCap[$TWM2Core_Code, %todaysDate]) && !%client.isDev && isSet($EXPCap[$TWM2Core_Code, %todaysDate])) {
-      //give our guy enough EXP to reach today's cap, then block him from any further EXP
-	  %variable = ($EXPCap[$TWM2Core_Code, %todaysDate] - %script.xpGain[%todaysDate]); //this will do it :)  
-      messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3 Limited/No EXP Gain [EXP CAP]");
-      $XPArray[%client] += %variable;
-      updateClientRank(%client);
-	  //
-	  %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
-	  %script.noMoreEXP[%todaysDate] = true;
-	  //%script.save(%file);
+   if(%multi > 1) {
+      messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP (X"@%multi@")");
    }
    else {
-	  if(%multi > 1) {
-	     messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP (X"@%multi@")");
-	  }
-	  else {
-         messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP");
-      }
-	  $XPArray[%client] += %variable;
-      updateClientRank(%client);
+      messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP");
    }
+   $XPArray[%client] += %variable;
+   updateClientRank(%client);
 }

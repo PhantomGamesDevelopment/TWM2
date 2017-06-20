@@ -66,7 +66,7 @@ function HelljumpGame::pickPlayerSpawn(%game, %client, %respawn) {
    // place this client on his own team, '%respawn' does not ever seem to be used
    //we no longer care whether it is a respawn since all spawns use same points.
    %loc = $HellJump::SpawnGraph[$CurrentMission];
-   %position = vectorAdd(%loc,VectorAdd(getRandomPosition(20,1), "0 0 10"));
+   %position = vectorAdd(%loc,VectorAdd(TWM2Lib_MainControl("getRandomPosition", 20 TAB 1), "0 0 10"));
    return %position;//return %game.pickTeamSpawn(%client.team);
 }
 
@@ -1106,7 +1106,7 @@ function HelljumpGame::GoNextStrike(%game) {
 function HelljumpGame::DefineProperSpawnPos(%game, %loc) {
    %zCheck = GetTerrainHeight(%loc);
    %zProper = %zCheck + 10;
-   %p1 = getRandomPosition(40, 1);
+   %p1 = TWM2Lib_MainControl("getRandomPosition", 40 TAB 1);
    %p2 = vectorAdd(%loc, %p1);
    %zCheck2 = GetTerrainHeight(%p2);
    %zProperf = %zCheck2 + 10;
@@ -2840,15 +2840,6 @@ function GenerateHelljumpChallengeMenu(%client, %tag, %index) {
    }
    else {
       messageClient( %client, 'SetLineHud', "", %tag, %index, "Points Jackpot - Earn 25,000 Points (Team Score).");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("ThatsAHind")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "That's a Hind - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "That's a Hind - Use a Hind Pilot Killstreak in Helljump.");
       %index++;
    }
    //

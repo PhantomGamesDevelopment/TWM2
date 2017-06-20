@@ -8,7 +8,6 @@ Error("********************************************");
                                                    //Mod Systems
 exec("serverControl.cs");                          //Server Settings
 
-exec("scripts/TWM2/Systems/List.cs");               //List Instance
 exec("scripts/TWM2/Systems/Directorate.cs");        //Client Container Objects
 exec("scripts/TWM2/Systems/AdvancedRankSystem.cs"); //Adv. Ranks
 exec("scripts/TWM2/Systems/MainControl.cs");        //TWM2 Core Functions
@@ -26,7 +25,6 @@ exec("scripts/TWM2/Systems/Weather.cs");            //Weather functions
 exec("scripts/TWM2/Systems/Keystrokes.cs");         //Insert/Delete functions
 exec("scripts/TWM2/Systems/Killstreak.cs");         //Killstreak Superweapons
 exec("scripts/TWM2/Missions/MissionCore.cs");       //Missions
-exec("scripts/TWM2/Systems/ScoreHudInventory.cs");  //F2 Inventory
 exec("scripts/TWM2/Systems/Scoremenucmds.cs");      //Score Menu load again to update the inv. changes
 exec("scripts/TWM2/Systems/SuccessiveKills.cs");    //Successive Kills
 exec("scripts/TWM2/Systems/PieceData.cs");          //Piece Data, /undo Command
@@ -38,7 +36,6 @@ exec("scripts/TWM2/Systems/weaponModes.cs");        //Global Defines for Weapon 
 exec("scripts/TWM2/AI/DroneAI.cs");                 //Drones
 
 exec("scripts/TWM2/Objects/MissileSatellite.cs");   //Missile Satellite
-exec("scripts/TWM2/Objects/MedalSeal.cs");
 exec("scripts/TWM2/Systems/HarbingersWrath.cs");    //Harbinger's Wrath
 
                                                    //Mod Dependancies
@@ -46,7 +43,6 @@ exec("scripts/TWM2/Systems/HarbingersWrath.cs");    //Harbinger's Wrath
 exec("scripts/TWM2/loadmenu.cs");                  //loadscreen
 exec("scripts/TWM2/WeaponFunctions.cs");           //TWM2 Weapon Functions
 exec("scripts/TWM2/Zombie/LoadZombieScripts.cs");  //TWM2 Zombie Script Load
-exec("scripts/TWM2/Soldier/LoadSoldierScripts.cs");//TWM2 Soldier Script Load
 exec("scripts/TWM2/CustomCamera.cs");              //TWM2 Cameras
 exec("scripts/TWM2/CustomArmors.cs");              //TWM2 Armors
 exec("scripts/TWM2/ArmorFunctions.cs");            //TWM2 Armors Functions
@@ -70,6 +66,7 @@ exec("scripts/TWM2/ExteriorFunctioning/BloodEffects.cs");//TWM2 Gore Mod
 exec("scripts/TWM2/ExteriorFunctioning/ProtPatch.cs");   //Alv's CCM Patch
 exec("scripts/TWM2/ExteriorFunctioning/PConFunctions.cs");//P-Con Functions 1.7
 exec("scripts/TWM2/ExteriorFunctioning/ArmorDamageEffects.cs");//Loop Damages
+exec("scripts/TWM2/ExteriorFunctioning/cmdArmor.cs");  //cmdArmor patch
 
                                                    //Chat Commands
 
@@ -135,7 +132,6 @@ exec("scripts/weapons/MGs/MRXX.cs");               //MRXX ZC4 Machine Gun
 exec("scripts/weapons/Shotguns/Model1887.cs");     //Model 1887 Shotgun
 exec("scripts/weapons/Other/AcidCannon.cs");       //Zombie Lord/Demon Lord Acid Cannon
 exec("scripts/weapons/Other/NapalmLauncher.cs");   //ZH7C8 Napalm Launcher
-exec("scripts/weapons/Construction/RCMissile.cs"); //RC Launcher
 
 BuildDeconList();  //build decon. list (con tool)
 

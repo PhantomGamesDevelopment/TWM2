@@ -128,13 +128,13 @@ $dFlag[3] = "Charlie";
 
 //XP Stuffz
 $TWM2::TeamKillDeduct = 10; //Lose this Much For TK
-$TWM2::KillXPGain = 5;      //Gain for killing PLAYERS not zombies
+$TWM2::KillXPGain = 15;      //Gain for killing PLAYERS not zombies
 
 $TWM2::MaxZombies = 150; //You can set this now too :)
 $TWM2::CanSpawnZ = 1;    //0 Disables Zombie Spawning
 
 $TWM2::ZombieName[1] = "Zombie";
-$TWM2::ZombieName[2] = "Ravenger Zombie";
+$TWM2::ZombieName[2] = "Ravager Zombie";
 $TWM2::ZombieName[3] = "Zombie Lord";
 $TWM2::ZombieName[4] = "Demon Zombie";
 $TWM2::ZombieName[5] = "Air Rapier Zombie";
@@ -145,11 +145,11 @@ $TWM2::ZombieName[9] = "Shifter Zombie";
 $TWM2::ZombieName[10] = "Zombie Summoner";
 $TWM2::ZombieName[11] = "Sniper Zombie";
 $TWM2::ZombieName[12] = "Ultra Demon Zombie";
-$TWM2::ZombieName[13] = "Volatile Ravenger";
+$TWM2::ZombieName[13] = "Volatile Ravager";
 $TWM2::ZombieName[14] = "Slingshot AA Zombie";
 $TWM2::ZombieName[15] = "Wraith Zombie";
 $TWM2::ZombieName[16] = "General Rog";
-$TWM2::ZombieName[17] = "Elite Demon Zombie";
+$TWM2::ZombieName[17] = "Elite Demon";
 
 $TWM2::BossName["Windshear"] = "Colonel Windshear";
 $TWM2::BossName["GoL"] = "The Ghost Of Lightning";
@@ -177,21 +177,21 @@ $TWM2::BossName["Vardison2"] = "Lord Vardison";
 $TWM2::BossName["Vardison3"] = "Lord Vardison";
 $TWM2::BossName["ShadeLord"] = "The Shade Lord";
                                                     //-----OFFICIAL VALUES-----\\
-$TWM2::ZombieXPAward[1] = 2;                        //           2
-$TWM2::ZombieXPAward[2] = 4;                        //           4
-$TWM2::ZombieXPAward[3] = 12;                       //           12
-$TWM2::ZombieXPAward[4] = 8;                        //           8
-$TWM2::ZombieXPAward[5] = 7;                        //           7
-$TWM2::ZombieXPAward[6] = 55;                       //           55
-$TWM2::ZombieXPAward[9] = 6;                        //           6
-$TWM2::ZombieXPAward[10] = 15;                      //           15
-$TWM2::ZombieXPAward[11] = 13;                      //           13
-$TWM2::ZombieXPAward[12] = 20;                      //           20
-$TWM2::ZombieXPAward[13] = 8;                       //           8
-$TWM2::ZombieXPAward[14] = 17;                      //           17
-$TWM2::ZombieXPAward[15] = 35;                      //           35
+$TWM2::ZombieXPAward[1] = 1;                        //           1
+$TWM2::ZombieXPAward[2] = 5;                        //           5
+$TWM2::ZombieXPAward[3] = 18;                       //           18
+$TWM2::ZombieXPAward[4] = 5;                        //           5
+$TWM2::ZombieXPAward[5] = 10;                       //           10
+$TWM2::ZombieXPAward[6] = 100;                      //           100
+$TWM2::ZombieXPAward[9] = 3;                        //           3
+$TWM2::ZombieXPAward[10] = 65;                      //           65
+$TWM2::ZombieXPAward[11] = 10;                      //           10
+$TWM2::ZombieXPAward[12] = 25;                      //           25
+$TWM2::ZombieXPAward[13] = 7;                       //           7
+$TWM2::ZombieXPAward[14] = 20;                      //           20
+$TWM2::ZombieXPAward[15] = 50;                      //           50
 $TWM2::ZombieXPAward[16] = 1000;                    //          1000
-$TWM2::ZombieXPAward[17] = 15;                      //           15
+$TWM2::ZombieXPAward[17] = 25;                      //           25
 
 $TWM2::BossXPAward["Yvex"] = 10000;                 //          10000
 $TWM2::BossXPAward["CnlWindshear"] = 12500;         //          12500

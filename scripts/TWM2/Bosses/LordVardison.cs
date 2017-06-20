@@ -578,6 +578,11 @@ function SpawnVardison(%position) {
       Datablock = "VardisonStageOneArmor";
    };
    %Cpos = vectorAdd(%position, "0 0 5");
+
+   %Boss.isMultiPhaseBoss = true;
+   %Boss.isFirstPhase = true;
+   %Boss.isFinalPhase = false;
+
    InitiateBoss(%Boss, "Vardison1");
 
    %Boss.team = 30;
@@ -609,6 +614,11 @@ function SpawnVardison2(%position) {
       Datablock = "VardisonStageTwoArmor";
    };
    %Cpos = vectorAdd(%position, "0 0 5");
+
+   %Boss.isMultiPhaseBoss = true;
+   %Boss.isFirstPhase = false;
+   %Boss.isFinalPhase = false;
+
    InitiateBoss(%Boss, "Vardison2");
 
    %Boss.team = 30;
@@ -649,6 +659,11 @@ function SpawnVardison3(%position) {
       Datablock = "VardisonStageThreeArmor";
    };
    %Cpos = vectorAdd(%position, "0 0 5");
+
+   %Boss.isMultiPhaseBoss = true;
+   %Boss.isFirstPhase = false;
+   %Boss.isFinalPhase = true;
+
    InitiateBoss(%Boss, "Vardison3");
 
    %Boss.team = 30;
@@ -777,16 +792,7 @@ function VardisonThink(%Boss) {
                   }
                }
             }
-            //Phase 2 is stationary unless you're on Hard or WTF mode
-            if(%dLevel >= 3) {
-               %needMove = true;
-            }
-            else {
-               //Phase Two only Super-Lunges if you get too close
-               if(getWord(VardisonGetClosest(%Boss), 1) <= 50) {
-                  %needMove = true;
-               }
-            }
+            %needMove = true;
          }
       case 3:
          //Did I just get a kill?
@@ -912,7 +918,7 @@ function VardisonDoMove(%Boss) {
             %Boss.hastarget = 1;
          }
          %vector = ZgetFacingDirection(%Boss, %clPlayer, %pos);
-         %vector = vectorscale(%vector, $Zombie::DForwardSpeed*1.8);
+         %vector = vectorscale(%vector, $Zombie::DForwardSpeed*5);
          %upvec = "150";
          %x = Getword(%vector,0);
          %y = Getword(%vector,1);
@@ -1013,7 +1019,7 @@ function VardisonSummonMinions(%Boss) {
 }
 
 function VardisonDoMinionSummon(%Boss) {
-   %posSpawn = vectorAdd(%Boss.getPosition(), getRandomposition(50, 1));
+   %posSpawn = vectorAdd(%Boss.getPosition(), TWM2Lib_MainControl("getRandomPosition", 50 TAB 1));
    %spawnFire = new ParticleEmissionDummy(){
       position = vectoradd(%posSpawn, "0 0 0.5");
       dataBlock = "defaultEmissionDummy";
@@ -1530,7 +1536,7 @@ function VardisonNamedAttack(%Boss, %attack, %args) {
       
       case "RiftGate":
          %pos = getField(%args, 0);
-         %goPos = RMPG();
+         %goPos = TWM2Lib_MainControl("RMPG");
          %TargetSearchMask = $TypeMasks::PlayerObjectType;
          %c = createEmitter(%pos, FlashLEmitter, "1 0 0");      //Rotate it
          %c.schedule(1000, delete);
@@ -1674,6 +1680,7 @@ function VardisonManager::summonOrb(%this, %boss) {
 }
 
 function VardisonManager::orbKill(%this, %boss, %orb) {
+   %restoreCount = 0;
    for(%i = 0; %i < ClientGroup.getCount(); %i++) {
       %cl = ClientGroup.getObject(%i);
       if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {
@@ -1686,9 +1693,11 @@ function VardisonManager::orbKill(%this, %boss, %orb) {
          //If Vardison Restores HP from rift kills, do that now :P
          if($TWM2::Vardison_OrbRegenHP[$TWM2::VardisonDifficulty]) {
             %boss.setDamageLevel(%boss.getDamageLevel() - 0.35);
+            %restoreCount++;
          }
       }
    }
+   MessageAll('msgRestore', "\c5Lord Vardison has absorbed the life energy of "@%restoreCount@" combatants.");
    %wipeEmit = new ParticleEmissionDummy(){
       position = %orb.getPosition();
       dataBlock = "defaultEmissionDummy";
@@ -1766,23 +1775,6 @@ function ShadowOrb::damageObject(%data, %targetObject, %sourceObject, %position,
    %damageScale = %data.damageScale[%damageType];
    if(%damageScale !$= "") {
       %amount *= %damageScale;
-   }
-   if (!$TeamDamage && !%targetObject.getDataBlock().deployedObject) {
-      if(isObject(%sourceObject)) {
-         if(%sourceObject.getDataBlock().catagory $= "Vehicles") {
-            %attackerTeam = getVehicleAttackerTeam(%sourceObject);
-         }
-         else {
-            %attackerTeam = %sourceObject.team;
-         }
-      }
-      if ((%targetObject.getTarget() != -1) && isTargetFriendly(%targetObject.getTarget(), %attackerTeam)) {
-         %curDamage = %targetObject.getDamageLevel();
-         %availableDamage = %targetObject.getDataBlock().disabledLevel - %curDamage - 0.05;
-         if (%amount > %availableDamage) {
-            %amount = %availableDamage;
-         }
-      }
    }
    if (%amount > 0) {
       %targetObject.applyDamage(%amount);

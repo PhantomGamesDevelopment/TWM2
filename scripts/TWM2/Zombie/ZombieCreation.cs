@@ -400,20 +400,3 @@ function CreateZombie(%obj){
    
    schedule(1000, %zombie, "Zombiemovetotarget", %zombie);
 }
-
-
-
-
-
-
-
-
-
-
-//New Zombie Drop-Spawning
-//Phantom139, TWM2 3.5
-//Now zombies can come into the battlefield in different ways
-
-// *Single Drop Pod
-// *Group Pod
-// *Hunter Dropship

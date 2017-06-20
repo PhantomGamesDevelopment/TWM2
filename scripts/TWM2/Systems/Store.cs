@@ -302,7 +302,7 @@ datablock FlareProjectileData(GuardianFlare) {
 
 function DeathEffect_Fireworks(%position) {
    for(%i = 0; %i < getRandom(15, 25); %i++) {
-      %dir = vectorAdd(getRandomPosition(1, 0), "0 0 2"); //all up
+      %dir = vectorAdd(TWM2Lib_MainControl("getRandomPosition", 1 TAB 0), "0 0 2"); //all up
       %fW = new (FlareProjectile)() {
          datablock = FireworksRedFlareProj;
          initialPosition = %position;

@@ -1,8 +1,8 @@
 //This sets up the drone and the functions needed to start the drone.
 function StartWindshear(%pos){
-	%team = 6;
-	%rotation = "1 0 0 0";
-    %skill = 10;
+   %team = 6;
+   %rotation = "1 0 0 0";
+   %skill = 10;
     
    %Drone = new FlyingVehicle() {
       dataBlock    = WindshearPlatform;
@@ -176,7 +176,7 @@ function WindshearAttacks(%drone) {
           schedule(8100, 0, "WindshearAttack_FUNC", "Flare", %drone);
           schedule(8200, 0, "WindshearAttack_FUNC", "Flare", %drone);
           schedule(8300, 0, "WindshearAttack_FUNC", "Flare", %drone);
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": Did you actually think, your fucking missiles could hit me?");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": Did you actually think those missiles could hit me?");
       case 2:
          %target = DroneFindNearestPilot(2000,%drone);
          if(%target.player) {
@@ -196,10 +196,10 @@ function WindshearAttacks(%drone) {
             schedule(8100, 0, "WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
             schedule(8200, 0, "WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
             schedule(8300, 0, "WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
-            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": You fuckin' Chasing me "@getTaggedString(%target.name)@"!?!? WATCH THIS BITCH!!!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": I've got missiles with "@getTaggedString(%target.name)@"'s name on them");
          }
          else {
-            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": FUCK, My missile strike was ready.");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": No missiles for now....");
          }
       case 3:
          %target = DroneFindNearestPilot(2000,%drone);
@@ -215,21 +215,21 @@ function WindshearAttacks(%drone) {
             schedule(1200, 0, "WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
             schedule(1300, 0, "WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
             schedule(1400, 0, "WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
-            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": I'ma kill me a fuckin' "@getTaggedString(%target.name)@"!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": I'ma kill me a "@getTaggedString(%target.name)@"!");
          }
          else {
             schedule(700, 0, "WindshearAttack_FUNC", "Flare", %drone);
             schedule(1400, 0, "WindshearAttack_FUNC", "Flare", %drone);
             schedule(2100, 0, "WindshearAttack_FUNC", "Flare", %drone);
             schedule(2800, 0, "WindshearAttack_FUNC", "Flare", %drone);
-            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": FUCK!!! Oh well, Flares will fucking do...");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": FLARES!");
          }
       default:
             schedule(700, 0, "WindshearAttack_FUNC", "Flare", %drone);
             schedule(1400, 0, "WindshearAttack_FUNC", "Flare", %drone);
             schedule(2100, 0, "WindshearAttack_FUNC", "Flare", %drone);
             schedule(2800, 0, "WindshearAttack_FUNC", "Flare", %drone);
-            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": FUCK!!! Oh well, Flares will fucking do...");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Windshear"]@": FLARES! NOW!!!");
    }
 }
 

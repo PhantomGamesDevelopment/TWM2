@@ -375,12 +375,12 @@ function DominationGame::CheckIntermit(%game) {
 
 function DominationGame::pickTeamSpawn(%game, %team) {
    if(%team == 1) {
-      %pos = vectorAdd($DominationGame::SpawnLocation1[$CurrentMission],GetRandomPosition(5,1));
+      %pos = vectorAdd($DominationGame::SpawnLocation1[$CurrentMission], TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
       %pos = vectorAdd(%pos,"0 0 5");
       return %pos;
    }
    else if(%team == 2) {
-      %pos = vectorAdd($DominationGame::SpawnLocation2[$CurrentMission],GetRandomPosition(5,1));
+      %pos = vectorAdd($DominationGame::SpawnLocation2[$CurrentMission], TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
       %pos = vectorAdd(%pos,"0 0 5");
       return %pos;
    }
