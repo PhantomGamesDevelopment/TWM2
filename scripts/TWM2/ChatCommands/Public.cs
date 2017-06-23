@@ -1097,51 +1097,51 @@ function parsePublicCommands(%sender, %command, %args) {
 
       //checkStats: check the current rank information on a player
       case "checkstats":
-         %clientController = %sender.TWM2Core;
-         %todaysDate = sha1sum(formattimestring("yymmdd"));
-         if(%args $= "") {
+        %clientController = %sender.TWM2Core;
+        %todaysDate = sha1sum(formattimestring("yymmdd"));
+        if(%args $= "") {
             if(%clientController.officer $= "") {
-               %clientController.officer = 0;
+                %clientController.officer = 0;
             }
             %name = %sender.NameBase;
             %Rank = ""@$Prestige::Name[%clientController.officer]@""@%clientController.rank@"";
             %Stats = getCurrentEXP(%sender);
             for(%i = $Rank::RankCount; %i >= 0; %i--){
-               if(%stats >= $Ranks::MinPoints[%i]){
-                  %nextrank = ""@$Prestige::Name[%clientController.officer]@""@$Ranks::NewRank[(%i + 1)]@"";
-                  %nextrankXP = $Ranks::MinPoints[(%i + 1)];
-                  %i = 0;
-               }
+                if(%stats >= $Ranks::MinPoints[%i]){
+                    %nextrank = ""@$Prestige::Name[%clientController.officer]@""@$Ranks::NewRank[(%i + 1)]@"";
+                    %nextrankXP = $Ranks::MinPoints[(%i + 1)];
+                    %i = 0;
+                }
             }
             if(%Stats >= $Ranks::MinPoints[$Rank::RankCount]) {
-               messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@", You Currently Have "@%stats@" XP, and you have gained "@%clientController.xpGain[%todaysDate]@" EXP today.");
-               return 1;
+                messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@", You Currently Have "@printCurrentEXP(%sender)@" XP.");
+                return 1;
             }
             else {
-               messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@", You Currently Have "@%stats@" XP, and you have gained "@%clientController.xpGain[%todaysDate]@" EXP today. Your next rank is "@%nextrank@" and you need "@(%nextrankXP - %stats)@" XP.");
-               return 1;
+                messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@", You Currently Have "@printCurrentEXP(%sender)@" XP. Your next rank is "@%nextrank@" and you need "@(%nextrankXP - %stats)@" XP.");
+                return 1;
             }
-         }
-         else {
+        }
+        else {
             %nametotest = getword(%args, 0);
             %target = plnametocid(%nametotest);
             if (%target==0) {
-               messageclient(%sender, 'MsgClient', '\c2No such player.');
-               return 1;
+                messageclient(%sender, 'MsgClient', '\c2No such player.');
+                return 1;
             }
             //
             %targetController = %target.TWM2Core;
             if(%targetController.officer $= "") {
-               %targetController.officer = 0;
+                %targetController.officer = 0;
             }
             %Rank = ""@$Prestige::Name[%targetController.officer]@""@%targetController.rank@"";
-            %Stats = getCurrentEXP(%target);
+            %Stats = printCurrentEXP(%target);
             messageClient(%sender, 'MsgClient', "\c2"@%target.namebase@"'s Rank is "@%Rank@" and "@%target.namebase@"'s XP is "@%stats@".");
             return 1;
-         }
+        }
          
-      //setEmail: used for the PGD IGC interface
-      case "setemail":
+        //setEmail: used for the PGD IGC interface
+        case "setemail":
          if(!isSet(%args)) {
             return 1;
          }

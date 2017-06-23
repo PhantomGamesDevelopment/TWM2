@@ -23,16 +23,17 @@ function LoadUniversalBuilding(%client, %file) {
 }
 
 function Univ_Loader::onLine(%this, %line) {
-   %validity = ScanForValidLine(%line);
-   if(!%validity) {
-      messageClient(%this.client, 'MsgClient', "\c5PGD: ERROR, you are requesting a corrupted file.");
-      messageClient(%this.client, 'MsgClient', "\c5Corrupted files contain custom content not signed by the server.");
-      messageClient(%this.client, 'MsgClient', "\c5ABORTING CONNECTION.");
-      %this.valid = 0;
-      %this.disconnect();
-      return;
-   }
-   $PGDBuffer[%this.client, %this.load] = $PGDBuffer[%this.client, %this.load] @ "\n" @ %line;
+    %validity = TWM2Lib_PGDConnect_Support("fileValidator_Building", %line);
+    if(!%validity) {
+        error("Building load validity check failed for "@ %this.client.namebase @" ("@%this.client@"), client may be attempting to load unfriendly code.");
+        messageClient(%this.client, 'MsgClient', "\c5PGD: ERROR, you are requesting a corrupted file.");
+        messageClient(%this.client, 'MsgClient', "\c5Corrupted files contain custom content not signed by the server.");
+        messageClient(%this.client, 'MsgClient', "\c5ABORTING CONNECTION.");
+        %this.valid = 0;
+        %this.disconnect();
+        return;
+    }
+    $PGDBuffer[%this.client, %this.load] = $PGDBuffer[%this.client, %this.load] @ "\n" @ %line;
 }
 
 function Univ_Loader::onConnectFailed(%this) {

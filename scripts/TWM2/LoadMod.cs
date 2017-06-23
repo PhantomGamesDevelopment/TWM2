@@ -32,10 +32,7 @@ exec("scripts/TWM2/Systems/DChalg.cs");             //Daily Challenges
 exec("scripts/TWM2/Systems/ArmorEnergyShields.cs"); //Armor Shields
 exec("scripts/TWM2/Systems/Store.cs");              //Mula
 exec("scripts/TWM2/Systems/weaponModes.cs");        //Global Defines for Weapon Modes
-
 exec("scripts/TWM2/AI/DroneAI.cs");                 //Drones
-
-exec("scripts/TWM2/Objects/MissileSatellite.cs");   //Missile Satellite
 exec("scripts/TWM2/Systems/HarbingersWrath.cs");    //Harbinger's Wrath
 
                                                    //Mod Dependancies

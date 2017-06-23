@@ -8,7 +8,7 @@ function TWM2Lib_MainControl(%functionName, %arguments) {
             %client = %arguments;
             $XPArray[%client] = 0;
             %client.CheckPGDConnect();  // <-- Used for Universal features
-            PGD_IsFileDL("Data/"@%client.guid@"/Ranks/TWM2/Saved.TWMSave");
+            TWM2Lib_PGDConnect_Support("performFileCheck", "Data/"@%client.guid@"/Ranks/TWM2/Saved.TWMSave");
             schedule(5000, 0, "LoadUniversalRank", %client);
 
             setDefaultInventory(%client);

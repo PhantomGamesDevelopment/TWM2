@@ -841,13 +841,13 @@ switch$ (%arg1)
         case "RanksSM":
              messageClient( %client, 'SetScoreHudSubheader', "", ""@%arg2.namebase@"'s Stats Card" );
              %client.SCMPage = "SM";
-	     %targetController = %arg2.TWM2Core;
+	         %targetController = %arg2.TWM2Core;
              //Specs
              if(%targetController.officer $= "") {
                 %targetController.officer = 0;
              }
              %rank = ""@$Prestige::Name[%targetController.officer]@""@%targetController.rank@"";
-             %XP = ((%targetController.millionxp) * 1000000) + %targetController.xp;
+             %XP = printCurrentEXP(%arg2);
              %mula = %targetController.money;
              %phrs = %targetController.phrase;
              %gmeTime = %targetController.gameTime;

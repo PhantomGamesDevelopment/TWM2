@@ -87,7 +87,6 @@ function UpdateClientRank(%client) {
        %scriptController.officer = 0;
     }
     //anti-Hack system.
-    %todaysDate = sha1sum(formattimestring("yymmdd"));
     %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
     //If I ever do so implement an EXP cap, here is where it is placed
     %multi = $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB TWM2Lib_MainControl("FormatTWM2Time", formattimestring("yymmdd")))];
@@ -103,8 +102,7 @@ function UpdateClientRank(%client) {
        %scriptController.millionxp++;
     }
     %scriptController.xp += $XPArray[%client];
-    //%scriptController.xpGain[%todaysDate] += $XPArray[%client]; //Phantom139: Removed daily EXP Cap (TWM2 3.9)
-    //%scriptController.save(%file);
+
     checkForXPAwards(%client);
     $XPArray[%client] = 0;
     %j = $Rank::RankCount;
@@ -131,7 +129,7 @@ function runRankUpdateLoop(%client, %j, %continue) {
          if($Prestige::Name[%scriptController.officer] >= 1) {
             $Prestige::Name[%scriptController.officer] = "";
          }
-         messageAll('msgclient',"\c2"@%name@" has become a "@$Prestige::Name[%scriptController.officer]@""@$Ranks::NewRank[%j]@" with a XP of "@getCurrentEXP(%client)@"!");
+         messageAll('msgclient',"\c2"@%name@" has become a "@$Prestige::Name[%scriptController.officer]@""@$Ranks::NewRank[%j]@" with a XP of "@printCurrentEXP(%client)@"!");
          messageclient(%client, 'Msgclient', "~wfx/Bonuses/Nouns/General.wav");
          bottomPrint(%client, "Excelent work "@%name@", you have been promoted to the rank of: "@$Prestige::Name[%scriptController.officer]@""@$Ranks::NewRank[%j]@"!", 5, 2 );
          echo("Promotion: "@%name@" to Rank "@$Ranks::NewRank[%j]@", XP: "@getCurrentEXP(%client)@".");
@@ -205,6 +203,14 @@ function getCurrentEXP(%client) {
    %scriptController = %client.TWM2Core;
    %xp = %scriptController.xp + (1000000*%scriptController.millionxp);
    return %xp;
+}
+
+function printCurrentEXP(%client) {
+    //print function shows a more readable version of EXP
+    %scriptController = %client.TWM2Core;
+    %milXP = %scriptController.millionxp;
+    %nonMilXP = %scriptControler.xp;
+    return %milXP @ "" @ %nonMilXP;
 }
 
 //PRESTIGE RANKS
