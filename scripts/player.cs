@@ -2418,9 +2418,6 @@ function Armor::onAdd(%data,%obj)
       %obj.rechargeShields(%data.shieldHeathCharge);
       %obj.activeShieldEffect();
    }
-   //TWM2: Activate Armor Effect
-   if(isClientControlledPlayer(%obj))
-   %obj.client.setActiveAE(%obj.client.getActiveAE());
 }
 
 function Armor::onRemove(%this, %obj)
@@ -3414,9 +3411,20 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
       }
       return;
    }
-   if(%damageType == $DamageType::Impact)
-      if(%sourceObject.getDamageState() $= "Destroyed")
+   if(%damageType == $DamageType::Impact) {
+      if(%sourceObject.getDamageState() $= "Destroyed") {
          return;
+      }
+	  //Check for the mother of all humiliating deaths :)
+	  if(%targetObject.getState() $= "dead") {
+		  if(%sourceObject.getClassName() $= "FlyingVehicle" && %sourceObject.lastPilot.getState() $= "dead") {
+			 if((%sourceObject.lastPilot.client.lastKilledBy == %targetObject.client) && (%sourceObject.lastPilot.client.lastKilledByPlayer == %targetObject)) {
+		        //You just got rekt....
+				CompleteNWChallenge(%sourceObject.lastPilot.client, "Uncomprehendable");
+			 }
+		  }
+	  }
+   }
    %armortype = %targetobject.getdatablock().getname();
    if (%damageType == $DamageType::ZAcid && %armortype !$= "ZombieArmor" && %armortype !$= "FZombieArmor" && %armortype !$= "LordZombieArmor" && %armortype !$= "DemonZombieArmor" && %armortype !$= "DemonMotherZombieArmor" && %armortype !$= "RapierZombieArmor" && %targetobject.infected != 1 && (%sourceObject.isZombie == 1 || %sourceObject.isBoss == 1)){
 	   %targetObject.Infected = 1;
@@ -3673,12 +3681,24 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
             }
          }
          //
+		 if(%targetObject.getControllingClient() !$= "") {
+		    %sourceClient.TWM2Core.PvPZombieKills++;
+			if(%sourceClient.TWM2Core.PvPZombieKills >= 100) {
+			   CompleteNWChallenge(%sourceClient, "Defectionator1");
+			   if(%sourceClient.TWM2Core.PvPZombieKills >= 250) {
+				  CompleteNWChallenge(%sourceClient, "Defectionator2");
+			      if(%sourceClient.TWM2Core.PvPZombieKills >= 500) {
+				     CompleteNWChallenge(%sourceClient, "Defectionator3");
+				  }
+			   }
+			}
+		 }		 
+		 //
          Game.ZkillUpdateScore(%sourceClient, %sourceObject, %targetObject);
          %sourceObject.zombiekillsinarow++;
          DoZKillstreakChecks(%sourceClient);
       }
       else {
-         %targetObject.client.playDeathArmorEffect();
          if(%targetObject.team != %sourceClient.team && !%targetObject.isBoss) {
             if(isObject(%sourceClient) && %sourceClient.IsActivePerk("Double Down")) {
                GainExperience(%sourceClient, $TWM2::KillXPGain * 2, "[D-D]Enemy Killed ");
@@ -3686,6 +3706,37 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
             else {
                GainExperience(%sourceClient, $TWM2::KillXPGain, "Enemy Killed ");
             }
+			//Kill Recording..
+			if(!%targetObject.isZombie && %sourceObject.isZombie) {
+				%sourceClient.TWM2Core.PvPHumanKills++;
+				if(%sourceClient.TWM2Core.PvPHumanKills >= 50) {
+				   CompleteNWChallenge(%sourceClient, "Infectionator1");
+				   if(%sourceClient.TWM2Core.PvPHumanKills >= 100) {
+					  CompleteNWChallenge(%sourceClient, "Infectionator2");
+					  if(%sourceClient.TWM2Core.PvPHumanKills >= 250) {
+						 CompleteNWChallenge(%sourceClient, "Infectionator3");
+					  }
+				   }
+				}			   
+			}
+			else {
+				%sourceClient.TWM2Core.PvPKills++;
+				if(%sourceClient.TWM2Core.PvPKills >= 100) {
+				   CompleteNWChallenge(%sourceClient, "Slayer1");
+				   if(%sourceClient.TWM2Core.PvPKills >= 250) {
+					  CompleteNWChallenge(%sourceClient, "Slayer2");
+					  if(%sourceClient.TWM2Core.PvPKills >= 500) {
+						 CompleteNWChallenge(%sourceClient, "Slayer3");
+						 if(%sourceClient.TWM2Core.PvPKills >= 750) {
+							CompleteNWChallenge(%sourceClient, "Slayer4");
+						    if(%sourceClient.TWM2Core.PvPKills >= 1000) {
+							   CompleteNWChallenge(%sourceClient, "Slayer5");
+							}
+						 }
+					  }
+				   }
+				}				
+			}
             //Team Gain Perk
             if(isObject(%sourceClient) && %sourceClient.IsActivePerk("Team Gain")) {
                %TargetSearchMask = $TypeMasks::PlayerObjectType;
@@ -3706,14 +3757,14 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
             %sourceObject.kills[%damageType]++;
             PerformSuccessiveKills(%sourceObject, %damageType);
             //
-            if(%sourceObject.killsinarow2 == 10) {
+            if(%sourceObject.killsinarow2 == 10 && !(%sourceObject.isBoss || %sourceObject.isZombie)) {
                MessageAll('MsgWOW', "\c2TWM2: "@%sourceClient.namebase@" is on a killsteak of 10");
                awardClient(%sourceClient, "14");
             }
-            if(%sourceObject.killsinarow2 == 20) {
+            if(%sourceObject.killsinarow2 == 20 && !(%sourceObject.isBoss || %sourceObject.isZombie)) {
                MessageAll('MsgWOW', "\c2TWM2: "@%sourceClient.namebase@" is on a killsteak of 20");
             }
-            if(%sourceObject.killsinarow2 == 25) {
+            if(%sourceObject.killsinarow2 == 25 && !(%sourceObject.isBoss || %sourceObject.isZombie)) {
                MessageAll('MsgWOW', "\c2TWM2: "@%sourceClient.namebase@" is on a killsteak of 25");
             }
             DoKillstreakChecks(%sourceClient);
@@ -3742,8 +3793,7 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
 }
 
 function Armor::onImpact(%data, %playerObject, %collidedObject, %vec, %vecLen) {
-	%data.damageObject(%playerObject, 0, VectorAdd(%playerObject.getPosition(),%vec),
-	%vecLen * %data.speedDamageScale , $DamageType::Ground);
+	%data.damageObject(%playerObject, 0, VectorAdd(%playerObject.getPosition(),%vec), %vecLen * %data.speedDamageScale , $DamageType::Ground);
 //	if (%collidedObject & $TypeMasks::PlayerObjectType) {
 //		if (%collidedObject.getState() !$= "Dead") {
 //			%data.damageObject(%collidedObject, 0, VectorAdd(%playerObject.getPosition(),%vec),

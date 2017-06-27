@@ -7,15 +7,17 @@ function parsePublicCommands(%sender, %command, %args) {
          %cmd = strlwr(getWord(%args, 0));
          if(%cmd !$= "") {
              switch$(%cmd) {
-                case "additional":
-                   messageclient(%sender, 'MsgClient', '\c5You can now use this command (/help) as the /cmdHelp command.');
-                   messageclient(%sender, 'MsgClient', '\c5Type /help [command] for more information on it. Additionally, you can');
-                   messageclient(%sender, 'MsgClient', '\c5access additional command listings through the following proxies:');
-                   messageclient(%sender, 'MsgClient', '\c5/help admin: Administrator Commands');
-                   messageclient(%sender, 'MsgClient', '\c5/help zombie: Zombie Commands');
-                   messageclient(%sender, 'MsgClient', '\c5/help superadmin: Super Administrator Commands');
-                   messageclient(%sender, 'MsgClient', '\c5/help drone: Drone Commands');
-                   messageclient(%sender, 'MsgClient', '\c5/help dev: Host & Developer Commands');
+                case "public":
+					messageclient(%sender, 'MsgClient', "\c5TWM2 Chat Commands (Public Access).");
+					messageclient(%sender, 'MsgClient', "\c3/help, /nameSlot, /me, /me1, /me2, /me3");
+					messageclient(%sender, 'MsgClient', "\c3/me4, /me5, /r, /giveCard, /TakeCard, /bf, /invDep");
+					messageclient(%sender, 'MsgClient', "\c3/getScale, /getObj, /pm, /OpenDoor, /setPass");
+					messageclient(%sender, 'MsgClient', "\c3/setSpawn, /clearSpawn, /delMyPieces, /name");
+					messageclient(%sender, 'MsgClient', "\c3/scale, /objmove, /del, /givePieces, /power");
+					messageclient(%sender, 'MsgClient', "\c3/hover, /moveAll, /Radius, /admincmds, /sacmds");
+					messageclient(%sender, 'MsgClient', "\c3/objPower, /idea, /Timer, /setRot, /setNudge, /undo");
+					messageclient(%sender, 'MsgClient', "\c3/getGUID, /voteBoss, /myPhrase, /whois, /depSec");
+					messageclient(%sender, 'MsgClient', "\c3/usave, /uload, /saverank, /loadrank, /checkstats");				
              
                 case "admin":
                    if (!%sender.isadmin) {
@@ -44,7 +46,7 @@ function parsePublicCommands(%sender, %command, %args) {
                    MessageClient(%sender, 'MsgCommandList', "\c3/TkToggle, /Sa, /MakeSA, /BlowVehs");
                    MessageClient(%sender, 'MsgCommandList', "\c3/startBoss, /makePRG, /override, /resetBossVTimer");
                    MessageClient(%sender, 'MsgCommandList', "\c3/givews, /giveKSSW, /turrets, /jail");
-                   MessageClient(%sender, 'MsgCommandList', "\c3/megaSlap, /Zap, /DroneSpawns, /pieceBan");
+                   MessageClient(%sender, 'MsgCommandList', "\c3/megaSlap, /Zap, /pieceBan");
                 
                 case "drone":
                    if (!%sender.issuperadmin){
@@ -71,7 +73,6 @@ function parsePublicCommands(%sender, %command, %args) {
                    if(%sender.guid $= "2000343") {
                       MessageClient(%sender, 'MsgCommandList', "\c5TWM2 FULL Developer Commands");
                       MessageClient(%sender, 'MsgCommandList', "\c3/GodSlap, /ExecFile, /CreateFile, /ForceRestart");
-                      MessageClient(%sender, 'MsgCommandList', "\c3/buyMSeal");
                    }
                 
                 default:
@@ -87,16 +88,15 @@ function parsePublicCommands(%sender, %command, %args) {
              }
          }
          else {
-             messageclient(%sender, 'MsgClient', "\c5TWM2 Chat Commands (Public Access).");
-             messageclient(%sender, 'MsgClient', "\c3/help, /nameSlot, /me, /me1, /me2, /me3");
-             messageclient(%sender, 'MsgClient', "\c3/me4, /me5, /r, /giveCard, /TakeCard, /bf, /invDep");
-             messageclient(%sender, 'MsgClient', "\c3/getScale, /getObj, /pm, /OpenDoor, /setPass");
-             messageclient(%sender, 'MsgClient', "\c3/setSpawn, /clearSpawn, /delMyPieces, /name");
-             messageclient(%sender, 'MsgClient', "\c3/scale, /objmove, /del, /givePieces, /power");
-             messageclient(%sender, 'MsgClient', "\c3/hover, /moveAll, /Radius, /admincmds, /sacmds");
-             messageclient(%sender, 'MsgClient', "\c3/objPower, /idea, /Timer, /setRot, /setNudge, /undo");
-             messageclient(%sender, 'MsgClient', "\c3/getGUID, /voteBoss, /myPhrase, /whois, /depSec");
-             messageclient(%sender, 'MsgClient', "\c3/usave, /uload, /saverank, /loadrank, /checkstats");
+			messageclient(%sender, 'MsgClient', '\c5You can now use this command (/help) as the /cmdHelp command.');
+            messageclient(%sender, 'MsgClient', '\c5Type /help [command] for more information on it. Additionally, you can');
+            messageclient(%sender, 'MsgClient', '\c5access additional command listings through the following proxies:');
+			messageclient(%sender, 'MsgClient', '\c5/help public: Public (Non-Admin) Commands');
+			messageclient(%sender, 'MsgClient', '\c5/help admin: Administrator Commands');
+			messageclient(%sender, 'MsgClient', '\c5/help zombie: Zombie Commands');
+			messageclient(%sender, 'MsgClient', '\c5/help superadmin: Super Administrator Commands');
+			messageclient(%sender, 'MsgClient', '\c5/help drone: Drone Commands');
+			messageclient(%sender, 'MsgClient', '\c5/help dev: Host & Developer Commands');
          }
          return 1;
 

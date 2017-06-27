@@ -32,6 +32,7 @@ package TWM2Mission_RainDown {
       }
       //
       if(%living == 0) {
+		 CompleteNWChallenge(%group.participant[1], "ExpertGunner");
          AwardClient(%group.participant[1], 32);
          %group.CompleteMission();
       }

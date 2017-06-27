@@ -46,8 +46,8 @@ datablock SeekerProjectileData(GrappleShot) {
                                  // very quickly - bramage
                                  
    lifetimeMS          = 500; // z0dd - ZOD, 4/14/02. Was 6000
-   muzzleVelocity      = 250.0;
-   maxVelocity         = 350.0; // z0dd - ZOD, 4/14/02. Was 80.0
+   muzzleVelocity      = 200.0;
+   maxVelocity         = 300.0; // z0dd - ZOD, 4/14/02. Was 80.0
    turningSpeed        = 54.0;
    acceleration        = 50.0;
 
@@ -94,7 +94,7 @@ datablock ShapeBaseImageData(GrappleHookImage) {
    projectileType = SeekerProjectile;
 
    usesEnergy = true;
-   minEnergy = 3;
+   minEnergy = 60;
 
    stateName[0] = "Activate";
    stateTransitionOnTimeout[0] = "ActivateReady";

@@ -246,53 +246,201 @@ function DefaultGame::ZkillUpdateScore(%game, %client, %implement, %zombie){
 }
 
 function GameConnection::AwardZombieKill(%client, %zombie, %implement) {
-   if(%client $= "" || %client == 0) {
-      return;
-   }
-   %zombieType = %zombie.type;
-   //stop right now
-   if(%zombie.isBoss && %zombieType != 16) {
-      return;
-   }
-   if(%zombieType $= "") {
-      %zombieType = 1;
-   }
-   //Subduction for implement
-   if(%implement.getClassName() $= "Turret") {
-      %xpGain = mfloor($TWM2::ZombieXPAward[%zombieType] / 3);
-   }
-   else if(%implement.getDataBlock().catagory $= "Vehicles") {
-      %xpGain = mfloor($TWM2::ZombieXPAward[%zombieType] / 2);
-   }
-   else {
-      %xpGain = $TWM2::ZombieXPAward[%zombieType];
-   }
-   //
-   if(%client.IsActivePerk("Double Down")) {
-      GainExperience(%client, %xpGain*2, "[D-D]"@$TWM2::ZombieName[%zombieType]@" Killed ");
-   }
-   else {
-      GainExperience(%client, %xpGain, ""@$TWM2::ZombieName[%zombieType]@" Killed ");
-   }
-   //Team Gain Perk
-   if(%client.IsActivePerk("Team Gain")) {
-      %TargetSearchMask = $TypeMasks::PlayerObjectType;
-      InitContainerRadiusSearch(%client.player.getPosition(), 20, %TargetSearchMask); //small distance
-      while ((%potentialTarget = ContainerSearchNext()) != 0){
-         if (%potentialTarget.getPosition() != %pos) {
-            if(%potentialTarget.client.team == %client.team && %potentialTarget.client != %client) {
-               GainExperience(%potentialTarget.client, %xpGain, "Team gain from "@%client.namebase@" ");
-            }
-         }
-      }
-   }
-   //some zombies have weapons, throw it :)
-   %zombie.throwweapon(1);
-   //End
-   //HellJump?
-   if($TWM::PlayingHellJump || $TWM::PlayingHorde) {
-      Game.OnZombieDeath(%client, %zombie);
-   }
+	if(%client $= "" || %client == 0) {
+		return;
+	}
+	%zombieType = %zombie.type;
+	//stop right now
+	if(%zombie.isBoss && %zombieType != 16) {
+		return;
+	}
+	if(%zombieType $= "") {
+		%zombieType = 1;
+	}
+	%client.TWM2Core.zombiekills[%zombieType]++;
+	//Zombie Slayer Challenges (TWM2 3.9.1)
+	switch(%zombieType) {
+		case 1:
+			if(%client.TWM2Core.zombiekills[1] >= 2500) {
+				CompleteNWChallenge(%client, "NormHunter1");
+				if(%client.TWM2Core.zombiekills[1] >= 5000) {
+					CompleteNWChallenge(%client, "NormHunter2");
+					if(%client.TWM2Core.zombiekills[1] >= 10000) {
+						CompleteNWChallenge(%client, "NormHunter3");
+					}
+				}
+			}	
+
+		case 2:
+			if(%client.TWM2Core.zombiekills[2] >= 1000) {
+				CompleteNWChallenge(%client, "RavHunter1");
+				if(%client.TWM2Core.zombiekills[2] >= 2500) {
+					CompleteNWChallenge(%client, "RavHunter2");
+					if(%client.TWM2Core.zombiekills[2] >= 5000) {
+						CompleteNWChallenge(%client, "RavHunter3");
+					}
+				}
+			}		
+		
+		case 3:
+			if(%client.TWM2Core.zombiekills[3] >= 1000) {
+				CompleteNWChallenge(%client, "LordHunter1");
+				if(%client.TWM2Core.zombiekills[3] >= 2000) {
+					CompleteNWChallenge(%client, "LordHunter2");
+					if(%client.TWM2Core.zombiekills[3] >= 3000) {
+						CompleteNWChallenge(%client, "LordHunter3");
+					}
+				}
+			}			
+		
+		case 4:
+			if(%client.TWM2Core.zombiekills[4] >= 1000) {
+				CompleteNWChallenge(%client, "DemonHunter1");
+				if(%client.TWM2Core.zombiekills[4] >= 2500) {
+					CompleteNWChallenge(%client, "DemonHunter2");
+					if(%client.TWM2Core.zombiekills[4] >= 5000) {
+						CompleteNWChallenge(%client, "DemonHunter3");
+					}
+				}
+			}		
+		
+		case 5:
+			if(%client.TWM2Core.zombiekills[5] >= 1500) {
+				CompleteNWChallenge(%client, "AirRapHunter1");
+				if(%client.TWM2Core.zombiekills[5] >= 3500) {
+					CompleteNWChallenge(%client, "AirRapHunter2");
+					if(%client.TWM2Core.zombiekills[5] >= 6000) {
+						CompleteNWChallenge(%client, "AirRapHunter3");
+					}
+				}
+			}		
+		
+		case 6:
+			if(%client.TWM2Core.zombiekills[6] >= 500) {
+				CompleteNWChallenge(%client, "DLordHunter1");
+				if(%client.TWM2Core.zombiekills[6] >= 1000) {
+					CompleteNWChallenge(%client, "DLordHunter2");
+					if(%client.TWM2Core.zombiekills[6] >= 1500) {
+						CompleteNWChallenge(%client, "DLordHunter3");
+					}
+				}
+			}		
+			
+		case 9:
+			if(%client.TWM2Core.zombiekills[9] >= 1500) {
+				CompleteNWChallenge(%client, "ShifterHunter1");
+				if(%client.TWM2Core.zombiekills[9] >= 3000) {
+					CompleteNWChallenge(%client, "ShifterHunter2");
+					if(%client.TWM2Core.zombiekills[9] >= 6000) {
+						CompleteNWChallenge(%client, "ShifterHunter3");
+					}
+				}
+			}
+
+		case 10:
+			if(%client.TWM2Core.zombiekills[10] >= 1000) {
+				CompleteNWChallenge(%client, "SummonerHunter1");
+				if(%client.TWM2Core.zombiekills[10] >= 2500) {
+					CompleteNWChallenge(%client, "SummonerHunter2");
+					if(%client.TWM2Core.zombiekills[10] >= 5000) {
+						CompleteNWChallenge(%client, "SummonerHunter3");
+					}
+				}
+			}	
+
+		case 11:
+			if(%client.TWM2Core.zombiekills[11] >= 1000) {
+				CompleteNWChallenge(%client, "SniperHunter1");
+				if(%client.TWM2Core.zombiekills[11] >= 2500) {
+					CompleteNWChallenge(%client, "SniperHunter2");
+					if(%client.TWM2Core.zombiekills[11] >= 5000) {
+						CompleteNWChallenge(%client, "SniperHunter3");
+					}
+				}
+			}	
+
+		case 12:
+			if(%client.TWM2Core.zombiekills[12] >= 1000) {
+				CompleteNWChallenge(%client, "UDemHunter1");
+				if(%client.TWM2Core.zombiekills[12] >= 2500) {
+					CompleteNWChallenge(%client, "UDemHunter2");
+					if(%client.TWM2Core.zombiekills[12] >= 5000) {
+						CompleteNWChallenge(%client, "UDemHunter3");
+					}
+				}
+			}
+
+		case 13:
+			if(%client.TWM2Core.zombiekills[13] >= 1000) {
+				CompleteNWChallenge(%client, "VRavHunter1");
+				if(%client.TWM2Core.zombiekills[13] >= 2500) {
+					CompleteNWChallenge(%client, "VRavHunter2");
+					if(%client.TWM2Core.zombiekills[13] >= 5000) {
+						CompleteNWChallenge(%client, "VRavHunter3");
+					}
+				}
+			}	
+
+		case 14:
+			if(%client.TWM2Core.zombiekills[14] >= 1000) {
+				CompleteNWChallenge(%client, "SSHunter1");
+				if(%client.TWM2Core.zombiekills[14] >= 2500) {
+					CompleteNWChallenge(%client, "SSHunter2");
+					if(%client.TWM2Core.zombiekills[14] >= 5000) {
+						CompleteNWChallenge(%client, "SSHunter3");
+					}
+				}
+			}		
+
+		case 15:
+			if(%client.TWM2Core.zombiekills[15] >= 500) {
+				CompleteNWChallenge(%client, "WraithHunter1");
+				if(%client.TWM2Core.zombiekills[15] >= 750) {
+					CompleteNWChallenge(%client, "WraithHunter2");
+					if(%client.TWM2Core.zombiekills[15] >= 1000) {
+						CompleteNWChallenge(%client, "WraithHunter3");
+					}
+				}
+			}				
+	}
+
+	//END
+	//Subduction for implement
+	if (%implement.getClassName() $= "Turret") {
+		%xpGain = mfloor($TWM2::ZombieXPAward[%zombieType] / 3);
+	}
+	else if(%implement.getDataBlock().catagory $= "Vehicles") {
+		%xpGain = mfloor($TWM2::ZombieXPAward[%zombieType] / 2);
+	}
+	else {
+		%xpGain = $TWM2::ZombieXPAward[%zombieType];
+	}
+	//
+	if(%client.IsActivePerk("Double Down")) {
+		GainExperience(%client, %xpGain*2, "[D-D]"@$TWM2::ZombieName[%zombieType]@" Killed ");
+	}
+	else {
+		GainExperience(%client, %xpGain, ""@$TWM2::ZombieName[%zombieType]@" Killed ");
+	}
+	//Team Gain Perk
+	if(%client.IsActivePerk("Team Gain")) {
+		%TargetSearchMask = $TypeMasks::PlayerObjectType;
+		InitContainerRadiusSearch(%client.player.getPosition(), 20, %TargetSearchMask); //small distance
+		while ((%potentialTarget = ContainerSearchNext()) != 0){
+			if (%potentialTarget.getPosition() != %pos) {
+				if(%potentialTarget.client.team == %client.team && %potentialTarget.client != %client) {
+					GainExperience(%potentialTarget.client, %xpGain, "Team gain from "@%client.namebase@" ");
+				}
+			}
+		}
+	}
+	//some zombies have weapons, throw it :)
+	%zombie.throwweapon(1);
+	//End
+	//HellJump?
+	if($TWM::PlayingHellJump || $TWM::PlayingHorde) {
+		Game.OnZombieDeath(%client, %zombie);
+	}
 }
 
 function serverCmdCheckHTilt(%client) {
@@ -472,144 +620,170 @@ function E_Sigma(%from, %to, %formula) {
 //to better control the current problems in the boss system.
 
 function TWM2Damage(%projectile, %target, %amount, %dType, %damLoc, %type) {
-   //terrain block
-   if(%target.getType() & ($TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType)) {
-      return;
-   }
+	//terrain block
+	if(%target.getType() & ($TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType)) {
+		return;
+	}
 
-   %data         = %projectile.getDatablock();
-   %sourceObject = %projectile.sourceObject;
-   %sourceClient = %sourceObject.client;
-   %targetClient = %target.client $= "" ? 0 : %target.client;
-   %TDB          = %target.getDatablock();
-   if(isObject(%sourceObject)) {
-      %SDB       = %sourceObject.getDatablock();
-   }
-   else {
-      %SDB       = "";
-   }
-   %total        = 1;
+	%data         = %projectile.getDatablock();
+	%sourceObject = %projectile.sourceObject;
+	%sourceClient = %sourceObject.client;
+	%targetClient = %target.client $= "" ? 0 : %target.client;
+	%TDB          = %target.getDatablock();
+	if(isObject(%sourceObject)) {
+		%SDB       = %sourceObject.getDatablock();
+	}
+	else {
+		%SDB       = "";
+	}
+	%total        = 1;
 
-   switch$(%type) {
-      case "projectile":
-         //
-         %target.headShot = 0; //Reset first
-         if(%sourceClient.ActivePerk["AP Bullets"]) {
-            %total *= 1.5;
-         }
-         if(%targetClient != 0) {
-            if(%targetClient.IsActivePerk("Kevlar Armor")) {
-               %total *= 0.5;
-            }
-         }
-         if(%target.isZombie) {
-            if(Game.CheckModifier("Demonic") == 1) {
-               %total = 0.5;
-            }
-         }
-         //------------------------------------------------------
-         //source object fixing
-         if(strStr(%SDB.getClassName(), "Turret") != -1) {
-            if(%SDB.getName() $= "HarbingerGunshipTurret") {
-               %projectile.sourceObject = %projectile.sourceObject.mountobj;
-            }
-            else if(%SDB.getName() $= "AC130GunshipTurret") {
-               %projectile.sourceObject = %projectile.sourceObject.mountobj;
-            }
-            else if(%SDB.getName() $= "CentaurTurret") {
-               %projectile.sourceObject = %projectile.sourceObject.source;
-            }
-         }
-         //------------------------------------------------------
-         //vehicle kill checking
-         if(strStr(%SDB.getClassName(), "Vehicle") != -1) {
-            if(%target.isPlayer() && %target.getState() $= "dead") {
-               %pl = %sourceObject.getMountNodeObject(0); //the pilot
-               %cl = %pl.client;
-               if(%cl !$= "") {
-                  if(!%targetObject.isAllyBot) {
-                     UpdateVehicleKillFile(%cl, %SDB.getName());
-                  }
-                  //
-                  if(%TDB $= "DemonMotherZombieArmor" && %SDB $= "CentaurVehicle") {
-                     %cl.CDLKills++;
-                     if(%cl.CDLKills >= 5) {
-                        AwardClient(%cl, "19");
-                     }
-                  }
-               }
-            }
-         }
-         //--------------------------------------------------------
-         //Headshot checking
-         if(%damLoc $= "head" && %TDB.getClassName() $= "PlayerData") {
-            if(%data.HeadMultiplier !$= "") {
-               %modifier *= %data.HeadMultiplier;
-            }
-            if(%data.HeadShotKill && $TWM2::HeadshotKill) {
-               %target.headShot = 1;
-            }
-            if(%sourceClient !$= "") {
-               if(%sourceClient.UpgradeOn("HSBullets", %projectile.WeaponImageSource) && $TWM2::HeadshotKill) {
-                  %target.headShot = 1;
-               }
-            }
-            if(%target.headShot) {
-               if(%targetClient != 0 && %targetClient.ActivePerk["Head Guard"]) {
-                  %target.headShot = 0;
-               }
-               else {
-                  if((!%target.isBoss && !%target.noHS) && !(%target.getShieldHealth() > 0)) {
-                     if(%target.isZombie) {
-                        if(%TDB $= "FZombieArmor") {
-                           AwardClient(%sourceClient, "16");
-                        }
-                        if(Game.CheckModifier("WheresMyHead") == 1) {
-                           %target.headShot = 0;
-                        }
-                        else {
-                           %total *= 1000;
-                        }
-                     }
-                     else {
-                        if(%target.isPilot() || %target.vehicleMounted) {
-                           %target.headShot = 0;
-                        }
-                        else {
-                           %total *= 1000;
-                           if(%targetClient != 0) {
-                              BottomPrint(%targetClient, "You Lost Your Head!!!", 3, 1);
-                           }
-                        }
-                     }
-                  }
-               }
-            }
-	     }
-         else if(%damLoc $= "legs") {
-            if(%data.LegsMultiplier !$= "") {
-               %total *= %data.LegsMultiplier;
-	        }
-         }
-         //All done! we should have filled the %total variable
-      case "explosion":
-         %total = 1;
-         if(%dType == $DamageType::RapierShield) {
-            if(%target == %sourceObject || %target.isZombie || %target.isBoss) {
-               %total = 0;
-            }
-         }
-   }
-   
-   %deal = %total * %amount;
-   if(%target.isBoss) {
-      if(%dType == $DamageType::SuperChaingun) {
-         %deal = 0;
-      }
-      %sourceClient.damageToBoss += %deal;
-   }
-   
-   return %total;
+	switch$(%type) {
+		//Projectiles...
+		case "projectile":
+			%target.headShot = 0; //Reset first
+			if(%sourceClient.ActivePerk["AP Bullets"]) {
+				%total *= 1.5;
+			}
+			if(%targetClient != 0) {
+				if(%targetClient.IsActivePerk("Kevlar Armor")) {
+					%total *= 0.5;
+				}
+			}
+			if(%target.isZombie) {
+				if(Game.CheckModifier("Demonic") == 1) {
+					%total = 0.5;
+				}
+			}
+			//------------------------------------------------------
+			//source object fixing
+			if(strStr(%SDB.getClassName(), "Turret") != -1) {
+				if(%SDB.getName() $= "HarbingerGunshipTurret") {
+					%projectile.sourceObject = %projectile.sourceObject.mountobj;
+				}
+				else if(%SDB.getName() $= "AC130GunshipTurret") {
+					%projectile.sourceObject = %projectile.sourceObject.mountobj;
+				}
+				else if(%SDB.getName() $= "CentaurTurret") {
+					%projectile.sourceObject = %projectile.sourceObject.source;
+				}
+			}
+			//------------------------------------------------------
+			//vehicle kill checking
+			if(strStr(%SDB.getClassName(), "Vehicle") != -1) {
+				if(%target.isPlayer() && %target.getState() $= "dead") {
+					%pl = %sourceObject.getMountNodeObject(0); //the pilot
+					%cl = %pl.client;
+					if(%cl !$= "") {
+						if(%target.client !$= "" && !%target.isZombie && %target.team != %pl.team) {
+							%cl.TWM2Core.PvPVehicleKills++;
+							if(%cl.TWM2Core.PvPVehicleKills >= 50) {
+								CompleteNWChallenge(%cl, "VehMans1");
+								if(%cl.TWM2Core.PvPVehicleKills >= 100) {
+									CompleteNWChallenge(%cl, "VehMans2");
+									if(%cl.TWM2Core.PvPVehicleKills >= 250) {
+										CompleteNWChallenge(%cl, "VehMans3");
+									}
+								}
+							}
+						}
+						if(!%target.isAllyBot) {
+							UpdateVehicleKillFile(%cl, %SDB.getName());
+						}
+						//
+						if(%TDB $= "DemonMotherZombieArmor" && %SDB $= "CentaurVehicle") {
+							%cl.CDLKills++;
+							if(%cl.CDLKills >= 5) {
+								AwardClient(%cl, "19");
+							}
+						}
+					}
+				}
+			}
+			//--------------------------------------------------------
+			//Headshot checking
+			if(%damLoc $= "head" && %TDB.getClassName() $= "PlayerData") {
+				if(%data.HeadMultiplier !$= "") {
+					%modifier *= %data.HeadMultiplier;
+				}
+				if(%data.HeadShotKill && $TWM2::HeadshotKill) {
+					%target.headShot = 1;
+				}
+				if(%sourceClient !$= "") {
+					if(%sourceClient.UpgradeOn("HSBullets", %projectile.WeaponImageSource) && $TWM2::HeadshotKill) {
+						%target.headShot = 1;
+					}
+				}
+				if(%target.headShot) {
+					if(%targetClient != 0 && %targetClient.ActivePerk["Head Guard"]) {
+						%target.headShot = 0;
+					}
+					else {
+						if((!%target.isBoss && !%target.noHS) && !(%target.getShieldHealth() > 0)) {
+							if(%target.isZombie) {
+								if(%TDB $= "FZombieArmor") {
+									AwardClient(%sourceClient, "16");
+								}
+								//
+								if(Game.CheckModifier("WheresMyHead") == 1) {
+									%target.headShot = 0;
+								}
+								else {
+									%total *= 1000;
+								}
+							}
+							else {
+								if(%target.isPilot() || %target.vehicleMounted) {
+									%target.headShot = 0;
+								}
+								else {
+									%total *= 1000;
+									if(%targetClient != 0) {
+										BottomPrint(%targetClient, "You Lost Your Head!!!", 3, 1);
+										//Recording...
+										if(%sourceClient !$= "") {
+											%sourceClient.TWM2Core.PvPHeadshotKills++;
+											if(%sourceClient.TWM2Core.PvPHeadshotKills >= 100) {
+												CompleteNWChallenge(%sourceClient, "HSHoncho1");
+												if(%sourceClient.TWM2Core.PvPHeadshotKills >= 200) {
+													CompleteNWChallenge(%sourceClient, "HSHoncho2");
+													if(%sourceClient.TWM2Core.PvPHeadshotKills >= 300) {
+														CompleteNWChallenge(%sourceClient, "HSHoncho3");
+													}
+												}
+											}									 
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else if(%damLoc $= "legs") {
+				if(%data.LegsMultiplier !$= "") {
+					%total *= %data.LegsMultiplier;
+				}
+			}
+			
+		case "explosion":
+			%total = 1;
+			if(%dType == $DamageType::RapierShield) {
+				if(%target == %sourceObject || %target.isZombie || %target.isBoss) {
+					%total = 0;
+				}
+			}
+	}
+
+	%deal = %total * %amount;
+	if(%target.isBoss) {
+		if(%dType == $DamageType::SuperChaingun) {
+			%deal = 0;
+		}
+		%sourceClient.damageToBoss += %deal;
+	}
+
+	return %total;
 }
 
 //===============================================================================

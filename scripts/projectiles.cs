@@ -27,9 +27,8 @@ function ProjectileData::onCollision(%data, %projectile, %targetObject, %modifie
       }
       %targetObject.lastDamagedImage = %projectile.getDatablock().ImageSource;
       %targetObject.damage(%projectile.sourceObject, %position, %modifier * %data.directDamage, %data.directDamageType);
-      
-      //After Damage Stuff For Player Objects
-      if(%targetObject.isPlayer()) {
+
+      if (!(%targetObject.getType() & ($TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType)) && %targetObject.getDataBlock().getClassName() $= "PlayerData") {
          if(%targetObject.getState() $= "dead") {
             if(%projectile.sourceObject.client !$= "") {
                if(%projectile.getDatablock().getName() !$= "GrenadeShrapnel") {

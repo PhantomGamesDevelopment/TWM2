@@ -54,43 +54,118 @@ $Challenge::Info["Nuke3"] = "Nuke Expert III\t1\t50000\tZ-Bomb Killstreak";
 $Challenge::Info["Fission1"] = "Fission Bomb Expert I\t1\t25000\tNone";
 $Challenge::Info["Fission2"] = "Fission Bomb Expert II\t1\t50000\tNone";
 $Challenge::Info["Fission3"] = "Fission Bomb Expert III\t1\t75000\tNone";
+$Challenge::Info["LOAS1"] = "LOAS Expert I\t1\t25000\tNone";
+$Challenge::Info["LOAS2"] = "LOAS Expert II\t1\t50000\tNone";
+$Challenge::Info["LOAS3"] = "LOAS Expert III\t1\t75000\tNone";
 
 //Bosses
 $Challenge::Info["Yvex1"] = "Nightmarish Enterprise\t2\t1000\tNone";
 $Challenge::Info["Yvex2"] = "Darkness Rising\t2\t2500\tNone";
-$Challenge::Info["Yvex3"] = "Shadowy Desecration\t2\t5000\tLord Yvex Recruitable Ally";
+$Challenge::Info["Yvex3"] = "Shadowy Desecration\t2\t5000\tNone";
 $Challenge::Info["CWS1"] = "Fortress In The Sky\t2\t1000\tNone";
 $Challenge::Info["CWS2"] = "Aerieal Nightmare\t2\t2500\tNone";
 $Challenge::Info["CWS3"] = "Harbinger's Bane\t2\t5000\tNone";
 $Challenge::Info["GOL1"] = "Envious Lightning\t2\t1500\tNone";
 $Challenge::Info["GOL2"] = "The Shocking Truth\t2\t3000\tNone";
 $Challenge::Info["GOL3"] = "Severe Thunderstorm\t2\t6500\tNone";
+$Challenge::Info["GOF1"] = "Purifier\t2\t5000\tNone";
+$Challenge::Info["GOF2"] = "Inceneration Ender\t2\t10000\tNone";
+$Challenge::Info["GOF3"] = "Mt. Death Depleter\t2\t20000\tNone";
 $Challenge::Info["Veg1"] = "Flaming Revolt\t2\t1500\tNone";
 $Challenge::Info["Veg2"] = "Burning Frenzy\t2\t3000\tNone";
-$Challenge::Info["Veg3"] = "Firestorm Ender\t2\t6500\tGeneral Vegenor Recruitable Ally";
+$Challenge::Info["Veg3"] = "Firestorm Ender\t2\t6500\tNone";
 $Challenge::Info["LRog1"] = "Revenge Halter\t2\t2500\tNone";
 $Challenge::Info["LRog2"] = "Return to Returner\t2\t5000\tNone";
-$Challenge::Info["LRog3"] = "Payback's A Bitch\t2\t10000\tLord Rog Recruitable Ally";
+$Challenge::Info["LRog3"] = "Payback's A Bitch\t2\t10000\tNone";
 $Challenge::Info["Ins1"] = "El Shipitor\t2\t2500\tNone";
 $Challenge::Info["Ins2"] = "No Gravity, No Problem\t2\t5000\tNone";
-$Challenge::Info["Ins3"] = "Gravitational Influx\t2\t10000\tMajor Insignia Recruitable Ally";
+$Challenge::Info["Ins3"] = "Gravitational Influx\t2\t10000\tNone";
+$Challenge::Info["Stormrider1"] = "Clear Skies\t2\t2500\tNone";
+$Challenge::Info["Stormrider2"] = "Shootdown Master\t2\t5000\tNone";
+$Challenge::Info["Stormrider3"] = "Harbinger Fighter Demolisher\t2\t10000\tNone";
 $Challenge::Info["Treb1"] = "Precious Cargo\t2\t2500\tNone";
 $Challenge::Info["Treb2"] = "Harbinger Denied\t2\t5000\tNone";
 $Challenge::Info["Treb3"] = "Tank Halter\t2\t10000\tNone";
 $Challenge::Info["Vard1"] = "Shining Star\t2\t3500\tNone";
 $Challenge::Info["Vard2"] = "Glare The Dark\t2\t7000\tNone";
-$Challenge::Info["Vard3"] = "Outevil The Wicked\t2\t12500\tLord Vardison Recruitable Ally";
+$Challenge::Info["Vard3"] = "Outevil The Wicked\t2\t12500\tNone";
 $Challenge::Info["VardEasy"] = "The Standard Experience\t2\t7000\tNone";
-$Challenge::Info["VardNorm"] = "Demon Hunter\t2\t1500\tNone";
+$Challenge::Info["VardNorm"] = "Demon Hunter\t2\t15000\tNone";
 $Challenge::Info["VardHard"] = "Master Demon Slayer\t2\t25000\tNone";
 $Challenge::Info["VardWtf"] = "God of the Shadow Realm\t2\t50000\tNone";
-//Blacklist
-$Challenge::Info["Acceptance"] = "Acceptance\t3\t1000\tNone";
-$Challenge::Info["ListHit"] = "Hitlister of The List\t3\t2500\tNone";
-$Challenge::Info["TopHit"] = "Champion Slayer\t3\t3500\tNone";
-$Challenge::Info["ButIm2"] = "But I'm #2\t3\t3500\tNone";
-$Challenge::Info["DF3"] = "Don't Forget #3\t3\t3500\tNone";
+$Challenge::Info["ShadeLord1"] = "Night Stalker\t2\t5000\tNone";
+$Challenge::Info["ShadeLord2"] = "Shadow Embracer\t2\t10000\tNone";
+$Challenge::Info["ShadeLord3"] = "Dawnlight Encarnate\t2\t20000\tNone";
+
+//Blacklist: Depricated 3.9.1
+//$Challenge::Info["Acceptance"] = "Acceptance\t3\t1000\tNone";
+//$Challenge::Info["ListHit"] = "Hitlister of The List\t3\t2500\tNone";
+//$Challenge::Info["TopHit"] = "Champion Slayer\t3\t3500\tNone";
+//$Challenge::Info["ButIm2"] = "But I'm #2\t3\t3500\tNone";
+//$Challenge::Info["DF3"] = "Don't Forget #3\t3\t3500\tNone";
+
+//Wargames
+$Challenge::Info["Slayer1"] = "Slayer I\t3\t1000\tNone";
+$Challenge::Info["Slayer2"] = "Slayer II\t3\t2500\tNone";
+$Challenge::Info["Slayer3"] = "Slayer III\t3\t5000\tNone";
+$Challenge::Info["Slayer4"] = "Slayer IV\t3\t7500\tNone";
+$Challenge::Info["Slayer5"] = "Slayer V\t3\t10000\tNone";
+$Challenge::Info["Defectionator1"] = "Defectionator I\t3\t2500\tNone";
+$Challenge::Info["Defectionator2"] = "Defectionator II\t3\t5000\tNone";
+$Challenge::Info["Defectionator3"] = "Defectionator III\t3\t10000\tNone";
+$Challenge::Info["Infectionator1"] = "Infectionator I\t3\t2500\tNone";
+$Challenge::Info["Infectionator2"] = "Infectionator II\t3\t5000\tNone";
+$Challenge::Info["Infectionator3"] = "Infectionator III\t3\t10000\tNone";
+$Challenge::Info["HSHoncho1"] = "Headshot Honcho I\t3\t2500\tNone";
+$Challenge::Info["HSHoncho2"] = "Headshot Honcho II\t3\t5000\tNone";
+$Challenge::Info["HSHoncho3"] = "Headshot Honcho III\t3\t10000\tNone";
+$Challenge::Info["VehMans1"] = "Vehicular Manslaughter I\t3\t2500\tNone";
+$Challenge::Info["VehMans2"] = "Vehicular Manslaughter II\t3\t5000\tNone";
+$Challenge::Info["VehMans3"] = "Vehicular Manslaughter III\t3\t10000\tNone";
+$Challenge::Info["Assassin"] = "Assassinator\t3\t5000\tNone";
+$Challenge::Info["CompletelyUnexpected"] = "That Was... Unexpected\t3\t50000\tNone";
+$Challenge::Info["Uncomprehendable"] = "Uncomprehendable\t3\t100000\tNone";
+
 //Zombie Slaying
+$Challenge::Info["NormHunter1"] = "Frontline Buster I\t4\t2500\tNone";
+$Challenge::Info["NormHunter2"] = "Frontline Buster II\t4\t5000\tNone";
+$Challenge::Info["NormHunter3"] = "Frontline Buster III\t4\t10000\tNone";
+$Challenge::Info["RavHunter1"] = "Speed Kills I\t4\t2500\tNone";
+$Challenge::Info["RavHunter2"] = "Speed Kills II\t4\t5000\tNone";
+$Challenge::Info["RavHunter3"] = "Speed Kills III\t4\t10000\tNone";
+$Challenge::Info["LordHunter1"] = "The Bigger They Are I\t4\t2500\tNone";
+$Challenge::Info["LordHunter2"] = "The Bigger They Are II\t4\t5000\tNone";
+$Challenge::Info["LordHunter3"] = "The Bigger They Are III\t4\t10000\tNone";
+$Challenge::Info["DemonHunter1"] = "Fire Retardant I\t4\t2500\tNone";
+$Challenge::Info["DemonHunter2"] = "Fire Retardant II\t4\t5000\tNone";
+$Challenge::Info["DemonHunter3"] = "Fire Retardant III\t4\t10000\tNone";
+$Challenge::Info["AirRapHunter1"] = "Bat Slayer I\t4\t2500\tNone";
+$Challenge::Info["AirRapHunter2"] = "Bat Slayer II\t4\t5000\tNone";
+$Challenge::Info["AirRapHunter3"] = "Bat Slayer III\t4\t10000\tNone";
+$Challenge::Info["DLordHunter1"] = "Hellspawn Erradicator I\t4\t2500\tNone";
+$Challenge::Info["DLordHunter2"] = "Hellspawn Erradicator II\t4\t5000\tNone";
+$Challenge::Info["DLordHunter3"] = "Hellspawn Erradicator III\t4\t10000\tNone";
+$Challenge::Info["ShifterHunter1"] = "Anti-Warp I\t4\t2500\tNone";
+$Challenge::Info["ShifterHunter2"] = "Anti-Warp II\t4\t5000\tNone";
+$Challenge::Info["ShifterHunter3"] = "Anti-Warp III\t4\t10000\tNone";
+$Challenge::Info["SummonerHunter1"] = "Horde Halter I\t4\t2500\tNone";
+$Challenge::Info["SummonerHunter2"] = "Horde Halter II\t4\t5000\tNone";
+$Challenge::Info["SummonerHunter3"] = "Horde Halter III\t4\t10000\tNone";
+$Challenge::Info["SniperHunter1"] = "Scope Breaker I\t4\t2500\tNone";
+$Challenge::Info["SniperHunter2"] = "Scope Breaker II\t4\t5000\tNone";
+$Challenge::Info["SniperHunter3"] = "Scope Breaker III\t4\t10000\tNone";
+$Challenge::Info["UDemHunter1"] = "Runner Down I\t4\t2500\tNone";
+$Challenge::Info["UDemHunter2"] = "Runner Down II\t4\t5000\tNone";
+$Challenge::Info["UDemHunter3"] = "Runner Down III\t4\t10000\tNone";
+$Challenge::Info["VRavHunter1"] = "C4 Coming Through I\t4\t2500\tNone";
+$Challenge::Info["VRavHunter2"] = "C4 Coming Through II\t4\t5000\tNone";
+$Challenge::Info["VRavHunter3"] = "C4 Coming Through III\t4\t10000\tNone";
+$Challenge::Info["SSHunter1"] = "De-Flakerizer I\t4\t2500\tNone";
+$Challenge::Info["SSHunter2"] = "De-Flakerizer II\t4\t5000\tNone";
+$Challenge::Info["SSHunter3"] = "De-Flakerizer III\t4\t10000\tNone";
+$Challenge::Info["WraithHunter1"] = "Anti Spec-Ops I\t4\t2500\tNone";
+$Challenge::Info["WraithHunter2"] = "Anti Spec-Ops II\t4\t5000\tNone";
+$Challenge::Info["WraithHunter3"] = "Anti Spec-Ops III\t4\t10000\tNone";
 
 //Events
 $Challenge::Info["NewYearsEve"] = "New Years Eve Fireworks\t5\t1500\tJavelin Hellclass";
@@ -122,6 +197,9 @@ $Challenge::Info["Milestone25"] = "Milestone 25\t9\t25000\tNone";
 $Challenge::Info["ArmyOf50Stopped"] = "Army Of 50 Stopped\t9\t50000\tSecond Chance Perk";
 $Challenge::Info["Angel"] = "Angel\t9\t500\tNone";
 $Challenge::Info["ZBomber"] = "Z-Bomber\t9\t2000\tNone";
+$Challenge::Info["FirstBlood"] = "First Blood\t9\t10000\tNone";
+$Challenge::Info["SpeedSlayer"] = "Speed Slayer\t9\t20000\tNone";
+$Challenge::Info["HighScorer"] = "High Scorer\t9\t25000\tNone";
 
 //Helljump
 $Challenge::Info["GroupBuster"] = "Group Buster\t10\t5000\tNone";
@@ -139,9 +217,16 @@ $Challenge::Info["LifeGiver"] = "Giver of Life\t10\t7500\tNone";
 //From The Top
 $Challenge::Info["SimonSays"] = "Simon Says\t11\t1000\tNone";
 $Challenge::Info["FromTheTop"] = "From The Top\t11\t1000\tNone";
+$Challenge::Info["NaturalLeader"] = "Natural Leader\t11\t2500\tNone";
 $Challenge::Info["GoldStar"] = "Gold Star\t11\t1000\tNone";
 $Challenge::Info["Faster"] = "Faster!\t11\t250\tNone";
 $Challenge::Info["EpicFailure"] = "Epic Failure\t11\t5\tNone";
+$Challenge::Info["ExpertGunner"] = "Expert AC-130 Gunner\t11\t25000\tNone";
+$Challenge::Info["Survivalist"] = "Survivalist\t11\t25000\tNone";
+$Challenge::Info["Invisibreh"] = "Shhh.. I'm Invisibreh\t11\t25000\tNone";
+$Challenge::Info["WeakGunship"] = "I have you now!\t11\t25000\tNone";
+$Challenge::Info["InvasionBuster"] = "Invade THIS!\t11\t25000\tNone";
+$Challenge::Info["SurvivalistExtreme"] = "Extreme Survivalist\t11\t50000\tNone";
 
 //Prestige
 $Challenge::Info["Prestge1"] = "Instructive Private\t12\t100\tNone";
@@ -251,7 +336,7 @@ function CompleteNWChallenge(%client, %name) {
    %taskReward = getField($Challenge::Info[%name], 3);
    //
    GainExperience(%client, %taskXPGive, "Challenge "@%taskName@" Completed ");
-   BottomPrint(%client, "CHALLEGNE COMPLETE: "@%taskName@" \n +"@%taskXPGive@"XP, Reward: "@%taskReward@"", 2, 3);
+   BottomPrint(%client, "CHALLENGE COMPLETE: "@%taskName@" \n +"@%taskXPGive@"XP, Reward: "@%taskReward@"", 2, 3);
    MessageClient(%client, 'MsgSound', "~wfx/Bonuses/Nouns/General.wav");
    MessageAll('msgComplete', "\c5"@%client.namebase@" completed challenge "@%taskName@"");
    //
@@ -265,13 +350,13 @@ function CompleteNWChallenge(%client, %name) {
 function GenerateChallegnesMenu(%client, %tag, %index) {
    %scriptController = %client.TWM2Core;
    %xp = getCurrentEXP(%client);
-   messageClient( %client, 'SetLineHud', "", %tag, %index, "Other Challenges:");
+   messageClient( %client, 'SetLineHud', "", %tag, %index, "Select a category to view challenges:");
    %index++;
    //
    messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t6>PGD Challenges (Daily/Weekly/Monthly)</a>");
    %index++;
    if(%xp >= $Ranks::MinPoints[13]) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t1>Killstreak Challenges</a>");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t1>Killstreak Challenges</a>: Tasks for calling in advanced support");
       %index++;
    }
    else {
@@ -280,25 +365,24 @@ function GenerateChallegnesMenu(%client, %tag, %index) {
    }
    //
    if(%xp >= $Ranks::MinPoints[18]) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t2>Boss Challenges</a>");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t2>Boss Challenges</a>: Tasks for eliminating the toughest enemies in TWM2");
       %index++;
    }
    else {
       messageClient( %client, 'SetLineHud', "", %tag, %index, "Boss Challenges - Reach Gunnary Sergeant To Unlock");
       %index++;
    }
-   //
    if(%xp >= $Ranks::MinPoints[23]) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t3>Blacklist Challenges</a>");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t3>Wargames Challenges</a>: Tasks for eliminating enemy players in various ways");
       %index++;
    }
    else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Blacklist Challenges - Reach Lieutenant To Unlock");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "Wargames Challenges - Reach Lieutenant To Unlock");
       %index++;
    }
    //
    if(%xp >= $Ranks::MinPoints[28]) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Zombie Slaying Challenges (Coming Soon)");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t4>Zombie Slaying Challenges</a>: Tasks for eliminating combatants of the zombie horde");
       %index++;
    }
    else {
@@ -306,11 +390,11 @@ function GenerateChallegnesMenu(%client, %tag, %index) {
       %index++;
    }
    //
-   messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t5>Special Event Challenges</a>");
+   messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t5>Special Event Challenges</a>: Tasks for playing TWM2 during special events");
    %index++;
    //
    if(%xp >= $Ranks::MinPoints[40]) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t7>Sabotage Challenges</a>");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t7>Sabotage Challenges</a>: Tasks related to the Sabotage game mode");
       %index++;
    }
    else {
@@ -319,7 +403,7 @@ function GenerateChallegnesMenu(%client, %tag, %index) {
    }
    //
    if(%xp >= $Ranks::MinPoints[40]) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t8>Domination Challenges</a>");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t8>Domination Challenges</a>: Tasks related to the Domination game mode");
       %index++;
    }
    else {
@@ -328,7 +412,7 @@ function GenerateChallegnesMenu(%client, %tag, %index) {
    }
    //
    if(%xp >= $Ranks::MinPoints[40]) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t9>Horde 3 Challenges</a>");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t9>Horde 3 Challenges</a>: Tasks related to surviving the waves of the zombie horde");
       %index++;
    }
    else {
@@ -337,7 +421,7 @@ function GenerateChallegnesMenu(%client, %tag, %index) {
    }
    //
    if(%xp >= $Ranks::MinPoints[40]) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t10>Helljump Challenges</a>");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t10>Helljump Challenges</a>: Tasks related to performing spec-ops Helljump operations");
       %index++;
    }
    else {
@@ -346,7 +430,7 @@ function GenerateChallegnesMenu(%client, %tag, %index) {
    }
    //
    if(%xp >= $Ranks::MinPoints[40]) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t11>From the top</a>");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t11>From the top</a>: Tasks related to ordering and completing missions");
       %index++;
    }
    else {
@@ -355,193 +439,12 @@ function GenerateChallegnesMenu(%client, %tag, %index) {
    }
    //
    if(%scriptController.officer >= 1) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t12>Officer Challenges</a>");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOtherTasksSub\t12>Officer Challenges</a>: Tasks related to officer ranks and advanced progression");
       %index++;
    }
    else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Officer Challenges - Reach a Officer Rank To Unlock");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "Officer Challenges - Reach Instructive Private To Unlock");
       %index++;
    }
    return %index;
 }
-
-//SUB MENU        GetNonWeapSubMenu(%client, %tag, %index, %challengeCategory)
-function GetNonWeapSubMenu(%client, %tag, %index, %challengeCategory) {
-   switch(%challengeCategory) {
-      //Killstreaks
-      case 1:
-         //Killstreak.cs
-         %index = GenerateStreakChallengeMenu(%client, %tag, %index);
-      //Bosses
-      case 2:
-         %index = GenerateBossChallengeMenu(%client, %tag, %index);
-      //Blacklist
-      case 3:
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "Blacklist Challenges:");
-         %index++;
-         if(%client.CheckNWChallengeCompletion("Acceptance")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Acceptance: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Acceptance: Earn a Spot on the Blacklist 15.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("ListHit")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Hitlister of The List: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Hitlister of The List: Kill a Blacklist Player.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("TopHit")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Champion Slayer: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Champion Slayer: Kill the #1 Player on the Server.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("ButIm2")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "But I'm #2: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "But I'm #2: Kill the #2 Player on the Server.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("DF3")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Don't Forget #3: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Don't Forget #3: Kill the #3 Player on the Server.");
-            %index++;
-         }
-         //
-      //Zombie Slaying
-      case 4:
-      //Events
-      case 5:
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "Special Event Challenges:");
-         %index++;
-         if(%client.CheckNWChallengeCompletion("NewYearsEve")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "New Years Eve Fireworks: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "New Years Eve Fireworks: Get a Javelin Kill on New Years Eve.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("NewYears")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "New Years Fireworks: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "New Years Fireworks: Call in a nuke on New Years Day.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("GunshipMall")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Gunship to The Mall: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Gunship to The Mall: Call in a Gunship on Christmas Mall 2009.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("IndepRPG")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Independance RPG: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Independance RPG: Score an RPG Kill on the Fourth Of July.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("SoulsticeBombard")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Soulstice Bombard: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Soulstice Bombard: Call in artillery on one of the soulstices.");
-            %index++;
-         }
-         //
-      //PGD
-      case 6:
-         %index = GenerateDWMChallengeMenu(%client, %tag, %index);
-      //Sabotage
-      case 7:
-         %index = GenerateSabotageChallengeMenu(%client, %tag, %index);
-      //Domination
-      case 8:
-         %index = GenerateDominationChallengeMenu(%client, %tag, %index);
-      //Horde 2
-      case 9:
-         %index = GenerateHordeChallengeMenu(%client, %tag, %index);
-      //Helljump
-      case 10:
-         %index = GenerateHelljumpChallengeMenu(%client, %tag, %index);
-      //FTT
-      case 11:
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "From The Top Challenges:");
-         %index++;
-         if(%client.CheckNWChallengeCompletion("SimonSays")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Simon Says: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Simon Says: Order a mission.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("FromTheTop")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "From The Top: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "From The Top: Accept a mission.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("GoldStar")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Gold Star: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Gold Star: Complete a mission within the time limit.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("Faster")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Faster!: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Faster!: Complete a mission, but miss the time limit.");
-            %index++;
-         }
-         //
-         if(%client.CheckNWChallengeCompletion("EpicFailure")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Epic Failure: Done.");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Epic Failure: Fail a mission.");
-            %index++;
-         }
-      //Prestige
-      case 12:
-         %index = GeneratePrestigeChallengeMenu(%client, %tag, %index);
-   }
-   return %index;
-}
-

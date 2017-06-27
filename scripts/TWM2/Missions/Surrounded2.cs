@@ -15,6 +15,8 @@ package TWM2Mission_Surrounded2 {
          %group.participant[%i].player.setPosition(%spF);
       
          AwardClient(%group.participant[%i], 36);
+		 
+		 CompleteNWChallenge(%group.participant[%i], "SurvivalistExtreme");
       }
       %group.AddMissionTime(10); //surviving = success with reward
       %group.CompleteMission();

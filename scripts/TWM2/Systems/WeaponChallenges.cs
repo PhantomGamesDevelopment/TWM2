@@ -234,11 +234,11 @@ function GenerateWChallengeSubMenu(%client, %tag, %index, %image) {
       %taskReq = getField(%Field, 1);
       //
       if(!%client.CheckChallengeCompletion(%image, %i)) {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, ""@%taskName@" - Need: "@%taskReq@"");
+         messageClient( %client, 'SetLineHud', "", %tag, %index, ""@%taskName@" - Earn "@%taskReq@" Kills with this weapon");
          %index++;
       }
       else {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, ""@%taskName@" - Complete");
+         messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>"@%taskName@"</color> - Earn "@%taskReq@" Kills with this weapon");
          %index++;
       }
    }

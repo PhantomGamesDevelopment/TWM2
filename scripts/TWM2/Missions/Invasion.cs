@@ -15,6 +15,8 @@ package TWM2Mission_Invasion {
          %group.participant[%i].player.setPosition(%spF);
       
          AwardClient(%group.participant[%i], 37);
+		 
+		 CompleteNWChallenge(%group.participant[%i], "InvasionBuster");
       }
       %group.AddMissionTime(10); //surviving = success with reward
       %group.CompleteMission();

@@ -11,11 +11,13 @@
 
 //So, without further ado, lets begin
 //Mission Vars!
+//NOTE: For the first set, you can have the menu tag [NEW] in the [F2] screen by adding \t1 after the below,
+// Ex: $Mission::TWM2Mision[4] = "Invasion\t1";
 $Mission::TWM2Mision[0] = "RainDown";
 $Mission::TWM2Mision[1] = "EnemyAc130Above";
 $Mission::TWM2Mision[2] = "Surrounded";
-$Mission::TWM2Mision[3] = "Surrounded2\t1";
-$Mission::TWM2Mision[4] = "Invasion\t1";
+$Mission::TWM2Mision[3] = "Surrounded2";
+$Mission::TWM2Mision[4] = "Invasion";
 
 $Mission::VarSet["RainDown", "TaskDetails"] = "Rain Down\tClear The Zombies with the AC130\t3:00/Gunship Support";
 $Mission::VarSet["RainDown", "Orders"] = "Using the turret, eliminate all zombies, you have 3 minutes.";
@@ -231,6 +233,7 @@ function AddClientToMission(%client) {
    %group.ParticipantAlive[%group.Participants] = true;
    messageClient(%client, 'msgFailed', "\c5MISSION: Added to the mission squad, prepare for orders.");
    CompleteNWChallenge(%client, "FromTheTop");
+   CompleteNWChallenge(%group.Participant[1], "NaturalLeader");
 }
 
 function TWM2MissionClass::StartTWM2MissionTimer(%group) {

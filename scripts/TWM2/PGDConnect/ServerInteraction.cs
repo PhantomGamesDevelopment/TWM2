@@ -49,36 +49,40 @@ function serverInterfacing::onConnected(%this) {
 }
 
 function serverInterfacing::onLine(%this, %line) {
-   if (trim(%line) $= "") {       //is the line a HTTP header?
-     if (!%this.readyToRead) {
-        %this.readyToRead = true;
-     }
-   }
-   if(!%this.readyToRead) {
-      return; //we have no use for this.
-   }
-   //read necessary data
-   switch$(getWord(%line, 0)) {
-      case "ApplyDevList":
-         %list = getWords(%line, 1);
-         %list = strreplace(%list, "TAB", "\t"); //boom! 
-         for(%i = 0; %i < getFieldCount(%list); %i++) {
-	    %FieldGUID = getSubStr(getField(%list, %i), 0, strstr(getField(%list, %i), ":"));
-            %FieldLEVEL = getSubStr(getField(%list, %i), strLen(%FieldGUID) + 1, strLen(getField(%list, %i)));
-	    $DeveloperList[%i] = %FieldGUID;
-	    $DeveloperLevel[%i] = %FieldLEVEL;
-	    echo("Developers "@%i@": "@$DeveloperList[%i]@" -> "@$DeveloperLevel[%i]@"");
-         }
-      case "SetHighRank":
-	 $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] = getWord(%line, 1);
-         echo("PGD: Highest Rank Set To "@getWord(%line, 1)@"");
-      case "SetHighOfficer":
-	 $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] = getWord(%line, 1);
-	 echo("PGD: Highest Officer Rank Set To "@getWord(%line, 1)@"");	
-      case "SetEXPMultiplier":
-	 $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB TWM2Lib_MainControl("FormatTWM2Time" , formattimestring("yymmdd")))] = getWord(%line, 1);
-         echo("PGD: EXP Multiplier is now: "@getWord(%line, 1)@"");
-      default:
-         echo("PGD: Depricated command "@getWord(%line, 0)@" issued, ignored...");			
-   }
+	if (trim(%line) $= "") {       //is the line a HTTP header?
+		if (!%this.readyToRead) {
+			%this.readyToRead = true;
+		}
+	}
+	if(!%this.readyToRead) {
+		return; //we have no use for this.
+	}
+	//read necessary data
+	switch$(getWord(%line, 0)) {
+		case "ApplyDevList":
+			%list = getWords(%line, 1);
+			%list = strreplace(%list, "TAB", "\t"); //boom! 
+			for(%i = 0; %i < getFieldCount(%list); %i++) {
+				%FieldGUID = getSubStr(getField(%list, %i), 0, strstr(getField(%list, %i), ":"));
+				%FieldLEVEL = getSubStr(getField(%list, %i), strLen(%FieldGUID) + 1, strLen(getField(%list, %i)));
+				$DeveloperList[%i] = %FieldGUID;
+				$DeveloperLevel[%i] = %FieldLEVEL;
+				echo("Developers "@%i@": "@$DeveloperList[%i]@" -> "@$DeveloperLevel[%i]@"");
+			}
+		
+		case "SetHighRank":
+			$RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] = getWord(%line, 1);
+			echo("PGD: Highest Rank Set To "@getWord(%line, 1)@"");
+		
+		case "SetHighOfficer":
+			$OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] = getWord(%line, 1);
+			echo("PGD: Highest Officer Rank Set To "@getWord(%line, 1)@"");	
+		
+		case "SetEXPMultiplier":
+			$EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB TWM2Lib_MainControl("FormatTWM2Time" , formattimestring("yymmdd")))] = getWord(%line, 1);
+			echo("PGD: EXP Multiplier is now: "@getWord(%line, 1)@"");
+		
+		default:
+			echo("PGD: Depricated command "@getWord(%line, 0)@" issued, ignored...");			
+	}
 }

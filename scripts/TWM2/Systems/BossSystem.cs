@@ -38,9 +38,9 @@ function InitiateBoss(%Boss, %name) {
       case "Trebor":
          %print = "<color:FF0000>BOSS BATTLE \n LORDRANIUS TREVOR";
       case "Stormrider":
-         %print = "<color:FF0000>BOSS BATTLE \n COMMANDER STORMRIDER";
+         %print = "<color:FF0000>CLASSIC BOSS BATTLE \n COMMANDER STORMRIDER";
       case "GhostOfFire":
-         %print = "<color:FF0000>BOSS BATTLE \n GHOST OF FIRE";
+         %print = "<color:FF0000>CLASSIC BOSS BATTLE \n GHOST OF FIRE";
       case "ShadeLord":
          %print = "<color:FF0000>BOSS BATTLE \n THE SHADE LORD";
    }
@@ -162,6 +162,18 @@ function GameConnection::GiveBossAward(%client, %bossName) {
       //VARDISON
       else if(%bossName $= "Vardison3") {
          AwardClient(%client, 13);
+		 if($TWM2::VardisonDifficulty == 1) {
+			CompleteNWChallenge(%client, "VardEasy");
+		 }
+		 else if($TWM2::VardisonDifficulty == 2) {
+			CompleteNWChallenge(%client, "VardNorm");
+		 }
+		 else if($TWM2::VardisonDifficulty == 3) {
+			CompleteNWChallenge(%client, "VardHard");
+		 }	
+		 else if($TWM2::VardisonDifficulty == 4) {
+			CompleteNWChallenge(%client, "VardWtf");
+		 }		 
       }
       else if(%bossName $= "Trebor") {
          AwardClient(%client, 15);
@@ -238,6 +250,16 @@ function CheckBossChallenge(%client, %boss) {
          if(%dc >= 10) {
             CompleteNWChallenge(%client, "GOL3");
          }
+      case "GhostOfFire":
+         if(%dc >= 1) {
+            CompleteNWChallenge(%client, "GOF1");
+         }
+         if(%dc >= 3) {
+            CompleteNWChallenge(%client, "GOF2");
+         }
+         if(%dc >= 5) {
+            CompleteNWChallenge(%client, "GOF3");
+         }		 
       case "Vegenor":
          if(%dc >= 3) {
             CompleteNWChallenge(%client, "Veg1");
@@ -278,6 +300,16 @@ function CheckBossChallenge(%client, %boss) {
          if(%dc >= 5) {
             CompleteNWChallenge(%client, "Vard3");
          }
+      case "Stormrider":
+         if(%dc >= 3) {
+            CompleteNWChallenge(%client, "Stormrider1");
+         }
+         if(%dc >= 5) {
+            CompleteNWChallenge(%client, "Stormrider2");
+         }
+         if(%dc >= 10) {
+            CompleteNWChallenge(%client, "Stormrider3");
+         }		 
       case "Trebor":
          if(%dc >= 2) {
             CompleteNWChallenge(%client, "Treb1");
@@ -288,212 +320,17 @@ function CheckBossChallenge(%client, %boss) {
          if(%dc >= 7) {
             CompleteNWChallenge(%client, "Treb3");
          }
-   }
-}
-
-function GenerateBossChallengeMenu(%client, %tag, %index) {
-   if(%client.CheckNWChallengeCompletion("Yvex1")) {
-      if(%client.CheckNWChallengeCompletion("Yvex2")) {
-         if(%client.CheckNWChallengeCompletion("Yvex3")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Shadowy Desecration - Done");
-            %index++;
+      case "ShadeLord":
+         if(%dc >= 1) {
+            CompleteNWChallenge(%client, "ShadeLord1");
          }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Shadowy Desecration - Defeat Lord Yvex 10 Times");
-            %index++;
+         if(%dc >= 2) {
+            CompleteNWChallenge(%client, "ShadeLord2");
          }
-      }
-      else {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "Darkness Rising - Defeat Lord Yvex 5 Times");
-         %index++;
-      }
+         if(%dc >= 3) {
+            CompleteNWChallenge(%client, "ShadeLord3");
+         }		 
    }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Nightmarish Enterprise - Defeat Lord Yvex 3 Times");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("CWS1")) {
-      if(%client.CheckNWChallengeCompletion("CWS2")) {
-         if(%client.CheckNWChallengeCompletion("CWS3")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Harbinger's Bane - Done");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Harbinger's Bane - Defeat Colonel Windshear 10 Times");
-            %index++;
-         }
-      }
-      else {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "Aerieal Nightmare - Defeat Colonel Windshear 5 Times");
-         %index++;
-      }
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Fortress In The Sky - Defeat Colonel Windshear 3 Times");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("GOL1")) {
-      if(%client.CheckNWChallengeCompletion("GOL2")) {
-         if(%client.CheckNWChallengeCompletion("GOL3")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Severe Thunderstorm - Done");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Severe Thunderstorm - Defeat The Ghost Of Lightning 10 Times");
-            %index++;
-         }
-      }
-      else {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "The Shocking Truth - Defeat The Ghost Of Lightning 5 Times");
-         %index++;
-      }
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Envious Lightning - Defeat The Ghost Of Lightning 3 Times");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("Veg1")) {
-      if(%client.CheckNWChallengeCompletion("Veg2")) {
-         if(%client.CheckNWChallengeCompletion("Veg3")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Firestorm Ender - Done");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Firestorm Ender - Defeat General Vegenor 10 Times");
-            %index++;
-         }
-      }
-      else {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "Burning Frenzy - Defeat General Vegenor 5 Times");
-         %index++;
-      }
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Flaming Revolt - Defeat General Vegenor 3 Times");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("LRog1")) {
-      if(%client.CheckNWChallengeCompletion("LRog2")) {
-         if(%client.CheckNWChallengeCompletion("LRog3")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Payback's A Bitch - Done");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Payback's A Bitch - Defeat Lord Rog 7 Times");
-            %index++;
-         }
-      }
-      else {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "Return to Returner - Defeat Lord Rog 4 Times");
-         %index++;
-      }
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Revenge Halter - Defeat Lord Rog 2 Times");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("Ins1")) {
-      if(%client.CheckNWChallengeCompletion("Ins2")) {
-         if(%client.CheckNWChallengeCompletion("Ins3")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Gravitational Influx - Done");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Gravitational Influx - Defeat Major Insignia 7 Times");
-            %index++;
-         }
-      }
-      else {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "No Gravity, No Problem - Defeat Major Insignia 4 Times");
-         %index++;
-      }
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "El Shipitor - Defeat Major Insignia 2 Times");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("Treb1")) {
-      if(%client.CheckNWChallengeCompletion("Treb2")) {
-         if(%client.CheckNWChallengeCompletion("Treb3")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Tank Halter - Done");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Tank Halter - Defeat Lordranius Trebor 7 Times");
-            %index++;
-         }
-      }
-      else {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "Harbinger Denied - Defeat Lordranius Trebor 4 Times");
-         %index++;
-      }
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Precious Cargo - Defeat Lordranius Trebor 2 Times");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("Vard1")) {
-      if(%client.CheckNWChallengeCompletion("Vard2")) {
-         if(%client.CheckNWChallengeCompletion("Vard3")) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Outevil The Wicked - Done");
-            %index++;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "Outevil The Wicked - Defeat Lord Vardison 5 Times");
-            %index++;
-         }
-      }
-      else {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "Glare The Dark - Defeat Lord Vardison 3 Times");
-         %index++;
-      }
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Shining Star - Defeat Lord Vardison");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("VardEasy")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "The Standard Experience - Done");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "The Standard Experience - Defeat Lord Vardison on Easy Difficulty");
-      %index++;
-   }
-   if(%client.CheckNWChallengeCompletion("VardNorm")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Demon Hunter - Done");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Demon Hunter - Defeat Lord Vardison on Normal Difficulty");
-      %index++;
-   }
-   if(%client.CheckNWChallengeCompletion("VardHard")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Master Demon Slayer - Done");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Master Demon Slayer - Defeat Lord Vardison on Hard Difficulty");
-      %index++;
-   }
-   if(%client.CheckNWChallengeCompletion("VardWtf")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "God of the Shadow Realm - Done [You are a freaking boss master]");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "God of the Shadow Realm - Against all odds, emerge victorious against WTF difficulty Lord Vardison");
-      %index++;
-   }
-   //
-   return %index;
 }
 
 function BossManager::addKill(%this, %tObj) {

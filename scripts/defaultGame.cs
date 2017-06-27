@@ -967,6 +967,11 @@ function DefaultGame::onClientKilled(%game, %clVictim, %clKiller, %damageType, %
 		   %p.schedulePop();
 		   MissionCleanup.add(%p);
        }
+	   
+	   if(%clKiller !$= "") {
+	      %clVictim.lastKilledBy = %clKiller;
+		  %clVictim.lastKilledByPlayer = %clKiller.player;
+	   }
 
        //[[CHANGE]] Make sure the beacon get's removed.. as it should be.. :D
        %clvictim.player.RemoveBeacon();

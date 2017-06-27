@@ -517,6 +517,8 @@ function HordeGame::startMatch(%game) {
    for(%i = 0; %i < ClientGroup.getCount(); %i ++) {
       %client = ClientGroup.getObject(%i);
       $HordeGame::Score[%client] = 0;
+	  $HordeGame::FirstWaveKills[%client] = 0;
+	  $HordeGame::HighestWaveScoreCount[%client] = 0;
    }
 
    $HordeGame::InitialGoTime = 300;
@@ -1393,6 +1395,13 @@ function HordeGame::OnZombieDeath(%game, %killer, %victim) {
       }
       else {
          CenterPrintAll("<just:center>Wave Highlight \n"@%killer.namebase@" Scores the First Kill!" , 3, 3);
+		 if($HordeGame::CurrentWave == 1) {
+			CompleteNWChallenge(%killer, "FirstBlood");
+		 }
+		 $HordeGame::FirstWaveKills[%killer]++;
+		 if($HordeGame::FirstWaveKills[%killer] >= 10) {
+			CompleteNWChallenge(%killer, "SpeedSlayer");
+		 }
       }
    }
 }
@@ -1421,106 +1430,17 @@ function DoWaveHighlights() {
             %highestKillsCL = %cl;
          }
       }
+	  //
+	  $HordeGame::HighestWaveScoreCount[%highestKillsCL]++;
+      if($HordeGame::FirstWaveKills[%highestKillsCL] >= 10) {
+         CompleteNWChallenge(%highestKillsCL, "HighScorer");
+      }	  
       //
       CenterPrintAll("<just:center>Best Stats For Wave "@%wave@""@
       "\nHighest Scorer: "@%highestScoreCL.namebase@" with "@%highestScore@" Points"@
       "\nMost Kills: "@%highestKillsCL.namebase@" with "@%highestKills@" Kills", 5 ,3);
    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-function GenerateHordeChallengeMenu(%client, %tag, %index) {
-   if(%client.CheckNWChallengeCompletion("15For15")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "15 For 15 - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "15 For 15 - Complete Wave 15.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("Milestone25")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Milestone 25 - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Milestone 25 - Complete Wave 25.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("ArmyOf50Stopped")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Army Of 50 Stopped - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Army Of 50 Stopped - Complete Horde (All 50 Waves).");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("Angel")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Angel - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Angel - Revive a fallen teammate in Horde.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("ZBomber")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Z-Bomber - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Z-Bomber - Call in a Z-Bomb While Playing Horde.");
-      %index++;
-   }
-   //
-   return %index;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function HordeGame::leaveMissionArea(%game, %playerData, %player) {
    if(%player.getState() $= "Dead")
@@ -1547,6 +1467,3 @@ function HordeGame::enterMissionArea(%game, %playerData, %player) {
    %player.client.outOfBounds = false;
    messageClient(%player.client, 'EnterMissionArea', '\c1You are back in the mission area.');
 }
-
-
-

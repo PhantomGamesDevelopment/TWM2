@@ -18,6 +18,23 @@ $Prestige::Name[13] = "Noble ";
 $Prestige::Name[14] = "Masterful ";
 $Prestige::Name[15] = "Harbinger ";
 
+$Prestige::Rewards[0] = "";
+$Prestige::Rewards[1] = "Fission Bomb Strike, Double Down Perk";
+$Prestige::Rewards[2] = "Pulse Rifle";
+$Prestige::Rewards[3] = "Pulse SMG";
+$Prestige::Rewards[4] = "XVD4 Acid Launcher";
+$Prestige::Rewards[5] = "Silver Armor Flag, Crimson Hawk";
+$Prestige::Rewards[6] = "Blue Armor Flag";
+$Prestige::Rewards[7] = "Red Armor Flag";
+$Prestige::Rewards[8] = "Green Armor Flag";
+$Prestige::Rewards[9] = "Plasma Torpedo Cannon";
+$Prestige::Rewards[10] = "Dartanian Elite Armor, Incendiary Cannon";
+$Prestige::Rewards[11] = "VMC9 Gravity Cannon";
+$Prestige::Rewards[12] = "DDV4 Plasma Launcher";
+$Prestige::Rewards[13] = "Dartanian Gravity Axe";
+$Prestige::Rewards[14] = "PLMX56 Phantom Spiker";
+$Prestige::Rewards[15] = "Gold Armor Flag, VX3 Volt Driver, LOAS Strike";
+
 $Ranks::MinPoints[0] = 0;
 $Ranks::NewRank[0] = "Private";
 $Ranks::RankTag[0] = "[Pvt]";

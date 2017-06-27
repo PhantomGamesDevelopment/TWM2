@@ -18,6 +18,7 @@ exec("scripts/TWM2/Systems/NewsPanel.cs");          //Scoremenu News Page
 exec("scripts/TWM2/Systems/Perks.cs");              //Special Perks
 exec("scripts/TWM2/Systems/WeaponChallenges.cs");   //Weapon Challenges
 exec("scripts/TWM2/Systems/NWChallengeIndex.cs");   //Non-Weapon Challenges
+exec("scripts/TWM2/Systems/ChallengeMenus.cs");     //F2 Menus for Challenges
 exec("scripts/TWM2/Systems/ClientSettings.cs");     //Save Client Settings
 exec("scripts/TWM2/Systems/ChatLog.cs");            //Chat / Connection Logging
 exec("scripts/TWM2/Systems/ChatBot.cs");            //Chat Monitoring/Commands
@@ -30,7 +31,6 @@ exec("scripts/TWM2/Systems/SuccessiveKills.cs");    //Successive Kills
 exec("scripts/TWM2/Systems/PieceData.cs");          //Piece Data, /undo Command
 exec("scripts/TWM2/Systems/DChalg.cs");             //Daily Challenges
 exec("scripts/TWM2/Systems/ArmorEnergyShields.cs"); //Armor Shields
-exec("scripts/TWM2/Systems/Store.cs");              //Mula
 exec("scripts/TWM2/Systems/weaponModes.cs");        //Global Defines for Weapon Modes
 exec("scripts/TWM2/AI/DroneAI.cs");                 //Drones
 exec("scripts/TWM2/Systems/HarbingersWrath.cs");    //Harbinger's Wrath

@@ -31,7 +31,6 @@ function CreateClientRankFile(%client) {
    //now apply the base settings for this new file.
    %scriptController.name = %client.namebase;
    %scriptController.xp = 0;
-   %scriptController.money = 0;
    %scriptController.rank = "Private";
    %scriptController.phrase = "None Set";
    %scriptController.gameTime = 0;
@@ -150,36 +149,36 @@ function runRankUpdateLoop(%client, %j, %continue) {
 }
 
 function fetchCap(%type, %index) {
-   if(%type $= "Officer") {
-      if(!isSet($OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) || $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] <= 0) {
-         return false;
-      }
-      else {
-         if(%index >= $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
-            return true;
-         }
-         else {
-	    return false;
-         }
-      }    
-   }
-   else if(%type $= "Level") {
-      if(!isSet($RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) || $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] <= 0) {
-         return false;
-      }
-      else {
-         if(%index >= $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
-            return true;
-         }
-         else {
-	    return false;
-         }
-      }       
-   }
-   else if(%type $= "EXP") {
-      echo("fetchCap(): Call to EXP cap made, however the EXP cap has been depricated. use trace(1) to log the call stack.");
-      return false;
-   }
+	if(%type $= "Officer") {
+		if(!isSet($OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) || $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] <= 0) {
+			return false;
+		}
+		else {
+			if(%index >= $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}    
+	}
+	else if(%type $= "Level") {
+		if(!isSet($RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) || $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] <= 0) {
+			return false;
+		}
+		else {
+			if(%index >= $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}       
+	}
+	else if(%type $= "EXP") {
+		echo("fetchCap(): Call to EXP cap made, however the EXP cap has been depricated. use trace(1) to log the call stack.");
+		return false;
+	}
 }
 
 function checkForXPAwards(%client) {
@@ -209,8 +208,8 @@ function printCurrentEXP(%client) {
     //print function shows a more readable version of EXP
     %scriptController = %client.TWM2Core;
     %milXP = %scriptController.millionxp;
-    %nonMilXP = %scriptControler.xp;
-    return %milXP @ "" @ %nonMilXP;
+    %nonMilXP = %scriptController.xp;
+    return (%milXP == 0 ? "" : %milXP) @ "" @ %nonMilXP;
 }
 
 //PRESTIGE RANKS
@@ -218,7 +217,6 @@ function PromoteToPrestige(%client) {
    %scriptController = %client.TWM2Core;
    %savedGameTime = %scriptController.gameTime;
    %savedPhrs = %scriptController.phrase;
-   %savedMoney = %scriptController.money;
    if(%scriptController.officer $= "" || %scriptController.officer == 0) {
       %next = 1;
    }
@@ -231,7 +229,7 @@ function PromoteToPrestige(%client) {
       error("It is recommended you report these details to Phantom139 (phantom139@phantomdev.net) ASAP.");
       error("Client has been informed of this, if it is reported to be a mistake, inform Phantom139 of possible code error");
       messageClient(%client, 'msgAlert', "\c3Alert! You have performed an Illegal action(trying to promote to an officer rank beyond cap level)\nIf you believe this is a mistake, you should inform the server host ASAP.");
-return;
+	  return;
    }
 
    DumpStats(%client);
@@ -250,7 +248,6 @@ return;
    %client.TWM2Core.name = %client.namebase;
    %client.TWM2Core.xp = 0;
    %client.TWM2Core.millionxp = 0;
-   %client.TWM2Core.money = %savedMoney;
    %client.TWM2Core.rank = "Private";
    %client.TWM2Core.phrase = %savedPhrs;
    %client.TWM2Core.gameTime = %savedGameTime;
@@ -305,88 +302,6 @@ function DumpStats(%c) {
    // this is now our cleaned object file, it will be populated shortly
 }
 
-function GeneratePrestigeChallengeMenu(%client, %tag, %index) {
-   if(%client.CheckNWChallengeCompletion("Prestge1")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Instructive Private - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Instructive Private - Reach Officer Level 1.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("Prestge2")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Excelling Private - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Excelling Private - Reach Officer Level 2.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("Prestge3")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Champion Private - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Champion Private - Reach Officer Level 3.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("Prestge4")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Prestigious Private - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Prestigious Private - Reach Officer Level 4.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("Prestge5")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Supreme Private - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Supreme Private - Reach Officer Level 5.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("Prestge9")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Phantom's Vengeance - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Phantom's Vengeance - Reach Oficer Level 9.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("GameEnder")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Game Ender - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Game Ender - Call in a Fission Bomb.");
-      %index++;
-   }
-   //
-   return %index; 
-}
-
-function EXPWillBreakRankCap(%client) {
-   %script = %client.TWM2Core;
-   %rN = %script.rankNumber;
-   %officer = %script.officer;
-   //Phantom139: updated here, now handles officer ranks so we can apply numbers above 61 to restrict up to a officer level
-   %currentRankNumber = (%officer*$Rank::RankCount) + %rN;
- 	  //apply the new check here                                   |LEAVE THIS, apply ONLY on base rank|
-   if(fetchCap("Level", %currentRankNumber + 1) && (getCurrentEXP(%client) >= $Ranks::MinPoints[%rN+1])) {
-      return true;
-   }
-   else {
-      return false;
-   }
-}
-
 //Direct calls to needed function, replaces
 //old system.
 function GainExperience(%client, %variable, %tagToGain) {
@@ -399,12 +314,7 @@ function GainExperience(%client, %variable, %tagToGain) {
    }
    %variable *= %multi;
    %variable = mFloor(%variable);
-   %script.money += %variable; //money is kept no matter what
    //
-   if(EXPWillBreakRankCap(%client)) {
-      messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3 Further Progression Locked [RANK CAP]");
-      return;
-   }
    if(%multi > 1) {
       messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP (X"@%multi@")");
    }
@@ -413,4 +323,41 @@ function GainExperience(%client, %variable, %tagToGain) {
    }
    $XPArray[%client] += %variable;
    updateClientRank(%client);
+}
+
+function WipeStats(%client) {
+   %scriptController = %client.TWM2Core;
+   %savedGameTime = %scriptController.gameTime;
+   %savedPhrs = %scriptController.phrase;
+   if(%scriptController.officer < 15) {
+      error("Client "@%client@" is attempting to wipe stats??? Not max level...");
+	  return;
+   }
+
+   DumpStats(%client);
+   
+   %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
+   
+   %name = "ClientSettings"@%client.guid@"";
+   %check = nameToID(%name);
+   if(isObject(%check)) {
+      %check.delete(); //kill current settings, as they are no longer valid.
+   }
+   %script = new ScriptObject(%name) {};
+   %client.container.add(%script);
+
+   //now apply the base settings for this new file.
+   %client.TWM2Core.name = %client.namebase;
+   %client.TWM2Core.xp = 0;
+   %client.TWM2Core.millionxp = 0;
+   %client.TWM2Core.rank = "Private";
+   %client.TWM2Core.phrase = %savedPhrs;
+   %client.TWM2Core.gameTime = %savedGameTime;
+   %client.TWM2Core.officer = 0;
+   //and save the new file
+   //%scriptController.save(%file);
+   SaveClientFile(%client);
+
+   MessageAll('msgAdminForce', "\c5"@%client.namebase@" has hit the reset button and is back at level 1!!!");
+   recordAction(%client, "", ""); //record blank action for the challenges to pick off any officer challenges
 }

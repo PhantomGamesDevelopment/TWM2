@@ -16,6 +16,8 @@ package TWM2Mission_EnemyAc130Above {
          %group.participant[%i].player.setPosition(%spF);
 
          AwardClient(%group.participant[%i], 33);
+		 
+		 CompleteNWChallenge(%group.participant[%i], "Invisibreh");
       }
 
       %group.CompleteMission();
@@ -207,6 +209,7 @@ package TWM2Mission_EnemyAc130Above {
 
          for(%i = 1; %i <= %group.participants; %i++) {
             AwardClient(%group.participant[%i], 34);
+			CompleteNWChallenge(%group.participant[%i], "WeakGunship");
          }
    
          %group.CompleteMission();

@@ -180,7 +180,7 @@ function DoZombPlayerMaker(%client, %type) {
             Datablock = "ROGZombieArmor";
          };
          %player.NoHS = 1;
-         %player.isBoss = 1;
+         //%player.isBoss = 1;
          %player.isPlayerRog = 1;
 
 	     %player.mountImage(ZdummyslotImg, 4);

@@ -35,5 +35,4 @@ function LoadClientFile(%client) {
    //
    loadChallengeData(%client);
    loadSettings(%client);
-   %client.storeCreate();
 }
