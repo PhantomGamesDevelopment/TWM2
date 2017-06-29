@@ -742,7 +742,7 @@ function updateChallengeFile(%client) {
 
 function GenerateDWMChallengeMenu(%client, %tag, %index) {
    %dateStr = formattimestring("yymmdd");
-   messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000> Green Indicates A Completed Challenge");
+   messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Green Indicates A Completed Challenge");
    %index++;   
    messageClient( %client, 'SetLineHud', "", %tag, %index, "Uncolored Indicates An Active Challenge");
    %index++;  
@@ -759,7 +759,7 @@ function GenerateDWMChallengeMenu(%client, %tag, %index) {
       //
       if(%cType == 1) {
          if(%client.TWM2Controller.completed[%i, %dateStr]) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000>*DAILY* "@%cName@" - Completed");
+            messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>*DAILY* "@%cName@" - Completed");
             %index+=2;
          }
          else {
@@ -770,7 +770,7 @@ function GenerateDWMChallengeMenu(%client, %tag, %index) {
       //
       else if(%cType == 2) {
          if(%client.TWM2Controller.completed[%i, %dateStr]) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000>*WEEKLY* "@%cName@" - Completed");
+            messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>*WEEKLY* "@%cName@" - Completed");
             %index+=2;
          }
          else {
@@ -780,7 +780,7 @@ function GenerateDWMChallengeMenu(%client, %tag, %index) {
       }
       else {
          if(%client.TWM2Controller.completed[%i, %dateStr]) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000>*MONTHLY* "@%cName@" - Completed");
+            messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>*MONTHLY* "@%cName@" - Completed");
             %index+=2;
          }
          else {
