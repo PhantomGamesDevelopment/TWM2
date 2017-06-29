@@ -744,9 +744,12 @@ function GenerateDWMChallengeMenu(%client, %tag, %index) {
    %dateStr = formattimestring("yymmdd");
    messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000> Green Indicates A Completed Challenge");
    %index++;   
-   messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00> Uncolored Indicates An Active Challenge");
+   messageClient( %client, 'SetLineHud', "", %tag, %index, "Uncolored Indicates An Active Challenge");
    %index++;  
+   messageClient( %client, 'SetLineHud', "", %tag, %index, "6/29/17: PGD Challenges reacitvated, now running 5x daily");
+   %index++;   
    messageClient( %client, 'SetLineHud', "", %tag, %index, "4/20/16: New Daily Challenge System is Live!");
+   %index++; 
    for(%i = 1; isSet($Challenges::Challenge[%i]); %i++) {
       %challenge = $Challenges::Challenge[%i];
       %cType = getField(%challenge, 0);
