@@ -16,7 +16,7 @@ function downloadChallenges() {
    echo("* Downloading Challenge List, scheduling next download");
    messageAll('MsgAdminForce', "\c3TWM2: Downloading challenges from PGD server.");
    %connection = new TCPObject(ChallengeDownload);
-   %location = "/public/TWM2/Challenge/";
+   %location = "/public/Univ/twm2/";
    %host = $PGDServer;
    //
    %request = "GET" SPC %location SPC "HTTP/1.1\x0aHost: "@%host@"\r\n\r\n";
@@ -38,7 +38,7 @@ function downloadChallenges_Manual() {
    echo("* Downloading Challenge List, scheduling next download");
    messageAll('MsgAdminForce', "\c3TWM2: Downloading challenges from PGD server.");
    %connection = new TCPObject(ChallengeDownload);
-   %location = "/public/TWM2/Challenge/";
+   %location = "/public/Univ/twm2/";
    %host = $PGDServer;
    //
    %request = "GET" SPC %location SPC "HTTP/1.1\x0aHost: "@%host@"\r\n\r\n";
@@ -742,9 +742,9 @@ function updateChallengeFile(%client) {
 
 function GenerateDWMChallengeMenu(%client, %tag, %index) {
    %dateStr = formattimestring("yymmdd");
-   messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000> Red Indicates A Completed Challenge");
+   messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000> Green Indicates A Completed Challenge");
    %index++;   
-   messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00> Green Indicates An Active Challenge");
+   messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00> Uncolored Indicates An Active Challenge");
    %index++;  
    messageClient( %client, 'SetLineHud', "", %tag, %index, "4/20/16: New Daily Challenge System is Live!");
    for(%i = 1; isSet($Challenges::Challenge[%i]); %i++) {
@@ -760,7 +760,7 @@ function GenerateDWMChallengeMenu(%client, %tag, %index) {
             %index+=2;
          }
          else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>*DAILY* "@%cName@" - "@%cDesc@" *"@%CRewd@"EXP");
+            messageClient( %client, 'SetLineHud', "", %tag, %index, "=*DAILY* "@%cName@" - "@%cDesc@" *"@%CRewd@"EXP");
             %index+=2;
          }
       }
@@ -771,7 +771,7 @@ function GenerateDWMChallengeMenu(%client, %tag, %index) {
             %index+=2;
          }
          else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>*WEEKLY* "@%cName@" - "@%cDesc@" *"@%CRewd@"EXP");
+            messageClient( %client, 'SetLineHud', "", %tag, %index, "*WEEKLY* "@%cName@" - "@%cDesc@" *"@%CRewd@"EXP");
             %index+=2;
          }
       }
@@ -781,7 +781,7 @@ function GenerateDWMChallengeMenu(%client, %tag, %index) {
             %index+=2;
          }
          else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>*MONTHLY* "@%cName@" - "@%cDesc@" *"@%CRewd@"EXP");
+            messageClient( %client, 'SetLineHud', "", %tag, %index, "*MONTHLY* "@%cName@" - "@%cDesc@" *"@%CRewd@"EXP");
             %index+=2;
          }
       }

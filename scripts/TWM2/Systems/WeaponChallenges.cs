@@ -238,7 +238,7 @@ function GenerateWChallengeSubMenu(%client, %tag, %index, %image) {
          %index++;
       }
       else {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>"@%taskName@"</color> - Earn "@%taskReq@" Kills with this weapon");
+         messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>"@%taskName@" - Earn "@%taskReq@" Kills with this weapon");
          %index++;
       }
    }

@@ -14,7 +14,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("UAV1")) {
 				if(%client.CheckNWChallengeCompletion("UAV2")) {
 					if(%client.CheckNWChallengeCompletion("UAV3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>UAV Expert III</color>: Call in 150 UAV Recon Satellites");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>UAV Expert III: Call in 150 UAV Recon Satellites");
 						%index++;
 					}
 					else {
@@ -35,7 +35,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Airstrike1")) {
 				if(%client.CheckNWChallengeCompletion("Airstrike2")) {
 					if(%client.CheckNWChallengeCompletion("Airstrike3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Airstrike Expert III</color>: Call in 125 Airstrikes");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Airstrike Expert III: Call in 125 Airstrikes");
 						%index++;
 					}
 					else {
@@ -56,7 +56,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("UAMS1")) {
 				if(%client.CheckNWChallengeCompletion("UAMS2")) {
 					if(%client.CheckNWChallengeCompletion("UAMS3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>UAMS Expert III</color>: Call in 125 UAMS Strikes");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>UAMS Expert III: Call in 125 UAMS Strikes");
 						%index++;
 					}
 					else {
@@ -77,7 +77,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Helicopter1")) {
 				if(%client.CheckNWChallengeCompletion("Helicopter2")) {
 					if(%client.CheckNWChallengeCompletion("Helicopter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Helicopter Expert III</color>: Call in 125 Combat Helicopters");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Helicopter Expert III: Call in 125 Combat Helicopters");
 						%index++;
 					}
 					else {
@@ -98,7 +98,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Harrier1")) {
 				if(%client.CheckNWChallengeCompletion("Harrier2")) {
 					if(%client.CheckNWChallengeCompletion("Harrier3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Harrier Expert III</color>: Call in 110 Plasma Harrier Airstrikes");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Harrier Expert III: Call in 110 Plasma Harrier Airstrikes");
 						%index++;
 					}
 					else {
@@ -119,7 +119,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("SatNuke1")) {
 				if(%client.CheckNWChallengeCompletion("SatNuke2")) {
 					if(%client.CheckNWChallengeCompletion("SatNuke3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>OLS Expert III</color>: Call in 125 Orbital Laser Strikes");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>OLS Expert III: Call in 125 Orbital Laser Strikes");
 						%index++;
 					}
 					else {
@@ -140,7 +140,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("NapalmHarrier1")) {
 				if(%client.CheckNWChallengeCompletion("NapalmHarrier2")) {
 					if(%client.CheckNWChallengeCompletion("NapalmHarrier3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Napalm Airstrike Expert III</color>: Call in 110 Napalm Airstrikes");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Napalm Airstrike Expert III: Call in 110 Napalm Airstrikes");
 						%index++;
 					}
 					else {
@@ -161,7 +161,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("GunHeli1")) {
 				if(%client.CheckNWChallengeCompletion("GunHeli2")) {
 					if(%client.CheckNWChallengeCompletion("GunHeli3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Gunship Helicopter Expert III</color>: Call in 110 Gunship Helicopters");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Gunship Helicopter Expert III: Call in 110 Gunship Helicopters");
 						%index++;
 					}
 					else {
@@ -182,7 +182,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("SBomber1")) {
 				if(%client.CheckNWChallengeCompletion("SBomber2")) {
 					if(%client.CheckNWChallengeCompletion("SBomber3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Stealth Bomber Expert III</color>: Call in 100 Stealth Bombers");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Stealth Bomber Expert III: Call in 100 Stealth Bombers");
 						%index++;
 					}
 					else {
@@ -203,7 +203,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Gunship1")) {
 				if(%client.CheckNWChallengeCompletion("Gunship2")) {
 					if(%client.CheckNWChallengeCompletion("Gunship3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Harbinger Gunship Expert III</color>: Call in 75 Harbinger Gunships");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Harbinger Gunship Expert III: Call in 75 Harbinger Gunships");
 						%index++;
 					}
 					else {
@@ -224,7 +224,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Apache1")) {
 				if(%client.CheckNWChallengeCompletion("Apache2")) {
 					if(%client.CheckNWChallengeCompletion("Apache3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Apache Gunner Expert III</color>: Call in 75 Apache Gunners");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Apache Gunner Expert III: Call in 75 Apache Gunners");
 						%index++;
 					}
 					else {
@@ -246,7 +246,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 				if(%client.CheckNWChallengeCompletion("ACGunship1")) {
 					if(%client.CheckNWChallengeCompletion("ACGunship2")) {
 						if(%client.CheckNWChallengeCompletion("ACGunship3")) {
-							messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>AC-130 Expert III</color>: Call in 75 AC-130 Gunners");
+							messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>AC-130 Expert III: Call in 75 AC-130 Gunners");
 							%index++;
 						}
 						else {
@@ -272,7 +272,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Centaur1")) {
 				if(%client.CheckNWChallengeCompletion("Centaur2")) {
 					if(%client.CheckNWChallengeCompletion("Centaur3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Centaur Artillery Expert III</color>: Call in 50 Artillery Strikes");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Centaur Artillery Expert III: Call in 50 Artillery Strikes");
 						%index++;
 					}
 					else {
@@ -293,7 +293,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("EMP1")) {
 				if(%client.CheckNWChallengeCompletion("EMP2")) {
 					if(%client.CheckNWChallengeCompletion("EMP3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>EMP Expert III</color>: Call in 25 Mass EMP's");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>EMP Expert III: Call in 25 Mass EMP's");
 						%index++;
 					}
 					else {
@@ -314,7 +314,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Nuke1")) {
 				if(%client.CheckNWChallengeCompletion("Nuke2")) {
 					if(%client.CheckNWChallengeCompletion("Nuke3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Nuke Expert III</color>: Call in 25 Nukes");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Nuke Expert III: Call in 25 Nukes");
 						%index++;
 					}
 					else {
@@ -336,7 +336,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 				if(%client.CheckNWChallengeCompletion("Fission1")) {
 					if(%client.CheckNWChallengeCompletion("Fission2")) {
 						if(%client.CheckNWChallengeCompletion("Fission3")) {
-							messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Fission Bomb Expert III</color>: Call in 5 Fission Bombs");
+							messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Fission Bomb Expert III: Call in 5 Fission Bombs");
 							%index++;
 						}
 						else {
@@ -363,7 +363,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 				if(%client.CheckNWChallengeCompletion("LOAS1")) {
 					if(%client.CheckNWChallengeCompletion("LOAS2")) {
 						if(%client.CheckNWChallengeCompletion("LOAS3")) {
-							messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>LOAS Expert III</color>: Call in 15 Low Orbit Orbital Strikes (LOAS)");
+							messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>LOAS Expert III: Call in 15 Low Orbit Orbital Strikes (LOAS)");
 							%index++;
 						}
 						else {
@@ -394,7 +394,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Yvex1")) {
 				if(%client.CheckNWChallengeCompletion("Yvex2")) {
 					if(%client.CheckNWChallengeCompletion("Yvex3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Shadowy Desecration</color>: Defeat Lord Yvex 10 Times");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Shadowy Desecration: Defeat Lord Yvex 10 Times");
 						%index++;
 					}
 					else {
@@ -415,7 +415,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("CWS1")) {
 				if(%client.CheckNWChallengeCompletion("CWS2")) {
 					if(%client.CheckNWChallengeCompletion("CWS3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Harbinger's Bane</color>: Defeat Colonel Windshear 10 Times");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Harbinger's Bane: Defeat Colonel Windshear 10 Times");
 						%index++;
 					}
 					else {
@@ -436,7 +436,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("GOL1")) {
 				if(%client.CheckNWChallengeCompletion("GOL2")) {
 					if(%client.CheckNWChallengeCompletion("GOL3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Severe Thunderstorm</color>: Defeat The Ghost Of Lightning 10 Times");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Severe Thunderstorm: Defeat The Ghost Of Lightning 10 Times");
 						%index++;
 					}
 					else {
@@ -457,7 +457,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("GOF1")) {
 				if(%client.CheckNWChallengeCompletion("GOF2")) {
 					if(%client.CheckNWChallengeCompletion("GOF3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Mt. Death Depleter</color>: Defeat The Ghost Of Fire 5 Times");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Mt. Death Depleter: Defeat The Ghost Of Fire 5 Times");
 						%index++;
 					}
 					else {
@@ -478,7 +478,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Veg1")) {
 				if(%client.CheckNWChallengeCompletion("Veg2")) {
 					if(%client.CheckNWChallengeCompletion("Veg3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Firestorm Ender</color>: Defeat General Vegenor 10 Times");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Firestorm Ender: Defeat General Vegenor 10 Times");
 						%index++;
 					}
 					else {
@@ -499,7 +499,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("LRog1")) {
 				if(%client.CheckNWChallengeCompletion("LRog2")) {
 					if(%client.CheckNWChallengeCompletion("LRog3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Payback's A Bitch</color>: Defeat Lord Rog 7 Times");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Payback's A Bitch: Defeat Lord Rog 7 Times");
 						%index++;
 					}
 					else {
@@ -520,7 +520,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Ins1")) {
 				if(%client.CheckNWChallengeCompletion("Ins2")) {
 					if(%client.CheckNWChallengeCompletion("Ins3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Gravitational Influx</color>: Defeat Major Insignia 7 Times");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Gravitational Influx: Defeat Major Insignia 7 Times");
 						%index++;
 					}
 					else {
@@ -541,7 +541,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Stormrider1")) {
 				if(%client.CheckNWChallengeCompletion("Stormrider2")) {
 					if(%client.CheckNWChallengeCompletion("Stormrider3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Harbinger Fighter Demolisher</color>: Defeat Commander Stormrider 10 Times");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Harbinger Fighter Demolisher: Defeat Commander Stormrider 10 Times");
 						%index++;
 					}
 					else {
@@ -562,7 +562,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Treb1")) {
 				if(%client.CheckNWChallengeCompletion("Treb2")) {
 					if(%client.CheckNWChallengeCompletion("Treb3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Tank Halter</color>: Defeat Lordranius Trevor 7 Times");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Tank Halter: Defeat Lordranius Trevor 7 Times");
 						%index++;
 					}
 					else {
@@ -583,7 +583,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Vard1")) {
 				if(%client.CheckNWChallengeCompletion("Vard2")) {
 					if(%client.CheckNWChallengeCompletion("Vard3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Outevil The Wicked</color>: Defeat Lord Vardison 5 Times");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Outevil The Wicked: Defeat Lord Vardison 5 Times");
 						%index++;
 					}
 					else {
@@ -602,7 +602,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("VardEasy")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>The Standard Experience</color>: Defeat Lord Vardison on Easy Difficulty");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>The Standard Experience: Defeat Lord Vardison on Easy Difficulty");
 				%index++;
 			}
 			else {
@@ -610,7 +610,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 				%index++;
 			}
 			if(%client.CheckNWChallengeCompletion("VardNorm")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Demon Hunter</color>: Defeat Lord Vardison on Normal Difficulty");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Demon Hunter: Defeat Lord Vardison on Normal Difficulty");
 				%index++;
 			}
 			else {
@@ -618,7 +618,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 				%index++;
 			}
 			if(%client.CheckNWChallengeCompletion("VardHard")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Master Demon Slayer</color>: Defeat Lord Vardison on Hard Difficulty");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Master Demon Slayer: Defeat Lord Vardison on Hard Difficulty");
 				%index++;
 			}
 			else {
@@ -626,7 +626,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 				%index++;
 			}
 			if(%client.CheckNWChallengeCompletion("VardWtf")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>God of the Shadow Realm</color>: You're a fucking badass... Just bask in that...");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>God of the Shadow Realm: You're a fucking badass... Just bask in that...");
 				%index++;
 				messageClient( %client, 'SetLineHud', "", %tag, %index, "");
 				%index++;			
@@ -641,7 +641,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("ShadeLord1")) {
 				if(%client.CheckNWChallengeCompletion("ShadeLord2")) {
 					if(%client.CheckNWChallengeCompletion("ShadeLord3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Dawnlight Encarnate</color>: Defeat The Shade Lord for the Third Time");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Dawnlight Encarnate: Defeat The Shade Lord for the Third Time");
 						%index++;
 					}
 					else {
@@ -670,7 +670,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 					if(%client.CheckNWChallengeCompletion("Slayer3")) {
 						if(%client.CheckNWChallengeCompletion("Slayer4")) {
 							if(%client.CheckNWChallengeCompletion("Slayer5")) {
-								messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Slayer V</color>: Kill 1,000 Enemy Players");
+								messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Slayer V: Kill 1,000 Enemy Players");
 								%index++;								
 							}
 							else {
@@ -701,7 +701,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Defectionator1")) {
 				if(%client.CheckNWChallengeCompletion("Defectionator2")) {
 					if(%client.CheckNWChallengeCompletion("Defectionator3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Defectionator III</color>: Kill 500 \"Zombified\" Players");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Defectionator III: Kill 500 \"Zombified\" Players");
 						%index++;
 					}
 					else {
@@ -722,7 +722,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("Infectionator1")) {
 				if(%client.CheckNWChallengeCompletion("Infectionator2")) {
 					if(%client.CheckNWChallengeCompletion("Infectionator3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Infectionator III</color>: Convert 250 Players to the Zombie Horde");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Infectionator III: Convert 250 Players to the Zombie Horde");
 						%index++;
 					}
 					else {
@@ -743,7 +743,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("HSHoncho1")) {
 				if(%client.CheckNWChallengeCompletion("HSHoncho2")) {
 					if(%client.CheckNWChallengeCompletion("HSHoncho3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Headshot Honcho III</color>: Eliminate 300 Enemy Players with Headshots");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Headshot Honcho III: Eliminate 300 Enemy Players with Headshots");
 						%index++;
 					}
 					else {
@@ -764,7 +764,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("VehMans1")) {
 				if(%client.CheckNWChallengeCompletion("VehMans2")) {
 					if(%client.CheckNWChallengeCompletion("VehMans3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Vehicular Manslaughter III</color>: Eliminate 250 Enemy Players with a vehicle");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Vehicular Manslaughter III: Eliminate 250 Enemy Players with a vehicle");
 						%index++;
 					}
 					else {
@@ -783,7 +783,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}		
 			//		
 			if(%client.CheckNWChallengeCompletion("Assassin")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Assassinator</color>: Backstab an enemy player using the Blade of Vengeance");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Assassinator: Backstab an enemy player using the Blade of Vengeance");
 				%index++;
 			}
 			else {
@@ -792,7 +792,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}					
 			//	
 			if(%client.CheckNWChallengeCompletion("CompletelyUnexpected")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>That Was... Unexpected</color>: Eliminate someone playing as General Rog by backstabbing them with the Blade of Vengence");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>That Was... Unexpected: Eliminate someone playing as General Rog by backstabbing them with the Blade of Vengence");
 				%index++;
 				messageClient( %client, 'SetLineHud', "", %tag, %index, "");
 				%index++;				
@@ -805,7 +805,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}			
 			//	
 			if(%client.CheckNWChallengeCompletion("Uncomprehendable")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Uncomprehendable</color>: You committed the ultimate vehicle kill humiliation, well done!");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Uncomprehendable: You committed the ultimate vehicle kill humiliation, well done!");
 				%index++;
 			}
 			else {
@@ -822,7 +822,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("NormHunter1")) {
 				if(%client.CheckNWChallengeCompletion("NormHunter2")) {
 					if(%client.CheckNWChallengeCompletion("NormHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Frontline Buster III</color>: Slay 10,000 Zombies (Normal Type)");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Frontline Buster III: Slay 10,000 Zombies (Normal Type)");
 						%index++;
 					}
 					else {
@@ -843,7 +843,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("RavHunter1")) {
 				if(%client.CheckNWChallengeCompletion("RavHunter2")) {
 					if(%client.CheckNWChallengeCompletion("RavHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Speed Kills III</color>: Slay 5,000 Ravager Zombies");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Speed Kills III: Slay 5,000 Ravager Zombies");
 						%index++;
 					}
 					else {
@@ -864,7 +864,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("LordHunter1")) {
 				if(%client.CheckNWChallengeCompletion("LordHunter2")) {
 					if(%client.CheckNWChallengeCompletion("LordHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>The Bigger They Are III</color>: Slay 3,000 Zombie Lords");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>The Bigger They Are III: Slay 3,000 Zombie Lords");
 						%index++;
 					}
 					else {
@@ -885,7 +885,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("DemonHunter1")) {
 				if(%client.CheckNWChallengeCompletion("DemonHunter2")) {
 					if(%client.CheckNWChallengeCompletion("DemonHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Fire Retardant III</color>: Slay 5,000 Demon Zombies");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Fire Retardant III: Slay 5,000 Demon Zombies");
 						%index++;
 					}
 					else {
@@ -906,7 +906,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("AirRapHunter1")) {
 				if(%client.CheckNWChallengeCompletion("AirRapHunter2")) {
 					if(%client.CheckNWChallengeCompletion("AirRapHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Bat Slayer III</color>: Slay 6,000 Air Rapier Zombies");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Bat Slayer III: Slay 6,000 Air Rapier Zombies");
 						%index++;
 					}
 					else {
@@ -927,7 +927,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("DLordHunter1")) {
 				if(%client.CheckNWChallengeCompletion("DLordHunter2")) {
 					if(%client.CheckNWChallengeCompletion("DLordHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Hellspawn Erradicator III</color>: Slay 1,500 Demon Lord Zombies");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Hellspawn Erradicator III: Slay 1,500 Demon Lord Zombies");
 						%index++;
 					}
 					else {
@@ -948,7 +948,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("ShifterHunter1")) {
 				if(%client.CheckNWChallengeCompletion("ShifterHunter2")) {
 					if(%client.CheckNWChallengeCompletion("ShifterHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Anti-Warp III</color>: Slay 6,000 Shifter Zombies");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Anti-Warp III: Slay 6,000 Shifter Zombies");
 						%index++;
 					}
 					else {
@@ -969,7 +969,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("SummonerHunter1")) {
 				if(%client.CheckNWChallengeCompletion("SummonerHunter2")) {
 					if(%client.CheckNWChallengeCompletion("SummonerHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Horde Halter III</color>: Slay 5,000 Zombie Summoners");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Horde Halter III: Slay 5,000 Zombie Summoners");
 						%index++;
 					}
 					else {
@@ -990,7 +990,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("SniperHunter1")) {
 				if(%client.CheckNWChallengeCompletion("SniperHunter2")) {
 					if(%client.CheckNWChallengeCompletion("SniperHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Scope Breaker III</color>: Slay 5,000 Sniper Zombies");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Scope Breaker III: Slay 5,000 Sniper Zombies");
 						%index++;
 					}
 					else {
@@ -1011,7 +1011,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("UDemHunter1")) {
 				if(%client.CheckNWChallengeCompletion("UDemHunter2")) {
 					if(%client.CheckNWChallengeCompletion("UDemHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Runner Down III</color>: Slay 5,000 Ultra Demon Zombies");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Runner Down III: Slay 5,000 Ultra Demon Zombies");
 						%index++;
 					}
 					else {
@@ -1032,7 +1032,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("VRavHunter1")) {
 				if(%client.CheckNWChallengeCompletion("VRavHunter2")) {
 					if(%client.CheckNWChallengeCompletion("VRavHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>C4 Coming Through III</color>: Slay 5,000 Volatile Ravager Zombies");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>C4 Coming Through III: Slay 5,000 Volatile Ravager Zombies");
 						%index++;
 					}
 					else {
@@ -1053,7 +1053,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("SSHunter1")) {
 				if(%client.CheckNWChallengeCompletion("SSHunter2")) {
 					if(%client.CheckNWChallengeCompletion("SSHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>De-Flakerizer III</color>: Slay 5,000 Slingshot Zombies");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>De-Flakerizer III: Slay 5,000 Slingshot Zombies");
 						%index++;
 					}
 					else {
@@ -1074,7 +1074,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			if(%client.CheckNWChallengeCompletion("WraithHunter1")) {
 				if(%client.CheckNWChallengeCompletion("WraithHunter2")) {
 					if(%client.CheckNWChallengeCompletion("WraithHunter3")) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Anti Spec-Ops III</color>: Slay 1,000 Wraith Zombies");
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Anti Spec-Ops III: Slay 1,000 Wraith Zombies");
 						%index++;
 					}
 					else {
@@ -1099,7 +1099,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			messageClient( %client, 'SetLineHud', "", %tag, %index, "Special Event Challenges:");
 			%index++;
 			if(%client.CheckNWChallengeCompletion("NewYearsEve")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>New Years Eve Fireworks</color>: Get a Javelin Kill on New Year's Eve.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>New Years Eve Fireworks: Get a Javelin Kill on New Year's Eve.");
 				%index++;
 			}
 			else {
@@ -1108,7 +1108,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("NewYears")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>New Years Fireworks</color>: Call in a Nuclear Strike on New Year's Day.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>New Years Fireworks: Call in a Nuclear Strike on New Year's Day.");
 				%index++;
 			}
 			else {
@@ -1117,7 +1117,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("GunshipMall")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Gunship to The Mall</color>: Call in a Gunship Killstreak on Christmas Mall 2009.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Gunship to The Mall: Call in a Gunship Killstreak on Christmas Mall 2009.");
 				%index++;
 			}
 			else {
@@ -1126,7 +1126,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("IndepRPG")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Independance RPG</color>: Score an RPG Kill on the Fourth of July.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Independance RPG: Score an RPG Kill on the Fourth of July.");
 				%index++;
 			}
 			else {
@@ -1135,7 +1135,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("SoulsticeBombard")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Soulstice Bombard</color>: Call in artillery on one of the soulstices (6/21 or 12/21).");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Soulstice Bombard: Call in artillery on one of the soulstices (6/21 or 12/21).");
 				%index++;
 			}
 			else {
@@ -1155,7 +1155,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			messageClient( %client, 'SetLineHud', "", %tag, %index, "Sabotage Game Mode Challenges:");
 			%index++;			
 			if(%client.CheckNWChallengeCompletion("BombDisarmed")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Bomb Disarmed</color>: Disarm an enemy bomb.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Bomb Disarmed: Disarm an enemy bomb.");
 				%index++;
 			}
 			else {
@@ -1164,7 +1164,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("BombPlanted")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Bomb Planted</color>: Arm the bomb at the objective.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Bomb Planted: Arm the bomb at the objective.");
 				%index++;
 			}
 			else {
@@ -1173,7 +1173,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("BombDetonated")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Bomb Detonated</color>: Win a Round Of Sabotage.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Bomb Detonated: Win a Round Of Sabotage.");
 				%index++;
 			}
 			else {
@@ -1182,7 +1182,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("3For5Sabo")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Three For Five</color>: Win 3 Rounds Of Sabotage in a match.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Three For Five: Win 3 Rounds Of Sabotage in a match.");
 				%index++;
 			}
 			else {
@@ -1191,7 +1191,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("BaseDestroyer")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Base Destroyer</color>: Go Undefeated in a full game of Sabotage.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Base Destroyer: Go Undefeated in a full game of Sabotage.");
 				%index++;
 			}
 			else {
@@ -1206,7 +1206,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			messageClient( %client, 'SetLineHud', "", %tag, %index, "Domination Game Mode Challenges:");
 			%index++;			
 			if(%client.CheckNWChallengeCompletion("ZoneCapture")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Zone Conquerer</color>: Capture an Area.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Zone Conquerer: Capture an Area.");
 				%index++;
 			}
 			else {
@@ -1215,7 +1215,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("ABC")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Alpha Bravo Charlie</color>: Secure All Three Areas at one Time.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Alpha Bravo Charlie: Secure All Three Areas at one Time.");
 				%index++;
 			}
 			else {
@@ -1224,7 +1224,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("MatchSet")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Match Set</color>: Win a Round Of Domination.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Match Set: Win a Round Of Domination.");
 				%index++;
 			}
 			else {
@@ -1233,7 +1233,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("3For5")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Three For Five</color>: Win 3 Rounds Of Domination.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Three For Five: Win 3 Rounds Of Domination.");
 				%index++;
 			}
 			else {
@@ -1242,7 +1242,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("Undefeatable")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Undefeatable</color>: Go Undefeated in a full game of Domination.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Undefeatable: Go Undefeated in a full game of Domination.");
 				%index++;
 			}
 			else {
@@ -1257,7 +1257,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			messageClient( %client, 'SetLineHud', "", %tag, %index, "Horde 3 Game Mode Challenges:");
 			%index++;			
 			if(%client.CheckNWChallengeCompletion("15For15")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>15 For 15</color>: Complete Wave 15.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>15 For 15: Complete Wave 15.");
 				%index++;
 			}
 			else {
@@ -1266,7 +1266,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("Milestone25")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Milestone 25</color>: Complete Wave 25.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Milestone 25: Complete Wave 25.");
 				%index++;
 			}
 			else {
@@ -1275,7 +1275,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("ArmyOf50Stopped")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Army Of 50 Stopped</color>: Complete Horde 3 (All 50 Waves).");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Army Of 50 Stopped: Complete Horde 3 (All 50 Waves).");
 				%index++;
 			}
 			else {
@@ -1284,7 +1284,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("Angel")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Angel</color>: Revive a fallen teammate in Horde.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Angel: Revive a fallen teammate in Horde.");
 				%index++;
 			}
 			else {
@@ -1293,7 +1293,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("ZBomber")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Z-Bomber</color>: Call in a Z-Bomb While Playing Horde.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Z-Bomber: Call in a Z-Bomb While Playing Horde.");
 				%index++;
 			}
 			else {
@@ -1302,7 +1302,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("FirstBlood")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>First Blood</color>: Kill the first zombie that spawns in a Horde 3 game.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>First Blood: Kill the first zombie that spawns in a Horde 3 game.");
 				%index++;
 			}
 			else {
@@ -1311,7 +1311,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}	
 			//
 			if(%client.CheckNWChallengeCompletion("SpeedSlayer")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Speed Slayer</color>: Be the featured first killer 10 times in a single game.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Speed Slayer: Be the featured first killer 10 times in a single game.");
 				%index++;
 			}
 			else {
@@ -1320,7 +1320,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}			
 			//
 			if(%client.CheckNWChallengeCompletion("HighScorer")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>High Scorer</color>: Be the featured high scorer 10 times in a single game.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>High Scorer: Be the featured high scorer 10 times in a single game.");
 				%index++;
 			}
 			else {
@@ -1335,7 +1335,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			messageClient( %client, 'SetLineHud', "", %tag, %index, "Helljump Game Mode Challenges:");
 			%index++;			
 			if(%client.CheckNWChallengeCompletion("GroupBuster")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Group Buster</color>: Complete A Group.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Group Buster: Complete A Group.");
 				%index++;
 			}
 			else {
@@ -1344,7 +1344,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("WaveDefeater")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Wave Defeater</color>: Complete A Wave.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Wave Defeater: Complete A Wave.");
 				%index++;
 			}
 			else {
@@ -1353,7 +1353,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("OneK")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>1K Soldier</color>: Earn 1,000 Points (Solo Score).");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>1K Soldier: Earn 1,000 Points (Solo Score).");
 				%index++;
 			}
 			else {
@@ -1362,7 +1362,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("FiveK")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>5K Soldier</color>: Earn 5,000 Points (Solo Score).");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>5K Soldier: Earn 5,000 Points (Solo Score).");
 				%index++;
 			}
 			else {
@@ -1371,7 +1371,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("TenK")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>10K Soldier</color>: Earn 10,000 Points (Solo Score).");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>10K Soldier: Earn 10,000 Points (Solo Score).");
 				%index++;
 			}
 			else {
@@ -1380,7 +1380,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("PointsSurge")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Points Surge</color>: Earn 7,500 Points (Team Score).");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Points Surge: Earn 7,500 Points (Team Score).");
 				%index++;
 			}
 			else {
@@ -1389,7 +1389,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("PointsJackpot")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Points Jackpot</color>: Earn 25,000 Points (Team Score).");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Points Jackpot: Earn 25,000 Points (Team Score).");
 				%index++;
 			}
 			else {
@@ -1398,7 +1398,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("DownBoy")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Down Boy... Down</color>: Kill the wraith zombie on Strike 5.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Down Boy... Down: Kill the wraith zombie on Strike 5.");
 				%index++;
 			}
 			else {
@@ -1407,7 +1407,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("ClassExtravaganza")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Class Extravaganza</color>: Use a hellclass.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Class Extravaganza: Use a hellclass.");
 				%index++;
 			}
 			else {
@@ -1416,7 +1416,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("LifeGiver")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Giver of Life</color>: Use a Full Team Respawn beacon.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Giver of Life: Use a Full Team Respawn beacon.");
 				%index++;
 			}
 			else {
@@ -1431,7 +1431,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			messageClient( %client, 'SetLineHud', "", %tag, %index, "From The Top (Mission) Challenges:");
 			%index++;			
 			if(%client.CheckNWChallengeCompletion("SimonSays")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Simon Says</color>: Order a mission.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Simon Says: Order a mission.");
 				%index++;
 			}
 			else {
@@ -1440,7 +1440,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("FromTheTop")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>From The Top</color>: Accept a mission.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>From The Top: Accept a mission.");
 				%index++;
 			}
 			else {
@@ -1449,7 +1449,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("NaturalLeader")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Natural Leader</color>: Order a mission and have another player join your team.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Natural Leader: Order a mission and have another player join your team.");
 				%index++;
 			}
 			else {
@@ -1458,7 +1458,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//			
 			if(%client.CheckNWChallengeCompletion("GoldStar")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Gold Star</color>: Complete a mission within the time limit.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Gold Star: Complete a mission within the time limit.");
 				%index++;
 			}
 			else {
@@ -1467,7 +1467,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("Faster")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Faster!</color>: Complete a mission, but miss the time limit.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Faster!: Complete a mission, but miss the time limit.");
 				%index++;
 			}
 			else {
@@ -1476,7 +1476,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("EpicFailure")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Epic Failure</color>: Fail a mission ;).");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Epic Failure: Fail a mission ;).");
 				%index++;
 			}
 			else {
@@ -1485,7 +1485,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}	
 			//
 			if(%client.CheckNWChallengeCompletion("ExpertGunner")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Expert AC-130 Gunner</color>: Complete 'Rain Down'.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Expert AC-130 Gunner: Complete 'Rain Down'.");
 				%index++;
 			}
 			else {
@@ -1494,7 +1494,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//	
 			if(%client.CheckNWChallengeCompletion("Survivalist")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Survivalist</color>: Complete 'Surrounded'.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Survivalist: Complete 'Surrounded'.");
 				%index++;
 			}
 			else {
@@ -1503,7 +1503,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("Invisibreh")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Shhh.. I'm Invisibreh</color>: Complete 'Enemy AC-130 Above' by outlasting the enemy AC-130.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Shhh.. I'm Invisibreh: Complete 'Enemy AC-130 Above' by outlasting the enemy AC-130.");
 				%index++;
 			}
 			else {
@@ -1512,7 +1512,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//	
 			if(%client.CheckNWChallengeCompletion("WeakGunship")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>I have you now!</color>: Complete 'Enemy AC-130 Above' by destroying the enemy AC-130.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>I have you now!: Complete 'Enemy AC-130 Above' by destroying the enemy AC-130.");
 				%index++;
 			}
 			else {
@@ -1521,7 +1521,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//	
 			if(%client.CheckNWChallengeCompletion("InvasionBuster")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Invade THIS!</color>: Complete 'Invasion'.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Invade THIS!: Complete 'Invasion'.");
 				%index++;
 			}
 			else {
@@ -1530,7 +1530,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("SurvivalistExtreme")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Extreme Survivalist</color>: Complete 'Surrounded 2.0'.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Extreme Survivalist: Complete 'Surrounded 2.0'.");
 				%index++;
 			}
 			else {
@@ -1545,7 +1545,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			messageClient( %client, 'SetLineHud', "", %tag, %index, "Officer Challenges:");
 			%index++;					
 			if(%client.CheckNWChallengeCompletion("Prestge1")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Instructive Private</color> - Reach Officer Level 1.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Instructive Private - Reach Officer Level 1.");
 				%index++;
 			}
 			else {
@@ -1554,7 +1554,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("Prestge2")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Excelling Private</color> - Reach Officer Level 2.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Excelling Private - Reach Officer Level 2.");
 				%index++;
 			}
 			else {
@@ -1563,7 +1563,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("Prestge3")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Champion Private</color> - Reach Officer Level 3.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Champion Private - Reach Officer Level 3.");
 				%index++;
 			}
 			else {
@@ -1572,7 +1572,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("Prestge4")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Prestigious Private</color> - Reach Officer Level 4.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Prestigious Private - Reach Officer Level 4.");
 				%index++;
 			}
 			else {
@@ -1581,7 +1581,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("Prestge5")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Supreme Private</color> - Reach Officer Level 5.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Supreme Private - Reach Officer Level 5.");
 				%index++;
 			}
 			else {
@@ -1590,7 +1590,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("Prestge9")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Phantom's Vengeance</color> - Reach Oficer Level 9.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Phantom's Vengeance - Reach Oficer Level 9.");
 				%index++;
 			}
 			else {
@@ -1599,7 +1599,7 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			}
 			//
 			if(%client.CheckNWChallengeCompletion("GameEnder")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Game Ender</color> - Call in a Fission Bomb.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Game Ender - Call in a Fission Bomb.");
 				%index++;
 			}
 			else {
