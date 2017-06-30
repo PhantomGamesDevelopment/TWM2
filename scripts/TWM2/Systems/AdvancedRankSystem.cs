@@ -66,7 +66,11 @@ function LoadClientRankfile(%client) {
       echo("Found TWM2 Rank/Setting Client Controller for "@%client@" -> "@%object@"");
       %client.TWM2Core = %object;
    }
-   //
+   //Check Officer Challenges.
+   for(%i = %client.TWM2Core.officer; %i > 0; %i--) {
+      %oChN = "Prestige"@%i;
+	  CompleteNWChallenge(%client, %oChN);
+   }   
    TWM2Lib_MainControl("PlayerTimeLoop", %client); //post load functions
 }
 
@@ -109,43 +113,42 @@ function UpdateClientRank(%client) {
 }
 
 function runRankUpdateLoop(%client, %j, %continue) {
-   if(!%continue) {
-      return;
-      //break the function run through here
-   }
-   if(%j <= 0) {
-      return;
-   }
-   %name = %client.namebase;
-   %scriptController = %client.TWM2Core;
-   if(getCurrentEXP(%client) >= $Ranks::MinPoints[%j]){
-      if(%scriptController.rank !$= $Ranks::NewRank[%j] && !fetchCap("Level", ((%scriptController.officer)*$Rank::RankCount)+%j)) {
-         %scriptController.rankNumber = %j;
-         if($TWM2::UseRankTags) {
-             DoNameChangeChecks(%client);
-         }
-         %scriptController.rank = $Ranks::NewRank[%j];
-         if($Prestige::Name[%scriptController.officer] >= 1) {
-            $Prestige::Name[%scriptController.officer] = "";
-         }
-         messageAll('msgclient',"\c2"@%name@" has become a "@$Prestige::Name[%scriptController.officer]@""@$Ranks::NewRank[%j]@" with a XP of "@printCurrentEXP(%client)@"!");
-         messageclient(%client, 'Msgclient', "~wfx/Bonuses/Nouns/General.wav");
-         bottomPrint(%client, "Excelent work "@%name@", you have been promoted to the rank of: "@$Prestige::Name[%scriptController.officer]@""@$Ranks::NewRank[%j]@"!", 5, 2 );
-         echo("Promotion: "@%name@" to Rank "@$Ranks::NewRank[%j]@", XP: "@getCurrentEXP(%client)@".");
-         //UpdateRankFile(%client);
-         SaveClientFile(%client);
-         //
-         if(!$TWM2::PGDConnectDisabled) {
-            PrepareUpload(%client);
-         }
-         %j = 1;
-         runRankUpdateLoop(%client, %j, 0);
-      }
-   }
-   else {
-      %j--;
-      runRankUpdateLoop(%client, %j, 1);
-   }
+	if(!%continue) {
+		return;
+	}
+	if(%j <= 0) {
+		return;
+	}
+	%name = %client.namebase;
+	%scriptController = %client.TWM2Core;   
+	//perform rank update
+	if(getCurrentEXP(%client) >= $Ranks::MinPoints[%j]){
+		if(%scriptController.rank !$= $Ranks::NewRank[%j] && !fetchCap("Level", ((%scriptController.officer)*$Rank::RankCount)+%j)) {
+			%scriptController.rankNumber = %j;
+			if($TWM2::UseRankTags) {
+				DoNameChangeChecks(%client);
+			}
+			%scriptController.rank = $Ranks::NewRank[%j];
+			if($Prestige::Name[%scriptController.officer] >= 1) {
+				$Prestige::Name[%scriptController.officer] = "";
+			}
+			messageAll('msgclient',"\c2"@%name@" has become a "@$Prestige::Name[%scriptController.officer]@""@$Ranks::NewRank[%j]@" with a XP of "@printCurrentEXP(%client)@"!");
+			messageclient(%client, 'Msgclient', "~wfx/Bonuses/Nouns/General.wav");
+			bottomPrint(%client, "Excelent work "@%name@", you have been promoted to the rank of: "@$Prestige::Name[%scriptController.officer]@""@$Ranks::NewRank[%j]@"!", 5, 2 );
+			echo("Promotion: "@%name@" to Rank "@$Ranks::NewRank[%j]@", XP: "@getCurrentEXP(%client)@".");
+			SaveClientFile(%client);
+			//
+			if(!$TWM2::PGDConnectDisabled) {
+				PrepareUpload(%client);
+			}
+			%j = 1;
+			runRankUpdateLoop(%client, %j, 0);
+		}
+	}
+	else {
+		%j--;
+		runRankUpdateLoop(%client, %j, 1);
+	}
 }
 
 function fetchCap(%type, %index) {
@@ -258,35 +261,10 @@ function PromoteToPrestige(%client) {
 
    MessageAll('msgSpecial', "\c5"@%client.namebase@" has promoted to Officer level "@%next@".");
    recordAction(%client, "", ""); //record blank action for the challenges to pick off any officer challenges
-
-   switch(%next) {
-      case 1:
-         schedule(1000, 0, "CompleteNWChallenge", %client, "Prestige1");
-      case 2:
-         schedule(1000, 0, "CompleteNWChallenge", %client, "Prestige1");
-         schedule(1500, 0, "CompleteNWChallenge", %client, "Prestige2");
-      case 3:
-         schedule(1000, 0, "CompleteNWChallenge", %client, "Prestige1");
-         schedule(1500, 0, "CompleteNWChallenge", %client, "Prestige2");
-         schedule(2000, 0, "CompleteNWChallenge", %client, "Prestige3");
-      case 4:
-         schedule(1000, 0, "CompleteNWChallenge", %client, "Prestige1");
-         schedule(1500, 0, "CompleteNWChallenge", %client, "Prestige2");
-         schedule(2000, 0, "CompleteNWChallenge", %client, "Prestige3");
-         schedule(2500, 0, "CompleteNWChallenge", %client, "Prestige4");
-      case 5 or 6 or 7 or 8:
-         schedule(1000, 0, "CompleteNWChallenge", %client, "Prestige1");
-         schedule(1500, 0, "CompleteNWChallenge", %client, "Prestige2");
-         schedule(2000, 0, "CompleteNWChallenge", %client, "Prestige3");
-         schedule(2500, 0, "CompleteNWChallenge", %client, "Prestige4");
-         schedule(3000, 0, "CompleteNWChallenge", %client, "Prestige5");
-      case 9:
-         schedule(1000, 0, "CompleteNWChallenge", %client, "Prestige1");
-         schedule(1500, 0, "CompleteNWChallenge", %client, "Prestige2");
-         schedule(2000, 0, "CompleteNWChallenge", %client, "Prestige3");
-         schedule(2500, 0, "CompleteNWChallenge", %client, "Prestige4");
-         schedule(3000, 0, "CompleteNWChallenge", %client, "Prestige5");
-         schedule(3500, 0, "CompleteNWChallenge", %client, "Prestige9");
+   
+   for(%i = %next; %i > 0; %i--) {
+      %oChN = "Prestige"@%i;
+	  CompleteNWChallenge(%client, %oChN);
    }
 }
 

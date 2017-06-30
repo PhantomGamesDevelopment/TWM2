@@ -1544,60 +1544,141 @@ function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
 			//Officer Promotion
 			messageClient( %client, 'SetLineHud', "", %tag, %index, "Officer Challenges:");
 			%index++;					
-			if(%client.CheckNWChallengeCompletion("Prestge1")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Instructive Private - Reach Officer Level 1.");
+			if(%client.CheckNWChallengeCompletion("Prestige1")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Instructive Officer - Reach Officer Level 1.");
 				%index++;
 			}
 			else {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "Instructive Private - Reach Officer Level 1.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
 				%index++;
 			}
 			//
-			if(%client.CheckNWChallengeCompletion("Prestge2")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Excelling Private - Reach Officer Level 2.");
+			if(%client.CheckNWChallengeCompletion("Prestige2")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Excelling Officer - Reach Officer Level 2.");
 				%index++;
 			}
 			else {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "Excelling Private - Reach Officer Level 2.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
 				%index++;
 			}
 			//
-			if(%client.CheckNWChallengeCompletion("Prestge3")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Champion Private - Reach Officer Level 3.");
+			if(%client.CheckNWChallengeCompletion("Prestige3")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Champion Officer - Reach Officer Level 3.");
 				%index++;
 			}
 			else {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "Champion Private - Reach Officer Level 3.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
 				%index++;
 			}
 			//
-			if(%client.CheckNWChallengeCompletion("Prestge4")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Prestigious Private - Reach Officer Level 4.");
+			if(%client.CheckNWChallengeCompletion("Prestige4")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Prestigious Officer - Reach Officer Level 4.");
 				%index++;
 			}
 			else {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "Prestigious Private - Reach Officer Level 4.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
 				%index++;
 			}
 			//
-			if(%client.CheckNWChallengeCompletion("Prestge5")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Supreme Private - Reach Officer Level 5.");
+			if(%client.CheckNWChallengeCompletion("Prestige5")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Supreme Officer - Reach Officer Level 5.");
 				%index++;
 			}
 			else {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "Supreme Private - Reach Officer Level 5.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
 				%index++;
 			}
 			//
-			if(%client.CheckNWChallengeCompletion("Prestge9")) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Phantom's Vengeance - Reach Oficer Level 9.");
+			if(%client.CheckNWChallengeCompletion("Prestige6")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Glorious Officer - Reach Officer Level 6.");
 				%index++;
 			}
 			else {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, "Phantom's Vengeance - Reach Oficer Level 9.");
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
 				%index++;
 			}
 			//
+			if(%client.CheckNWChallengeCompletion("Prestige7")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Ultimate Officer - Reach Officer Level 7.");
+				%index++;
+			}
+			else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
+				%index++;
+			}
+			//
+			if(%client.CheckNWChallengeCompletion("Prestige8")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Shadowing Officer - Reach Officer Level 8.");
+				%index++;
+			}
+			else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
+				%index++;
+			}
+			//			
+			if(%client.CheckNWChallengeCompletion("Prestige9")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Phantom Officer - Reach Oficer Level 9.");
+				%index++;
+			}
+			else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
+				%index++;
+			}
+			//
+			if(%client.CheckNWChallengeCompletion("Prestige10")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Brutal Officer - Reach Oficer Level 10.");
+				%index++;
+			}
+			else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
+				%index++;
+			}
+			//
+			if(%client.CheckNWChallengeCompletion("Prestige11")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Vengeful Officer - Reach Oficer Level 11.");
+				%index++;
+			}
+			else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
+				%index++;
+			}
+			//
+			if(%client.CheckNWChallengeCompletion("Prestige12")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Noble Officer - Reach Oficer Level 12.");
+				%index++;
+			}
+			else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
+				%index++;
+			}
+			//
+			if(%client.CheckNWChallengeCompletion("Prestige13")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Spectral Officer - Reach Oficer Level 13.");
+				%index++;
+			}
+			else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
+				%index++;
+			}
+			//
+			if(%client.CheckNWChallengeCompletion("Prestige14")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Masterful Officer - Reach Oficer Level 14.");
+				%index++;
+			}
+			else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
+				%index++;
+			}
+			//
+			if(%client.CheckNWChallengeCompletion("Prestige15")) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Rising Harbinger - Reach The Highest Officer Level (15).");
+				%index++;
+			}
+			else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:990000>=== CLASSIFIED: REQUIRES ADDITIONAL INTELLIGENCE ===");
+				%index++;
+			}
+			//			
 			if(%client.CheckNWChallengeCompletion("GameEnder")) {
 				messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>Game Ender - Call in a Fission Bomb.");
 				%index++;

@@ -171,7 +171,7 @@ function DemonMotherThink(%obj){
    %closestClient = getWord(%closestClient,0).Player;
    
    if(%closestClient != -1){
-	%searchobject = %closestclient.player;
+	%searchobject = %closestclient;
 	%dist = vectorDist(%pos,%searchobject.getPosition());
 	if(%dist <= 100){
 	   if(%dist <= 50){		//ok were now in combat mode, lets decide on what we should do, move attack, or shoot.

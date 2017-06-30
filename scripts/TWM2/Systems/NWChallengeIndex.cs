@@ -229,12 +229,21 @@ $Challenge::Info["InvasionBuster"] = "Invade THIS!\t11\t25000\tNone";
 $Challenge::Info["SurvivalistExtreme"] = "Extreme Survivalist\t11\t50000\tNone";
 
 //Prestige
-$Challenge::Info["Prestge1"] = "Instructive Private\t12\t100\tNone";
-$Challenge::Info["Prestge2"] = "Excelling Private\t12\t250\tNone";
-$Challenge::Info["Prestge3"] = "Champion Private\t12\t350\tNone";
-$Challenge::Info["Prestge4"] = "Prestigious Private\t12\t500\tNone";
-$Challenge::Info["Prestge5"] = "Supreme Private\t12\t1000\tNone";
-$Challenge::Info["Prestge9"] = "Phantom's Vengeance\t12\t10000\tNone";
+$Challenge::Info["Prestige1"] = "Instructive Officer\t12\t100\tNone";
+$Challenge::Info["Prestige2"] = "Excelling Officer\t12\t250\tNone";
+$Challenge::Info["Prestige3"] = "Champion Officer\t12\t350\tNone";
+$Challenge::Info["Prestige4"] = "Prestigious Officer\t12\t500\tNone";
+$Challenge::Info["Prestige5"] = "Supreme Officer\t12\t1000\tNone";
+$Challenge::Info["Prestige6"] = "Glorious Officer\t12\t2500\tNone";
+$Challenge::Info["Prestige7"] = "Ultimate Officer\t12\t5000\tNone";
+$Challenge::Info["Prestige8"] = "Shadowing Officer\t12\t7500\tNone";
+$Challenge::Info["Prestige9"] = "Phantom Officer\t12\t10000\tNone";
+$Challenge::Info["Prestige10"] = "Brutal Officer\t12\t10000\tNone";
+$Challenge::Info["Prestige11"] = "Vengeful Officer\t12\t10000\tNone";
+$Challenge::Info["Prestige12"] = "Spectral Officer\t12\t10000\tNone";
+$Challenge::Info["Prestige13"] = "Noble Officer\t12\t10000\tNone";
+$Challenge::Info["Prestige14"] = "Masterful Officer\t12\t10000\tNone";
+$Challenge::Info["Prestige15"] = "Rising Harbinger\t12\t10000\tNone";
 $Challenge::Info["GameEnder"] = "Game Ender\t12\t5000\tNone";
 
 
@@ -247,59 +256,39 @@ $Challenge::Info["GameEnder"] = "Game Ender\t12\t5000\tNone";
 
 //Core Functions
 function GameConnection::AllowedToDoNW(%client, %name) {
-   %scriptController = %client.TWM2Core;
-   %xp = getCurrentEXP(%client);
-   %taskCate = getField($Challenge::Info[%name], 1);
-   switch(%taskCate) {
-      case 1:
-         if(%xp > $Ranks::MinPoints[13]) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case 2:
-         if(%xp > $Ranks::MinPoints[18]) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case 3:
-         if(%xp > $Ranks::MinPoints[23]) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case 4:
-         if(%xp > $Ranks::MinPoints[28]) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case 5:
-         return 1; //everyone can do these.
-      case 6:
-         return 1; //handled by a different system
-      case 7 or 8 or 9 or 10:
-         if(%xp > $Ranks::MinPoints[40]) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case 11:
-         if(%xp > $Ranks::MinPoints[59]) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case 12:
-         return 1;
-   }
+	%scriptController = %client.TWM2Core;
+	%xp = getCurrentEXP(%client);
+	%taskCate = getField($Challenge::Info[%name], 1);
+   
+	if(%taskCate == 5 || %taskCate == 6) {
+		//Special categories available for all players
+		return 1;
+	}
+   
+	if(%taskCate == 1) {
+		return %xp >= $Ranks::MinPoints[13]; 
+	}
+	else if(%taskCate == 2) { 
+		return %xp >= $Ranks::MinPoints[18];
+	}
+	else if(%taskCate == 3) {
+		return %xp >= $Ranks::MinPoints[23];
+	}
+	else if(%taskCate == 4) {
+		return %xp >= $Ranks::MinPoints[28];
+	}
+	else if(%taskCate == 7 || %taskCate == 8 || %taskCate == 9 || %taskCate == 10) {
+		return %xp >= $Ranks::MinPoints[40];
+	}
+	else if(%taskCate == 11) {
+		return %xp >= $Ranks::MinPoints[59];
+	}
+	else if(%taskCate == 12) {
+		return %scriptController.officer >= 1;
+	}
+	else {
+		error("AllowedToDoNW: Invalid challenge category for "@%name@", system shows: "@%taskCate@" ("@%Challenge::Info[%name]@")");
+	}
 }
 
 function GameConnection::CheckNWChallengeCompletion(%client, %name) {
@@ -347,7 +336,7 @@ function CompleteNWChallenge(%client, %name) {
 }
 
 //Menus
-function GenerateChallegnesMenu(%client, %tag, %index) {
+function GenerateChallengesMenu(%client, %tag, %index) {
    %scriptController = %client.TWM2Core;
    %xp = getCurrentEXP(%client);
    messageClient( %client, 'SetLineHud', "", %tag, %index, "Select a category to view challenges:");

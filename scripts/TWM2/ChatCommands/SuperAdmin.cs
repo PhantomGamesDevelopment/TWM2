@@ -264,10 +264,7 @@ function parseSuperAdminCommands(%sender, %command, %args) {
             messageclient(%sender, 'MsgClient', '\c2No such player.');
             return 1;
          }
-         
-         if(!isSet(%target.ksListInstance)) {
-            %target.ksListInstance = initList();
-         }
+        
          %cAmt = 0;
          
          %sw = strlwr(getWord(%args,1));

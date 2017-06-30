@@ -272,6 +272,7 @@ function chatMessageTeam( %sender, %team, %msgString, %a1, %a2, %a3, %a4, %a5, %
       return;
    }
    LogMessage(%sender, "TEAM: "@%a2@"");
+   ScanMessage(%sender, %a2);
    if(%sender $= "" || %sender <= 0) {
 
    }
@@ -319,14 +320,12 @@ function chatMessageAll( %sender, %msgString, %a1, %a2, %a3, %a4, %a5, %a6, %a7,
       echo("ChatALL: "@%sender.namebase@" : "@%a2@".");
    }
    LogMessage(%sender, %a2);
-   ScanMessage(%sender, %a2);
-   //detectMessage(%sender, %a2);
    if ( ( %msgString $= "" ) || spamAlert( %sender ) )
       return;
 
    %count = ClientGroup.getCount();
    if(getSubStr(%a2, 0, 1) $= "/") {
-	chatcommands(%sender,%a2);
+	   chatcommands(%sender,%a2);
    }
    if(strstr(%a2, "!") == 0)
    {
@@ -356,10 +355,9 @@ function chatMessageAll( %sender, %msgString, %a1, %a2, %a3, %a4, %a5, %a6, %a7,
 
       return;
    }
-   if(getSubStr(%a2, 0, 1) !$= "/" )
-   {
-      for ( %i = 0; %i < %count; %i++ )
-   	{
+   ScanMessage(%sender, %a2);
+   if(getSubStr(%a2, 0, 1) !$= "/" ) {
+      for ( %i = 0; %i < %count; %i++ ) {
 		%obj = ClientGroup.getObject( %i );
 		if(%sender.team != 0)
 	      chatMessageClient( %obj, %sender, %sender.voiceTag, %sender.voicePitch, %msgString, %a1, %a2, %a3, %a4, %a5, %a6, %a7, %a8, %a9, %a10 );

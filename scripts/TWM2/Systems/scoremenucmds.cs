@@ -762,7 +762,7 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
-             %index = GenerateChallegnesMenu(%client, %tag, %index);
+             %index = GenerateChallengesMenu(%client, %tag, %index);
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tChallenge\t1>Return to Challenge Menu</a>');

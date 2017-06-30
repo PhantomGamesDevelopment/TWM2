@@ -147,6 +147,9 @@ function ChargeEmitter(%zombie){
 //************************************************************
 
 function ZombieLookforTarget(%zombie){
+   if(!isObject(%zombie)) {
+      return;
+   }
    %wbpos = %zombie.getworldboxcenter();
    %z = getWord(%wbpos, 2);
    if(%z < $zombie::FallDieHeight) {
