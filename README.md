@@ -64,8 +64,7 @@ this level of authority, please contact Phantom139 on the PGD Forums, or by emai
 MOD DEVELOPMENT HISTORY:
 
 3.9 -> 3.91 (In Progress):
-* Lib'd the TWM2 MainControl file to remove some more functions
-* Lib'd the PGD Connect support interface as well
+* Lib'd the TWM2 MainControl file and PGD Connect Support files to recover some functions
 * The F2 Menu now detects PGD Connected accounts and will no longer show the option to PGD Connect to already connected users
 * Addressed a security issue regarding players who are "attempting" to load code via universal rank files.
   * Nice try DDDX, but your fem-phantom fantasies will NOT be happening... ;)
@@ -73,10 +72,15 @@ MOD DEVELOPMENT HISTORY:
 * Addressed the bug that would allow Vardison 2.0 to summon infinite minions
 * Addressed the bug with Vardison 2.0 that made his Shadow Rift invincible
 * Removed two un-used game objects that were never completed, the Medal Seal and the UAV Control Panel
+  * Note: This has inadvertently introduced a new bug causing the UAMS streak to no longer correctly function, this will be addressed before the official release of 3.91
 * Removed a few erraneous exec calls to non-existent files in the mod load script
 * Depricated the F2 Inventory Screen (Nobody ever used this)
 * Fixed a few bugs in the F2 Menu
-* [phantomdev.net] "Hopefully" fixed the CRON setting on the daily challenge script so it runs every day now.
+  * Incorrect links
+  * Missing tags
+  * Overlap on some lines of text
+* [phantomdev.net] Fixed the CRON setting on the daily challenge script so it runs every day now
+* Adjusted the daily challenge script to point to the correct link, effectively re-enabling the system
 * Addressed the bug preventing weapon challenge progress from recording
 * Re-did the Challenge Menus in the F2 Menu
   * Renamed Weapon Challenges to just Challenges
@@ -95,17 +99,22 @@ MOD DEVELOPMENT HISTORY:
 	* Ghost of Fire
 	* Commander Stormrider
   * Added in additional challenges for the other categories to help players make some more mod progression
+  * Added officer promotion challenges for the remaining officer levels without them
   * Removed erraneous reward notes on the boss challenges, as we removed the "AI Follower" system back in 3.7
   * Addressed the bug preventing the four Vardison challenges for specific difficulty completions from actually completing
 * Added in the necessary hooks to enable officer ranks 10 - 15
   * Have fun!
 * Re-did the Officer Promotion windows to preview the rewards upcoming at that level
 * Added in the capability to "reset" your entire TWM2 progression upon hitting max level of Officer 15 (Max Level)
+  * I'm currently considering replacing this with a different system, will be decided as a 3.92 feature
 * Depricated the Store and Money systems, these systems will become progression based unlocks for "higher" officer levels (10 - 15)
   * Armor effects will not return
   * Armor flags will return in 3.92
+* Fixed the bug with Demon Lord zombies not targeting properly
+* Fixed a console warning bug caused by zombie objects despawning and then calling a scan method
 * Shifter Zombies now have a randomzied element in their teleport method
 * Plasma Torpedo Cannon now requires officer level 9 (Phantom)
+* Addressed the bug preventing the challenges for reaching officer ranks from completing
 * Weapon Balancing Pass
   * Grapple Hook
     * Slowed down the attacher projectile a bit, lowering the range
