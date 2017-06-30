@@ -46,13 +46,13 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
              
         case "OrderMisSub":
              %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "Missions" );
-             if(getCurrentEXP(%client) < $Ranks::MinPoints[59] && %scriptController.officer < 1) {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "You must have the 'Commanding Officer' Rank To Order Missions.");
+             messageClient( %client, 'SetScoreHudSubheader', "", "Operations" );
+             if(getCurrentEXP(%client) < $Ranks::MinPoints[49] && %scriptController.officer < 1) {
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "You must have the 'General' Rank To Order Operations.");
                 %index++;
              }
              else {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "Order A Mission, Select a Mission");
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "Select an Operation");
                 %index++;
                 %xI = 0;
                 while(isSet($Mission::TWM2Mision[%xI])) {
@@ -77,13 +77,13 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
              %task = %arg3;
              switch(%task) {
                 case 1:
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, "Mission: "@getField($Mission::VarSet[""@%mission@"", "TaskDetails"], 0)@"");
+                   messageClient( %client, 'SetLineHud', "", %tag, %index, "Operation: "@getField($Mission::VarSet[""@%mission@"", "TaskDetails"], 0)@"");
                    %index++;
                    messageClient( %client, 'SetLineHud', "", %tag, %index, "Details: "@getField($Mission::VarSet[""@%mission@"", "TaskDetails"], 1)@"");
                    %index++;
                    messageClient( %client, 'SetLineHud', "", %tag, %index, "Difficulty: "@$Mission::VarSet[""@%mission@"", "Difficulty"]@"");
                    %index++;
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, "Mission Time Window: "@$Mission::VarSet[""@%mission@"", "TimeLimit"] / 60@" Minutes");
+                   messageClient( %client, 'SetLineHud', "", %tag, %index, "Operation Time Window: "@$Mission::VarSet[""@%mission@"", "TimeLimit"] / 60@" Minutes");
                    %index++;
                    messageClient( %client, 'SetLineHud', "", %tag, %index, "Required Players: "@$Mission::VarSet[""@%mission@"", "PlayerReq"]@"");
                    %index++;
@@ -91,9 +91,9 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
                    %index++;
                    messageClient( %client, 'SetLineHud', "", %tag, %index, "");
                    %index++;
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOrderMis\t"@%mission@"\t2>Order Mission</a>");
+                   messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOrderMis\t"@%mission@"\t2>Order This Operation</a>");
                    %index++;
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOrderMisSub\t1>Select A Different Mission</a>');
+                   messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOrderMisSub\t1>Select A Different Operation</a>');
                    %index++;
                    messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Return To Main Menu</a>');
                    %index++;
@@ -110,18 +110,18 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
              
         case "Missions":
              %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "Missions" );
-             if(getCurrentEXP(%client) < $Ranks::MinPoints[59] && %scriptController.officer < 1) {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "You must have the 'Commanding Officer' Rank To Order Missions.");
+             messageClient( %client, 'SetScoreHudSubheader', "", "Operations" );
+             if(getCurrentEXP(%client) < $Ranks::MinPoints[49] && %scriptController.officer < 1) {
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "Order Operation: LOCKED, Requires 'General' Rank.");
                 %index++;
              }
              else {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOrderMisSub\t1>Order A Mission</a>');
+                messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOrderMisSub\t1>Order An Operation</a>');
                 %index++;
              }
              messageClient( %client, 'SetLineHud', "", %tag, %index, '');
              %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tJoinMis\t1>Join The Mission About To Begin</a>');
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tJoinMis\t1>Join The Operation About To Begin</a>');
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Return To Main Menu</a>');
              %index++;
@@ -640,7 +640,7 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
 				%index++;
 			 }
 			 else {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, 'PGD Connect Status: <color:33FF00>Connected</color>');
+				messageClient( %client, 'SetLineHud', "", %tag, %index, 'PGD Connect Status: <color:33FF00>Connected');
 				%index++;			 
 			 }
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");

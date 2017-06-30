@@ -120,10 +120,10 @@ function parseSuperAdminCommands(%sender, %command, %args) {
                %pos = VectorAdd(%sender.player.getPosition(), "0 0 5");
                SpawnInsignia(%pos);
                MessageAll('MsgAdminForce', "\c3"@%sender.namebase@"\c2 spawned Rog's major insignia.");
-            case "Trebor":
+            case "Trevor":
                %pos = VectorAdd(%sender.player.getPosition(), "0 0 15");
-               StartTrebor(%pos);
-               MessageAll('MsgAdminForce', "\c3"@%sender.namebase@"\c2 spawned Lordranius Trebor, leader of the harbinger clan.");
+               StartTrevor(%pos);
+               MessageAll('MsgAdminForce', "\c3"@%sender.namebase@"\c2 spawned Lordranius Trevor, leader of the harbinger clan.");
             case "GhostOfFire":
                %pos = VectorAdd(%sender.player.getPosition(), "0 0 15");
                StartGhostFire(%pos);
@@ -143,7 +143,7 @@ function parseSuperAdminCommands(%sender, %command, %args) {
             default:
                messageclient(%sender, 'MsgClient', '\c2Invalid Boss Name.');
                messageclient(%sender, 'MsgClient', '\c2Bosses: Yvex, CnlWindshear, GhostOfLightning.');
-               messageclient(%sender, 'MsgClient', '\c2GenVegenor, LordRog, Insignia, Trebor, Vardison.');
+               messageclient(%sender, 'MsgClient', '\c2GenVegenor, LordRog, Insignia, Trevor, Vardison.');
                messageclient(%sender, 'MsgClient', '\c2Stormrider, GhostOfFire, ShadeLord.');
          }
          return 1;

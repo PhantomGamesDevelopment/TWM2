@@ -247,9 +247,9 @@ function VoteBoss_StartBoss(%BossAbbr)
          SpawnLordRog(%pos);
       case "Insignia":
          SpawnInsignia(%pos);
-      case "Trebor":
-         %pos = VectorAdd(%pos, "0 20 0"); // so trebor doesn't land right on top of them..
-         StartTrebor(%pos);                // its lots of lulz though!
+      case "Trevor":
+         %pos = VectorAdd(%pos, "0 20 0"); // so trevor doesn't land right on top of them..
+         StartTrevor(%pos);                // its lots of lulz though!
       case "Vardison":
          StartVardison1(%pos);
       case "DAVardison":
@@ -278,8 +278,8 @@ function BossFullname(%BossAbbr)
             return "Lord Rog";
        case "insignia":
             return "Major Insignia";
-       case "trebor":
-            return "Lordranius Trebor";
+       case "trevor":
+            return "Lordranius Trevor";
        case "stormrider":
             return "Commander Stormrider";
        case "gof":
@@ -311,7 +311,7 @@ function isBoss(%Boss)
             return 1;
        case "insignia":
             return 1;
-       case "trebor":
+       case "trevor":
             return 1;
        case "vardison":
             return 1;

@@ -112,7 +112,7 @@ datablock ShapeBaseImageData(GrappleHookImage) {
    
    stateName[3] = "Fire";
    stateTransitionOnTimeout[3] = "Reload";
-   stateTimeoutValue[3] = 0.5;
+   stateTimeoutValue[3] = 5.0;
    stateFire[3] = true;
    stateAllowImageChange[3] = false;
    stateSequence[3] = "Fire";

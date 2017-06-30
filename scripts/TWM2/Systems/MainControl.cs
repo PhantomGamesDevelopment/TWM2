@@ -206,6 +206,22 @@ function TWM2Lib_MainControl(%functionName, %arguments) {
             %PositionF = getWord(%Position, 0) SPC getWord(%Position, 1) SPC %Z;
 
             return %PositionF;
+			
+		case "getstrtrailingnumber":
+			%str = trim(StrReplace(%arguments, " ", ""));
+			%len = strLen(%str);
+			%trailingNum = "";
+			for(%i = %len-1; %i >= 0; %i--) {
+				%ch = strcmp(getSubStr(%str, %i, 1), "");
+				if(%ch > 48 && %ch < 57) {
+					//Number, remember, we're reading backwards, so write backwards.
+					%trailingNum = getSubStr(%str, %i, 1) @ %trailingNum;
+				}
+				else {
+					break;
+				}
+			}
+			return %trailingNum;
 
         default:
             error("TWM2Lib_MainControl(): Error, unknown function "@%functionName@" sent to command.");

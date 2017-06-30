@@ -1,4 +1,4 @@
-datablock HoverVehicleData(TreborTank) : CentaurVehicle {
+datablock HoverVehicleData(TrevorTank) : CentaurVehicle {
    spawnOffset = "0 0 4";
    canControl = true;
    floatingGravMag = 4.5;
@@ -30,13 +30,13 @@ datablock HoverVehicleData(TreborTank) : CentaurVehicle {
    ShieldDamageScale[$DamageType::Bullet] = 0.01;  //I deny you shrike n0bs
 };
 
-function StartTrebor(%pos){
+function StartTrevor(%pos){
 	%team = 6;
 	%rotation = "1 0 0 0";
     %skill = 10;
 
    %tank = new HoverVehicle() {
-      dataBlock    = TreborTank;
+      dataBlock    = TrevorTank;
       position     = %pos;
       rotation     = %rotation;
       team         = %team;
@@ -49,16 +49,16 @@ function StartTrebor(%pos){
 
    %tank.CanUseSpec = 1;
    %tank.SpecTicks = 0;
-   InitiateBoss(%tank, "Trebor");
+   InitiateBoss(%tank, "Trevor");
 
-   TreborDetermineAttack(%tank);
-   TreborMove(%tank);
-   MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trebor"]@": It's time to test the harbinger clan's ultimate siege weapon. ON YOU!");
+   TrevorDetermineAttack(%tank);
+   TrevorMove(%tank);
+   MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": It's time to test the harbinger clan's ultimate siege weapon. ON YOU!");
 
    return %tank;
 }
 
-function TreborTank::onAdd(%this, %obj) {
+function TrevorTank::onAdd(%this, %obj) {
    Parent::onAdd(%this, %obj);
 
    %turret = TurretData::create(CentaurTurret);
@@ -85,11 +85,11 @@ function TreborTank::onAdd(%this, %obj) {
    setTargetSensorGroup(%turret.getTarget(), 6);
    setTargetAlwaysVisMask(%turret.getTarget(), 0xffffffff);
 }
-function TreborTank::deleteAllMounted(%data, %obj) {
+function TrevorTank::deleteAllMounted(%data, %obj) {
    CentaurVehicle::deleteAllMounted(%data, %obj);
 }
 
-function TreborLocateTarget(%tank) {
+function TrevorLocateTarget(%tank) {
    %wbpos = %tank.getworldboxcenter();
    %count = ClientGroup.getCount();
    %closestClient = -1;
@@ -108,7 +108,7 @@ function TreborLocateTarget(%tank) {
    return %closestClient SPC %closestDistance;
 }
 
-function TreborRotateAndVec(%tank, %tPl){
+function TrevorRotateAndVec(%tank, %tPl){
    if(!isObject(%tPl)) {
       return;
    }
@@ -126,20 +126,20 @@ function TreborRotateAndVec(%tank, %tPl){
    return %set;
 }
 
-function TreborMove(%tank) {
+function TrevorMove(%tank) {
    if(!isObject(%tank)) {
       return;
    }
    if(%tank.performingSpec) {  //Specials make the tank do things that this must be off to work
-      schedule(250, 0, "TreborMove", %tank);
+      schedule(250, 0, "TrevorMove", %tank);
       return;
    }
-   %target = TreborLocateTarget(%tank);
+   %target = TrevorLocateTarget(%tank);
    if(!isObject(%target.player)) {
-      schedule(100, 0, "TreborMove", %tank);
+      schedule(100, 0, "TrevorMove", %tank);
       return;
    }
-   %vec = TreborRotateAndVec(%tank, %target.player);  //turns the tank
+   %vec = TrevorRotateAndVec(%tank, %target.player);  //turns the tank
    %dist = VectorDist(%target.player.getPosition(), %tank.getPosition());   //The all important
    //don't ask how we would get this far
    //but we simply move
@@ -159,26 +159,26 @@ function TreborMove(%tank) {
       if(%dist < 10 && !%tank.teleporting) {
          //interesting... trying to cut it close?
          %tank.teleporting = 1;
-         MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trebor"]@": Trying to do that huhn? I think not!");
+         MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Trying to do that huhn? I think not!");
          PhaseShift(%tank);
       }
       %vector = vectorscale(%tank.getForwardVector(), 1150);
       %tank.applyImpulse(%tank.getPosition(), %vector);
    }
-   schedule(100, 0, "TreborMove", %tank);
+   schedule(100, 0, "TrevorMove", %tank);
 }
 
-function TreborDetermineAttack(%tank) {
+function TrevorDetermineAttack(%tank) {
    if(!isObject(%tank)) {
       return;
    }
    if(%tank.performingSpec) {  //Specials make the tank do things that this must be off to work
-      schedule(250, 0, "TreborDetermineAttack", %tank);
+      schedule(250, 0, "TrevorDetermineAttack", %tank);
       return;
    }
-   %target = TreborLocateTarget(%tank);
+   %target = TrevorLocateTarget(%tank);
    if(!isObject(%target)) {
-      schedule(250, 0, "TreborDetermineAttack", %tank);
+      schedule(250, 0, "TrevorDetermineAttack", %tank);
       return;
    }
    %dist = VectorDist(%target.player.getPosition(), %tank.getPosition());   //The all important
@@ -215,13 +215,13 @@ function TreborDetermineAttack(%tank) {
          //3. Phase Shift: Tank Shifts to collider range
          switch(%attackNum) {
             case 1:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trebor"]@": Dodge this "@getTaggedString(%target.name)@"!!!");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Dodge this "@getTaggedString(%target.name)@"!!!");
                RammingSpeed(%tank, %target);
             case 2:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trebor"]@": Engage sideswipe boosters");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Engage sideswipe boosters");
                SlideTarget(%tank, %target);
             case 3:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trebor"]@": Engage Phase Shift!");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Engage Phase Shift!");
                PhaseShift(%tank);
          }
       }
@@ -230,18 +230,18 @@ function TreborDetermineAttack(%tank) {
          %attackNum = getRandom(1,3);
          switch(%attackNum) {
             case 1:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trebor"]@": Engage missile storm on "@getTaggedString(%target.name)@"!!!");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Engage missile storm on "@getTaggedString(%target.name)@"!!!");
                MissileStorm(%tank, %target);
             case 2:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trebor"]@": Let a firey storm of missiles rain upon you, "@getTaggedString(%target.name)@"!!!");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Let a firey storm of missiles rain upon you, "@getTaggedString(%target.name)@"!!!");
                MissileRain(%tank, %target);
             case 3:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trebor"]@": Engage missile storm on "@getTaggedString(%target.name)@"!!!");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Engage missile storm on "@getTaggedString(%target.name)@"!!!");
                MissileStorm(%tank, %target);
          }
       }
    }
-   schedule(250, 0, "TreborDetermineAttack", %tank);
+   schedule(250, 0, "TrevorDetermineAttack", %tank);
 }
 
 //Attackz0rs
@@ -266,7 +266,7 @@ function RammingSpeed(%tank, %target) {
       %tank.turretObject.schedule(100, "unMountImage", 0);
    }
    else {
-      %vec = TreborRotateAndVec(%tank, %target.player);  //turns the tank
+      %vec = TrevorRotateAndVec(%tank, %target.player);  //turns the tank
       %vector = vectorscale(%tank.getForwardVector(), 15000);
       %tank.applyImpulse(%tank.getPosition(), %vector);
       //%tank.setImageTrigger(3, true);
@@ -296,7 +296,7 @@ function SlideTarget(%tank, %target) {
       %tank.performingSpec = 1;
    }
    else {
-      %vec = TreborRotateAndVec(%tank, %target.player);  //turns the tank
+      %vec = TrevorRotateAndVec(%tank, %target.player);  //turns the tank
       %x = Getword(%vec,0);
       %y = Getword(%vec,1);
       %nv1 = %y;

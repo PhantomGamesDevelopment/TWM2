@@ -1,7 +1,7 @@
 CMD TSSF TWM 2, The Story Continues
 CMD MAINPAGE TWM 2 News
 CMD PersControl Settings
-CMD Missions Missions
+CMD Missions Operations
 CMD PC Piece Count
 CMD ContSave Content Saving System
 CMD BL15 Blacklist 15

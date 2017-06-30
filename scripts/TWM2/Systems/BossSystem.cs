@@ -35,7 +35,7 @@ function InitiateBoss(%Boss, %name) {
          %print = "<color:FF0000>BOSS ALERT \n LORD VARDISON HAS ENTERED HIS SECOND FORM";
       case "Vardison3":
          %print = "<color:FF0000>BOSS ALERT \n LORD VARDISON HAS ENTERED HIS FINAL FORM";
-      case "Trebor":
+      case "Trevor":
          %print = "<color:FF0000>BOSS BATTLE \n LORDRANIUS TREVOR";
       case "Stormrider":
          %print = "<color:FF0000>CLASSIC BOSS BATTLE \n COMMANDER STORMRIDER";
@@ -64,7 +64,7 @@ function BossCheckUp(%boss, %name) {
    MessageAll('MsgSPCurrentObjective1', "", "Boss Battle: "@$TWM2::BossName[%name]@" [Boss Kill Count: "@$TWM2::BossManager.bossKills@"]");
    MessageAll('MsgSPCurrentObjective2', "", "Boss HP: "@mFloor(%boss.getDamageLeft()*100)@"/"@mFloor(%boss.getMaxDamage()*100)@" ("@%percentage@"%)");
 
-   if(%name !$= "CnlWindshear" && %name !$= "Trebor" && %name !$= "Stormrider") {
+   if(%name !$= "CnlWindshear" && %name !$= "Trevor" && %name !$= "Stormrider") {
       if(!isObject(%boss) || %boss.getState() $= "dead") {
          if(%name $= "Vardison1") {
             %count = ClientGroup.getCount();
@@ -175,7 +175,7 @@ function GameConnection::GiveBossAward(%client, %bossName) {
 			CompleteNWChallenge(%client, "VardWtf");
 		 }		 
       }
-      else if(%bossName $= "Trebor") {
+      else if(%bossName $= "Trevor") {
          AwardClient(%client, 15);
       }
       //rank writing
@@ -310,15 +310,15 @@ function CheckBossChallenge(%client, %boss) {
          if(%dc >= 10) {
             CompleteNWChallenge(%client, "Stormrider3");
          }		 
-      case "Trebor":
+      case "Trevor":
          if(%dc >= 2) {
-            CompleteNWChallenge(%client, "Treb1");
+            CompleteNWChallenge(%client, "Trev1");
          }
          if(%dc >= 4) {
-            CompleteNWChallenge(%client, "Treb2");
+            CompleteNWChallenge(%client, "Trev2");
          }
          if(%dc >= 7) {
-            CompleteNWChallenge(%client, "Treb3");
+            CompleteNWChallenge(%client, "Trev3");
          }
       case "ShadeLord":
          if(%dc >= 1) {
@@ -344,7 +344,7 @@ exec("scripts/TWM2/Bosses/GhostOfLightning.cs");
 exec("scripts/TWM2/Bosses/GeneralVegenor.cs");
 exec("scripts/TWM2/Bosses/LordRog.cs");
 exec("scripts/TWM2/Bosses/MajorInsignia.cs");
-exec("scripts/TWM2/Bosses/LordraniusTrebor.cs");
+exec("scripts/TWM2/Bosses/LordraniusTrevor.cs");
 exec("scripts/TWM2/Bosses/Stormrider.cs");
 exec("scripts/TWM2/Bosses/GhostOfFire.cs");
 exec("scripts/TWM2/Bosses/ShadeLord.cs");
