@@ -228,6 +228,20 @@ function TWM2Lib_MainControl(%functionName, %arguments) {
     }
 }
 
+function ReMoveClientSW(%client) {
+   if(!isObject(%client.player) || %client.player.getState() $= "dead") {
+      return;
+   }
+   else {
+      %sp = Game.pickPlayerSpawn(%client, false);
+      //2 sec Invincibility please?
+      %client.player.setInvinc(1);
+      %client.player.schedule(2000, "setInvinc", 0);
+      %client.player.setTransform(%client.player.lastTransformStuff);  //%sp for new spawn
+      %client.setControlObject(%client.player);
+   }
+}
+
 function ListGUIDS() {
    for(%i = 0; %i < ClientGroup.getCount(); %i++) {
       %cl = ClientGroup.getObject(%i);

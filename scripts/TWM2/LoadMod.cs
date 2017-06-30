@@ -1,10 +1,10 @@
 // TWM 2, Mod Load Script, Place any Scripts To Be Executed In Here
 
-Error("********************************************");
-Error("********************************************");
-Error("******** EXECUTING TWM2 MOD SCRIPTS ********");
-Error("********************************************");
-Error("********************************************");
+echo("********************************************");
+echo("********************************************");
+echo("******** EXECUTING TWM2 MOD SCRIPTS ********");
+echo("********************************************");
+echo("********************************************");
                                                    //Mod Systems
 exec("serverControl.cs");                          //Server Settings
 
@@ -34,6 +34,9 @@ exec("scripts/TWM2/Systems/ArmorEnergyShields.cs"); //Armor Shields
 exec("scripts/TWM2/Systems/weaponModes.cs");        //Global Defines for Weapon Modes
 exec("scripts/TWM2/AI/DroneAI.cs");                 //Drones
 exec("scripts/TWM2/Systems/HarbingersWrath.cs");    //Harbinger's Wrath
+
+                                                   //Mod Objects
+exec("scripts/TWM2/ModObjects/UAMS.cs");            //UAMS Missile Satellite
 
                                                    //Mod Dependancies
 
@@ -134,7 +137,7 @@ BuildDeconList();  //build decon. list (con tool)
 
 exec("scripts/TWM2/Bosses/LordVardison.cs"); //load him last
 
-error("Loading custom scripts");
+echo("Loading custom scripts");
 exec("scripts/Customize/CustomScripts.cs");
 
 schedule(5500, 0, "establishPGDConnection");
@@ -143,11 +146,11 @@ cleanChallenges();
 $ChallengeIndex = 0;
 schedule(7000, 0, "downloadChallenges");
 
-Error("********************************************");
-Error("********************************************");
-Error("************* EXECUTE COMPLETE *************");
-Error("********************************************");
-Error("********************************************");
+echo("********************************************");
+echo("********************************************");
+echo("************* EXECUTE COMPLETE *************");
+echo("********************************************");
+echo("********************************************");
 
 //POST LOAD TASKS.....
 //OrderStreaks();

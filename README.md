@@ -79,7 +79,6 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
 * Addressed the bug that would allow Vardison 2.0 to summon infinite minions
 * Addressed the bug with Vardison 2.0 that made his Shadow Rift invincible
 * Removed two un-used game objects that were never completed, the Medal Seal and the UAV Control Panel
-  * Note: This has inadvertently introduced a new bug causing the UAMS streak to no longer correctly function, this will be addressed before the official release of 3.91
 * Removed a few erraneous exec calls to non-existent files in the mod load script
 * Depricated the F2 Inventory Screen (Nobody ever used this)
 * Fixed a few bugs in the F2 Menu
