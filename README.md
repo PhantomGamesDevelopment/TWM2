@@ -62,9 +62,14 @@ this level of authority, please contact Phantom139 on the PGD Forums, or by emai
 ====
 
 MOD DEVELOPMENT HISTORY (GIT VERSIONS):
-*** NOTE: For the Legacy Changelogs, please see LEGACY CHANGELOG.md ***
+
+PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY CHANGELOG.md
 
 3.9 -> 3.91 (In Progress):
+* Reduced the requirement to order missions to the rank of General (49) from Commanding Officer (59)
+  * This change also applies to the 'From The Top' Challenge Category
+  * In-Game, Missions have been renamed to Operations
+* Fixed the incorrect internal tags for Lordranius Trevor
 * Lib'd the TWM2 MainControl file and PGD Connect Support files to recover some functions
 * The F2 Menu now detects PGD Connected accounts and will no longer show the option to PGD Connect to already connected users
 * No more scary scientific notion when performing /checkstats or using the F2 menu to view player experience
@@ -135,8 +140,8 @@ MOD DEVELOPMENT HISTORY (GIT VERSIONS):
   * Still three phases to defeat, but all phases have been adjusted
   * Balanced to be easier, but harder...
   * Four difficulty options that can be set by a global variable
-* Removed Darch Archmage Vardison (Was even more so prone to crashes)
-* Huge Balancing Pass on Bosses, this primarily focused on boss health, boss speed, and attack damage
+* Removed Dark Archmage Vardison (Was even more so prone to crashes)
+* Balancing Pass on Bosses, this primarily focused on boss health, boss speed, and attack damage
   * Shade Lord:
     * Reduced Total HP
 	* Reduced Boss Speed
