@@ -44,8 +44,8 @@ function CreateClientRankFile(%client) {
 }
 
 function LoadClientRankfile(%client) {
-	if(!isSet(%client) || %client.guide $= "") {
-		messageClient(%player.client, 'LeaveMissionArea', '\c1Alert: No GUID detected on your client object, please re-connect to the server...~wfx/misc/warning_beep.wav');
+	if(!isSet(%client) || %client.guid $= "") {
+		messageClient(%client, 'LeaveMissionArea', '\c1Alert: No GUID detected on your client object, please re-connect to the server...~wfx/misc/warning_beep.wav');
 		return;
 	}
 	%client.donotupdate = 0;
