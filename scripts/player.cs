@@ -3681,7 +3681,7 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
             }
          }
          //
-		 if(%targetObject.getControllingClient() !$= "") {
+		 if(%targetObject.isPlayerZombie) {
 		    %sourceClient.TWM2Core.PvPZombieKills++;
 			if(%sourceClient.TWM2Core.PvPZombieKills >= 100) {
 			   CompleteNWChallenge(%sourceClient, "Defectionator1");

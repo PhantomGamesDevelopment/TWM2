@@ -205,6 +205,7 @@ function DoZombPlayerMaker(%client, %type) {
    }
    //
    %player.zombieType = %type;
+   %player.isPlayerZombie = true;
    
    ZombieGroup.add(%player);
    return %player TAB %function;

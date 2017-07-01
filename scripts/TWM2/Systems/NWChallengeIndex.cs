@@ -127,21 +127,30 @@ $Challenge::Challenge[1, 44] = "Nuke3";
 $Challenge::Info["Nuke3"] = "Nuke Expert III\t1\t50000\tZ-Bomb Killstreak\tCall in 25 Nukes";
 $Challenge::Challenge[1, 45] = "Fission1";
 $Challenge::SetRequirement[1, 45] = "Officer 1";
-$Challenge::Info["Fission1"] = "Fission Bomb Expert I\t1\t25000\tNone\tCall in 1 Fission Bomb";
+$Challenge::Info["Fission1"] = "Fission Bomb Expert I\t1\t25000\tNone\tCall in a Fission Bomb";
 $Challenge::Challenge[1, 46] = "Fission2";
 $Challenge::SetRequirement[1, 46] = "Officer 1";
-$Challenge::Info["Fission2"] = "Fission Bomb Expert II\t1\t50000\tNone\tCall in 2 Fission Bomb";
+$Challenge::Info["Fission2"] = "Fission Bomb Expert II\t1\t50000\tNone\tCall in 2 Fission Bombs";
 $Challenge::Challenge[1, 47] = "Fission3";
 $Challenge::SetRequirement[1, 47] = "Officer 1";
-$Challenge::Info["Fission3"] = "Fission Bomb Expert III\t1\t75000\tNone\tCall in 5 Fission Bomb";
-$Challenge::Challenge[1, 48] = "LOAS1";
-$Challenge::SetRequirement[1, 48] = "Officer 15";
+$Challenge::Info["Fission3"] = "Fission Bomb Expert III\t1\t75000\tNone\tCall in 5 Fission Bombs";
+$Challenge::Challenge[1, 48] = "PulseStar1";
+$Challenge::SetRequirement[1, 48] = "Officer 9";
+$Challenge::Info["PulseStar1"] = "PulseStar Expert I\t1\t5000\tNone\tCall in 15 PulseStar Shield Systems";
+$Challenge::Challenge[1, 49] = "PulseStar2";
+$Challenge::SetRequirement[1, 49] = "Officer 9";
+$Challenge::Info["PulseStar2"] = "PulseStar Expert II\t1\t10000\tNone\tCall in 30 PulseStar Shield Systems";
+$Challenge::Challenge[1, 50] = "PulseStar3";
+$Challenge::SetRequirement[1, 50] = "Officer 9";
+$Challenge::Info["PulseStar3"] = "PulseStar Expert III\t1\t25000\tNone\tCall in 50 PulseStar Shield Systems";
+$Challenge::Challenge[1, 51] = "LOAS1";
+$Challenge::SetRequirement[1, 51] = "Officer 15";
 $Challenge::Info["LOAS1"] = "LOAS Expert I\t1\t25000\tNone\tCall in 5 Low Orbit Orbital Strikes (LOAS)";
-$Challenge::Challenge[1, 49] = "LOAS2";
-$Challenge::SetRequirement[1, 49] = "Officer 15";
+$Challenge::Challenge[1, 52] = "LOAS2";
+$Challenge::SetRequirement[1, 52] = "Officer 15";
 $Challenge::Info["LOAS2"] = "LOAS Expert II\t1\t50000\tNone\tCall in 10 Low Orbit Orbital Strikes (LOAS)";
-$Challenge::Challenge[1, 50] = "LOAS3";
-$Challenge::SetRequirement[1, 50] = "Officer 15";
+$Challenge::Challenge[1, 53] = "LOAS3";
+$Challenge::SetRequirement[1, 53] = "Officer 15";
 $Challenge::Info["LOAS3"] = "LOAS Expert III\t1\t75000\tNone\tCall in 15 Low Orbit Orbital Strikes (LOAS)";
 
 //Bosses
@@ -518,98 +527,103 @@ $Challenge::Category[12] = "Officer Challenges\tTasks related to officer ranks a
 
 $Challenge::Challenge[12, 0] = "Prestige1";
 $Challenge::SetHidden[12, 0] = true;
-$Challenge::HiddenMessage[12, 0] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 0] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige1"] = true;
 $Challenge::Info["Prestige1"] = "Instructive Officer\t12\t100\tNone\tReach Officer Level 1";
 
 $Challenge::Challenge[12, 1] = "Prestige2";
 $Challenge::SetHidden[12, 1] = true;
-$Challenge::HiddenMessage[12, 1] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 1] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige2"] = true;
 $Challenge::Info["Prestige2"] = "Excelling Officer\t12\t250\tNone\tReach Officer Level 2";
 
 $Challenge::Challenge[12, 2] = "Prestige3";
 $Challenge::SetHidden[12, 2] = true;
-$Challenge::HiddenMessage[12, 2] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 2] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige3"] = true;
 $Challenge::Info["Prestige3"] = "Champion Officer\t12\t350\tNone\tReach Officer Level 3";
 
 $Challenge::Challenge[12, 3] = "Prestige4";
 $Challenge::SetHidden[12, 3] = true;
-$Challenge::HiddenMessage[12, 3] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 3] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige4"] = true;
 $Challenge::Info["Prestige4"] = "Prestigious Officer\t12\t500\tNone\tReach Officer Level 4";
 
 $Challenge::Challenge[12, 4] = "Prestige5";
 $Challenge::SetHidden[12, 4] = true;
-$Challenge::HiddenMessage[12, 4] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 4] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige5"] = true;
 $Challenge::Info["Prestige5"] = "Supreme Officer\t12\t1000\tNone\tReach Officer Level 5";
 
 $Challenge::Challenge[12, 5] = "Prestige6";
 $Challenge::SetHidden[12, 5] = true;
-$Challenge::HiddenMessage[12, 5] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 5] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige6"] = true;
 $Challenge::Info["Prestige6"] = "Glorious Officer\t12\t2500\tNone\tReach Officer Level 6";
 
 $Challenge::Challenge[12, 6] = "Prestige7";
 $Challenge::SetHidden[12, 6] = true;
-$Challenge::HiddenMessage[12, 6] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 6] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige7"] = true;
 $Challenge::Info["Prestige7"] = "Ultimate Officer\t12\t5000\tNone\tReach Officer Level 7";
 
 $Challenge::Challenge[12, 7] = "Prestige8";
 $Challenge::SetHidden[12, 7] = true;
-$Challenge::HiddenMessage[12, 7] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 7] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige8"] = true;
 $Challenge::Info["Prestige8"] = "Shadowing Officer\t12\t7500\tNone\tReach Officer Level 8";
 
 $Challenge::Challenge[12, 8] = "Prestige9";
 $Challenge::SetHidden[12, 8] = true;
-$Challenge::HiddenMessage[12, 8] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 8] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige9"] = true;
 $Challenge::Info["Prestige9"] = "Phantom Officer\t12\t10000\tNone\tReach Officer Level 9";
 
 $Challenge::Challenge[12, 9] = "Prestige10";
 $Challenge::SetHidden[12, 9] = true;
-$Challenge::HiddenMessage[12, 9] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 9] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige10"] = true;
 $Challenge::Info["Prestige10"] = "Brutal Officer\t12\t10000\tNone\tReach Officer Level 10";
 
 $Challenge::Challenge[12, 10] = "Prestige11";
 $Challenge::SetHidden[12, 10] = true;
-$Challenge::HiddenMessage[12, 10] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 10] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige11"] = true;
 $Challenge::Info["Prestige11"] = "Vengeful Officer\t12\t10000\tNone\tReach Officer Level 11";
 
 $Challenge::Challenge[12, 11] = "Prestige12";
 $Challenge::SetHidden[12, 11] = true;
-$Challenge::HiddenMessage[12, 11] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 11] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige12"] = true;
 $Challenge::Info["Prestige12"] = "Spectral Officer\t12\t10000\tNone\tReach Officer Level 12";
 
 $Challenge::Challenge[12, 12] = "Prestige13";
 $Challenge::SetHidden[12, 12] = true;
-$Challenge::HiddenMessage[12, 12] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 12] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige13"] = true;
 $Challenge::Info["Prestige13"] = "Noble Officer\t12\t10000\tNone\tReach Officer Level 13";
 
 $Challenge::Challenge[12, 13] = "Prestige14";
 $Challenge::SetHidden[12, 13] = true;
-$Challenge::HiddenMessage[12, 13] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 13] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige14"] = true;
 $Challenge::Info["Prestige14"] = "Masterful Officer\t12\t10000\tNone\tReach Officer Level 14";
 
 $Challenge::Challenge[12, 14] = "Prestige15";
 $Challenge::SetHidden[12, 14] = true;
-$Challenge::HiddenMessage[12, 14] = "<color:990000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
+$Challenge::HiddenMessage[12, 14] = "<color:BB0000>=== CLASSIFIED: REQUIRES CLEARANCE ===";
 $Challenge::IsNotMultiTier["Prestige15"] = true;
 $Challenge::Info["Prestige15"] = "Rising Harbinger\t12\t10000\tNone\tReach The Highest Officer Level (15)";
 
 $Challenge::Challenge[12, 15] = "GameEnder";
 $Challenge::IsNotMultiTier["GameEnder"] = true;
 $Challenge::Info["GameEnder"] = "Game Ender\t12\t5000\tNone\tUse a Fission Bomb to end a game";
-
+$Challenge::Challenge[12, 16] = "CastleWalls";
+$Challenge::IsNotMultiTier["CastleWalls"] = true;
+$Challenge::Info["CastleWalls"] = "Castle Walls\t12\t15000\tNone\tAbsorb 100 enemy rounds with a single PulseStar Shield System";
+$Challenge::Challenge[12, 17] = "OrbitalDeath";
+$Challenge::IsNotMultiTier["OrbitalDeath"] = true;
+$Challenge::Info["OrbitalDeath"] = "Orbital Death Dealer\t12\t20000\tNone\tEliminate 15 enemy players or 50 zombies with a single LOAS strike";
 
 //CORE
 

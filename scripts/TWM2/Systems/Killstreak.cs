@@ -17,6 +17,9 @@ $Killstreak[14] = "Arrow IV Nuke Strike\t"@$Killstreak::Kills["Nuke", 0]@"\t"@$K
 $Killstreak[15] = "Z-Bomb\t-1\t"@$Killstreak::Kills["ZBomb", 1]@"\tWipe out all zombies (not bosses) in a flash.";
 $Killstreak[16] = "Fission Bomb\t"@$Killstreak::Kills["Fission", 0]@"\t-1\t(Matches) End the game with an explosive bang.";
 $Killstreak[17] = "Napalm Airstrike\t"@$Killstreak::Kills["Napalm", 0]@"\t"@$Killstreak::Kills["Napalm", 1]@"\tQuick destructive airstrike with remaining fire.";
+//Coming Soon 3.9.2
+//$Killstreak[18] = "PulseStar Shield System\t"@$Killstreak::Kills["PulseStar", 0]@"\t"@$Killstreak::Kills["PulseStar", 1]@"\tAirdrop an advanced Harbinger shield system.";
+//$Killstreak[19] = "LOAS\t"@$Killstreak::Kills["LOAS", 0]@"\t"@$Killstreak::Kills["LOAS", 1]@"\tControl a localized satellite to direct high powered explosive rod strikes.";
 
 //Phantom: V3.9: Order the streaks based on killcounts...
 function OrderStreaks() {
