@@ -3046,7 +3046,7 @@ function Armor::onCollision(%this,%obj,%col,%forceVehicleNode)
           return;
        }
           %obj.scriptkill($DamageType::Admin);
-          %col.setDamageLevel(%col.getDamageLevel() - 25.0);
+          %col.setDamageLevel(%col.getDamageLevel() - 10.0);
           %col.setVelocity("0 0 0");
           if(!%obj.iszombie) {
              ServerPlay3d(BOVHitSound, %obj.getPosition());

@@ -100,7 +100,7 @@ datablock SeekerProjectileData(LordRogStiloutte) {
 
 datablock PlayerData(LordRogZombieArmor) : LightMaleHumanArmor {
    boundingBox = "1.63 1.63 2.6";
-   maxDamage = 650.0;
+   maxDamage = 500.0;
    minImpactSpeed = 35;
    shapeFile = "bioderm_heavy.dts";
 
@@ -342,7 +342,7 @@ function LordRogAttack_FUNC(%att, %args) {
          }
          schedule(30000, 0, LordRogAttack_FUNC, "ZombieSummon", %z);
          //--------------------
-         %type = getRandomZombieType("1 2 3 5 9 12 13 15 17");   //omit 4 in place of 17: Demon -> Elite Demon
+         %type = getRandomZombieType("1 2 3 4 5 9 12 13 15"); 
          messageall('RogMsg',"\c4"@$TWM2::ZombieName[8]@": Attack my target!");
          for(%i = 0; %i < 5; %i++) {
             %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
@@ -359,7 +359,7 @@ function LordRogAttack_FUNC(%att, %args) {
             return;
          }
       
-         %type = getRandomZombieType("1 2 3 5 9 12 13 15 17");
+         %type = getRandomZombieType("1 2 3 4 5 9 12 13 15");
          MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Additional Reinforcements!!! NOW!");
          %typeCaller = %type SPC %type SPC %type SPC %type;
          %callPos = vectorAdd(%z.getPosition(), "2000 0 400");
@@ -415,7 +415,7 @@ function LordRogAttack_FUNC(%att, %args) {
             return;
          }
          %z.laserStormSount++;
-         if(%z.laserStormSount < 40) {
+         if(%z.laserStormSount < 25) {
             %vec = vectorsub(%t.getworldboxcenter(), %z.getMuzzlePoint(6));
             %vec = vectoradd(%vec, vectorscale(%t.getvelocity(), vectorlen(%vec)/100));
             %p = new LinearFlareProjectile() {
@@ -438,8 +438,6 @@ function LordRogAttack_FUNC(%att, %args) {
          %fpos = vectoradd(%t.getposition(), TWM2Lib_MainControl("getRandomPosition", 50 TAB 0));
          %pos2 = vectoradd(%fpos, "0 0 700");
          schedule(500, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(1000, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(1500, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
       
       case "MeteorOblivion":
          %t = getWord(%args, 0);
@@ -450,16 +448,6 @@ function LordRogAttack_FUNC(%att, %args) {
          schedule(1500, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
          schedule(2000, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
          schedule(2500, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(3000, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(3500, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(4000, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(4500, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(5000, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(5500, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(6000, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(6500, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(7000, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
-         schedule(7500, 0, spawnprojectile, JTLMeteorStormFireball, GrenadeProjectile, %pos2, "0 0 -10");
       
       case "StaticDischarge":
          %z = getWord(%args, 0);
@@ -467,7 +455,7 @@ function LordRogAttack_FUNC(%att, %args) {
             return;
          }
          %z.setMoveState(true);
-         %z.schedule(7000, setMoveState, false);
+         %z.schedule(8500, setMoveState, false);
          %TargetSearchMask = $TypeMasks::PlayerObjectType;
          %c = createEmitter(%z.getPosition(), FlashLEmitter, "1 0 0");      //Rotate it
          %c.schedule(1000, delete);
@@ -484,7 +472,7 @@ function LordRogAttack_FUNC(%att, %args) {
          if(!isobject(%obj) || %obj.getState() $= "dead") {
             return;
          }
-         if(%obj.staticTicks > 15) {
+         if(%obj.staticTicks > 10) {
             %obj.setMoveState(false);
             return;
          }
@@ -492,7 +480,7 @@ function LordRogAttack_FUNC(%att, %args) {
          %c.schedule(1000, delete);
          %obj.setMoveState(true);
          %obj.staticTicks++;
-         %obj.damage(0, %obj.getPosition(), 0.05, $DamageType::Zombie);
+         %obj.damage(0, %obj.getPosition(), 0.6, $DamageType::Zombie);
          schedule(1000, 0, LordRogAttack_FUNC, "SCDLoop", %obj);
    }
 }

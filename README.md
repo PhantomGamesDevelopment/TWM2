@@ -89,7 +89,7 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
 * Adjusted the daily challenge script to point to the correct link, effectively re-enabling the system
 * Addressed the bug preventing weapon challenge progress from recording
 * Flipped the /help public and /help additional roles, now using /help will provide the list of accessors
-* Removed all aspects of daily exp recording as we are no longer capping progression in the mod
+* Removed all remaining EXP capping codes as the cap was removed in 3.9
 * Re-did the Challenge Menus in the F2 Menu
   * Renamed Weapon Challenges to just Challenges
   * From this menu, players now select General Tasks or Weapon Challenges
@@ -100,7 +100,7 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
 * TWM2 Challenge System Changes
   * Depricated the Blacklist Challenges, and replaced it with Wargames challenges, which are focused on PvP tasks across all modes.
     * Let's see who can complete some of those "tough" ones :)
-  * Completed the Zombie Slaying Challenges, allowing players to earn some nice healthy batches of EXP for slaying zombies
+  * "Finally" completed the Zombie Slaying Challenges category, zombie hunters rejoice for bonus EXP!
   * Added boss challenges for the bosses that did not have any:
     * Shade Lord
 	* Ghost of Fire
@@ -111,24 +111,52 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
   * Addressed the bug preventing the four Vardison challenges for specific difficulty completions from actually completing
   * Internally, Redid the entire challenge system to automate most of it, allowing for eally easy deployment of future challenges
     * Added in some cool new features for these as well for things such as hidden challenges, and embedded additional requirements
-* Added in the necessary hooks to enable officer ranks 10 - 15
-  * Have fun!
-* Re-did the Officer Promotion windows to preview the rewards upcoming at that level
+	* All menus are now generated via script instead of hardcoded, making fixing issues with the system much easier
+* Enabled officer ranks 10 - 15
+* Re-did the Officer Promotion windows to preview the rewards upcoming at that officer level
 * Added in the capability to "reset" your entire TWM2 progression upon hitting max level of Officer 15 (Max Level)
-  * I'm currently considering replacing this with a different system, will be decided as a 3.92 feature
+  * This is a temporary feature that will be replaced in 3.9.2
 * Depricated the Store and Money systems, these systems will become progression based unlocks for "higher" officer levels (10 - 15)
   * Armor effects will not return
   * Armor flags will return in 3.92
 * Fixed the bug with Demon Lord zombies not targeting properly
 * Fixed a console warning bug caused by zombie objects despawning and then calling a scan method
 * Shifter Zombies now have a randomzied element in their teleport method
-* Plasma Torpedo Cannon now requires officer level 9 (Phantom)
+* Fixed a code bug with Lord Yvex which caused his death pulse to be replaced by nightmare missiles
+* Plasma Torpedo Cannon now requires officer level 9 (Was 4)
 * Addressed the bug preventing the challenges for reaching officer ranks from completing
 * Weapon Balancing Pass
   * Grapple Hook
     * Slowed down the attacher projectile a bit, lowering the range
 	* Grapple hook now requires 60% armor energy and consumes this when firing
 	* There is now a 5 second cooldown when firing to prevent for quick escapes
+* Boss Balancing Pass
+  * Lord Yvex
+    * Health reduced to 40,000 (Was 50,000)
+    * Nightmare time reduced to 33% of what it was (NOTE: This change also applies to Lord Vardison)
+	* Nightmare damage taken is unchanged
+	* Yvex Healing from Nightmares reduced by 50%
+  * Lord Rog
+    * Health reduced to 50,000 (Was 65,000)
+	* Rog's Blade of Vengeance now only restores 1000HP (Was 2500HP)
+    * Removed Elite Demons from his spawning pool (These minions are reserved for Lord Vardison)
+	* Reduced Lord Rog's Meteor Attacks to 1 and 5 meteors respectively (Was 3 and 15)
+	* Static Discharge Attack
+	  * Lord Rog freeze time increased to 8.5 seconds (Was 7 seconds)
+	  * Inflicted freeze time reduced to 10 seconds (Was 15 seconds)
+	  * Damage per second increased to 0.6 (Was 0.5)
+	    * This equates to a 20% damage reduction when considering the attack duration decrease
+	* Laser attack now only fires 25 pulses instead of 40
+  * Ghost of Fire
+    * Now immune to death by falling under the map
+	  * Sorry TWM1 Vets, but this strategy is no longer going to work ;)
+    * 1000% armor increase to all fire damage types
+	  * This should hammer home the point to not use fire weapons on the Ghost of Fire
+    * Mt. Death no longer instantly triggers (No more ear rape)
+	  * There is now a three second delay between his attack trigger and the first pulse
+	  * Added four additional bursts to compensate
+	* Reduced the amount of cursed flames spawned to 1 and 3 (Was 3 and 5)
+	  * As a reminder folks, you can block these with Flare Grenades ;)
 
 3.8 -> 3.9:
 * Progression System Adjustments

@@ -49,6 +49,9 @@ function CreateMissileSat(%client, %unlim, %rem) {
       team         = %client.team;
    };
    MissionCleanUp.add(%sat);
+   %sat.TurretObject.setAutoFire(false);
+   %sat.getDataBlock().isMountable(%sat, false);
+   %sat.getDataBlock().schedule(6500, "isMountable", %sat, true);   
    setTargetSensorGroup(%sat.getTarget(), %client.team);
 
    %sat.GoPoint = 1;
@@ -62,13 +65,13 @@ function CreateMissileSat(%client, %unlim, %rem) {
    %sat.canLaucnhStrike = 1;
    %sat.isUnlimitedSat = %unlim;
    
-   MessageClient(%client, 'msgSatcom', "\c3UAMS: Satellite Moving to Position, Standby....");
+   MessageClient(%client, 'msgSatcom', "\c3Command: Your UAMS is entering the area, standby for control signal...");
    
    if(!%unlim) {
       %client.player.setPosition(VectorAdd(%x SPC %y SPC 0,$Prison::JailPos));
-   
-      %client.setControlObject(%sat.turretObject);
-      %client.schedule(499, setControlObject, %sat.turretObject);
+	  //Phantom: For some reason, the game will freeze turrets immediately after creation
+	  %client.setControlObject(%sat.turretObject);
+	  commandToClient(%client, 'ControlObjectResponse', true, getControlObjectType(%sat.turretObject,%client.player));
       MissileSatControlLoop(%client, %sat);
    }
    else {
@@ -173,6 +176,7 @@ function MissileSatControlLoop(%client, %sat) {
       %sat.schedule(1000, "Delete");
       return;
    }
+   %sat.turretObject.clientControl = %client;
    //%client.setControlObject(%sat.turretObject);
    schedule(100, 0, "MissileSatControlLoop", %client, %sat);
 }

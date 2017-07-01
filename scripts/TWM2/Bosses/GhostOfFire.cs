@@ -374,8 +374,9 @@ datablock PlayerData(GhostFireArmor) : MediumPlayerDamageProfile
    maxGrenades = 1;           // Max number of different grenades the player can have
    maxMines = 1;              // Max number of different mines the player can have
 
-   damageScale[$DamageType::plasma] = 0.05;
-   damageScale[$DamageType::Burn] = 0.05;
+   damageScale[$DamageType::plasma] = 0.001;
+   damageScale[$DamageType::Burn] = 0.001;
+   damageScale[$DamageType::Fire] = 0.001;
    damageScale[$DamageType::Bullet] = 0.10;  //I deny you shrike n0bs
 
    // Inventory restrictions
@@ -461,9 +462,13 @@ function GOFPerformMove(%ghost,%closestClient,%closestDistance) {
    %ghost.TargetCL = %closestClient;
    %ghost.DistToTarg = %closestDistance;
    %zposition = %ghost.getPosition();
-   %Zzaxis = getword(%zposition,2);
-   if(%Zzaxis < $zombie::falldieheight) {
-   %ghost.scriptkill($DamageType::Suicide);
+   %z = getWord(%zposition, 2);
+   if(%z < -300) {
+      %ghost.startFade(400, 0, true);
+      %ghost.startFade(1000, 0, false);
+      %ghost.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
+      %ghost.setVelocity("0 0 0");
+      MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoF"]@": My ghostly powers allow me to laugh aside your hopes of me falling to my death...");
    }
    %pos = %ghost.getworldboxcenter();
    %closestClient = %closestClient.Player;
@@ -757,8 +762,6 @@ function GOFDoRandomAttacks(%g) {
       case 6:
          if(isObject(%target.player)) {
             GOFAttack_FUNC("LaunchSeekfire", %g SPC %target.player SPC 1);
-            GOFAttack_FUNC("LaunchSeekfire", %g SPC %target.player SPC 1500);
-            GOFAttack_FUNC("LaunchSeekfire", %g SPC %target.player SPC 3000);
             messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Clensic Flames Will Persue You "@getTaggedString(%target.name)@"!");
          }
          else {
@@ -769,8 +772,6 @@ function GOFDoRandomAttacks(%g) {
             GOFAttack_FUNC("LaunchSeekfire", %g SPC %target.player SPC 1);
             GOFAttack_FUNC("LaunchSeekfire", %g SPC %target.player SPC 1500);
             GOFAttack_FUNC("LaunchSeekfire", %g SPC %target.player SPC 3000);
-            GOFAttack_FUNC("LaunchSeekfire", %g SPC %target.player SPC 4500);
-            GOFAttack_FUNC("LaunchSeekfire", %g SPC %target.player SPC 6000);
             messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": "@getTaggedString(%target.name)@", I present to you the gift, of cursed flames...");
          }
          else {
@@ -817,10 +818,14 @@ function GOFDoRandomAttacks(%g) {
       case 13 or 14 or 15:
          if(isObject(%target.player)) {
             %store = %target.player.getPosition();
-            GOFAttack_FUNC("Ultracano", %g SPC %store);
+            //GOFAttack_FUNC("Ultracano", %g SPC %store);
             schedule(3000, 0, GOFAttack_FUNC, "Ultracano", %g SPC %store);
             schedule(6000, 0, GOFAttack_FUNC, "Ultracano", %g SPC %store);
             schedule(9000, 0, GOFAttack_FUNC, "Ultracano", %g SPC %store);
+			schedule(12000, 0, GOFAttack_FUNC, "Ultracano", %g SPC %store);
+			schedule(15000, 0, GOFAttack_FUNC, "Ultracano", %g SPC %store);
+			schedule(16000, 0, GOFAttack_FUNC, "Ultracano", %g SPC %store);
+			schedule(17000, 0, GOFAttack_FUNC, "Ultracano", %g SPC %store);
             messageall('TheFireMsg',"\c4"@$TWM2::BossName["GoF"]@": Rise Mt. Death... Cleanse "@getTaggedString(%target.name)@"!");
          }
          else {

@@ -245,7 +245,7 @@ datablock TurretData(AC130GunshipTurret) : TurretDamageProfile
    catagory                = "Turrets";
    shapeFile               = "turret_belly_base.dts";
    preload                 = true;
-   canControl 			   = true;
+   canControl = false;
    cmdCategory = "Tactical";
    cmdIcon = CMDFlyingBomberIcon;
    cmdMiniIconName = "commander/MiniIcons/com_bomber_grey";
