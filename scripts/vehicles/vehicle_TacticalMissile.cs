@@ -428,13 +428,19 @@ function UAVVehicle::onAdd(%this, %obj) {
    %obj.turretObject = %turret;
    %turret.team = %obj.team;
    %turret.base = %obj;
-   %turret.mountImage(MissileSatelliteBarrel,0);
+   %turret.mountImage(MissileSatelliteBarrel,3);
    setTargetSensorGroup(%turret.getTarget(),%obj.team);
    
    %turret.setInventory(MissileLauncherAmmo, 9999, true);
    
+   %turret.setAutoFire(false);
+   %turret.mountImage(AIAimingTurretBarrel,0);
+   
    %turret.setCloaked(true);
    %obj.setCloaked(true);
+   
+   setTargetSensorGroup(%turret.getTarget(), %turret.team);
+   setTargetNeverVisMask(%turret.getTarget(), 0xffffffff);   
 }
 
 function UAVVehicle::deleteAllMounted(%data, %obj) {
