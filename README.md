@@ -79,6 +79,8 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
 * Addressed the bug with Vardison 2.0 that made his Shadow Rift invincible
 * Removed two un-used game objects that were never completed, the Medal Seal and the UAV Control Panel
 * Removed a few erraneous exec calls to non-existent files in the mod load script
+* Fixed a bug when users reached an EXP value over 1,000,000 that would cause all of the EXP to be processed additionally from 1,000,000
+  * For example, let's say I was 900,001 and gained 100,000 EXP, I would be placed at 1,100,000 instead of the correct value of 1,000,001
 * Depricated the F2 Inventory Screen (Nobody ever used this)
 * Fixed a few bugs in the F2 Menu
   * Incorrect links
@@ -122,7 +124,7 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
 * Fixed a console warning bug caused by zombie objects despawning and then calling a scan method
 * Shifter Zombies now have a randomzied element in their teleport method
 * Fixed a code bug with Lord Yvex which caused his death pulse to be replaced by nightmare missiles
-* Plasma Torpedo Cannon now requires officer level 9 (Was 4)
+* Officer Weapons no longer require a rank to use, you only need to reach the officer level in question and you've got it!
 * Addressed the bug preventing the challenges for reaching officer ranks from completing
 * Weapon Balancing Pass
   * Grapple Hook

@@ -9,7 +9,7 @@ function LoadRanksBase() {
 }
 
 function CreateClientRankFile(%client) {
-   if(!isSet(%client)) {
+   if(!isSet(%client) || %client.guid $= "") {
       return;
    }
    if(%client.donotupdate) {
@@ -44,72 +44,80 @@ function CreateClientRankFile(%client) {
 }
 
 function LoadClientRankfile(%client) {
-   %client.donotupdate = 0;
-   echo("Attempting To Load "@%client.namebase@"'s Ranks File");
-   %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
-   if(!isFile(%file)) {
-      echo(""@%client.namebase@" does not have a save file, creating one.");
-      CreateClientRankFile(%client);
-   }
-   else {
-      LoadClientFile(%client);
-   }
-   //define a new script object for the client, if it does not yet exist
-   %soNAME = "Container_"@%client.guid@"/TWM2Client_"@%client.guid@"";
-   %object = nameToId(%soNAME);
-   if(!isObject(%object)) {
-      echo("TWM2 Rank/Setting Client Controller Object is non-existant, creating");
-      %client.TWM2Core = new ScriptObject("TWM2Client_"@%client.guid) {};
-      %client.container.add(%client.TWM2Core);
-   }
-   else {
-      echo("Found TWM2 Rank/Setting Client Controller for "@%client@" -> "@%object@"");
-      %client.TWM2Core = %object;
-   }
-   //Check Officer Challenges.
-   for(%i = %client.TWM2Core.officer; %i > 0; %i--) {
-      %oChN = "Prestige"@%i;
-	  CompleteNWChallenge(%client, %oChN);
-   }   
-   TWM2Lib_MainControl("PlayerTimeLoop", %client); //post load functions
+	if(!isSet(%client) || %client.guide $= "") {
+		messageClient(%player.client, 'LeaveMissionArea', '\c1Alert: No GUID detected on your client object, please re-connect to the server...~wfx/misc/warning_beep.wav');
+		return;
+	}
+	%client.donotupdate = 0;
+	echo("Attempting To Load "@%client.namebase@"'s Ranks File");
+	%file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
+	if(!isFile(%file)) {
+		echo(""@%client.namebase@" does not have a save file, creating one.");
+		CreateClientRankFile(%client);
+	}
+	else {
+		LoadClientFile(%client);
+	}
+	//define a new script object for the client, if it does not yet exist
+	%soNAME = "Container_"@%client.guid@"/TWM2Client_"@%client.guid@"";
+	%object = nameToId(%soNAME);
+	if(!isObject(%object)) {
+		echo("TWM2 Rank/Setting Client Controller Object is non-existant, creating");
+		%client.TWM2Core = new ScriptObject("TWM2Client_"@%client.guid) {};
+		%client.container.add(%client.TWM2Core);
+	}
+	else {
+		echo("Found TWM2 Rank/Setting Client Controller for "@%client@" -> "@%object@"");
+		%client.TWM2Core = %object;
+	}
+	//Check Officer Challenges.
+	for(%i = %client.TWM2Core.officer; %i > 0; %i--) {
+		%oChN = "Prestige"@%i;
+		CompleteNWChallenge(%client, %oChN);
+	}   
+	TWM2Lib_MainControl("PlayerTimeLoop", %client); //post load functions
 }
 
 function UpdateClientRank(%client) {
-    if(!isSet(%client) || %client.guid $= "") {
-       return;
-    }
-    if(%client.donotupdate) {
-       echo("Stopped rank up check on "@%client@", server denies access (probably loading univ rank)");
-       return;
-    }
-    %scriptController = %client.TWM2Core;
-    if($XPArray[%client] <= 0) {
-       return; //kill it here, no need to go into the loop
-    }
-    if(%scriptController.officer $= "") {
-       %scriptController.officer = 0;
-    }
-    //anti-Hack system.
-    %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
-    //If I ever do so implement an EXP cap, here is where it is placed
-    %multi = $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB TWM2Lib_MainControl("FormatTWM2Time", formattimestring("yymmdd")))];
-    if(!isSet(%multi) || %multi < 1) {
-       %multi = 1;
-    }
-    // convert it to second form
-    if(!isSet(%scriptController.millionxp)) {
-       %scriptController.millionxp = 0;
-    }
-    if((%scriptController.xp + $XPArray[%client]) >= 1000000) {
-       %scriptController.xp = 0;
-       %scriptController.millionxp++;
-    }
-    %scriptController.xp += $XPArray[%client];
+	if(!isSet(%client) || %client.guid $= "") {
+		return;
+	}
+	if(%client.donotupdate) {
+		echo("Stopped rank up check on "@%client@", server denies access (probably loading univ rank)");
+		return;
+	}
+	%scriptController = %client.TWM2Core;
+	if($XPArray[%client] <= 0) {
+		return; //kill it here, no need to go into the loop
+	}
+	if(%scriptController.officer $= "") {
+		%scriptController.officer = 0;
+	}
+	%file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
+	//If I ever do so implement an EXP cap, here is where it is placed
+	%multi = $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB TWM2Lib_MainControl("FormatTWM2Time", formattimestring("yymmdd")))];
+	if(!isSet(%multi) || %multi < 1) {
+		%multi = 1;
+	}
+	// convert it to second form
+	if(!isSet(%scriptController.millionxp)) {
+		%scriptController.millionxp = 0;
+	}
+	if((%scriptController.xp + $XPArray[%client]) >= 1000000) {
+		%scriptController.xp = 0;
+		%scriptController.millionxp++;
+		$XPArray[%client] = (%scriptController.xp + $XPArray[%client]) - 1000000;
+		if($XPArray[%client] < 0) {
+			//Hmmm.... something wierd going on here...
+			$XPArray[%client] = 0;
+		}
+	}
+	%scriptController.xp += $XPArray[%client];
 
-    checkForXPAwards(%client);
-    $XPArray[%client] = 0;
-    %j = $Rank::RankCount;
-    runRankUpdateLoop(%client, %j, 1);
+	checkForXPAwards(%client);
+	$XPArray[%client] = 0;
+	%j = $Rank::RankCount;
+	runRankUpdateLoop(%client, %j, 1);
 }
 
 function runRankUpdateLoop(%client, %j, %continue) {
@@ -136,6 +144,9 @@ function runRankUpdateLoop(%client, %j, %continue) {
 			messageclient(%client, 'Msgclient', "~wfx/Bonuses/Nouns/General.wav");
 			bottomPrint(%client, "Excelent work "@%name@", you have been promoted to the rank of: "@$Prestige::Name[%scriptController.officer]@""@$Ranks::NewRank[%j]@"!", 5, 2 );
 			echo("Promotion: "@%name@" to Rank "@$Ranks::NewRank[%j]@", XP: "@getCurrentEXP(%client)@".");
+			if(%j == $Rank::RankCount && %scriptController.officer < $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
+				messageclient(%client, 'Msgclient', "\c5Congratulations, you have reached the maximum rank in TWM2 and have unlocked the ability to enter an officer rank. To proceed, open the [F2] menu and select the Settings option.");
+			}
 			SaveClientFile(%client);
 			//
 			if(!$TWM2::PGDConnectDisabled) {
@@ -294,7 +305,7 @@ function GainExperience(%client, %variable, %tagToGain) {
    %variable = mFloor(%variable);
    //
    if(%multi > 1) {
-      messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP (X"@%multi@")");
+      messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP (Bonus Multiplier: "@%multi@")");
    }
    else {
       messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP");
