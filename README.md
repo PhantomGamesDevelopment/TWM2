@@ -75,7 +75,6 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
 * No more scary scientific notion when performing /checkstats or using the F2 menu to view player experience
 * Addressed a security issue regarding players who are "attempting" to load code via universal rank files.
   * Nice try DDDX, but your fem-phantom fantasies will NOT be happening... ;)
-* Another boss balancing pass
 * Addressed the bug that would allow Vardison 2.0 to summon infinite minions
 * Addressed the bug with Vardison 2.0 that made his Shadow Rift invincible
 * Removed two un-used game objects that were never completed, the Medal Seal and the UAV Control Panel
