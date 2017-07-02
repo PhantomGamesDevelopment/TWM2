@@ -158,7 +158,7 @@ function GenerateCompletedChallegnesMenu(%client, %tag, %index) {
             %Image = %db.getName().image;
             if(%Image.HasChallenges) {
                if(DoMedalCheck(%client, %image) == 1 && CanUseRankedWeapon(%image, %client) == 1) {
-                  messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tCompletedSub\t"@%Image@"\t1>"@%Image.GunName@"</a>");
+                  messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tWeaponUpgradesSub\t"@%Image@"\t1>"@%Image.GunName@"</a>");
                   %index++;
                }
                else {

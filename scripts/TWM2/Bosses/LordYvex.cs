@@ -629,9 +629,10 @@ function YvexAttacks(%yvex) {
    if(!isObject(%yvex) || %yvex.getState() $= "dead") {
       return;
    }
-   %closestClient = ZombieLookForTarget(%zombie);
-   %closestDistance = getWord(%closestClient,1);
+   %closestClient = ZombieLookForTarget(%yvex);
+   //%closestDistance = getWord(%closestClient,1);
    %closestClient = getWord(%closestClient,0).Player;
+   %closestDistance = vectorDist(%yvex.getPosition(), %closestClient.getPosition());
    
    if(%closestClient) {
       if(%closestDistance <= 150) {
@@ -885,7 +886,7 @@ function Yvexnightmareloop(%zombie,%viewer) {
 }
 
 function KillerPulse::onCollision(%data,%projectile,%targetObject,%modifier,%position,%normal) {
-   if (%targetObject.getClassName() $= "Player" && %targetObject.isBoss) {
+   if (%targetObject.getClassName() $= "Player" && !%targetObject.isBoss) {
       messageall('msgkillcurse', "\c5"@getTaggedString(%targetObject.client.name)@" Took a fatal Hit from "@$TWM2::ZombieName[7]@"'s Dark Energy");
       %targetObject.throwWeapon();
       %targetObject.clearinventory();

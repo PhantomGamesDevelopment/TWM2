@@ -17,8 +17,14 @@
 //
 function ProjectileData::onCollision(%data, %projectile, %targetObject, %modifier, %position, %normal) {
    if(isObject(%targetObject)) { // Console spam fix - ToS. z0ddm0d
-      if(!(%targetObject.getType() & ($TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType)) && (%targetObject.getDataBlock().getClassName() $= "PlayerData")) {
-         %damLoc = firstWord(%targetObject.getDamageLocation(%position));
+      if(!(%targetObject.getType() & ($TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType)) 
+		  && (%targetObject.getType() & ($TypeMasks::PlayerObjectType | $TypeMasks::VehicleObjectType))) {
+		 if(%targetObject.getType() & $TypeMasks::PlayerObjectType) {
+            %damLoc = firstWord(%targetObject.getDamageLocation(%position));
+		 }
+		 else {
+		    %damLoc = "";
+		 }
          %test = TWM2Damage(%projectile, %targetObject, %data.directDamage, %data.directDamageType, %damLoc, "projectile");
          if(%test == 0) {
             return;
