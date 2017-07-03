@@ -14,11 +14,9 @@ function GetWeaponChallenges(%Image, %number) {
 
 function UpdateVehicleKillFile(%client, %VDB) {
    if(%VDB $= "") {  //Phantom139: Ha!! No more invalid Files!!!
-      //echo("No Vehicle Datablock");
       return;
    }
    if(%client $= "") {  //Phantom139: Ha! No More UE on Invalid File
-      //echo("No Client");
       return;
    }
    %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";

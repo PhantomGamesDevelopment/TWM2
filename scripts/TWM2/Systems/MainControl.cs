@@ -690,18 +690,25 @@ function TWM2Damage(%projectile, %target, %amount, %dType, %damLoc, %type) {
 			if(strStr(%SDB.getClassName(), "Turret") != -1) {
 				if(%SDB.getName() $= "HarbingerGunshipTurret") {
 					%projectile.sourceObject = %projectile.sourceObject.mountobj;
+					%sourceObject = %projectile.sourceObject;
+					%SDB = %sourceObject.getDataBlock();
 				}
 				else if(%SDB.getName() $= "AC130GunshipTurret") {
 					%projectile.sourceObject = %projectile.sourceObject.mountobj;
+					%sourceObject = %projectile.sourceObject;
+					%SDB = %sourceObject.getDataBlock();
 				}
 				else if(%SDB.getName() $= "CentaurTurret") {
 					%projectile.sourceObject = %projectile.sourceObject.source;
+					%sourceObject = %projectile.sourceObject;
+					%SDB = %sourceObject.getDataBlock();
 				}
 			}
 			//------------------------------------------------------
 			//vehicle kill checking
+			//NOTE: THIS DOESN'T GO HERE!!! 
 			if(strStr(%SDB.getClassName(), "Vehicle") != -1) {
-				if(%target.isPlayer() && %target.getState() $= "dead") {
+				if((%target.getType() & ($TypeMasks::PlayerObjectType)) && %target.getState() $= "dead") {
 					%pl = %sourceObject.getMountNodeObject(0); //the pilot
 					%cl = %pl.client;
 					if(%cl !$= "") {
@@ -717,9 +724,7 @@ function TWM2Damage(%projectile, %target, %amount, %dType, %damLoc, %type) {
 								}
 							}
 						}
-						if(!%target.isAllyBot) {
-							UpdateVehicleKillFile(%cl, %SDB.getName());
-						}
+						UpdateVehicleKillFile(%cl, %SDB.getName());
 						//
 						if(%TDB $= "DemonMotherZombieArmor" && %SDB $= "CentaurVehicle") {
 							%cl.CDLKills++;

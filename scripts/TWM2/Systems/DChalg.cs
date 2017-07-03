@@ -127,80 +127,86 @@ function doChallengeKillRecording(%sourceObject, %targetObject) {
 }
 
 function recordAction(%client, %action, %variables) {
-   %ymd = formattimestring("yymmdd");
-   %so = %client.TWM2Controller;
-   //echo(""@%client@" - "@%action@" - "@%variables@"");
-   //
-   switch$(%action) {
-      case "CCMP":
-         %so.completed[getField(%variables, 0), %ymd] = getField(%variables, 1);
-      case "BOSS":
-         %so.bossSlayCount[getField(%variables, 0), %ymd] += 1;
-      case "PKC":
-         //player kill count
-         if(getField(%variables, 0) $= "total") {
-            %so.totalPlayerKillCount[%ymd] += getField(%variables, 1);
-         }
-         else {
-            %so.PlayerKillCount[%ymd, getField(%variables, 1)] += getField(%variables, 2);
-         }
-      case "ZKC":
-         if(getField(%variables, 0) $= "total") {
-            %so.totalZombieKillCount[%ymd] += getField(%variables, 1);
-         }
-         else {
-            //a 3-case would have all of these filed
-            if(!isSet(getField(%variables, 3))) {
-               %so.ZombieKillCount[%ymd, 0, getField(%variables, 1)] += getField(%variables, 2);
-            }
-            else {
-               %so.ZombieKillCount[%ymd, getField(%variables, 1), getField(%variables, 2)] += getField(%variables, 3);
-            }
-         }
-      case "HSC":
-         if(getField(%variables, 0) !$= "zombie") {
-            %so.playerHeadshots[%ymd] += getField(%variables, 1);
-         }
-         else {
-            %so.zombieHeadshots[%ymd] += getField(%variables, 1);
-         }
-      case "KSCC":
-         %so.killstreakCalls[%ymd, getField(%variables, 0)] += getField(%variables, 1);
-      case "KSKC":
-         %so.killstreakKills[%ymd, getField(%variables, 0)] += getField(%variables, 1);
-      case "SKC":
-         %so.successiveSolo[%ymd, getField(%variables, 0)] += getField(%variables, 1);
-      case "SKSC":
-         %so.successiveStreak[%ymd, getField(%variables, 0)] += getField(%variables, 1);
-      case "BOMBARM":
-         %so.bombArm[%ymd, $CurrentMission] += 1;
-         %so.bombArmTotal[%ymd] += 1;
-      case "BOMBDIS":
-         %so.bombDisarm[%ymd, $CurrentMission] += 1;
-         %so.bombDisarmTotal[%ymd] += 1;
-      case "SABWIN":
-         %so.sabotageRoundWins[%ymd, $CurrentMission] += 1;
-         %so.sabotageRoundWinTotal[%ymd] += 1;
-      case "AREACAP":
-         %so.areaCapture[%ymd, $CurrentMission] += 1;
-         %so.areaCaptureTotal[%ymd] += 1;
-      case "DOMWIN":
-         %so.dominationRoundWins[%ymd, $CurrentMission] += 1;
-         %so.dominationRoundWinTotal[%ymd] += 1;
-	  case "EXPGAIN":
-	     %so.dailyEXPGain[%ymd] += getField(%variables, 0);
-	  case "BACK":
-	     if(getField(%variables, 0) $= "zombie") {
-		    %so.zombieBackstabs[%ymd] += 1;
-		 }
-		 else {
-		    %so.playerBackstabs[%ymd] += 1;
-		 }
-      default:
-         //no action recorded
-   }
-   allCheckCompletion(%client);
-   updateChallengeFile(%client);
+	%ymd = formattimestring("yymmdd");
+	%so = %client.TWM2Controller;
+	//echo(""@%client@" - "@%action@" - "@%variables@"");
+	//
+	switch$(%action) {
+		case "CCMP":
+			%so.completed[getField(%variables, 0), %ymd] = getField(%variables, 1);
+		case "BOSS":
+			%so.bossSlayCount[getField(%variables, 0), %ymd] += 1;
+		case "PKC":
+			//player kill count
+			if(getField(%variables, 0) $= "total") {
+				%so.totalPlayerKillCount[%ymd] += getField(%variables, 1);
+			}
+			else {
+				%so.PlayerKillCount[%ymd, getField(%variables, 1)] += getField(%variables, 2);
+			}
+		case "ZKC":
+			if(getField(%variables, 0) $= "total") {
+				%so.totalZombieKillCount[%ymd] += getField(%variables, 1);
+			}
+			else {
+				//a 3-case would have all of these filed
+				if(!isSet(getField(%variables, 3))) {
+					%so.ZombieKillCount[%ymd, 0, getField(%variables, 1)] += getField(%variables, 2);
+				}
+				else {
+					%so.ZombieKillCount[%ymd, getField(%variables, 1), getField(%variables, 2)] += getField(%variables, 3);
+				}
+			}
+		case "HSC":
+			if(getField(%variables, 0) !$= "zombie") {
+				%so.playerHeadshots[%ymd] += getField(%variables, 1);
+			}
+			else {
+				%so.zombieHeadshots[%ymd] += getField(%variables, 1);
+			}
+		case "KSCC":
+			%so.killstreakCalls[%ymd, getField(%variables, 0)] += getField(%variables, 1);
+		case "KSKC":
+			%so.killstreakKills[%ymd, getField(%variables, 0)] += getField(%variables, 1);
+		case "SKC":
+			%so.successiveSolo[%ymd, getField(%variables, 0)] += getField(%variables, 1);
+		case "SKSC":
+			%so.successiveStreak[%ymd, getField(%variables, 0)] += getField(%variables, 1);
+		case "BOMBARM":
+			%so.bombArm[%ymd, $CurrentMission] += 1;
+			%so.bombArmTotal[%ymd] += 1;
+		case "BOMBDIS":
+			%so.bombDisarm[%ymd, $CurrentMission] += 1;
+			%so.bombDisarmTotal[%ymd] += 1;
+		case "SABWIN":
+			%so.sabotageRoundWins[%ymd, $CurrentMission] += 1;
+			%so.sabotageRoundWinTotal[%ymd] += 1;
+		case "AREACAP":
+			%so.areaCapture[%ymd, $CurrentMission] += 1;
+			%so.areaCaptureTotal[%ymd] += 1;
+		case "HORDEWAVE":
+			%so.totalHordeWavesCompleted[%ymd] += 1;
+			%cWave = getField(%variables, 0);
+			if(%cWave > %so.highestHordeWave[%ymd]) {
+				%so.highestHordeWave[%ymd] = %cWave;
+			}
+		case "DOMWIN":
+			%so.dominationRoundWins[%ymd, $CurrentMission] += 1;
+			%so.dominationRoundWinTotal[%ymd] += 1;
+		case "EXPGAIN":
+			%so.dailyEXPGain[%ymd] += getField(%variables, 0);
+		case "BACK":
+			if(getField(%variables, 0) $= "zombie") {
+				%so.zombieBackstabs[%ymd] += 1;
+			}
+			else {
+				%so.playerBackstabs[%ymd] += 1;
+			}
+		default:
+		//no action recorded
+	}
+	allCheckCompletion(%client);
+	updateChallengeFile(%client);
 }
 
 function cleanChallenges() {
@@ -239,129 +245,139 @@ function allCheckCompletion(%client) {
 }
 
 function checkCompletion(%client, %cID) {
-   %challenge = $Challenges::Challenge[%cID];
-   %cType = trim(getField(%challenge, 0));
-   %cCond = getsubstr(getField(%challenge, 3), 1, strlen(getField(%challenge, 3)));
-   %so = %client.TWM2Controller;
-   %dateStr = formattimestring("yymmdd");
-   //cannot complete the same one twice :P
-   if(%so.completed[%cid, %dateStr]) {
-      return;
-   }
-   //
-   switch$(getWord(%cCond, 0)) {
-      case "E":
-         %killCount = getWord(%cCond, 1);
-         %killDB = getWord(%cCond, 2) $= "A" ? 0 : getWord(%cCond, 2);
-         if(%killDB != 0) {
-            if(%so.PlayerKillCount[%dateStr, %killDB] >= %killCount) {
-               %done = true;
-            }
-         }
-         else {
-            if(%so.totalPlayerKillCount[%dateStr] >= %killCount) {
-               %done = true;
-            }
-         }
-      case "Z":
-         %killCount = getWord(%cCond, 1);
-         %killedType = getWord(%cCond, 2) $= "A" ? -1 : getWord(%cCond, 2);
-         %killDB = getWord(%cCond, 3) $= "A" ? 0 : getWord(%cCond, 3);
-         if(%killDB != 0) {
-            if(%killedType != -1) {
-               if(%so.ZombieKillCount[%dateStr, %killDB, %killedType] >= %killCount) {
-                  %done = true;
-               }
-            }
-            else {
-               if(%so.ZombieKillCount[%dateStr, %killDB, ""] >= %killCount) {
-                  %done = true;
-               }
-            }
-         }
-         else {
-            if(%killedType != -1) {
-               if(%so.ZombieKillCount[%dateStr, 0, %killedType] >= %killCount) {
-                  %done = true;
-               }
-            }
-            else {
-               if(%so.totalZombieKillCount[%dateStr] >= %killCount) {
-                  %done = true;
-               }
-            }
-         }
-      case "HS":
-         %counter = getWord(%cCond, 1);
-         %type = getWord(%cCond, 2) $= "E" ? "E" : "Z";
-         if(%type $= "E") {
-            if(%so.playerHeadshots[%dateStr] >= %counter) {
-               %done = true;
-            }
-         }
-         else {
-            if(%so.zombieHeadshots[%dateStr] >= %counter) {
-               %done = true;
-            }
-         }
-      case "KS":
-         %type = getWord(%cCond, 1);
-         %ammount = getWord(%cCond, 2);
-         if(%so.killstreakCalls[%dateStr, %type] >= %ammount) {
-            %done = true;
-         }
-      case "KSK":
-         %type = getWord(%cCond, 1);
-         %ammount = getWord(%cCond, 2);
-         if(%so.killstreakKills[%dateStr, %type] >= %ammount) {
-            %done = true;
-         }
-      case "SK":
-         %soloType = getWord(%cCond, 1);
-         %ammount = getWord(%cCond, 2);
-         if(%so.successiveSolo[%dateStr, %soloType] >= %ammount) {
-            %done = true;
-         }
-      case "SKS":
-         %streakType = getWord(%cCond, 1);
-         %ammount = getWord(%cCond, 2);
-         if(%so.successiveStreak[%dateStr, %streakType] >= %ammount) {
-            %done = true;
-         }
-      case "Prestige":
-	     %level = getWord(%cCond, 1);
-		 if(%client.TWM2Core.officer >= %level) {
-		    %done = true;
-		 }
-      case "Boss":
-         %name = getWord(%cCond, 1);
-         %amount = getWord(%cCond, 2);
-         if(%so.bossSlayCount[%name, %dateStr] >= %amount) {
-            %done = true;
-         }
-      case "Back":
-	     %zOrA = getWord(%cCond, 1);
-		 %amount = getWord(%cCond, 2);
-		 if(%zOrA $= "Z") {
-		    if(%so.zombieBackstabs[%dateStr] >= %amount) {
-			   %done = true;
+	%challenge = $Challenges::Challenge[%cID];
+	%cType = trim(getField(%challenge, 0));
+	%cCond = getsubstr(getField(%challenge, 3), 1, strlen(getField(%challenge, 3)));
+	%so = %client.TWM2Controller;
+	%dateStr = formattimestring("yymmdd");
+	//cannot complete the same one twice :P
+	if(%so.completed[%cid, %dateStr]) {
+		return;
+	}
+	//
+	switch$(getWord(%cCond, 0)) {
+		case "E":
+			%killCount = getWord(%cCond, 1);
+			%killDB = getWord(%cCond, 2) $= "A" ? 0 : getWord(%cCond, 2);
+			if(%killDB != 0) {
+				if(%so.PlayerKillCount[%dateStr, %killDB] >= %killCount) {
+					%done = true;
+				}
 			}
-		 }
-		 else {
-	 	    if(%so.playerBackstabs[%dateStr] >= %amount) {
-			   %done = true;
+			else {
+				if(%so.totalPlayerKillCount[%dateStr] >= %killCount) {
+					%done = true;
+				}
 			}
-	 	 }
-      default:
-         error("Unknown challenge in parser...");
-   }
-   if(%done) {
-      %cName = getField(%challenge, 1);
-      %CRewd = getField(%challenge, 4);
-      CenterPrint(%client, "CHALLENGE COMPLETED\n"@%cName@"", 3, 3);
-      GainExperience(%client, %cRewd, %cName@" Challenge Completed");
-      recordAction(%client, "CCMP", ""@%cid@"\t1");
-   }
+		case "Z":
+			%killCount = getWord(%cCond, 1);
+			%killedType = getWord(%cCond, 2) $= "A" ? -1 : getWord(%cCond, 2);
+			%killDB = getWord(%cCond, 3) $= "A" ? 0 : getWord(%cCond, 3);
+			if(%killDB != 0) {
+				if(%killedType != -1) {
+					if(%so.ZombieKillCount[%dateStr, %killDB, %killedType] >= %killCount) {
+						%done = true;
+					}
+				}
+				else {
+					if(%so.ZombieKillCount[%dateStr, %killDB, ""] >= %killCount) {
+						%done = true;
+					}
+				}
+			}
+			else {
+				if(%killedType != -1) {
+					if(%so.ZombieKillCount[%dateStr, 0, %killedType] >= %killCount) {
+						%done = true;
+					}
+				}
+				else {
+					if(%so.totalZombieKillCount[%dateStr] >= %killCount) {
+						%done = true;
+					}
+				}
+			}
+		case "HS":
+			%counter = getWord(%cCond, 1);
+			%type = getWord(%cCond, 2) $= "E" ? "E" : "Z";
+			if(%type $= "E") {
+				if(%so.playerHeadshots[%dateStr] >= %counter) {
+					%done = true;
+				}
+			}
+			else {
+				if(%so.zombieHeadshots[%dateStr] >= %counter) {
+					%done = true;
+				}
+			}
+		case "KS":
+			%type = getWord(%cCond, 1);
+			%amount = getWord(%cCond, 2);
+			if(%so.killstreakCalls[%dateStr, %type] >= %amount) {
+				%done = true;
+			}
+		case "KSK":
+			%type = getWord(%cCond, 1);
+			%amount = getWord(%cCond, 2);
+			if(%so.killstreakKills[%dateStr, %type] >= %amount) {
+				%done = true;
+			}
+		case "SK":
+			%soloType = getWord(%cCond, 1);
+			%amount = getWord(%cCond, 2);
+			if(%so.successiveSolo[%dateStr, %soloType] >= %ammount) {
+				%done = true;
+			}
+		case "SKS":
+			%streakType = getWord(%cCond, 1);
+			%amount = getWord(%cCond, 2);
+			if(%so.successiveStreak[%dateStr, %streakType] >= %ammount) {
+				%done = true;
+			}
+		case "Horde":
+			%waveNum = getWord(%cCond, 1);
+			if(%so.highestHordeWave[%dateStr] >= %waveNum) {
+				%done = true;
+			}
+		case "HordeWaves":
+			%amount = getWord(%cCond, 1);
+			if(%so.totalHordeWavesCompleted[%dateStr] >= %amount) {
+				%done = true;
+			}			
+		case "Prestige":
+			%level = getWord(%cCond, 1);
+			if(%client.TWM2Core.officer >= %level) {
+				%done = true;
+			}
+		case "Boss":
+			%name = getWord(%cCond, 1);
+			%amount = getWord(%cCond, 2);
+			if(%so.bossSlayCount[%name, %dateStr] >= %amount) {
+				%done = true;
+			}
+		case "Back":
+			%zOrA = getWord(%cCond, 1);
+			%amount = getWord(%cCond, 2);
+			if(%zOrA $= "Z") {
+				if(%so.zombieBackstabs[%dateStr] >= %amount) {
+					%done = true;
+				}
+			}
+			else {
+				if(%so.playerBackstabs[%dateStr] >= %amount) {
+				%done = true;
+			}
+		}
+		default:
+			error("Unknown challenge in parser...");
+	}
+	if(%done) {
+		%cName = getField(%challenge, 1);
+		%CRewd = getField(%challenge, 4);
+		CenterPrint(%client, "CHALLENGE COMPLETED\n"@%cName@"", 3, 3);
+		GainExperience(%client, %cRewd, %cName@" Challenge Completed");
+		recordAction(%client, "CCMP", ""@%cid@"\t1");
+	}
 }
 
 //Check Multi-Completion (handles weekly & monthly challenges)
@@ -441,7 +457,7 @@ function checkMultiCompletion(%client, %cID) {
 			         %done = true;
 			      }
 		       }
-		       else {
+		       else { 
 		          if(getCurrentMonthTotal(%client, ZombieKillCount, 0 SPC %killedType) >= %killCount) {
 			         %done = true;
 			      }		 
@@ -459,7 +475,7 @@ function checkMultiCompletion(%client, %cID) {
 			      }		 
 		       }	
             }
-         }
+         } 
       case "HS":
          %counter = getWord(%cCond, 1);
          %type = getWord(%cCond, 2) $= "E" ? "E" : "Z";

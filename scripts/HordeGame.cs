@@ -427,6 +427,12 @@ function HordeNextWave(%game, %wave) {
       $HordeGame::RevivesLeft++;
    }
    $HordeGame::CurrentWave = %wave;
+   for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+	  %cl = ClientGroup.getObject(%i);
+	  if(%wave != 1) {
+         recordAction(%cl, "HORDEWAVE", %wave-1);
+	  }
+   }  
    HordeKillAllZombies(); //Cleans up the server
    if($HordeGame::CurrentWave == 51) { //Victory
       for (%i = 0; %i < ClientGroup.getCount(); %i++) {
