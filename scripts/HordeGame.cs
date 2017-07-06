@@ -600,6 +600,12 @@ function HordeGame::gameOver(%game) {
     $HordeGame::Zombiecount = 0;
     $HordeGame::LivingCount = 0;
     $HordeGame::CanSpawnZombies = 1;
+	
+	for(%i = 0; $HordeSpawnSched[%i] !$= ""; %i++) {
+		if(isEventPending($HordeSpawnSched[%i])) {
+			cancel($HordeSpawnSched[%i]);
+		}
+	}
 
 	for(%i = 0; %i < ClientGroup.getCount(); %i ++) {
 		%client = ClientGroup.getObject(%i);
@@ -706,7 +712,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 1);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 1);
             }
          case 2:
             for(%i = 0; %i < 25; %i++) {
@@ -714,7 +720,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 1);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 1);
             }
          case 3:
             for(%i = 0; %i < 30; %i++) {
@@ -722,7 +728,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 1);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 1);
             }
          case 4:
             for(%i = 0; %i < 35; %i++) {
@@ -730,7 +736,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 1);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 1);
             }
          case 5:
             for(%i = 0; %i < 40; %i++) {
@@ -738,7 +744,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 1);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 1);
             }
          case 6:
             for(%i = 0; %i < 20; %i++) {
@@ -747,7 +753,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 7:
             for(%i = 0; %i < 25; %i++) {
@@ -756,7 +762,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 8:
             for(%i = 0; %i < 30; %i++) {
@@ -765,7 +771,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 9:
             for(%i = 0; %i < 35; %i++) {
@@ -774,7 +780,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 10:
             for(%i = 0; %i < 40; %i++) {
@@ -783,7 +789,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 11:
             for(%i = 0; %i < 20; %i++) {
@@ -792,7 +798,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 12:
             for(%i = 0; %i < 25; %i++) {
@@ -801,7 +807,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 13:
             for(%i = 0; %i < 30; %i++) {
@@ -810,7 +816,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 14:
             for(%i = 0; %i < 35; %i++) {
@@ -819,7 +825,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 15:
             for(%i = 0; %i < 40; %i++) {
@@ -828,7 +834,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 16:
             for(%i = 0; %i < 20; %i++) {
@@ -837,7 +843,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 17:
             for(%i = 0; %i < 25; %i++) {
@@ -846,7 +852,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 18:
             for(%i = 0; %i < 30; %i++) {
@@ -855,7 +861,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 19:
             for(%i = 0; %i < 35; %i++) {
@@ -864,7 +870,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 20:
             for(%i = 0; %i < 40; %i++) {
@@ -873,7 +879,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 21:
             for(%i = 0; %i < 20; %i++) {
@@ -882,7 +888,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 22:
             for(%i = 0; %i < 25; %i++) {
@@ -891,7 +897,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 23:
             for(%i = 0; %i < 30; %i++) {
@@ -900,7 +906,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 24:
             for(%i = 0; %i < 35; %i++) {
@@ -909,7 +915,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          //The Rapier wave :D
          case 25:
@@ -918,7 +924,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 5);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 5);
             }
          case 26:
             for(%i = 0; %i < 30; %i++) {
@@ -933,7 +939,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 27:
             for(%i = 0; %i < 35; %i++) {
@@ -948,7 +954,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 28:
             for(%i = 0; %i < 40; %i++) {
@@ -963,7 +969,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 29:
             for(%i = 0; %i < 45; %i++) {
@@ -978,7 +984,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 30:
             for(%i = 0; %i < 50; %i++) {
@@ -993,7 +999,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 31:
             for(%i = 0; %i < 20; %i++) {
@@ -1008,7 +1014,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 32:
             for(%i = 0; %i < 25; %i++) {
@@ -1023,7 +1029,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 33:
             for(%i = 0; %i < 30; %i++) {
@@ -1038,7 +1044,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 34:
             for(%i = 0; %i < 35; %i++) {
@@ -1053,7 +1059,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 35:
             for(%i = 0; %i < 40; %i++) {
@@ -1068,7 +1074,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 36:
             for(%i = 0; %i < 25; %i++) {
@@ -1083,7 +1089,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 37:
             for(%i = 0; %i < 30; %i++) {
@@ -1098,7 +1104,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 38:
             for(%i = 0; %i < 35; %i++) {
@@ -1113,7 +1119,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 39:
             for(%i = 0; %i < 40; %i++) {
@@ -1128,7 +1134,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 40:
             for(%i = 0; %i < 40; %i++) {
@@ -1143,7 +1149,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          //The Lord wave :D
          case 41:
@@ -1152,7 +1158,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 3);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 3);
             }
          //The Lord wave, 2.0 :D
          case 42:
@@ -1161,7 +1167,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 3);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 3);
             }
          //Slasher Wave
          case 43:
@@ -1170,7 +1176,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 11);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 11);
             }
          case 44:
             for(%i = 0; %i < 40; %i++) {
@@ -1185,7 +1191,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 45:
             for(%i = 0; %i < 40; %i++) {
@@ -1200,7 +1206,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 46:
             for(%i = 0; %i < 45; %i++) {
@@ -1215,7 +1221,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          case 47:
             for(%i = 0; %i < 50; %i++) {
@@ -1230,7 +1236,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, %type);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, %type);
             }
          //The sniper wave :p
          case 48:
@@ -1239,7 +1245,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 9);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 9);
             }
          //The ravie wave, V2.0 :p
          case 49:
@@ -1248,7 +1254,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 2);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 2);
             }
          //ZOMG!!!! Demon LORDS!!! RUN
          case 50:
@@ -1257,7 +1263,7 @@ function StartHordeZombies(%mission, %wave) {
                %final = vectoradd($HordeGame::ZombieStartPt[%mission, %pt], TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
                $HordeGame::Zombiecount++;
                %time = 1000 * getRandom(1, 60);
-               schedule(%time, 0, "HordeSpawnZombies", %final, 6);
+               $HordeSpawnSched[%i] = schedule(%time, 0, "HordeSpawnZombies", %final, 6);
             }
          default:
          error("Horde: Wave Error, Wave "@%wave@" is unknown on "@%mission@"");

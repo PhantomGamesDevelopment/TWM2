@@ -1114,11 +1114,11 @@ function parsePublicCommands(%sender, %command, %args) {
                 }
             }
             if(%Stats >= $Ranks::MinPoints[$Rank::RankCount]) {
-                messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@", You Currently Have "@printCurrentEXP(%sender)@" XP.");
+                messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@" ("@%clientController.rankNumber@"), You Currently Have "@printCurrentEXP(%sender)@" XP.");
                 return 1;
             }
             else {
-                messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@", You Currently Have "@printCurrentEXP(%sender)@" XP. Your next rank is "@%nextrank@" and you need "@(%nextrankXP - %stats)@" XP.");
+                messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@" ("@%clientController.rankNumber@"), You Currently Have "@printCurrentEXP(%sender)@" XP. Your next rank is "@%nextrank@" and you need "@(%nextrankXP - %stats)@" XP.");
                 return 1;
             }
         }
@@ -1136,7 +1136,7 @@ function parsePublicCommands(%sender, %command, %args) {
             }
             %Rank = ""@$Prestige::Name[%targetController.officer]@""@%targetController.rank@"";
             %Stats = printCurrentEXP(%target);
-            messageClient(%sender, 'MsgClient', "\c2"@%target.namebase@"'s Rank is "@%Rank@" and "@%target.namebase@"'s XP is "@%stats@".");
+            messageClient(%sender, 'MsgClient', "\c2"@%target.namebase@"'s Rank is "@%Rank@" ("@%targetController.rankNumber@") and "@%target.namebase@"'s XP is "@%stats@".");
             return 1;
         }
          

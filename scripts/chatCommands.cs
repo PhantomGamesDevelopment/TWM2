@@ -38,7 +38,6 @@ function VectToRot(%vec){
 function addCMD(%proxy, %name, %send) {
    $CCHelp[%name] = ""@%send@"";
    $CommandGroup[%name] = %proxy;
-   echo("Command "@%name@" added to list under proxy "@%proxy@", Help: "@%send@"");
 }
 
 function chatcommands(%sender, %message) {
@@ -252,8 +251,6 @@ function VoteBoss_StartBoss(%BossAbbr)
          StartTrevor(%pos);                // its lots of lulz though!
       case "Vardison":
          StartVardison1(%pos);
-      case "DAVardison":
-         StartDAVardison(%pos);
       case "ShadeLord":
          SpawnShadeLord(%pos);
       default:

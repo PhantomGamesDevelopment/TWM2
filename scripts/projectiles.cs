@@ -25,7 +25,7 @@ function ProjectileData::onCollision(%data, %projectile, %targetObject, %modifie
 		 else {
 		    %damLoc = "";
 		 }
-         %test = TWM2Damage(%projectile, %targetObject, %data.directDamage, %data.directDamageType, %damLoc, "projectile");
+         %test = CalculateProjectileDamage(%projectile, %targetObject, %data.directDamage, %data.directDamageType, %damLoc, "projectile");
          if(%test == 0) {
             return;
          }
@@ -600,7 +600,7 @@ function RadiusExplosion(%explosionSource, %position, %radius, %damage, %impulse
       if (%dist > %radius)
          continue;
          
-    %modifier = TWM2Damage(%explosionSource, %targetObject, %damage, %damageType, "", "explosion");
+    %modifier = CalculateProjectileDamage(%explosionSource, %targetObject, %damage, %damageType, "", "explosion");
     if(%modifier == 0) {
        return;
     }

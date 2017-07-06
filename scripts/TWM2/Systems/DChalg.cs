@@ -51,15 +51,16 @@ function downloadChallenges_Manual() {
 }
 
 function ChallengeDownload::onConnected(%this) {
-   %this.send(%this.request);
+	%this.send(%this.request);
 }
 
 function ChallengeDownload::onConnectFailed( %this ) {
-   error("Challenges: Connection failed");
+	error("Challenges: Connection failed");
 }
 
 function ChallengeDownload::onDisconnect(%this) {
-   %this.delete();
+	$Challenge::PerformingTimeUpdateCall = 0;
+	%this.delete();
 }
 
 function ChallengeDownload::onLine(%this, %line) {
@@ -75,11 +76,8 @@ function ChallengeDownload::onLine(%this, %line) {
    if (strstr(%line, "#TIME ") != -1) {
       //expire date line
       %line = strReplace(%line, "#TIME ", "");
-      echo("* Time Line: "@getField(%line, 1)@" -> "@getField(%line, 0)@" / "@getField(%line, 3)@" -> "@getField(%line, 2)@"");
-      $CurrentStartOfMonth = getField(%line, 1);
-      $CurrentMonthlyChallengeExpire = getField(%line, 0);
-      $CurrentWeeklyChallengeExpire = getField(%line, 2);    //aka: end of week
-      $CurrentStartOfWeek = getField(%line, 3);
+      echo("* Time Line: "@getWord(%line, 0));
+      $TomorrowDate = getWord(%line, 0);
       return;
    }
    else if (strstr(%line, "#CHLG ") != -1) {
@@ -129,6 +127,7 @@ function doChallengeKillRecording(%sourceObject, %targetObject) {
 function recordAction(%client, %action, %variables) {
 	%ymd = formattimestring("yymmdd");
 	%so = %client.TWM2Controller;
+	checkDateOnChallenge(%client);
 	//echo(""@%client@" - "@%action@" - "@%variables@"");
 	//
 	switch$(%action) {
@@ -206,7 +205,6 @@ function recordAction(%client, %action, %variables) {
 		//no action recorded
 	}
 	allCheckCompletion(%client);
-	updateChallengeFile(%client);
 }
 
 function cleanChallenges() {
@@ -232,16 +230,9 @@ function AddToChallenges(%line) {
 }
 
 function allCheckCompletion(%client) {
-   for(%i = 1; isSet($Challenges::Challenge[%i]); %i++) {
-      %cType = getField($Challenges::Challenge[%i], 0);
-      if(%cType == 1) {
-         checkCompletion(%client, %i);      //daily
-      }
-	  else {
-         checkMultiCompletion(%client, %i);
-	  }
-   }
-   //
+	for(%i = 1; isSet($Challenges::Challenge[%i]); %i++) {
+		checkCompletion(%client, %i); 
+	}
 }
 
 function checkCompletion(%client, %cID) {
@@ -380,380 +371,81 @@ function checkCompletion(%client, %cID) {
 	}
 }
 
-//Check Multi-Completion (handles weekly & monthly challenges)
-function checkMultiCompletion(%client, %cID) {
-   %challenge = $Challenges::Challenge[%cID];
-   %cType = trim(getField(%challenge, 0));
-   %cCond = getsubstr(getField(%challenge, 3), 1, strlen(getField(%challenge, 3)));
-   %so = %client.TWM2Controller;
-   %dateStr = formattimestring("yymmdd");
-   //cannot complete the same one twice :P
-   if(%so.completed[%cid, %dateStr]) {
-      return;
-   }
-   //
-   switch$(getWord(%cCond, 0)) {
-      case "E":
-         %killCount = getWord(%cCond, 1);
-         %killDB = getWord(%cCond, 2) $= "A" ? 0 : getWord(%cCond, 2);
-         if(%killDB != 0) {
-		    if(%cType == 2) {
-		       if(getCurrentWeekTotal(%client, PlayerKillCount, %killDB) >= %killCount) {
-			      %done = true;
-			   }
-		    }
-		    else {
-		       if(getCurrentMonthTotal(%client, PlayerKillCount, %killDB) >= %killCount) {
-			      %done = true;
-			   }		 
-		    }			
-         }
-         else {
-		    if(%cType == 2) {
-		       if(getCurrentWeekTotal(%client, totalPlayerKillCount) >= %killCount) {
-			      %done = true;
-			   }
-		    }
-		    else {
-		       if(getCurrentMonthTotal(%client, totalPlayerKillCount) >= %killCount) {
-			      %done = true;
-			   }		 
-		    }			
-         }
-      case "Z":
-         %killCount = getWord(%cCond, 1);
-         %killedType = getWord(%cCond, 2) $= "A" ? -1 : getWord(%cCond, 2);
-         %killDB = getWord(%cCond, 3) $= "A" ? 0 : getWord(%cCond, 3);
-         if(%killDB != 0) {
-            if(%killedType != -1) {
-		       if(%cType == 2) {
-		          if(getCurrentWeekTotal(%client, ZombieKillCount, %killDB SPC %killedType) >= %killCount) {
-			         %done = true;
-			      }
-		       }
-		       else {
-		          if(getCurrentMonthTotal(%client, ZombieKillCount, %killDB SPC %killedType) >= %killCount) {
-			         %done = true;
-			      }		 
-		       }			
-            }
-            else {
-		       if(%cType == 2) {
-		          if(getCurrentWeekTotal(%client, ZombieKillCount, %killDB SPC "") >= %killCount) {
-			         %done = true;
-			      }
-		       }
-		       else {
-		          if(getCurrentMonthTotal(%client, ZombieKillCount, %killDB SPC "") >= %killCount) {
-			         %done = true;
-			      }		 
-		       }					
-            }
-         }
-         else {
-            if(%killedType != -1) {
-		       if(%cType == 2) {
-		          if(getCurrentWeekTotal(%client, ZombieKillCount, 0 SPC %killedType) >= %killCount) {
-			         %done = true;
-			      }
-		       }
-		       else { 
-		          if(getCurrentMonthTotal(%client, ZombieKillCount, 0 SPC %killedType) >= %killCount) {
-			         %done = true;
-			      }		 
-		       }					
-            }
-            else {
-		       if(%cType == 2) {
-		          if(getCurrentWeekTotal(%client, totalZombieKillCount) >= %killCount) {
-			         %done = true;
-			      }
-		       }
-		       else {
-		          if(getCurrentMonthTotal(%client, totalZombieKillCount) >= %killCount) {
-			         %done = true;
-			      }		 
-		       }	
-            }
-         } 
-      case "HS":
-         %counter = getWord(%cCond, 1);
-         %type = getWord(%cCond, 2) $= "E" ? "E" : "Z";
-         if(%type $= "E") {
-		    if(%cType == 2) {
-		       if(getCurrentWeekTotal(%client, playerHeadshots) >= %counter) {
-			      %done = true;
-			   }
-		    }
-		    else {
-		       if(getCurrentMonthTotal(%client, playerHeadshots) >= %counter) {
-			      %done = true;
-			   }		 
-		    }	
-         }
-         else {
-		    if(%cType == 2) {
-		       if(getCurrentWeekTotal(%client, zombieHeadshots) >= %counter) {
-			      %done = true;
-			   }
-		    }
-		    else {
-		       if(getCurrentMonthTotal(%client, zombieHeadshots) >= %counter) {
-			      %done = true;
-			   }		 
-		    }	
-         }
-      case "KS":
-         %type = getWord(%cCond, 1);
-         %ammount = getWord(%cCond, 2);
-		 if(%cType == 2) {
-		    if(getCurrentWeekTotal(%client, killstreakCalls, %type) >= %ammount) {
-			   %done = true;
-			}
-		 }
-		 else {
-		    if(getCurrentMonthTotal(%client, killstreakCalls, %type) >= %ammount) {
-			   %done = true;
-			}		 
-		 }				
-      case "KSK":
-         %type = getWord(%cCond, 1);
-         %ammount = getWord(%cCond, 2);
-		 if(%cType == 2) {
-		    if(getCurrentWeekTotal(%client, killstreakKills, %type) >= %ammount) {
-			   %done = true;
-			}
-		 }
-		 else {
-		    if(getCurrentMonthTotal(%client, killstreakKills, %type) >= %ammount) {
-			   %done = true;
-			}		 
-		 }		
-      case "SK":
-         %soloType = getWord(%cCond, 1);
-         %ammount = getWord(%cCond, 2);
-		 if(%cType == 2) {
-		    if(getCurrentWeekTotal(%client, successiveSolo, %soloType) >= %ammount) {
-			   %done = true;
-			}
-		 }
-		 else {
-		    if(getCurrentMonthTotal(%client, successiveSolo, %soloType) >= %ammount) {
-			   %done = true;
-			}		 
-		 }
-      case "SKS":
-         %streakType = getWord(%cCond, 1);
-         %ammount = getWord(%cCond, 2);
-		 if(%cType == 2) {
-		    if(getCurrentWeekTotal(%client, successiveStreak, %streakType) >= %ammount) {
-			   %done = true;
-			}
-		 }
-		 else {
-		    if(getCurrentMonthTotal(%client, successiveStreak, %streakType) >= %ammount) {
-			   %done = true;
-			}		 
-		 }		
-	  //easy enough :)
-      case "Prestige":
-	     %level = getWord(%cCond, 1);
-		 if(%client.TWM2Core.officer >= %level) {
-		    %done = true;
-		 }
-      case "Boss":
-         %name = getWord(%cCond, 1);
-         %amount = getWord(%cCond, 2);
-         if(%cType == 2) {
-            if(getCurrentWeekTotal(%client, bossSlayCount, %name) >= %amount) {
-               %done = true;
-            }
-         }
-         else {
-            if(getCurrentMonthTotal(%client, bossSlayCount, %name) >= %amount) {
-               %done = true;
-            }
-         }
-      case "Back":
-	     %zOrA = getWord(%cCond, 1);
-		 %amount = getWord(%cCond, 2);
-		 if(%zOrA $= "Z") {
-			if(%cType == 2) {
-		       if(getCurrentWeekTotal(%client, zombieBackstabs) >= %amount) {
-			      %done = true;
-			   }
-	        }
-			else {
-		       if(getCurrentMonthTotal(%client, zombieBackstabs) >= %amount) {
-			      %done = true;
-			   }		    
-			}
-		 }
-		 else {
-			if(%cType == 2) {
-		       if(getCurrentWeekTotal(%client, playerBackstabs) >= %amount) {
-			      %done = true;
-			   }
-	        }
-			else {
-		       if(getCurrentMonthTotal(%client, playerBackstabs) >= %amount) {
-			      %done = true;
-			   }		    
-			}
-	 	 }
-      default:
-         error("Unknown challenge in parser...");
-   }
-   if(%done) {
-      %cName = getField(%challenge, 1);
-      %CRewd = getField(%challenge, 4);
-      CenterPrint(%client, ""@(%cType == 2 ? "WEEKLY" : "MONTHLY")@" CHALLENGE COMPLETED\n"@%cName@"", 3, 3);
-      GainExperience(%client, %cRewd, %cName@" Challenge Completed");
-      recordAction(%client, "CCMP", ""@%cid@"\t1");
-   }
+function checkDateOnChallenge(%client) {
+	if(!%client || %client $= "") {
+		return;
+	}
+	%cDATE = formattimestring("yymmdd");
+	%so = NameToID("Container_"@%client.guid@"/CCD_"@%client.guid);
+	if(%so.expireDate == %cDATE) {
+		//Midnight?
+		if(!$Challenge::PerformingTimeUpdateCall) {
+			echo("Challenge expiration date matches current, check for midnight update, manually expiring challenge data.");
+			
+			downloadChallenges_Manual();
+			$Challenge::PerformingTimeUpdateCall = 1;
+			
+			//Manually expire the challenge data.
+			%so.expireDate = 0;
+			schedule(5000, 0, "checkDateOnChallenge", %client);		
+		}
+		return;
+	}
+	if(%so.expireDate <= 0 || %so.expireDate < %cDATE) {
+		echo("Client daily challenge container is expired, cleaning..");
+		if(isObject(%so)) {
+			%so.delete();
+		}	
+		%client.TWM2Controller = new ScriptObject("CCD_"@%client.guid@"") {};
+		%client.container.add(%client.TWM2Controller);
+		if(!isSet($TomorrowDate)) {
+			%setTo = %cDATE + 1; 
+		}
+		else {
+			%setTo = $TomorrowDate;
+		}	
+		%client.TWM2Controller.expireDate = %setTo;
+		SaveClientFile(%client); //give em a save		
+	}
 }
-
-//keep a running weekly total
-function getCurrentWeekTotal(%client, %field, %additional_variables) {
-   if(!isSet(%client) || !isSet(%field)) {
-      return 0;
-   }
-   %scriptObj = %client.TWM2Controller;
-   if(isSet(%additional_variables)) {
-      %var_count = getWordCount(%additional_variables);
-	  %vStr = "";
-	  %integer = 0;
-	  while(isSet(getWord(%additional_variables, %integer))) {
-	     %vStr = %vStr @","@ getWord(%additional_variables, %integer);
-		 %integer++;
-	  }
-   }
-   //get the start and end day numbers of the week.
-   %sOW = getSubStr($CurrentStartOfWeek, 6, 2);
-   %eOW = %sOW + 7;  //7 day total.
-   //if we cross over months, we don't care, because the file is killed at month's end.
-   %cTotal = 0;
-   for(%i = %sOW; %i < %eOW; %i++) {
-      %iStor = %i;
-      if(%i < 10) {
-         %iStor = "0"@%i;
-      }
-      %day = %year@%month@%iStor;
-	  if(isSet(%vStr)) {
-	     eval("%cTotal += isSet("@%scriptObj@"."@%field@"["@%day SPC %vStr@"]) ? ("@%scriptObj@"."@%field@"["@%day SPC %vStr@"]) : 0;");
-      }
-	  else {
-	     eval("%cTotal += isSet("@%scriptObj@"."@%field@"["@%day@"]) ? ("@%scriptObj@"."@%field@"["@%day@"]) : 0;");
-      }
-   }
-   return %cTotal;
-}
-
-//keep a running monthly total
-function getCurrentMonthTotal(%client, %field, %additional_variables) {
-   if(!isSet(%client) || !isSet(%field)) {
-      return 0;
-   }
-   %scriptObj = %client.TWM2Controller;
-   if(isSet(%additional_variables)) {
-      %var_count = getWordCount(%additional_variables);
-	  %vStr = "";
-	  %integer = 0;
-	  while(isSet(getWord(%additional_variables, %integer))) {
-	     %vStr = %vStr @","@ getWord(%additional_variables, %integer);
-		 %integer++;
-	  }
-   }
-   //
-   %year = getSubStr($CurrentStartOfMonth, 0, 4);
-   %month = getSubStr($CurrentStartOfMonth, 4, 2);
-   //
-   %sOM = getSubStr($CurrentStartOfMonth, 6, 2);
-   %eOM = getSubStr($CurrentMonthlyChallengeExpire, 6, 2);
-   %cTotal = 0; //hold the counter at 0
-   for(%i = %sOM; %i <= %eOM; %i++) {
-      %iStor = %i;
-      if(%i < 10) {
-         %iStor = "0"@%i;
-      }
-      %day = %year@%month@%iStor;
-	  if(isSet(%vStr)) {
-	     eval("%cTotal += isSet("@%scriptObj@"."@%field@"["@%day SPC %vStr@"]) ? ("@%scriptObj@"."@%field@"["@%day SPC %vStr@"]) : 0;");
-      }
-	  else {
-	     eval("%cTotal += isSet("@%scriptObj@"."@%field@"["@%day@"]) ? ("@%scriptObj@"."@%field@"["@%day@"]) : 0;");
-      }
-   }
-   //
-   return %cTotal;
-}
-
 
 function loadChallengeData(%client) {
-   //Daily Challenges = Core Servers Only
-   if(!IsServerMain()) {
-      error("* Daily Challenges: Restricted To Core Servers Only");
-      return;
-   }
-   //
-   %object = NameToID("Container_"@%client.guid@"/CCD_"@%client.guid);
-   if(!isObject(%object)) {
-      %name = "CCD_"@%client.guid@"";
-      %client.TWM2Controller = new ScriptObject(%name) {};
-      %client.container.add(%client.TWM2Controller);
-   }
-   else {
-      %client.TWM2Controller = %object;
-   }
-   //
-   updateChallengeFile(%client);
-}
-
-//file update
-function updateChallengeFile(%client) {
-   if(!isSet(%client) || !ClientGroup.isMember(%client)) {
-      return;
-   }
-   if(%client.cannotReset) {
-      return;
-   }
-   //if the expry date is smaller than the current date, clear the current file for write
-   %so = %client.TWM2Controller;
-   //%file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
-   //exec(%file);
-   //
-   %cDATE = formattimestring("yymmdd");
-   if(%so.expireDate <= 0) {
-      if(isObject(%so)) {
-         %so.delete();
-      }
-      %client.TWM2Controller = new ScriptObject("CCD_"@%client.guid@"") {};
-      %client.container.add(%client.TWM2Controller);
-      //
-      if(!isSet($CurrentMonthlyChallengeExpire)) {
-         %setTo = %cDATE + 31;  //temp, will auto adjust at the end of the month.
-      }
-      else {
-         %setTo = $CurrentMonthlyChallengeExpire;
-      }
-      %client.TWM2Controller.expireDate = %setTo;
-      SaveClientFile(%client); //give em a save
-   }
-   //delete if expired and ONLY if the expire is present.
-   if(%cDATE > %client.TWM2Controller.expireDate) {
-      %client.TWM2Controller.expireDate = -1;
-      //
-      echo("Daily Challenge File Expired for "@%client@", preparing new file.");
-      //
-      %client.resetAttemps++;
-      if(%client.resetAttemps >= 3) {
-         error("Client "@%client@" reset attempts > 3, disabling challenge interpreter");
-         %client.cannotReset = 1;
-         return;
-      }
-      schedule(1500, 0, "updateChallengeFile", %client);
-      return;
-   }
+	//Daily Challenges = Core Servers Only
+	if(!IsServerMain()) {
+		error("* Daily Challenges: Restricted To Core Servers Only");
+		return;
+	}
+	//
+	%cDATE = formattimestring("yymmdd");
+	echo("Updating daily challenge data for "@%client);
+	%so = NameToID("Container_"@%client.guid@"/CCD_"@%client.guid);
+	if(!isObject(%so)) {
+		%name = "CCD_"@%client.guid@"";
+		%client.TWM2Controller = new ScriptObject(%name) {};
+		%client.container.add(%client.TWM2Controller);
+	}
+	else {
+		if(%so.expireDate <= 0 || %so.expireDate < %cDATE) {
+			echo("Expired daily challenge data located for "@%client@", performing clean");
+			if(isObject(%so)) {
+				%so.delete();
+			}
+			%client.TWM2Controller = new ScriptObject("CCD_"@%client.guid@"") {};
+			%client.container.add(%client.TWM2Controller);
+			//
+			if(!isSet($TomorrowDate)) {
+				%setTo = %cDATE + 1; 
+			}
+			else {
+				%setTo = $TomorrowDate;
+			}
+			%client.TWM2Controller.expireDate = %setTo;
+			SaveClientFile(%client); //give em a save
+		}
+		else {
+			%client.TWM2Controller = %so;
+		}
+	}
 }
 
 function GenerateDWMChallengeMenu(%client, %tag, %index) {
@@ -786,27 +478,6 @@ function GenerateDWMChallengeMenu(%client, %tag, %index) {
          }
          else {
             messageClient( %client, 'SetLineHud', "", %tag, %index, "=*DAILY* "@%cName@" - "@%cDesc@" *"@%CRewd@"EXP");
-            %index+=2;
-         }
-      }
-      //
-      else if(%cType == 2) {
-         if(%client.TWM2Controller.completed[%i, %dateStr]) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>*WEEKLY* "@%cName@" - Completed");
-            %index+=2;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "*WEEKLY* "@%cName@" - "@%cDesc@" *"@%CRewd@"EXP");
-            %index+=2;
-         }
-      }
-      else {
-         if(%client.TWM2Controller.completed[%i, %dateStr]) {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>*MONTHLY* "@%cName@" - Completed");
-            %index+=2;
-         }
-         else {
-            messageClient( %client, 'SetLineHud', "", %tag, %index, "*MONTHLY* "@%cName@" - "@%cDesc@" *"@%CRewd@"EXP");
             %index+=2;
          }
       }

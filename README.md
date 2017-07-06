@@ -70,9 +70,11 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
   * This change also applies to the 'From The Top' Challenge Category
   * In-Game, Missions have been renamed to Operations
 * Fixed the incorrect internal tags for Lordranius Trevor
+* Depricated Weekly and Monthly challenges, we will only issue daily challenges from this point forward
 * Lib'd the TWM2 MainControl file and PGD Connect Support files to recover some functions
 * The F2 Menu now detects PGD Connected accounts and will no longer show the option to PGD Connect to already connected users
 * No more scary scientific notion when performing /checkstats or using the F2 menu to view player experience
+* Both /checkStats and the F2 menu pages now display what rank number you are at along with the rank name
 * Addressed a security issue regarding players who are "attempting" to load code via universal rank files.
   * Nice try DDDX, but your fem-phantom fantasies will NOT be happening... ;)
 * Addressed the bug that would allow Vardison 2.0 to summon infinite minions
@@ -125,7 +127,10 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
 * Shifter Zombies now have a randomzied element in their teleport method
 * Fixed a code bug with Lord Yvex which caused his death pulse to be replaced by nightmare missiles
 * Officer Weapons no longer require a rank to use, you only need to reach the officer level in question and you've got it!
+* Addressed an additional Horde 3 out-of-game zombie spawning crash
+* Cleaned up the player kill logic and moved all TWM2 specific damage and death functioning to a separate file
 * Addressed the bug preventing the challenges for reaching officer ranks from completing
+* Addressed a bug in which vehicle bosses were not recording damage from players to the boss system correctly
 * Weapon Balancing Pass
   * Grapple Hook
     * Slowed down the attacher projectile a bit, lowering the range

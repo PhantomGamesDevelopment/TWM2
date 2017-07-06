@@ -831,7 +831,7 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
                 %timeString = ""@%daysFloored@" Days, "@%hoursFloored@" Hours, "@%timeLeft@" Minutes";
              }
              //Card
-             messageClient( %client, 'SetLineHud', "", %tag, %index, "Rank: "@%rank@", XP Points: "@%XP@".");
+             messageClient( %client, 'SetLineHud', "", %tag, %index, "Rank: "@%rank@" ("@%targetController.rankNumber@"), XP Points: "@%XP@".");
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, "TWM2 Time Played: "@%timeString@".");
              %index++;

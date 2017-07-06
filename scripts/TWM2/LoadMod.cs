@@ -11,6 +11,7 @@ exec("serverControl.cs");                          //Server Settings
 exec("scripts/TWM2/Systems/Directorate.cs");        //Client Container Objects
 exec("scripts/TWM2/Systems/AdvancedRankSystem.cs"); //Adv. Ranks
 exec("scripts/TWM2/Systems/MainControl.cs");        //TWM2 Core Functions
+exec("scripts/TWM2/Systems/ObjectDamage.cs");       //Object Damage Functioning
 exec("scripts/TWM2/Systems/Scoremenucmds.cs");      //Score Menu
 exec("scripts/TWM2/Systems/BossSystem.cs");         //Bosses
 exec("scripts/TWM2/Systems/Medals.cs");             //Medals
@@ -65,7 +66,6 @@ exec("scripts/TWM2/ExteriorFunctioning/killTrigger.cs"); //TWM2 Kill Trigger
 exec("scripts/TWM2/ExteriorFunctioning/BloodEffects.cs");//TWM2 Gore Mod
 exec("scripts/TWM2/ExteriorFunctioning/ProtPatch.cs");   //Alv's CCM Patch
 exec("scripts/TWM2/ExteriorFunctioning/PConFunctions.cs");//P-Con Functions 1.7
-exec("scripts/TWM2/ExteriorFunctioning/ArmorDamageEffects.cs");//Loop Damages
 exec("scripts/TWM2/ExteriorFunctioning/cmdArmor.cs");  //cmdArmor patch
 
                                                    //Chat Commands
