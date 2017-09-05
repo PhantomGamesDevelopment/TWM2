@@ -1,3 +1,16 @@
+$Boss::Proficiency["ShadeLord", 0] = "Team Bronze\t1000\tDefeat the Shade Lord with your team dying no more than 25 times";
+$Boss::ProficiencyCode["ShadeLord", 0] = "$TWM2::BossManager.bossKills < 25";
+$Boss::Proficiency["ShadeLord", 1] = "Team Silver\t5000\tDefeat the Shade Lord with your team dying no more than 15 times";
+$Boss::ProficiencyCode["ShadeLord", 1] = "$TWM2::BossManager.bossKills < 15";
+$Boss::Proficiency["ShadeLord", 2] = "Team Gold\t10000\tDefeat the Shade Lord with your team dying no more than 10 times";
+$Boss::ProficiencyCode["ShadeLord", 2] = "$TWM2::BossManager.bossKills < 10";
+$Boss::Proficiency["ShadeLord", 3] = "Unbroken\t25000\tDefeat the Shade Lord without dying, and dealing more than 15% damage to him";
+$Boss::ProficiencyCode["ShadeLord", 3] = "[bProf].bossDeaths == 0 && [dPerc] > 15";
+$Boss::Proficiency["ShadeLord", 4] = "Smite the Shadows\t50000\tDefeat the Shade Lord with the shade lord causing no deaths";
+$Boss::ProficiencyCode["ShadeLord", 4] = "$TWM2::BossManager.bossKills == 0";
+$Boss::Proficiency["ShadeLord", 5] = "Shade Buster\t7500\tDefeat the Shade Lord without dying once by the elemental shade";
+$Boss::ProficiencyCode["ShadeLord", 5] = "[bProf].shadeDeaths == 0";
+
 //SHADE LORD
 datablock ParticleData(ShadeSwordParticle) {
    dragCoeffiecient     = 0.0;
@@ -428,477 +441,478 @@ function SpawnShadeLord(%position) {
 }
 
 function ShadeLordFunction(%boss, %function, %args) {
-   switch$(%function) {
+	switch$(%function) {
 
-      //-------------
-      //Boss Attacks
-      //-------------
-      case "Att_ShadeStrike":
-         %target = getWord(%args, 0);
-         %boss.setMoveState(true);
-         %boss.schedule(5000, setMoveState, false);
-         %boss.setActionThread($Zombie::RogThread,true);
-         //
-         %bPos = %boss.getPosition();
-         %start1 = vectorAdd(%bPos, "300 -300 50");
-         %go = vectorAdd(%bPos, "-300 300 50");
-         %interval = 15;
-         for(%i = 0; %i < 3; %i++) {
-            %neg = %i % 2 == 0 ? 1 : -1;
-            %start = vectorAdd(%start1, %neg*%interval*%i@" 0 0");
-            %vec = vectorNormalize(vectorSub(%go,%start));
-            %p = new SeekerProjectile() {
-               dataBlock        = ShadeLordSword;
-               initialDirection = %vec;
-               initialPosition  = %start;
-            };
-            %p.sourceObject = %boss;
-            %p.targetedPlayer = %target;
-            %beacon = new BeaconObject() {
-               dataBlock = "SubBeacon";
-               beaconType = "vehicle";
-               position = %target.player.getWorldBoxCenter();
-            };
-            %beacon.team = 0;
-            %beacon.setTarget(0);
-            MissionCleanup.add(%beacon);
-            %p.setObjectTarget(%beacon);
-            DemonMotherMissileFollow(%target,%beacon,%p);
-         }
+		//-------------
+		//Boss Attacks
+		//-------------
+		case "Att_ShadeStrike":
+			%target = getWord(%args, 0);
+			%boss.setMoveState(true);
+			%boss.schedule(5000, setMoveState, false);
+			%boss.setActionThread($Zombie::RogThread,true);
+			//
+			%bPos = %boss.getPosition();
+			%start1 = vectorAdd(%bPos, "300 -300 50");
+			%go = vectorAdd(%bPos, "-300 300 50");
+			%interval = 15;
+			for(%i = 0; %i < 3; %i++) {
+				%neg = %i % 2 == 0 ? 1 : -1;
+				%start = vectorAdd(%start1, %neg*%interval*%i@" 0 0");
+				%vec = vectorNormalize(vectorSub(%go,%start));
+				%p = new SeekerProjectile() {
+					dataBlock        = ShadeLordSword;
+					initialDirection = %vec;
+					initialPosition  = %start;
+				};
+				%p.sourceObject = %boss;
+				%p.targetedPlayer = %target;
+				%beacon = new BeaconObject() {
+					dataBlock = "SubBeacon";
+					beaconType = "vehicle";
+					position = %target.player.getWorldBoxCenter();
+				};
+				%beacon.team = 0;
+				%beacon.setTarget(0);
+				MissionCleanup.add(%beacon);
+				%p.setObjectTarget(%beacon);
+				DemonMotherMissileFollow(%target,%beacon,%p);
+			}
 
-      case "Att_HealSequence":
-         %count = getWord(%args, 0);
-         if(!isObject(%boss) || %boss.getState() $= "dead") {
-            return;
-         }  
-         if(%count == 0) {
-            %boss.setMoveState(true);
-            %boss.setPosition(vectorAdd(%boss.getPosition(), TWM2Lib_MainControl("getRandomPosition", 300 TAB 1)));
-            cancel(%boss.moveLoop);
-         }
-         if(%count < 25) {
-            %boss.setDamageLevel(%boss.getDamageLevel() - 0.1);
-            createLifeEmitter(%boss.getPosition(), PrebeamEmitter, 5000);
-         }
-         else {
-            %boss.schedule(3000, setMoveState, false);
-            %boss.moveloop = schedule(3000, %boss, "ShadeLordFunction", %boss, "ShadeLordDoMove", "");
-            return;
-         }
-         schedule(200, %boss, "ShadeLordFunction", %boss, "Att_HealSequence", %count++);
+		case "Att_HealSequence":
+			%count = getWord(%args, 0);
+			if(!isObject(%boss) || %boss.getState() $= "dead") {
+				return;
+			}  
+			if(%count == 0) {
+				%boss.setMoveState(true);
+				%boss.setPosition(vectorAdd(%boss.getPosition(), TWM2Lib_MainControl("getRandomPosition", 300 TAB 1)));
+				cancel(%boss.moveLoop);
+			}
+			if(%count < 25) {
+				%boss.setDamageLevel(%boss.getDamageLevel() - 0.1);
+				createLifeEmitter(%boss.getPosition(), PrebeamEmitter, 5000);
+			}
+			else {
+				%boss.schedule(3000, setMoveState, false);
+				%boss.moveloop = schedule(3000, %boss, "ShadeLordFunction", %boss, "ShadeLordDoMove", "");
+				return;
+			}
+			schedule(200, %boss, "ShadeLordFunction", %boss, "Att_HealSequence", %count++);
 
-      case "Att_ShadeLordDecend":
-         %count = getWord(%args, 0);
-         if(%count == 0) {
-            cancel(%boss.moveLoop);
-            //%boss.rapierShield = 1;
-            %boss.setMoveState(true);
-            if(isObject(%boss.shadeStorm)) {
-               %boss.shadeStorm.delete();
-            }
-         }
-         else if(%count > 0 && %count <= 25) {
-            %pos = "0 0 "@ 250 - (10 * %count);
-            if(isObject(%boss.shadeStorm)) {
-               %boss.shadeStorm.delete();
-            }
-            %boss.shadeStorm = new ParticleEmissionDummy(){
-               position = vectoradd(%boss.getPosition(), %pos);
-               dataBlock = "defaultEmissionDummy";
-   	       emitter = "ShadeStormEmitter";            //ShadeStormEmitter
-            };
-         }
-         else if(%count == 26) {
-            for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-               %cl = ClientGroup.getObject(%i);
-               if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {
-                  ShadeLordFunction(%boss, "ShadeLordDropKill", %cl.player);
-               }
-            }
-           if(isObject(%boss.shadeStorm)) {
-              %boss.shadeStorm.delete();
-            }
-            %boss.shadeStorm = new ParticleEmissionDummy(){
-               position = vectoradd(%boss.getPosition(), "0 0 0.5");
-               dataBlock = "defaultEmissionDummy";
-   	       emitter = "ShadeStormEmitter";            //ShadeStormEmitter
-            };
-         }
-         else if(%count > 26 && %count < 40) {
-            if(isObject(%boss.shadeStorm)) {
-               %boss.shadeStorm.delete();
-            }
-            %boss.shadeStorm = new ParticleEmissionDummy(){
-               position = vectoradd(%boss.getPosition(), "0 0 1.5");
-               dataBlock = "defaultEmissionDummy";
-   	       emitter = "ShadeStormEmitter";            //ShadeStormEmitter
-            };
-         }
-         else if(%count == 40) {
-            %boss.setMoveState(false);
-            %boss.moveloop = schedule(3000, %boss, "ShadeLordFunction", %boss, "ShadeLordDoMove", "");
-            //flash all
-            for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-               %cl = ClientGroup.getObject(%i);
-               if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {
-                  %cl.player.setWhiteout(1.0);
-               }
-            }
-            return;
-         }
-         %count++;
-         schedule(300, %boss, "ShadeLordFunction", %boss, "Att_ShadeLordDecend", %count);
+		case "Att_ShadeLordDecend":
+			%count = getWord(%args, 0);
+			if(%count == 0) {
+				cancel(%boss.moveLoop);
+				//%boss.rapierShield = 1;
+				%boss.setMoveState(true);
+				if(isObject(%boss.shadeStorm)) {
+					%boss.shadeStorm.delete();
+				}
+			}
+			else if(%count > 0 && %count <= 25) {
+				%pos = "0 0 "@ 250 - (10 * %count);
+				if(isObject(%boss.shadeStorm)) {
+					%boss.shadeStorm.delete();
+				}
+				%boss.shadeStorm = new ParticleEmissionDummy(){
+					position = vectoradd(%boss.getPosition(), %pos);
+					dataBlock = "defaultEmissionDummy";
+					emitter = "ShadeStormEmitter";            //ShadeStormEmitter
+				};
+			}
+			else if(%count == 26) {
+				for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+					%cl = ClientGroup.getObject(%i);
+					if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {
+						ShadeLordFunction(%boss, "ShadeLordDropKill", %cl.player);
+					}
+				}
+				if(isObject(%boss.shadeStorm)) {
+					%boss.shadeStorm.delete();
+				}
+				%boss.shadeStorm = new ParticleEmissionDummy(){
+					position = vectoradd(%boss.getPosition(), "0 0 0.5");
+					dataBlock = "defaultEmissionDummy";
+					emitter = "ShadeStormEmitter";            //ShadeStormEmitter
+				};
+			}
+			else if(%count > 26 && %count < 40) {
+				if(isObject(%boss.shadeStorm)) {
+					%boss.shadeStorm.delete();
+				}
+				%boss.shadeStorm = new ParticleEmissionDummy(){
+					position = vectoradd(%boss.getPosition(), "0 0 1.5");
+					dataBlock = "defaultEmissionDummy";
+					emitter = "ShadeStormEmitter";            //ShadeStormEmitter
+				};
+			}
+			else if(%count == 40) {
+				%boss.setMoveState(false);
+				%boss.moveloop = schedule(3000, %boss, "ShadeLordFunction", %boss, "ShadeLordDoMove", "");
+				//flash all
+				for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+					%cl = ClientGroup.getObject(%i);
+					if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {
+						%cl.player.setWhiteout(1.0);
+					}
+				}
+				return;
+			}
+			%count++;
+			schedule(300, %boss, "ShadeLordFunction", %boss, "Att_ShadeLordDecend", %count);
 
-      case "Att_ShadeLordScream":
-         cancel(%boss.moveloop);
-         %boss.setMoveState(true);
-         %boss.schedule(5000, setMoveState, false);
-         //create emitter
-         %screamEmit = new ParticleEmissionDummy(){
-            position = vectoradd(%boss.getPosition(),"0 0 0.5");
-            dataBlock = "defaultEmissionDummy";
-            emitter = "ShadeLordScreamEmitter";            //ShadeStormEmitter
-         };
-         %screamEmit.schedule(5000, "delete");
-   
-         //knock down and throw weapons in radius.
-         %TargetSearchMask = $TypeMasks::PlayerObjectType;
-         InitContainerRadiusSearch(%boss.getPosition(), 45, %TargetSearchMask);
-         while ((%potentialTarget = ContainerSearchNext()) != 0) {
-            if(isSet(%potentialTarget.client)) {
-               //throw guns, knock down.
-               %potentialTarget.setActionThread("death1", true);
-               %potentialTarget.throwweapon(1);
-               %potentialTarget.throwweapon(0);
-               %potentialTarget.setMoveState(true);
-               %potentialTarget.schedule(3000, setMoveState, false);
-            }
-         }
-         //
-         %boss.moveloop = schedule(5000, %boss, "ShadeLordFunction", %boss, "ShadeLordDoMove", "");
+		case "Att_ShadeLordScream":
+			cancel(%boss.moveloop);
+			%boss.setMoveState(true);
+			%boss.schedule(5000, setMoveState, false);
+			//create emitter
+			%screamEmit = new ParticleEmissionDummy(){
+				position = vectoradd(%boss.getPosition(),"0 0 0.5");
+				dataBlock = "defaultEmissionDummy";
+				emitter = "ShadeLordScreamEmitter";            //ShadeStormEmitter
+			};
+			%screamEmit.schedule(5000, "delete");
 
-      //-------------
-      //Boss Functions
-      //-------------   
-      case "ShadeLordDarkAttacks":
-         if(!isObject(%boss) || %boss.getState() $= "Dead") {
-            return;
-         }
-         if(isObject(%boss.dayCloak)) {
-            %boss.dayCloak.delete();
-         }
-         if(%boss.randomFX $= "") {
-            %boss.randomFX = ShadeLordFunction(%boss, "ShadeStormFX", "");
-         }
-         if(%boss.antiSky $= "") {
-            %boss.antiSky = ShadeLordFunction(%boss, "ShadeStormAntiSky", "");
-         }
-         %attack = getRandom(1, 3);
-         switch(%attack) {
-            case 1:
-               MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": SHALDORVAAAAAAAAAAAAAAH!!!!!!!");
-               ShadeLordFunction(%boss, "Att_ShadeLordScream", "");
-            case 2:
-               MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": Descend Mighty Shade Storm, Destroy all who dare oppose us!");
-               ShadeLordFunction(%boss, "Att_ShadeLordDecend", 0);
-            case 3:
-               %target = FindValidTarget(%boss);
-               MessageAll('MessageAll', "\c4"@$TWM2::BossName["ShadeLord"]@": Come forth my shade, Destroy "@getTaggedString(%target.name)@"!");              
-               if(isObject(%target.player)) {           
-                  ShadeLordFunction(%boss, "Att_ShadeStrike", %target.player);
-               }
-               else {
-                  MessageAll('MessageAll', "\c4"@$TWM2::BossName["ShadeLord"]@": Hiding in death does not save you "@getTaggedString(%target.name)@"");
-               }
-         }
-         %boss.attacks = schedule(25000, %boss, "ShadeLordFunction", %boss, "ShadeLordDarkAttacks", "");
+			//knock down and throw weapons in radius.
+			%TargetSearchMask = $TypeMasks::PlayerObjectType;
+			InitContainerRadiusSearch(%boss.getPosition(), 45, %TargetSearchMask);
+			while ((%potentialTarget = ContainerSearchNext()) != 0) {
+				if(isSet(%potentialTarget.client)) {
+				//throw guns, knock down.
+					%potentialTarget.setActionThread("death1", true);
+					%potentialTarget.throwweapon(1);
+					%potentialTarget.throwweapon(0);
+					%potentialTarget.setMoveState(true);
+					%potentialTarget.schedule(3000, setMoveState, false);
+				}
+			}
+			//
+			%boss.moveloop = schedule(5000, %boss, "ShadeLordFunction", %boss, "ShadeLordDoMove", "");
 
-      case "ShadeLordLightAttacks":
-         if(!isObject(%boss) || %boss.getState() $= "Dead") {
-            return;
-         }
-         if(isObject(%boss.shadeStorm)) {
-            %boss.shadeStorm.delete();
-         }
-         if(!isObject(%boss) || !%boss.getState() $= "dead") {
-            if(isObject(%boss.dayCloak)) {
-               %boss.dayCloak.delete();
-            }
-            if(isObject(%boss.shadeStorm)) {
-               %boss.shadeStorm.delete();
-            }
-            return;
-         }
-         %attack = getRandom(1, 2);
-         switch(%attack) {
-            case 1:
-               MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": SHALDORVAAAAAAAAAAAAAAH!!!!!!!");
-               ShadeLordFunction(%boss, "Att_ShadeLordScream", "");
-            case 2:
-               MessageAll('MsgBossEvilness', "\c4"@$TWM2::BossName["ShadeLord"]@": Come forth, and return to me the power of the shadows!");
-               ShadeLordFunction(%boss, "Att_HealSequence", 0);
-         }
-         %boss.attacks = schedule(25000, %boss, "ShadeLordFunction", %boss, "ShadeLordLightAttacks", "");
+		//-------------
+		//Boss Functions
+		//-------------   
+		case "ShadeLordDarkAttacks":
+			if(!isObject(%boss) || %boss.getState() $= "Dead") {
+				return;
+			}
+			if(isObject(%boss.dayCloak)) {
+				%boss.dayCloak.delete();
+			}
+			if(%boss.randomFX $= "") {
+				%boss.randomFX = ShadeLordFunction(%boss, "ShadeStormFX", "");
+			}
+			if(%boss.antiSky $= "") {
+				%boss.antiSky = ShadeLordFunction(%boss, "ShadeStormAntiSky", "");
+			}
+			%attack = getRandom(1, 3);
+			switch(%attack) {
+				case 1:
+					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": SHALDORVAAAAAAAAAAAAAAH!!!!!!!");
+					ShadeLordFunction(%boss, "Att_ShadeLordScream", "");
+				case 2:
+					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": Descend Mighty Shade Storm, Destroy all who dare oppose us!");
+					ShadeLordFunction(%boss, "Att_ShadeLordDecend", 0);
+				case 3:
+					%target = FindValidTarget(%boss);
+					MessageAll('MessageAll', "\c4"@$TWM2::BossName["ShadeLord"]@": Come forth my shade, Destroy "@getTaggedString(%target.name)@"!");              
+					if(isObject(%target.player)) {           
+						ShadeLordFunction(%boss, "Att_ShadeStrike", %target.player);
+					}
+					else {
+						MessageAll('MessageAll', "\c4"@$TWM2::BossName["ShadeLord"]@": Hiding in death does not save you "@getTaggedString(%target.name)@"");
+					}
+			}
+			%boss.attacks = schedule(25000, %boss, "ShadeLordFunction", %boss, "ShadeLordDarkAttacks", "");
 
-      case "ShadeStormFX":
-         if(!isObject(%boss) || %boss.getState() $= "Dead") {
-            return;
-         }
-         %bPos = %boss.getPosition();
-         %start1 = vectorAdd(%bPos, "300 -300 50");
-         %go = vectorAdd(%bPos, "-300 300 50");
-         %interval = 15;
-         for(%i = 0; %i < 20; %i++) {
-            %neg = %i % 2 == 0 ? 1 : -1;
-            %start = vectorAdd(%start1, %neg*%interval*%i@" 0 0");
-            %vec = vectorNormalize(vectorSub(%go,%start));
-            %p = new SeekerProjectile() {
-               dataBlock        = ShadeLordSword;
-               initialDirection = %vec;
-               initialPosition  = %start;
-            };
-            %p.sourceObject = %boss;
-            MissionCleanup.add(%p);
-         } 
-         %boss.randomFX = schedule(getRandom(10000, 25000), %boss, "ShadeLordFunction", %boss, "ShadeStormFX", "");
-   
-      case "ShadeStormAntiSky":
-         if(!isObject(%boss) || %boss.getState() $= "Dead") {
-            return;
-         }
-         if(!$ShadeLordBoss::AllowedNighttime) {
-            return;
-         }
-         %killHeight = getWord(%boss.getPosition(), 2) + 50;
-         for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-            %cl = ClientGroup.getObject(%i);
-            if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {
-               if(getWord(%cl.player.getPosition(), 2) >= %killHeight) {
-                  ShadeLordFunction(%boss, "ShadeLordDropKill", %cl.player);
-               }
-            }
-         }
-         %boss.antiSky = schedule(2500, %boss, "ShadeLordFunction", %boss, "ShadeStormAntiSky", "");
+		case "ShadeLordLightAttacks":
+			if(!isObject(%boss) || %boss.getState() $= "Dead") {
+				return;
+			}
+			if(isObject(%boss.shadeStorm)) {
+				%boss.shadeStorm.delete();
+			}
+			if(!isObject(%boss) || !%boss.getState() $= "dead") {
+				if(isObject(%boss.dayCloak)) {
+					%boss.dayCloak.delete();
+				}
+				if(isObject(%boss.shadeStorm)) {
+					%boss.shadeStorm.delete();
+				}
+				return;
+			}
+			%attack = getRandom(1, 2);
+			switch(%attack) {
+				case 1:
+					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": SHALDORVAAAAAAAAAAAAAAH!!!!!!!");
+					ShadeLordFunction(%boss, "Att_ShadeLordScream", "");
+				case 2:
+					MessageAll('MsgBossEvilness', "\c4"@$TWM2::BossName["ShadeLord"]@": Come forth, and return to me the power of the shadows!");
+					ShadeLordFunction(%boss, "Att_HealSequence", 0);
+			}
+			%boss.attacks = schedule(25000, %boss, "ShadeLordFunction", %boss, "ShadeLordLightAttacks", "");
 
-      case "ShadeLordDoDeath":
-         %boss.RapierShield = 1;
-         %boss.inDeath = 1;
-         if(isObject(%boss.dayCloak)) {
-            %boss.dayCloak.delete();
-         }
-         if(isObject(%boss.shadeStorm)) {
-            %boss.shadeStorm.delete();
-         }
-         //set on fire
-         %fire = new ParticleEmissionDummy(){
-            position = vectoradd(%boss.getPosition(),"0 0 0.5");
-            dataBlock = "defaultEmissionDummy";
-   	    emitter = "BurnEmitter";
-         };
-         MissionCleanup.add(%fire);
-         %fire.schedule(5000, delete);
-         //
-         %Boss.setMoveState(true);
-         %boss.setActionThread("death1", true);
-         %boss.schedule(5000, "blowup");
-         %boss.schedule(5000, "scriptkill");
-         schedule(4999, 0, eval, ""@%boss@".rapierShield = 0;");
-   
-         Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
-         Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
-         Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
-         Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
-         Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
-         Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
+		case "ShadeStormFX":
+			if(!isObject(%boss) || %boss.getState() $= "Dead") {
+				return;
+			}
+			%bPos = %boss.getPosition();
+			%start1 = vectorAdd(%bPos, "300 -300 50");
+			%go = vectorAdd(%bPos, "-300 300 50");
+			%interval = 15;
+			for(%i = 0; %i < 20; %i++) {
+				%neg = %i % 2 == 0 ? 1 : -1;
+				%start = vectorAdd(%start1, %neg*%interval*%i@" 0 0");
+				%vec = vectorNormalize(vectorSub(%go,%start));
+				%p = new SeekerProjectile() {
+					dataBlock        = ShadeLordSword;
+					initialDirection = %vec;
+					initialPosition  = %start;
+				};
+				%p.sourceObject = %boss;
+				MissionCleanup.add(%p);
+			} 
+			%boss.randomFX = schedule(getRandom(10000, 25000), %boss, "ShadeLordFunction", %boss, "ShadeStormFX", "");
 
-      case "ShadeLordToggleCondition":
-         %flag = getWord(%args, 0);
-         if(!isObject(%boss) || %boss.getState() $= "dead") {
-            return;
-         }
-         cancel(%boss.attacks);
-         if(%flag) {
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            %Boss.setMoveState(true);
-            %Boss.setActionThread("cel4",true);
-            %Boss.schedule(3500, "SetMoveState", false);
-            skyVeryDark();
+		case "ShadeStormAntiSky":
+			if(!isObject(%boss) || %boss.getState() $= "Dead") {
+				return;
+			}
+			if(!$ShadeLordBoss::AllowedNighttime) {
+				return;
+			}
+			%killHeight = getWord(%boss.getPosition(), 2) + 50;
+			for(%i = 0; %i < ClientGroup.getCount(); %i++) {
+				%cl = ClientGroup.getObject(%i);
+				if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {
+					if(getWord(%cl.player.getPosition(), 2) >= %killHeight) {
+						ShadeLordFunction(%boss, "ShadeLordDropKill", %cl.player);
+					}
+				}
+			}
+			%boss.antiSky = schedule(2500, %boss, "ShadeLordFunction", %boss, "ShadeStormAntiSky", "");
 
-            %boss.attacks = ShadeLordFunction(%boss, "ShadeLordDarkAttacks", "");
-         }
-         else {
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
-            %Boss.setMoveState(true);
-            %Boss.setActionThread("death1",true);
-            %Boss.schedule(3000, "setActionThread", "cel4", true);
-            %Boss.schedule(4500, "SetMoveState", false);
-            skyDusk();
-      
-            cancel(%boss.antiSky);
-            cancel(%boss.randomFX);
-      
-            %boss.antiSky = "";
-            %boss.randomFX = "";
-            %boss.attacks = schedule(4500, %boss, "ShadeLordFunction", %boss, "ShadeLordLightAttacks", "");
-         }
+		case "ShadeLordDoDeath":
+			%boss.RapierShield = 1;
+			%boss.inDeath = 1;
+			if(isObject(%boss.dayCloak)) {
+				%boss.dayCloak.delete();
+			}
+			if(isObject(%boss.shadeStorm)) {
+				%boss.shadeStorm.delete();
+			}
+			//set on fire
+			%fire = new ParticleEmissionDummy(){
+				position = vectoradd(%boss.getPosition(),"0 0 0.5");
+				dataBlock = "defaultEmissionDummy";
+				emitter = "BurnEmitter";
+			};
+			MissionCleanup.add(%fire);
+			%fire.schedule(5000, delete);
+			//
+			%Boss.setMoveState(true);
+			%boss.setActionThread("death1", true);
+			%boss.schedule(5000, "blowup");
+			%boss.schedule(5000, "scriptkill");
+			schedule(4999, 0, eval, ""@%boss@".rapierShield = 0;");
 
-      case "ShadeLordDoMove":
-         if(!isobject(%boss) || %boss.getState() $= "Dead") {
-            if(isObject(%boss.dayCloak)) {
-               %boss.dayCloak.delete();
-            }
-            if(isObject(%boss.shadeStorm)) {
-               %boss.shadeStorm.delete();
-            }
-            return;
-         }
-         if(%boss.getDamageLeftPct() < 0.025) {
-            ShadeLordFunction(%boss, "ShadeLordDoDeath", "");
-         }
-         if(%boss.getDamageLeftPct() < 0.4) {
-            if($ShadeLordBoss::AllowedNighttime == 1) {
-               $ShadeLordBoss::AllowedNighttime = 0;
-               ShadeLordFunction(%boss, "ShadeLordToggleCondition", 0);
-               MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": No, You will not break the barrier of dark!");
-            }
-         }
-         else {
-            if($ShadeLordBoss::AllowedNighttime == 0) {
-               $ShadeLordBoss::AllowedNighttime = 1;
-               ShadeLordFunction(%boss, "ShadeLordToggleCondition", 1);
-               MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": Awaken, mighty storm of shade, bring forth the doom of our foes!");
-            }
-         }
-         if(isObject(%boss.dayCloak) && !%boss.inDeath) {
-            %boss.dayCloak.delete();
-            %boss.dayCloak = new ParticleEmissionDummy(){
-               position = vectoradd(%boss.getPosition(),"0 0 0.5");
-               dataBlock = "defaultEmissionDummy";
-   	       emitter = "dayCloakEmitter";            //ShadeStormEmitter
-            };
-            MissionCleanup.add(%boss.dayCloak);
-         }
-         else {
-            if($ShadeLordBoss::AllowedNighttime == 0) {
-               %boss.dayCloak = new ParticleEmissionDummy(){
-                  position = vectoradd(%boss.getPosition(),"0 0 0.5");
-                  dataBlock = "defaultEmissionDummy";
-   	          emitter = "dayCloakEmitter";            //ShadeStormEmitter
-               };
-            }
-         }   
-         if(isObject(%boss.shadeStorm)) {
-            %boss.shadeStorm.delete();
-            %boss.shadeStorm = new ParticleEmissionDummy(){
-               position = vectoradd(%boss.getPosition(),"0 0 250");
-               dataBlock = "defaultEmissionDummy";
-   	       emitter = "ShadeStormEmitter";            //ShadeStormEmitter
-            };  
-         }
-         else {
-            if($ShadeLordBoss::AllowedNighttime == 1) {
-               %boss.shadeStorm = new ParticleEmissionDummy(){
-                  position = vectoradd(%boss.getPosition(),"0 0 250");
-                  dataBlock = "defaultEmissionDummy";
-   	          emitter = "ShadeStormEmitter";            //ShadeStormEmitter
-               };
-            }
-         }
-         %pos = %boss.getworldboxcenter();
-         %closestClient = ZombieLookForTarget(%boss);
-         %z = getWord(%pos, 2);
-         if(%z < -300) {
-            %boss.startFade(400, 0, true);
-            %boss.startFade(1000, 0, false);
-            %boss.setPosition(vectorAdd(vectoradd(%closestclient.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
-            %boss.setVelocity("0 0 0");
-            MessageAll('MsgVardison', "\c4"@$TWM2::BossName["ShadeLord"]@": I'm back....");
-         }
-         %closestDistance = getWord(%closestClient,1);
-         %closestClient = getWord(%closestClient,0).Player;
-         if(%closestDistance <= $Zombie::detectDist) {
-            if(%closestDistance < 10) {
-               ShadeLordFunction(%boss, "ShadeLordDropKill", %closestClient);
-               MessageAll('MsgVardison', "\c4"@$TWM2::BossName["ShadeLord"]@": Feel The Vengeance of the Shadows "@getTaggedString(%closestClient.client.name)@".");
-               %closestClient.setMoveState(true);
-               ShadeLordFunction(%boss, "ShadeLordRandomTeleport", "");
-            }
-	    if(%boss.hastarget != 1){
-	       %boss.hastarget = 1;
-            }
-            %vector = ZgetFacingDirection(%boss,%closestClient,%pos);
-	    %vector = vectorscale(%vector, ($Zombie::DForwardSpeed) * 0.6);
-	    %upvec = "150";
-	    %x = Getword(%vector,0);
-	    %y = Getword(%vector,1);
-	    %z = Getword(%vector,2);
-	    if(%z >= ($Zombie::DForwardSpeed))
-	       %upvec = (%upvec * 5);
-	    %vector = %x@" "@%y@" "@%upvec;
-            %boss.applyImpulse(%pos, %vector);
-         }
-         else if(%boss.hastarget == 1){
-            %boss.hastarget = 0;
-	    %boss.DemonRmove = schedule(100, %boss, "ZSetRandomMove", %boss);
-         }
-         %boss.moveloop = schedule(230, %boss, "ShadeLordFunction", %boss, "ShadeLordDoMove", "");
+			Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
+			Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
+			Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
+			Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
+			Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
+			Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)],%boss.getPosition());
 
-      case "ShadeLordRandomTeleport":
-         if(%boss.getState() $= "dead") {
-            return;
-         }
-         %newPosition = vectorAdd(%boss.getPosition(), TWM2Lib_MainControl("getRandomPosition", 150 TAB 1));
-         %boss.setPosition(%newPosition); 
+		case "ShadeLordToggleCondition":
+			%flag = getWord(%args, 0);
+			if(!isObject(%boss) || %boss.getState() $= "dead") {
+				return;
+			}
+			cancel(%boss.attacks);
+			if(%flag) {
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				%Boss.setMoveState(true);
+				%Boss.setActionThread("cel4",true);
+				%Boss.schedule(3500, "SetMoveState", false);
+				skyVeryDark();
 
-      case "ShadeLordDropKill":
-         %target = getWord(%args, 0); 
-         %incoming = vectorAdd(%target.getPosition(), vectorAdd(TWM2Lib_MainControl("getRandomPosition", 70 TAB 1), "0 0 250"));
-         %vec = vectorNormalize(vectorSub(%target.getPosition(),%incoming));
-         %p = new SeekerProjectile() {
-            dataBlock        = ShadeLordSword;
-            initialDirection = %vec;
-            initialPosition  = %incoming;
-         };
-         %p.sourceObject = %boss;
-         %p.targetedPlayer = %target;
-         %beacon = new BeaconObject() {
-            dataBlock = "SubBeacon";
-            beaconType = "vehicle";
-            position = %target.getWorldBoxCenter();
-         };
-         %beacon.team = 0;
-         %beacon.setTarget(0);
-         MissionCleanup.add(%beacon);
-         %p.setObjectTarget(%beacon);
-         DemonMotherMissileFollow(%target,%beacon,%p); 
+				%boss.attacks = ShadeLordFunction(%boss, "ShadeLordDarkAttacks", "");
+			}
+			else {
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				Serverplay3D($Ion::ThunderSound[mFloor(getRandom() * $Ion::ThunderSoundCount)], %boss.getPosition());
+				%Boss.setMoveState(true);
+				%Boss.setActionThread("death1",true);
+				%Boss.schedule(3000, "setActionThread", "cel4", true);
+				%Boss.schedule(4500, "SetMoveState", false);
+				skyDusk();
 
-      //-------------
-      //Misc Functions
-      //-------------  
-      case "DoReturnMissile":
-         %ini = getWord(%args, 0);
-         %src = getWord(%args, 1);
-         %final = vectorAdd(%ini.getPosition(), vectorAdd(TWM2Lib_MainControl("getRandomPosition", 70 TAB 1), "0 0 250"));
-         %vec = vectorNormalize(vectorSub(%final, %ini.getPosition()));
-         %p = new SeekerProjectile() {
-            dataBlock        = ShadeLordSword;
-            initialDirection = %vec;
-            initialPosition  = vectorAdd(%ini.getPosition(), "0 0 3");
-         };
-         %p.sourceObject = %src;   
+				cancel(%boss.antiSky);
+				cancel(%boss.randomFX);
 
-      default:
-         error("ShadeLordFunction(): Non-existent SL function call "@%function@".");
+				%boss.antiSky = "";
+				%boss.randomFX = "";
+				%boss.attacks = schedule(4500, %boss, "ShadeLordFunction", %boss, "ShadeLordLightAttacks", "");
+			}
 
-   }
+		case "ShadeLordDoMove":
+			if(!isobject(%boss) || %boss.getState() $= "Dead") {
+				if(isObject(%boss.dayCloak)) {
+					%boss.dayCloak.delete();
+				}
+				if(isObject(%boss.shadeStorm)) {
+					%boss.shadeStorm.delete();
+				}
+				return;
+			}
+			if(%boss.getDamageLeftPct() < 0.025) {
+				ShadeLordFunction(%boss, "ShadeLordDoDeath", "");
+			}
+			if(%boss.getDamageLeftPct() < 0.4) {
+				if($ShadeLordBoss::AllowedNighttime == 1) {
+					$ShadeLordBoss::AllowedNighttime = 0;
+					ShadeLordFunction(%boss, "ShadeLordToggleCondition", 0);
+					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": No, You will not break the barrier of dark!");
+				}
+			}
+			else {
+				if($ShadeLordBoss::AllowedNighttime == 0) {
+					$ShadeLordBoss::AllowedNighttime = 1;
+					ShadeLordFunction(%boss, "ShadeLordToggleCondition", 1);
+					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": Awaken, mighty storm of shade, bring forth the doom of our foes!");
+				}
+			}
+			if(isObject(%boss.dayCloak) && !%boss.inDeath) {
+				%boss.dayCloak.delete();
+				%boss.dayCloak = new ParticleEmissionDummy(){
+					position = vectoradd(%boss.getPosition(),"0 0 0.5");
+					dataBlock = "defaultEmissionDummy";
+					emitter = "dayCloakEmitter";            //ShadeStormEmitter
+				};
+				MissionCleanup.add(%boss.dayCloak);
+			}
+			else {
+				if($ShadeLordBoss::AllowedNighttime == 0) {
+					%boss.dayCloak = new ParticleEmissionDummy(){
+						position = vectoradd(%boss.getPosition(),"0 0 0.5");
+						dataBlock = "defaultEmissionDummy";
+						emitter = "dayCloakEmitter";            //ShadeStormEmitter
+					};
+				}
+			}   
+			if(isObject(%boss.shadeStorm)) {
+				%boss.shadeStorm.delete();
+				%boss.shadeStorm = new ParticleEmissionDummy(){
+					position = vectoradd(%boss.getPosition(),"0 0 250");
+					dataBlock = "defaultEmissionDummy";
+					emitter = "ShadeStormEmitter";            //ShadeStormEmitter
+				};  
+			}
+			else {
+				if($ShadeLordBoss::AllowedNighttime == 1) {
+					%boss.shadeStorm = new ParticleEmissionDummy(){
+						position = vectoradd(%boss.getPosition(),"0 0 250");
+						dataBlock = "defaultEmissionDummy";
+						emitter = "ShadeStormEmitter";            //ShadeStormEmitter
+					};
+				}
+			}
+			%pos = %boss.getworldboxcenter();
+			%closestClient = ZombieLookForTarget(%boss);
+			%z = getWord(%pos, 2);
+			if(%z < -300) {
+				%boss.startFade(400, 0, true);
+				%boss.startFade(1000, 0, false);
+				%boss.setPosition(vectorAdd(vectoradd(%closestclient.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
+				%boss.setVelocity("0 0 0");
+				MessageAll('MsgVardison', "\c4"@$TWM2::BossName["ShadeLord"]@": I'm back....");
+			}
+			%closestDistance = getWord(%closestClient,1);
+			%closestClient = getWord(%closestClient,0).Player;
+			if(%closestDistance <= $Zombie::detectDist) {
+				if(%closestDistance < 10) {
+					ShadeLordFunction(%boss, "ShadeLordDropKill", %closestClient);
+					MessageAll('MsgVardison', "\c4"@$TWM2::BossName["ShadeLord"]@": Feel The Vengeance of the Shadows "@getTaggedString(%closestClient.client.name)@".");
+					//%closestClient.setMoveState(true);
+					ShadeLordFunction(%boss, "ShadeLordRandomTeleport", "");
+				}
+				if(%boss.hastarget != 1){
+					%boss.hastarget = 1;
+				}
+				%vector = ZgetFacingDirection(%boss,%closestClient,%pos);
+				%vector = vectorscale(%vector, ($Zombie::DForwardSpeed) * 0.6);
+				%upvec = "150";
+				%x = Getword(%vector,0);
+				%y = Getword(%vector,1);
+				%z = Getword(%vector,2);
+				if(%z >= ($Zombie::DForwardSpeed)) {
+					%upvec = (%upvec * 5);
+				}
+				%vector = %x@" "@%y@" "@%upvec;
+				%boss.applyImpulse(%pos, %vector);
+			}
+			else if(%boss.hastarget == 1){
+				%boss.hastarget = 0;
+				%boss.DemonRmove = schedule(100, %boss, "ZSetRandomMove", %boss);
+			}
+			%boss.moveloop = schedule(230, %boss, "ShadeLordFunction", %boss, "ShadeLordDoMove", "");
+
+		case "ShadeLordRandomTeleport":
+			if(%boss.getState() $= "dead") {
+				return;
+			}
+			%newPosition = vectorAdd(%boss.getPosition(), TWM2Lib_MainControl("getRandomPosition", 150 TAB 1));
+			%boss.setPosition(%newPosition); 
+
+		case "ShadeLordDropKill":
+			%target = getWord(%args, 0); 
+			%incoming = vectorAdd(%target.getPosition(), vectorAdd(TWM2Lib_MainControl("getRandomPosition", 70 TAB 1), "0 0 250"));
+			%vec = vectorNormalize(vectorSub(%target.getPosition(),%incoming));
+			%p = new SeekerProjectile() {
+				dataBlock        = ShadeLordSword;
+				initialDirection = %vec;
+				initialPosition  = %incoming;
+			};
+			%p.sourceObject = %boss;
+			%p.targetedPlayer = %target;
+			%beacon = new BeaconObject() {
+				dataBlock = "SubBeacon";
+				beaconType = "vehicle";
+				position = %target.getWorldBoxCenter();
+			};
+			%beacon.team = 0;
+			%beacon.setTarget(0);
+			MissionCleanup.add(%beacon);
+			%p.setObjectTarget(%beacon);
+			DemonMotherMissileFollow(%target,%beacon,%p); 
+
+		//-------------
+		//Misc Functions
+		//-------------  
+		case "DoReturnMissile":
+			%ini = getWord(%args, 0);
+			%src = getWord(%args, 1);
+			%final = vectorAdd(%ini.getPosition(), vectorAdd(TWM2Lib_MainControl("getRandomPosition", 70 TAB 1), "0 0 250"));
+			%vec = vectorNormalize(vectorSub(%final, %ini.getPosition()));
+			%p = new SeekerProjectile() {
+				dataBlock        = ShadeLordSword;
+				initialDirection = %vec;
+				initialPosition  = vectorAdd(%ini.getPosition(), "0 0 3");
+			};
+			%p.sourceObject = %src;   
+
+		default:
+			error("ShadeLordFunction(): Non-existent SL function call "@%function@".");
+
+	}
 }
