@@ -8,7 +8,7 @@ Web Sites/Pages:
 * https://github.com/PhantomGamesDevelopment/TWM2/ : Official Git Repostitory
 * http://www.phantomdev.net : Offical Website
 
-Current Version: 3.91 
+Current Version: 3.92 {Development}
 
 ====
 
@@ -64,6 +64,11 @@ this level of authority, please contact Phantom139 on the PGD Forums, or by emai
 MOD DEVELOPMENT HISTORY (GIT VERSIONS):
 
 PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY CHANGELOG.md
+
+3.91 -> 3.92 (In Progress):
+* Added Boss Proficiency
+  * Hidden challenges embedded in boss fights that award additional experience for completing tough feats
+  * For example: Defeat the shade lord without dying by the elemental shades
 
 3.9 -> 3.91:
 * Reduced the requirement to order missions to the rank of General (49) from Commanding Officer (59)
