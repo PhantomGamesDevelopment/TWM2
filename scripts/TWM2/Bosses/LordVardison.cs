@@ -468,11 +468,11 @@ datablock PlayerData(VardisonStageThreeArmor) : LightMaleHumanArmor {
 };
 
 datablock StaticShapeData(ShadowOrb) : StaticShapeDamageProfile {
-	className = "logoprojector";
-	shapeFile = "pack_deploy_sensor_motion.dts";
+	className = "Generator";
+	shapeFile = "station_generator_large.dts";
 
-	maxDamage      = 10.0;
-	destroyedLevel = 10.0;
+	maxDamage      = 2.0;
+	destroyedLevel = 2.0;
 	disabledLevel  = 0.3;
 
 	isShielded = false;
@@ -503,11 +503,14 @@ function ShadowOrb::onDestroyed(%this, %obj, %prevState) {
    if (%obj.isRemoved) {
       return;
    }
+   if(isObject(%obj.waypoint)) {
+      %obj.waypoint.schedule(500, "delete");
+   }
+   if(isObject($TWM2::VardisonManager.OrbSFX)) {
+      $TWM2::VardisonManager.OrbSFX.schedule(500, "delete");
+   }
    %obj.isRemoved = true;
    Parent::onDestroyed(%this, %obj, %prevState);
-   if(isObject(%orb.sfx)) {
-      %obj.sfx.schedule(500, "delete");
-   }
    %obj.schedule(500, "delete");
    $TWM2::VardisonManager.orbDestroyed();
 }
@@ -575,6 +578,11 @@ function SpawnVardison(%position) {
       Datablock = "VardisonStageOneArmor";
    };
    %Cpos = vectorAdd(%position, "0 0 5");
+
+   %Boss.isMultiPhaseBoss = true;
+   %Boss.isFirstPhase = true;
+   %Boss.isFinalPhase = false;
+
    InitiateBoss(%Boss, "Vardison1");
 
    %Boss.team = 30;
@@ -606,6 +614,11 @@ function SpawnVardison2(%position) {
       Datablock = "VardisonStageTwoArmor";
    };
    %Cpos = vectorAdd(%position, "0 0 5");
+
+   %Boss.isMultiPhaseBoss = true;
+   %Boss.isFirstPhase = false;
+   %Boss.isFinalPhase = false;
+
    InitiateBoss(%Boss, "Vardison2");
 
    %Boss.team = 30;
@@ -646,6 +659,11 @@ function SpawnVardison3(%position) {
       Datablock = "VardisonStageThreeArmor";
    };
    %Cpos = vectorAdd(%position, "0 0 5");
+
+   %Boss.isMultiPhaseBoss = true;
+   %Boss.isFirstPhase = false;
+   %Boss.isFinalPhase = true;
+
    InitiateBoss(%Boss, "Vardison3");
 
    %Boss.team = 30;
@@ -725,15 +743,17 @@ function VardisonThink(%Boss) {
             //If we're not ready to dish out an attack, let's check what else we need to do...
             // Are we low on minions?
             if($TWM2::VardisonManager.minionCount < $TWM2::Vardison1_MaxMinions[%dLevel]) {
-               //How many players am I up against?
-               %pCount = $HostGamePlayerCount;
-               //How low is my health?
-               %percentage = mCeil((mFloor(%boss.getDamageLeft()*100) / mFloor(%boss.getMaxDamage()*100)) * 100);
-               %BackwardsHP = 100 - %percentage;
-               %chance = %BackwardsHP * %pCount * (%Boss.canSummonMinions ? 1 : 0);
-               //Using our test factor, determine if I need minions.
-               if(%chance <= getRandom(1, 100)) {
-                  %needMinions = true;
+               if(%Boss.canSummonMinions) {
+                  //How many players am I up against?
+                  %pCount = $HostGamePlayerCount;
+                  //How low is my health?
+                  %percentage = mCeil((mFloor(%boss.getDamageLeft()*100) / mFloor(%boss.getMaxDamage()*100)) * 100);
+                  %BackwardsHP = 100 - %percentage;
+                  %chance = %BackwardsHP * %pCount;
+                  //Using our test factor, determine if I need minions.
+                  if(%chance <= getRandom(1, 100)) {
+                     %needMinions = true;
+                  }
                }
             }
             //Do I need to be moving towards the enemy?
@@ -759,27 +779,20 @@ function VardisonThink(%Boss) {
             //If we're not ready to dish out an attack, let's check what else we need to do...
             // Are we low on minions?
             if($TWM2::VardisonManager.minionCount < $TWM2::Vardison2_MaxMinions[%dLevel]) {
-               //How many players am I up against?
-               %pCount = $HostGamePlayerCount;
-               //How low is my health?
-               %percentage = mCeil((mFloor(%boss.getDamageLeft()*100) / mFloor(%boss.getMaxDamage()*100)) * 100);
-               %BackwardsHP = 100 - %percentage;
-               %chance = %BackwardsHP * %pCount * (%Boss.canSummonMinions ? 1 : 0);
-               //Using our test factor, determine if I need minions.
-               if(%chance <= getRandom(1, 100)) {
-                  %needMinions = true;
+               if(%Boss.canSummonMinions) {
+                  //How many players am I up against?
+                  %pCount = $HostGamePlayerCount;
+                  //How low is my health?
+                  %percentage = mCeil((mFloor(%boss.getDamageLeft()*100) / mFloor(%boss.getMaxDamage()*100)) * 100);
+                  %BackwardsHP = 100 - %percentage;
+                  %chance = %BackwardsHP * %pCount;
+                  //Using our test factor, determine if I need minions.
+                  if(%chance <= getRandom(1, 100)) {
+                     %needMinions = true;
+                  }
                }
             }
-            //Phase 2 is stationary unless you're on Hard or WTF mode
-            if(%dLevel >= 3) {
-               %needMove = true;
-            }
-            else {
-               //Phase Two only Super-Lunges if you get too close
-               if(getWord(VardisonGetClosest(%Boss), 1) <= 50) {
-                  %needMove = true;
-               }
-            }
+            %needMove = true;
          }
       case 3:
          //Did I just get a kill?
@@ -800,16 +813,18 @@ function VardisonThink(%Boss) {
          else {
             //If we're not ready to dish out an attack, let's check what else we need to do...
             // Are we low on minions?
-            if($TWM2::VardisonManager.minionCount < $TWM2::Vardison3_MaxMinions[%dLevel]) {
-               //How many players am I up against?
-               %pCount = $HostGamePlayerCount;
-               //How low is my health?
-               %percentage = mCeil((mFloor(%boss.getDamageLeft()*100) / mFloor(%boss.getMaxDamage()*100)) * 100);
-               %BackwardsHP = 100 - %percentage;
-               %chance = %BackwardsHP * %pCount * (%Boss.canSummonMinions ? 1 : 0);
-               //Using our test factor, determine if I need minions.
-               if(%chance <= getRandom(1, 100)) {
-                  %needMinions = true;
+            if($TWM2::VardisonManager.minionCount < $TWM2::Vardison3_MaxMinions[%dLevel] && %boss.canSummonMinions) {
+               if(%Boss.canSummonMinions) {
+                  //How many players am I up against?
+                  %pCount = $HostGamePlayerCount;
+                  //How low is my health?
+                  %percentage = mCeil((mFloor(%boss.getDamageLeft()*100) / mFloor(%boss.getMaxDamage()*100)) * 100);
+                  %BackwardsHP = 100 - %percentage;
+                  %chance = %BackwardsHP * %pCount;
+                  //Using our test factor, determine if I need minions.
+                  if(%chance <= getRandom(1, 100)) {
+                     %needMinions = true;
+                  }
                }
             }
             //Do I need to be moving towards the enemy?
@@ -903,7 +918,7 @@ function VardisonDoMove(%Boss) {
             %Boss.hastarget = 1;
          }
          %vector = ZgetFacingDirection(%Boss, %clPlayer, %pos);
-         %vector = vectorscale(%vector, $Zombie::DForwardSpeed*1.8);
+         %vector = vectorscale(%vector, $Zombie::DForwardSpeed*5);
          %upvec = "150";
          %x = Getword(%vector,0);
          %y = Getword(%vector,1);
@@ -980,28 +995,31 @@ function VardisonSummonOrb(%Boss) {
 }
 
 function VardisonSummonMinions(%Boss) {
-   %currentCount = $TWM2::VardisonManager.minionCount;
-   %dLevel = $TWM2::VardisonDifficulty;
-   %max = 0;
-   switch(%Boss.phase) {
-      case 1:
-         %max = $TWM2::Vardison1_MaxMinions[%dLevel];
-      case 2:
-         %max = $TWM2::Vardison2_MaxMinions[%dLevel];
-      case 3:
-         %max = $TWM2::Vardison3_MaxMinions[%dLevel];
+   if(%Boss.canSummonMinions) {
+      %currentCount = $TWM2::VardisonManager.minionCount;
+      %dLevel = $TWM2::VardisonDifficulty;
+      %max = 0;
+      switch(%Boss.phase) {
+         case 1:
+            %max = $TWM2::Vardison1_MaxMinions[%dLevel];
+         case 2:
+            %max = $TWM2::Vardison2_MaxMinions[%dLevel];
+         case 3:
+            %max = $TWM2::Vardison3_MaxMinions[%dLevel];
+      }
+      %factor = %dLevel / 4;
+      %Low = 1;
+      %High = mCeil((%max - %currentCount) * %factor);
+      for(%i = 0; %i < getRandom(%Low, %High); %i++) {
+         VardisonDoMinionSummon(%Boss);
+      }
+      %Boss.canSummonMinions = false;
+      $TWM2::VardisonManager.schedule($TWM2::Vardison_MinionCooldown[%dLevel] * 1000, cooldownOff, %Boss, "minions");
    }
-   %Low = 1;
-   %High = %max - %currentCount;
-   for(%i = 0; %i < getRandom(%Low, %High); %i++) {
-      VardisonDoMinionSummon(%Boss);
-   }
-   %Boss.canSummonMinions = false;
-   $TWM2::VardisonManager.schedule($TWM2::Vardison_MinionCooldown[%dLevel] * 1000, cooldownOff, %Boss, "minions");
 }
 
 function VardisonDoMinionSummon(%Boss) {
-   %posSpawn = vectorAdd(%Boss.getPosition(), getRandomposition(50, 1));
+   %posSpawn = vectorAdd(%Boss.getPosition(), TWM2Lib_MainControl("getRandomPosition", 50 TAB 1));
    %spawnFire = new ParticleEmissionDummy(){
       position = vectoradd(%posSpawn, "0 0 0.5");
       dataBlock = "defaultEmissionDummy";
@@ -1518,7 +1536,7 @@ function VardisonNamedAttack(%Boss, %attack, %args) {
       
       case "RiftGate":
          %pos = getField(%args, 0);
-         %goPos = RMPG();
+         %goPos = TWM2Lib_MainControl("RMPG");
          %TargetSearchMask = $TypeMasks::PlayerObjectType;
          %c = createEmitter(%pos, FlashLEmitter, "1 0 0");      //Rotate it
          %c.schedule(1000, delete);
@@ -1641,32 +1659,45 @@ function VardisonManager::summonOrb(%this, %boss) {
    setTargetSensorGroup(%orb.target, 30);
    setTargetName(%orb.target, addtaggedstring("\c7Shadow Rift"));
    
+   %orb.waypoint = new WayPoint() {
+      position = %orb.getPosition();
+      dataBlock = "WayPointMarker";
+      team = %boss.Team;
+      name = "Shadow Rift";
+   };
+   
+   %orb.startfade(1, 0, true);
+   
    //SFX
-   %orb.sfx = new ParticleEmissionDummy(){
+   $TWM2::VardisonManager.OrbSFX = new ParticleEmissionDummy(){
       position = %orb.getPosition();
       dataBlock = "defaultEmissionDummy";
       emitter = "ShadowOrbEmitter";
    };
-   MissionCleanup.add(%orb.sfx);
+   MissionCleanup.add($TWM2::VardisonManager.OrbSFX);
    //
    %this.orbKillSched = %this.schedule($TWM2::Vardison_OrbKillTime, orbKill, %boss, %orb);
 }
 
 function VardisonManager::orbKill(%this, %boss, %orb) {
+   %restoreCount = 0;
    for(%i = 0; %i < ClientGroup.getCount(); %i++) {
       %cl = ClientGroup.getObject(%i);
       if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {
          //Bye Bye :)
+         %cl.player.rapierShield = false;
          %cl.player.setInvincible(false);
          %cl.player.damage(%boss, %cl.player.getPosition(), 10000, $DamageType::ShadowOrb);
          %cl.player.blowup();
-         MessageAll('msgDeath', "\c2"@%cl.player.namebase@" has been annihilated by the Shadow Rift.");
+         MessageAll('msgDeath', "\c2"@%cl.namebase@" has been annihilated by the Shadow Rift.");
          //If Vardison Restores HP from rift kills, do that now :P
          if($TWM2::Vardison_OrbRegenHP[$TWM2::VardisonDifficulty]) {
             %boss.setDamageLevel(%boss.getDamageLevel() - 0.35);
+            %restoreCount++;
          }
       }
    }
+   MessageAll('msgRestore', "\c5Lord Vardison has absorbed the life energy of "@%restoreCount@" combatants.");
    %wipeEmit = new ParticleEmissionDummy(){
       position = %orb.getPosition();
       dataBlock = "defaultEmissionDummy";
@@ -1674,8 +1705,11 @@ function VardisonManager::orbKill(%this, %boss, %orb) {
    };
    %wipeEmit.schedule(500, "delete");
    //Delete the orb & it's effects
-   if(isObject(%orb.sfx)) {
-      %obj.sfx.schedule(500, "delete");
+   if(isObject(%obj.waypoint)) {
+      %obj.waypoint.schedule(500, "delete");
+   }
+   if(isObject($TWM2::VardisonManager.OrbSFX)) {
+      $TWM2::VardisonManager.OrbSFX.schedule(500, "delete");
    }
    %orb.schedule(500, "delete");
    if(isObject(%this.orbFire)) {
@@ -1695,6 +1729,7 @@ function VardisonManager::orbDestroyed(%this) {
    %boss = %this.Vardison;
    %boss.rapierShield = false;
    %boss.busy = false; //<-- let think() resume...
+   MessageAll('msgDeath', "\c2The Shadow Rift has been Shattered...");
 }
 
 function VardisonManager::cooldownOff(%this, %Boss, %type) {
@@ -1718,5 +1753,30 @@ function VardisonManager::cooldownOff(%this, %Boss, %type) {
          %Boss.setMoveState(false);
          %this.lastAttackTime = getRealTime();
          %Boss.busy = false;
+   }
+}
+
+function ShadowOrb::damageObject(%data, %targetObject, %sourceObject, %position, %amount, %damageType) {
+   if(%sourceObject && %targetObject.isEnabled()) {
+      if(%sourceObject.client) {
+         %targetObject.lastDamagedBy = %sourceObject.client;
+         %targetObject.lastDamagedByTeam = %sourceObject.client.team;
+         %targetObject.damageTimeMS = GetSimTime();
+      }
+      else {
+         %targetObject.lastDamagedBy = %sourceObject;
+         %targetObject.lastDamagedByTeam = %sourceObject.team;
+         %targetObject.damageTimeMS = GetSimTime();
+      }
+   }
+   if (%data.isShielded) {
+      %amount = %data.checkShields(%targetObject, %position, %amount, %damageType);
+   }
+   %damageScale = %data.damageScale[%damageType];
+   if(%damageScale !$= "") {
+      %amount *= %damageScale;
+   }
+   if (%amount > 0) {
+      %targetObject.applyDamage(%amount);
    }
 }

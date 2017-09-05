@@ -14,11 +14,9 @@ function GetWeaponChallenges(%Image, %number) {
 
 function UpdateVehicleKillFile(%client, %VDB) {
    if(%VDB $= "") {  //Phantom139: Ha!! No more invalid Files!!!
-      //echo("No Vehicle Datablock");
       return;
    }
    if(%client $= "") {  //Phantom139: Ha! No More UE on Invalid File
-      //echo("No Client");
       return;
    }
    %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
@@ -158,7 +156,7 @@ function GenerateCompletedChallegnesMenu(%client, %tag, %index) {
             %Image = %db.getName().image;
             if(%Image.HasChallenges) {
                if(DoMedalCheck(%client, %image) == 1 && CanUseRankedWeapon(%image, %client) == 1) {
-                  messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tCompletedSub\t"@%Image@"\t1>"@%Image.GunName@"</a>");
+                  messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tWeaponUpgradesSub\t"@%Image@"\t1>"@%Image.GunName@"</a>");
                   %index++;
                }
                else {
@@ -234,11 +232,11 @@ function GenerateWChallengeSubMenu(%client, %tag, %index, %image) {
       %taskReq = getField(%Field, 1);
       //
       if(!%client.CheckChallengeCompletion(%image, %i)) {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, ""@%taskName@" - Need: "@%taskReq@"");
+         messageClient( %client, 'SetLineHud', "", %tag, %index, ""@%taskName@" - Earn "@%taskReq@" Kills with this weapon");
          %index++;
       }
       else {
-         messageClient( %client, 'SetLineHud', "", %tag, %index, ""@%taskName@" - Complete");
+         messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>"@%taskName@" - Earn "@%taskReq@" Kills with this weapon");
          %index++;
       }
    }

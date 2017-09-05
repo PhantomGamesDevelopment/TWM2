@@ -105,16 +105,16 @@ function LoadUniversalRank(%client) {
       %client.donotupdate = 0;
       messageClient(%client, 'msgPGDRequired', "\c5PGD: PGD Connect account required to load universal ranks.");
       messageClient(%client, 'msgPGDRequired', "\c5PGD: Sign up for PGD Connect today, It's Fast, Easy, and FREE!");
-      messageClient(%client, 'msgPGDRequired', "\c5See: www.public.phantomdev.net/SMF/ in the PGD Section");
+      messageClient(%client, 'msgPGDRequired', "\c5See: www.forums.phantomdev.net in the Tribes 2 Section");
       messageClient(%client, 'msgPGDRequired', "\c5For more details.");
       schedule(500, 0, "LoadClientRankfile", %client);
       return 1;
    }
    //IS FILE
-   if(!PGD_IsFile("Data/"@%client.guid@"/Ranks/TWM2/Saved.TWMSave")) {
+   if(!TWM2Lib_PGDConnect_Support("isServerFile", "Data/"@%client.guid@"/Ranks/TWM2/Saved.TWMSave")) {
       %client.donotupdate = 0;
       messageClient(%client, 'msgPGDRequired', "\c5PGD: PGD Connect confirms you do not have a universal rank.");
-      messageClient(%client, 'msgPGDRequired', "\c5PGD: Play on a main server to start progressing one today!");
+      messageClient(%client, 'msgPGDRequired', "\c5PGD: Play on a |CORE| server to start progressing one today!");
       messageClient(%client, 'msgPGDRequired', "\c5PGD: Loading your local rank file for the time being...");
       schedule(500, 0, "LoadClientRankfile", %client);
       return 1;
@@ -133,22 +133,44 @@ function LoadUniversalRank(%client) {
 }
 
 function PGDConnection_HTTP::onCompleteRankDownload(%this) {
-   echo("download complete... evaluating and applying rank");
-   %client = %this.client;
+    echo("download complete... evaluating and applying rank");
+    %client = %this.client;
 
-   %fileO = new FileObject();
-   %fileO.openForWrite($TWM::RanksDirectory@"/"@%this.client.guid@"/Saved.TWMSave");
-   for (%i = 0; %i < $Buffer[%this]; %i++) {
-      %fileO.writeLine($Buffer[%this, %i]);
-      $Buffer[%this, %i] = "";
-   }
-   $Buffer[%this] = 0;
-   %fileO.close();
-   %fileO.delete();
+    for (%i = 0; %i < $Buffer[%this]; %i++) {
+        //Scan the line
+        if (!TWM2Lib_PGDConnect_Support("fileValidator_Rank", $Buffer[%this, %i])) {
+            error("Rank load validity check failed for "@ %this.client.namebase @" ("@%this.client@"), client may be attempting to load unfriendly code.");
+            messageClient(%client, 'msgComplete', "\c3PGD Error: Your rank file has failed load validation, and cannot load...");
+            messageClient(%client, 'msgComplete', "\c3A backup copy of your file has been saved to the local server, please contact Phantom139 to address...");
+            messageClient(%client, 'msgComplete', "\c3In the mean time, a blank file has been created so you may continue playing...");
+            %fileOB = new FileObject();
+            %fileOB.openForWrite($TWM::RanksDirectory@"/"@%this.client.guid@"/Backup_Corrupted.TWMSave");
+            for (%i = 0; %i < $Buffer[%this]; %i++) {
+                %fileOB.writeLine($Buffer[%this, %i]);
+                $Buffer[%this, %i] = "";
+            }
+            $Buffer[%this] = 0;
+            %fileOB.close();
+            %fileOB.delete();
+            %client.donotupdate = 0;
+            CreateClientRankFile(%client);
+            return;
+        }
+    }
+
+    %fileO = new FileObject();
+    %fileO.openForWrite($TWM::RanksDirectory@"/"@%this.client.guid@"/Saved.TWMSave");
+    for (%i = 0; %i < $Buffer[%this]; %i++) {
+        %fileO.writeLine($Buffer[%this, %i]);
+        $Buffer[%this, %i] = "";
+    }
+    $Buffer[%this] = 0;
+    %fileO.close();
+    %fileO.delete();
    
-   schedule(100, 0, LoadClientRankFile, %client);
+    schedule(100, 0, LoadClientRankFile, %client);
    
-   messageClient(%client, 'msgComplete', "\c3PGD: Your rank has been successfully downloaded.");
+    messageClient(%client, 'msgComplete', "\c3PGD: Your rank has been successfully downloaded.");
 }
 
 //------------------------------------------------------------------------
@@ -184,7 +206,7 @@ function TCPConnectionList::GeneratePGDUploadRequest(%this) {
    %client = %this.client;
    %file = $TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
    %fileBase = FileBase(%file) @ ".TWMSave";
-   %fileCont = getFileContents(%file);
+   %fileCont = TWM2Lib_PGDConnect_Support("fileContents", %file);
    
    %user     = getField($TWM2::PGDCredentials, 0);
    %password = getField($TWM2::PGDCredentials, 1);

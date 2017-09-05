@@ -66,7 +66,7 @@ function SummonerZombiemovetotarget(%zombie){
              %type = 12;
           }
        }
-       %SumPos = vectorAdd(VectorAdd(GetRandomPosition(20, 1), "0 0 7"), %zombie.getPosition());
+       %SumPos = vectorAdd(VectorAdd(TWM2Lib_MainControl("getRandomPosition", 20 TAB 1), "0 0 7"), %zombie.getPosition());
        %c = CreateEmitter(%SumPos, NightmareGlobeEmitter, "0 0 1");
        %c.schedule(((%Ct * 1000) + 500), "delete");
        for(%i = 1; %i <= %ct; %i++) {

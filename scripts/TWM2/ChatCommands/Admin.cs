@@ -1,19 +1,5 @@
 function parseAdminCommands(%sender, %command, %args) {
    switch$(strLwr(%command)) {
-      //admincmds: lists the avaliable mod admin commands
-      case "admincmds":
-         if (!%sender.isadmin) {
-            return 2;
-         }
-         messageclient(%sender, 'MsgClient', '\c5TWM2 Admin Commands.');
-         messageclient(%sender, 'MsgClient', '\c3/moveme, /moveto, /kill, /goto, /summon');
-         messageclient(%sender, 'MsgClient', '\c3/removePieces, /giveOrphans, /forcePieces');
-         messageclient(%sender, 'MsgClient', '\c3/myname, /setname, /cancelVote, /A, /getPos');
-         messageclient(%sender, 'MsgClient', '\c3/bp, /cp, /confiscate, /gag, /ZCmds, /passVote');
-         messageclient(%sender, 'MsgClient', '\c3/getDBs, /giveGun, /TwoTeams, /slap, /freeze');
-         messageclient(%sender, 'MsgClient', '\c3/warn');
-         return 1;
-         
       //moveme: moves a player in worldspace coords
       case "moveme":
          if (!%sender.isadmin) {
@@ -255,7 +241,7 @@ function parseAdminCommands(%sender, %command, %args) {
             removeTaggedString(%sender.name);
             %sender.name = addTaggedString(%name);
             setTargetName(%sender.target, %sender.name);
-            checkGUID(%sender);
+            TWM2Lib_MainControl("CheckGUID", %sender);
             return 1;
          }
          %oldName = getTaggedString(%sender.name);
@@ -317,7 +303,7 @@ function parseAdminCommands(%sender, %command, %args) {
             removeTaggedString(%target.name);
             %target.name = addTaggedString(%name);
             setTargetName(%target.target, %target.name);
-            checkGUID(%target);
+            TWM2Lib_MainControl("CheckGUID", %target);
             return 1;
          }
          %oldName = getTaggedString(%Target.name);
@@ -738,13 +724,6 @@ function parseAdminCommands(%sender, %command, %args) {
       //=======================================================================
       //=======================================================================
       
-      //zCmds: list all zombie commands
-      case "zcmds":
-         messageclient(%sender, 'MsgClient', '\c5TWM2 Zombie Chat Commands');
-         messageclient(%sender, 'MsgClient', '\c3/BuyZPack, /SpawnZ, /KillZombies, /cure');
-         messageclient(%sender, 'MsgClient', '\c3/MakeZ');
-         return 1;
-      
       //buyZPack: adds a zombie spawn pack to your inventory
       case "buyzpack":
          if (!%sender.isadmin){
@@ -973,14 +952,12 @@ function parseAdminCommands(%sender, %command, %args) {
    }
 }
 
-addCMD("Admin", "ZCmds", "Usage: /ZCmds: Lists zombie commands.");
 addCMD("Admin", "BuyZPack", "Usage: /BuyZPack: gives you a zombie spawner.");
 addCMD("Admin", "SpawnZ", "Usage: /SpawnZ [Amount] [Type]: spawns zombies.");
 addCMD("Admin", "KillZombies", "Usage: /KillZombies: kills all zombies.");
 addCMD("Admin", "Cure", "Usage: /Cure [Target]: cures the zombie infection in a player.");
 addCMD("Admin", "makeZ", "Usage: /makeZ [target] [Type]: makes player zombies.");
 
-addCMD("Admin", "AdminCmds", "Usage: /AdminCmds: Lists all admin commands.");
 addCMD("Admin", "Freeze", "Usage: /Freeze [name]: EMP Locks a player.");
 addCMD("Admin", "passVote", "Usage: /passVote: passes a vote in progress.");
 addCMD("Admin", "getPos", "Usage: /getPos: gets your current position on the map (XYZ).");

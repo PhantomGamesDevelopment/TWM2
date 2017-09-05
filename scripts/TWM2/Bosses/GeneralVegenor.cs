@@ -199,9 +199,9 @@ function Vegenormovetotarget(%zombie){
    if(%z < -300) {
       %zombie.startFade(400, 0, true);
       %zombie.startFade(1000, 0, false);
-      %zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), getRandomPosition(25, 1)));
+      %zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
       %zombie.setVelocity("0 0 0");
-      MessageAll('msgAntiFall', "\c4"@$TWM2::BossName["Vegenor"]@": Fuck Falling!!!!");
+      MessageAll('msgAntiFall', "\c4"@$TWM2::BossName["Vegenor"]@": Falling, How about no...");
    }
    %closestDistance = getWord(%closestClient,1);
    %closestClient = getWord(%closestClient,0).Player;
@@ -272,7 +272,7 @@ function VegenorAttack_FUNC(%att, %args) {
                messageall('MsgSummon',"\c4"@$TWM2::BossName["Vegenor"]@": Hunt them all down");
          }
          for(%i = 0; %i < 6; %i++) {
-            %pos = vectoradd(%z.getPosition(), getRandomPosition(10,1));
+            %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
             %fpos = vectoradd("0 0 5",%pos);
             StartAZombie(%fpos, %type);
          }
@@ -311,7 +311,7 @@ function VegenorAttack_FUNC(%att, %args) {
          DemonMotherMissileFollow(%Tobj, %beacon,%p);
       case "MeteorDrop":
          %t = getWord(%args, 0);
-         %fpos = vectoradd(%t.getposition(), getRandomposition(50, 0));
+         %fpos = vectoradd(%t.getposition(), TWM2Lib_MainControl("getRandomPosition", 50 TAB 0));
          %pos2 = vectoradd(%fpos, "0 0 700");
          schedule(500, 0, spawnprojectile, VegenorFireMeteor, GrenadeProjectile, %pos2, "0 0 -10");
    }

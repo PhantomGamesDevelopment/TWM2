@@ -1,4 +1,3 @@
-//
 datablock StaticShapeData(MissileShape) : StaticShapeDamageProfile {
    shapeFile      = "weapon_missile_projectile.dts";
    mass           = 1.0;
@@ -50,6 +49,9 @@ function CreateMissileSat(%client, %unlim, %rem) {
       team         = %client.team;
    };
    MissionCleanUp.add(%sat);
+   %sat.TurretObject.setAutoFire(false);
+   %sat.getDataBlock().isMountable(%sat, false);
+   %sat.getDataBlock().schedule(6500, "isMountable", %sat, true);   
    setTargetSensorGroup(%sat.getTarget(), %client.team);
 
    %sat.GoPoint = 1;
@@ -63,13 +65,13 @@ function CreateMissileSat(%client, %unlim, %rem) {
    %sat.canLaucnhStrike = 1;
    %sat.isUnlimitedSat = %unlim;
    
-   MessageClient(%client, 'msgSatcom', "\c3UAMS: Satellite Moving to Position, Standby....");
+   MessageClient(%client, 'msgSatcom', "\c3Command: Your UAMS is entering the area, standby for control signal...");
    
    if(!%unlim) {
       %client.player.setPosition(VectorAdd(%x SPC %y SPC 0,$Prison::JailPos));
-   
-      %client.setControlObject(%sat.turretObject);
-      %client.schedule(499, setControlObject, %sat.turretObject);
+	  //Phantom: For some reason, the game will freeze turrets immediately after creation
+	  %client.setControlObject(%sat.turretObject);
+	  commandToClient(%client, 'ControlObjectResponse', true, getControlObjectType(%sat.turretObject,%client.player));
       MissileSatControlLoop(%client, %sat);
    }
    else {
@@ -152,20 +154,6 @@ function MakeCruiseMissile(%client, %sat) {
    MissileSatGuidedLoop(%client, %Missile);
 }
 
-function ReMoveClientSW(%client) {
-   if(!isObject(%client.player) || %client.player.getState() $= "dead") {
-      return;
-   }
-   else {
-      %sp = Game.pickPlayerSpawn(%client, false);
-      //2 sec Invincibility please?
-      %client.player.setInvinc(1);
-      %client.player.schedule(2000, "setInvinc", 0);
-      %client.player.setTransform(%client.player.lastTransformStuff);  //%sp for new spawn
-      %client.setControlObject(%client.player);
-   }
-}
-
 //just a good function to delete the satelite if the client reliquishes control
 function MissileSatControlLoop(%client, %sat) {
    if(!isObject(%sat)) {
@@ -188,6 +176,7 @@ function MissileSatControlLoop(%client, %sat) {
       %sat.schedule(1000, "Delete");
       return;
    }
+   %sat.turretObject.clientControl = %client;
    //%client.setControlObject(%sat.turretObject);
    schedule(100, 0, "MissileSatControlLoop", %client, %sat);
 }

@@ -19,106 +19,26 @@ function ConstructionGame::updateScoreHud(%game, %client, %tag){
 }
 
 function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, %arg4, %arg5){
-%tag = $TagToUseForScoreMenu;
-messageClient( %client, 'ClearHud', "", %tag, 1 );
-//Stuff
-if(%arg1 $= "")
-%arg1 = "Null";
-if(%arg2 $= "")
-%arg2 = "Null";
-if(%arg3 $= "")
-%arg3 = "Null";
-if(%arg4 $= "")
-%arg4 = "Null";
-if(%arg5 $= "")
-%arg5 = "Null";
-//end
-%scriptController = %client.TWM2Core;
-echo("[F2] "@%client.namebase@": "@%arg1@", "@%arg2@", "@%arg3@", "@%arg4@", "@%arg5@".");
-switch$ (%arg1)
-{
+	%tag = $TagToUseForScoreMenu;
+	messageClient( %client, 'ClearHud', "", %tag, 1 );
+	//Stuff
+	if(%arg1 $= "")
+	%arg1 = "Null";
+	if(%arg2 $= "")
+	%arg2 = "Null";
+	if(%arg3 $= "")
+	%arg3 = "Null";
+	if(%arg4 $= "")
+	%arg4 = "Null";
+	if(%arg5 $= "")
+	%arg5 = "Null";
+	//end
+	%scriptController = %client.TWM2Core;
+	echo("[F2] "@%client.namebase@": "@%arg1@", "@%arg2@", "@%arg3@", "@%arg4@", "@%arg5@".");
+	switch$ (%arg1) {
         case "GTP":
              scoreCmdMainMenu(%game,%client,$TagToUseForScoreMenu,%arg2);
              %client.SCMPage = %arg2;
-             return;
-        //***********************************************************************
-        //* TWM STORE
-        case "Store":
-             %dept = %arg2;
-             if(!isSet(%dept)) {
-                %index = %client.showCentralStore(%index, %tag);
-             }
-             else {
-                switch$(%dept) {
-                   case "ArmorEffect":
-                      %index = %client.showArmorEffectsPage(%index, %tag);
-                   case "ArmorFlag":
-                      %index = %client.showArmorFlagPage(%index, %tag);
-                   case "SlotMachine":
-                      %index = %client.loadSlotMachine(%index, %tag);
-                   default:
-                      %index = %client.showCentralStore(%index, %tag);
-                }
-             }
-             return;
-
-        case "ArmorEffect":
-             %effect = %arg2;
-             %client.setActiveAE(%effect);
-             %game.schedule(100, "processGameLink", %client, "Store", "ArmorEffect");
-             return;
-
-        case "BuyArmorEffect":
-             %effectIndex = %arg2;
-             %money = %client.TWM2Core.money;
-             if(%money >= getField($Store::Item["ArmorEffect", %effectIndex], 1)) {
-                %client.TWM2Core.money -= getField($Store::Item["ArmorEffect", %effectIndex], 1);
-                %item = strReplace(getField($Store::Item["ArmorEffect", %effectIndex], 0), " ", "");
-                %client.store.purchased[%item] = 1;
-                SaveClientFile(%client);
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "Armor Effect Purchased.");
-                %index++;
-             }
-             else {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "Insufficient Funds To Purchase.");
-                %index++;
-             }
-             %game.schedule(1000, "processGameLink", %client, "Store", "ArmorEffect");
-             return;
-             
-        case "ArmorFlag":
-             %flag = %arg2;
-             %client.setActiveAF(%flag);
-             %game.schedule(100, "processGameLink", %client, "Store", "ArmorFlag");
-             return;
-        
-        case "BuyArmorFlag":
-             %flagIndex = %arg2;
-             %money = %client.TWM2Core.money;
-             if(%money >= getField($Store::Item["ArmorFlag", %flagIndex], 2)) {
-                %client.TWM2Core.money -= getField($Store::Item["ArmorFlag", %flagIndex], 2);
-                %item = strReplace(getField($Store::Item["ArmorFlag", %flagIndex], 0), " ", "");
-                %client.store.purchased[%item] = 1;
-                SaveClientFile(%client);
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "Armor Flag Purchased.");
-                %index++;
-             }
-             else {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "Insufficient Funds To Purchase.");
-                %index++;
-             }
-             %game.schedule(1000, "processGameLink", %client, "Store", "ArmorFlag");
-             return;
-             
-        case "SlotMachine":
-             %money = %client.TWM2Core.money;
-             if(%money < 50) {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "You cannot play the slot machine.");
-                %index++;
-                %game.schedule(1000, "processGameLink", %client, "Store", "");
-                return;
-             }
-             %index = %client.generateSlotMachineRoll(%index, %tag);
              return;
              
              
@@ -126,13 +46,13 @@ switch$ (%arg1)
              
         case "OrderMisSub":
              %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "Missions" );
-             if(getCurrentEXP(%client) < $Ranks::MinPoints[59] && %scriptController.officer < 1) {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "You must have the 'Commanding Officer' Rank To Order Missions.");
+             messageClient( %client, 'SetScoreHudSubheader', "", "Operations" );
+             if(getCurrentEXP(%client) < $Ranks::MinPoints[49] && %scriptController.officer < 1) {
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "You must have the 'General' Rank To Order Operations.");
                 %index++;
              }
              else {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "Order A Mission, Select a Mission");
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "Select an Operation");
                 %index++;
                 %xI = 0;
                 while(isSet($Mission::TWM2Mision[%xI])) {
@@ -147,16 +67,6 @@ switch$ (%arg1)
                    }
                    %xI++;
                 }
-                //messageClient( %client, 'SetLineHud', "", %tag, %index, '<font:arial:14><a:gamelink\tOrderMis\tRainDown\t1>Rain Down</a> - 3:00/Gunship Support [1P]');
-                //%index++;
-                //messageClient( %client, 'SetLineHud', "", %tag, %index, '<font:arial:14><a:gamelink\tOrderMis\tEnemyAc130Above\t1>Enemy AC-130 Above!</a> - 15:00/Survival-Escape Mission [3P]');
-                //%index++;
-                //messageClient( %client, 'SetLineHud', "", %tag, %index, '<font:arial:14><a:gamelink\tOrderMis\tSurrounded\t1>Surrounded!</a> - 5:00/Survival Mission [6P]');
-                //%index++;
-                //messageClient( %client, 'SetLineHud', "", %tag, %index, '<font:arial:16>[NEW]<font:arial:14><a:gamelink\tOrderMis\tSurrounded\t1>Surrounded 2.0!</a> - 10:00/Survival Mission [6P]');
-                //%index++;
-                //messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOrderMis\tTheShallowedCity\t1>The Shallowed City</a> - 10:00/City Assault [4P/2R]');
-                //%index++;
              }
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Return To Main Menu</a>');
              %index++;
@@ -167,13 +77,13 @@ switch$ (%arg1)
              %task = %arg3;
              switch(%task) {
                 case 1:
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, "Mission: "@getField($Mission::VarSet[""@%mission@"", "TaskDetails"], 0)@"");
+                   messageClient( %client, 'SetLineHud', "", %tag, %index, "Operation: "@getField($Mission::VarSet[""@%mission@"", "TaskDetails"], 0)@"");
                    %index++;
                    messageClient( %client, 'SetLineHud', "", %tag, %index, "Details: "@getField($Mission::VarSet[""@%mission@"", "TaskDetails"], 1)@"");
                    %index++;
                    messageClient( %client, 'SetLineHud', "", %tag, %index, "Difficulty: "@$Mission::VarSet[""@%mission@"", "Difficulty"]@"");
                    %index++;
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, "Est. Time Completion: "@$Mission::VarSet[""@%mission@"", "TimeLimit"] / 60@" Minutes");
+                   messageClient( %client, 'SetLineHud', "", %tag, %index, "Operation Time Window: "@$Mission::VarSet[""@%mission@"", "TimeLimit"] / 60@" Minutes");
                    %index++;
                    messageClient( %client, 'SetLineHud', "", %tag, %index, "Required Players: "@$Mission::VarSet[""@%mission@"", "PlayerReq"]@"");
                    %index++;
@@ -181,9 +91,9 @@ switch$ (%arg1)
                    %index++;
                    messageClient( %client, 'SetLineHud', "", %tag, %index, "");
                    %index++;
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOrderMis\t"@%mission@"\t2>Order Mission</a>");
+                   messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tOrderMis\t"@%mission@"\t2>Order This Operation</a>");
                    %index++;
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOrderMisSub\t1>Select A Different Mission</a>');
+                   messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOrderMisSub\t1>Select A Different Operation</a>');
                    %index++;
                    messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Return To Main Menu</a>');
                    %index++;
@@ -200,18 +110,18 @@ switch$ (%arg1)
              
         case "Missions":
              %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "Missions" );
-             if(getCurrentEXP(%client) < $Ranks::MinPoints[59] && %scriptController.officer < 1) {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "You must have the 'Commanding Officer' Rank To Order Missions.");
+             messageClient( %client, 'SetScoreHudSubheader', "", "Operations" );
+             if(getCurrentEXP(%client) < $Ranks::MinPoints[49] && %scriptController.officer < 1) {
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "Order Operation: LOCKED, Requires 'General' Rank.");
                 %index++;
              }
              else {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOrderMisSub\t1>Order A Mission</a>');
+                messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOrderMisSub\t1>Order An Operation</a>');
                 %index++;
              }
              messageClient( %client, 'SetLineHud', "", %tag, %index, '');
              %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tJoinMis\t1>Join The Mission About To Begin</a>');
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tJoinMis\t1>Join The Operation About To Begin</a>');
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Return To Main Menu</a>');
              %index++;
@@ -497,155 +407,198 @@ switch$ (%arg1)
              %index++;
              messageClient( %client, 'ClearHud', "", %tag, %index );
              return;
-             
-         case "inventoryWindow":
-            %index = buildInventoryWindow(%client, %tag, %index);
-            return;
+			 
+		case "StatResetWarn":
+			messageClient( %client, 'ClearHud', "", %tag, %index );
+			messageClient( %client, 'SetScoreHudSubheader', "", "Stat Reset" );
+			if(getCurrentEXP(%client) < $Ranks::MinPoints[61] && %scriptController.officer < 15) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "You must have the 'Harbinger Master Commander' Rank To Proceed.");
+				%index++;
+				messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Exit</a>');
+				%index++;
+				return;
+			}
+			%page = %arg2;	
+			switch(%page) {
+				case 1:
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "Congratulations on reaching the end of the rank progression!");
+					%index++;				
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "But, are you longing for that progression adventure once more?");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "Do you feel like there's nothing to strive for anymore?");
+					%index++;				
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "By reaching the last rank, you can choose to do a FULL RESET.");
+					%index++;	
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Get Me Out of Here</a>');
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tStatResetWarn\t2>Learn More</a>');
+					%index++;
 
-         case "setScoreInv":
-            %subZone = %arg2;
-            switch$(%subZone) {
-               case "Armor":
-                  %client.scoreHudInv[Armor] = %arg3;
-               case "Weapon":
-                  //pull the current settings
-                  %int = 1;
-                  while(isSet(%client.scoreHudInv[Weapon, %int])) {
-                     if(%client.scoreHudInv[Weapon, %int] $= %client.scoreHudInv[Weapon, %arg3]) {
-                        %client.scoreHudInv[Weapon, %int] = "";
-                     }
-                     %int++;
-                  }
-                  %slot = %arg3;
-                  %client.scoreHudInv[Weapon, %slot] = %arg4;
-                  //now do a post set check
-                  %xSlot = 1;
-                  while(isSet(%client.scoreHudInv[Weapon, %xSlot])) {
-                     //no two may co-exist, IE: be the same
-                     %iSlot = 1;
-                     while(isSet(%client.scoreHudInv[Weapon, %iSlot])) {
-                        if(%client.scoreHudInv[Weapon, %iSlot] $= %client.scoreHudInv[Weapon, %xSlot]) {
-                           if(%iSlot != %xSlot) {
-                              //remove iSlot, proceed
-                              %client.scoreHudInv[Weapon, %iSlot] = "";
-                           }
-                        }
-                        %iSlot++;
-                     }
-                     %xSlot++;
-                  }
-               case "Pistol":
-                  %client.scoreHudInv[Pistol] = %arg3;
-               case "Melee":
-                  %client.scoreHudInv[Melee] = %arg3;
-               case "Pack":
-                  %client.scoreHudInv[Pack] = %arg3;
-               case "Grenade":
-                  %client.scoreHudInv[Grenade] = %arg3;
-               case "Mine":
-                  %client.scoreHudInv[Mine] = %arg3;
-               case "Ability":
-                  %client.scoreHudInv[Ability] = %arg3;
-               default:
-                  error("Unknown Call to setScoreInv: "@%arg2@"/"@%arg3@"/"@%arg4@"");
-            }
-            Game.processGameLink(%client, "inventoryWindow");
-            return;
+				case 2:
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "By proceeding through here, you can reset at rank zero...");
+					%index++;				
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "It will be like you've never played TWM2 before");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "All medals, challenges, unlocks will be removed.");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "You only get to keep your play time and phrase.");
+					%index++;					
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "But, you can do it all over again!!!");
+					%index++;	
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Get Me Out of Here</a>');
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tStatResetWarn\t3>Continue</a>');
+					%index++;	
+
+				case 3:
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "DANGER: THIS ACTION IS IRREVERSABLE!!!");
+					%index++;				
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "THIS IS YOUR LAST CHANCE TO ABORT");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "CLICK BELOW AT YOUR OWN RISK!!!");
+					%index++;				
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "");
+					%index++;	
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>No, I\'m Not Thinking Clearly!!!</a>');
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tStatResetWarn\t4>Wipe Me From TWM2 Existence</a>');
+					%index++;	
+
+				case 4:
+					WipeStats(%client);
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "It has been done... Now... Begone!!!");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "Thank you for using the Phantom139 Memory wipe Services...");
+					%index++;					
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Exit</a>');
+					%index++;					
+				
+			}
+			return;
 
         case "PrestigeWarn":
-           messageClient( %client, 'ClearHud', "", %tag, %index );
-           messageClient( %client, 'SetScoreHudSubheader', "", "Officer Ranks" );
-           if(getCurrentEXP(%client) < $Ranks::MinPoints[61]) {
-              messageClient( %client, 'SetLineHud', "", %tag, %index, "You must have the 'Master Commander' Rank To Proceed.");
-              %index++;
-              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Exit</a>');
-              %index++;
-              return;
-           }
-           %page = %arg2;
-           switch(%page) {
-              case 1:
-                 %next = %scriptController.officer + 1;
-                 if(%scriptController.officer $= "" || %scriptController.officer == 0) {
-                    %scriptController.officer = 0;
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, "Welcome to the Officer Ranks!");
-                    %index++;
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, "Congradulations on completing the rank system");
-                    %index++;
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, "Now it's time to progress further!");
-                    %index++;
-                 }
-                 else {
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, "Welcome Back to Officer Ranking!");
-                    %index++;
-                 }
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, "The Officer Ranks are a way to hit the reset button in TWM2.");
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, "You will unlock many new things by proceeding through these");
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, "Officer ranks, yet it will become more difficult.");
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Cancel</a>');
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPrestigeWarn\t2>Continue</a>');
-                 %index++;
-              case 2:
-			     if(GetOfficerCap(%next)) {
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, "*** This officer rank level is currently locked ***");
-                    %index++;				
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, "***  Please try again at some other time/date  ***");
-                    %index++;							
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Return To Controls</a>');
-                    %index++;			
-					return;
-				 }
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, "Although you will restart at the first rank, you gain");
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, "the "@$Prestige::Name[%scriptController.officer]++@"title with your rank.");
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, "This action cannot be undone once your rank is saved");
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, "Are you sure you want to continue?");
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>No</a>');
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPrestigeWarn\t3>Yes</a>');
-                 %index++;
-              case 3:
-			     if(GetOfficerCap(%next)) {
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, "*** This officer rank level is currently locked ***");
-                    %index++;				
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, "***  Please try again at some other time/date  ***");
-                    %index++;							
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Return To Controls</a>');
-                    %index++;			
-					return;
-				 }			
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, "This action CANNOT be undone once your rank is saved");
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, "This is your last chance to turn back");
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Do Not Promote</a>');
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPrestigeWarn\t4>Promote Me Now!</a>');
-                 %index++;
-              case 4:
-			     if(GetOfficerCap(%next)) {
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, "*** This officer rank level is currently locked ***");
-                    %index++;				
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, "***  Please try again at some other time/date  ***");
-                    %index++;							
-                    messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Return To Controls</a>');
-                    %index++;			
-					return;
-				 }			
-                 PromoteToPrestige(%client);
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, "Congradulations, you have been promoted to the next Officer Rank!");
-                 %index++;
-                 messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Exit</a>');
-                 %index++;
-           }
-           return;
+			messageClient( %client, 'ClearHud', "", %tag, %index );
+			messageClient( %client, 'SetScoreHudSubheader', "", "Officer Ranks" );
+			if(getCurrentEXP(%client) < $Ranks::MinPoints[61]) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "You must have the 'Master Commander' Rank To Proceed.");
+				%index++;
+				messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Exit</a>');
+				%index++;
+				return;
+			}
+			%page = %arg2;
+			switch(%page) {
+				case 1:
+					%next = %scriptController.officer + 1;
+					if(%scriptController.officer $= "" || %scriptController.officer == 0) {
+						%scriptController.officer = 0;
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "Welcome to the Officer Ranks!");
+						%index++;
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "Congratulations on reaching the rank of Master Commander");
+						%index++;
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "But if you thought you were done.... you thought wrong...");
+						%index++;
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "The Officer Ranks are your next step of progression in TWM2.");
+						%index++;
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "");
+						%index++;	
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "Officer promotion effectively hits that reset button on your account");
+						%index++;
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "restarting you at level one with zero EXP, but you'll move forward");
+						%index++;					
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "This action is not in vain, as you unlock some cool new items!");
+						%index++;
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "To assist your path, you'll gain some new EXP gain methods to help.");
+						%index++;	
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "So, with that in mind, are you ready to move on to the next step?");
+						%index++;					
+					}
+					else {
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "Welcome Back to Officer Ranking!");
+						%index++;
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "You made it again! Master Commander once more!");					
+						%index++;
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "However, as you expected, you're still not done yet!");
+						%index++;
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "As a reminder, you'll lose it all, but gain more.");
+						%index++;		
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "So, are you ready to enter the next office rank?");
+						%index++;					
+					}
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Cancel</a>');
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPrestigeWarn\t2>Continue</a>');
+					%index++;
+					
+				case 2:
+					if(fetchCap("Officer", %next)) {
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "*** This officer rank level is currently locked ***");
+						%index++;				
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "***  Please try again at some other time/date  ***");
+						%index++;							
+						messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Return To Controls</a>');
+						%index++;			
+						return;
+					}
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "Although you will restart at the level 1, you gain");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "the "@trim($Prestige::Name[%scriptController.officer + 1])@" title with your rank.");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "");					
+					%index++;	
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "Rewards Earned for Promoting to Officer Level "@%scriptController.officer + 1@":");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, " * 1 Additional Killstreak Slot");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, " * "@$Prestige::Rewards[%scriptController.officer + 1]);
+					%index++;					
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "");
+					%index++;					
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "This action cannot be undone once your rank is saved");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "Are you sure you want to continue?");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>No</a>');
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPrestigeWarn\t3>Yes</a>');
+					%index++;
+					
+				case 3:
+					if(fetchCap("Officer", %next)) {
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "*** This officer rank level is currently locked ***");
+						%index++;				
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "***  Please try again at some other time/date  ***");
+						%index++;							
+						messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Return To Controls</a>');
+						%index++;			
+						return;
+					}			
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000>WARNING</color> This action CANNOT be undone!!!");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "This is your last chance to turn back");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Do Not Promote</a>');
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPrestigeWarn\t4>Shut Up And Promote Me Now!</a>');
+					%index++;
+					
+				case 4:
+					if(fetchCap("Officer", %next)) {
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "*** This officer rank level is currently locked ***");
+						%index++;				
+						messageClient( %client, 'SetLineHud', "", %tag, %index, "***  Please try again at some other time/date  ***");
+						%index++;							
+						messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Return To Controls</a>');
+						%index++;			
+						return;
+					}			
+					PromoteToPrestige(%client);
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "Congratulations, you have promoted to a new officer rank!!!");
+					%index++;
+					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Exit</a>');
+					%index++;
+			}
+			return;
 
         case "PersControl":
              %client.SCMPage = "SM";
@@ -654,28 +607,42 @@ switch$ (%arg1)
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
-             if(%scriptController.officer < 9) {
+             if(%scriptController.officer < $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
                 if(getCurrentEXP(%client) >= $Ranks::MinPoints[61]) {
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPrestigeWarn\t1>Promote To Next Officer Rank</a>');
+                   messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tPrestigeWarn\t1>Promote To Officer Level "@%scriptController.officer + 1@"</a>");
                    %index++;
                 }
                 else {
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, "Officer Ranking - Unlocked at Master Commander");
+                   messageClient( %client, 'SetLineHud', "", %tag, %index, "Officer Ranking - Requires Master Commander (Level 62)");
                    %index++;
                 }
              }
+             else {
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "Maximum Officer Level Achieved, Congratulations!!!");
+                %index++; 
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000><a:gamelink\tStatResetWarn\t1>Reset My Stats</a>: Reset To Level 1, Officer 0</color>");
+                %index++;				
+             }
              if(%scriptController.officer >= 1) {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "Current Officer Rank Level: "@%scriptController.officer@"");
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "Current Officer Rank Level: "@%scriptController.officer@" ("@trim($Prestige::Name[%scriptController.officer])@")");
                 %index++;
              }
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tWeaponUpgrades\t1>Weapon Attachments & Upgrades</a>');
+             %index++;			 
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPerks\t1>Perks</a>');
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tKillstreaks\t1>Killstreak Superweapons</a>');
              %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tUpdateSettings\t1>Save Settings</a>');
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tUpdateSettings\t1>Save Game Settings</a>');
              %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPGDConn1\t1>PGD Connect - In Game</a>');
-             %index++;
+			 if(!%client.IsPGDConnected()) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPGDConn1\t1>PGD Connect - In Game</a>');
+				%index++;
+			 }
+			 else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, 'PGD Connect Status: <color:33FF00>Connected');
+				%index++;			 
+			 }
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
@@ -709,31 +676,37 @@ switch$ (%arg1)
              %upgrade = %arg3;
              %client.DisableAllUpgrades(%image); //disable all first
              %client.ActivateUpgrade(%image, %upgrade);
-             %game.processGameLink(%client, "CompletedSub", %image);
+             %game.processGameLink(%client, "WeaponUpgradesSub", %image);
              return;
 
         case "DeActivateUpgrades":
              %image = %arg2;
              %client.DisableAllUpgrades(%image); //disable all
-             %game.processGameLink(%client, "CompletedSub", %image);
+             %game.processGameLink(%client, "WeaponUpgradesSub", %image);
              return;
              
-        case "CompletedSub":
+        case "WeaponUpgradesSub":
              %image = %arg2;
              %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "Completed Challenges" );
+             messageClient( %client, 'SetScoreHudSubheader', "", "Personal Settings" );
              messageClient( %client, 'SetLineHud', "", %tag, %index, "Select A Upgrade To Use");
              %index++;
              %index = GenerateCompletedSubMenu(%client, %tag, %index, %image);
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tWeaponChallenge\t1>Back to weapon challegnes</a>');
+             messageClient( %client, 'SetLineHud', "", %tag, %index, "");
+             %index++;			 
+             messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tWeaponTasksSub\t"@%image@">Jump to Weapon Challenge Page</a>");
+             %index++;			 
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tWeaponUpgrades\t1>Return to Weapon List</a>');
+             %index++;			 
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Return to Settings Menu</a>');
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
              %index++;
              return;
              
-        case "CompletedChallenge":
+        case "WeaponUpgrades":
              %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "Completed Challenges" );
+             messageClient( %client, 'SetScoreHudSubheader', "", "Personal Settings" );
              messageClient( %client, 'SetLineHud', "", %tag, %index, "Select A Weapon");
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
@@ -741,7 +714,7 @@ switch$ (%arg1)
              %index = GenerateCompletedChallegnesMenu(%client, %tag, %index);
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tWeaponChallenge\t1>Back to weapon challegnes</a>');
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Return to Settings Menu</a>');
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
              %index++;
@@ -750,11 +723,17 @@ switch$ (%arg1)
         case "WeaponTasksSub":
              %image = %arg2;
              %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "Weapon Challenges" );
+             messageClient( %client, 'SetScoreHudSubheader', "", "Challenges" );
              messageClient( %client, 'SetLineHud', "", %tag, %index, "Challenges:");
              %index++;
              %index = GenerateWChallengeSubMenu(%client, %tag, %index, %image);
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tWeaponChallenge\t1>Back to weapon challegnes</a>');
+             messageClient( %client, 'SetLineHud', "", %tag, %index, "");
+             %index++;			 
+             messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tWeaponUpgradesSub\t"@%image@">Jump to Weapon Attachments Page</a>");
+             %index++;			 
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tWeaponsTasks\t1>Return to Weapon List</a>');
+             %index++;			 
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tChallenge\t1>Return to Challenge Menu</a>');
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
              %index++;
@@ -762,7 +741,7 @@ switch$ (%arg1)
 
         case "WeaponsTasks":
              %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "Weapon Challenges" );
+             messageClient( %client, 'SetScoreHudSubheader', "", "Challenges" );
              messageClient( %client, 'SetLineHud', "", %tag, %index, "Select A Weapon");
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
@@ -770,7 +749,7 @@ switch$ (%arg1)
              %index = GenerateWeaponChallegnesMenu(%client, %tag, %index);
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tWeaponChallenge\t1>Back to weapon challegnes</a>');
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tChallenge\t1>Return to Challenge Menu</a>');
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
              %index++;
@@ -778,15 +757,15 @@ switch$ (%arg1)
              
         case "OtherTasks":
              %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "Weapon Challenges" );
+             messageClient( %client, 'SetScoreHudSubheader', "", "Challenges" );
              messageClient( %client, 'SetLineHud', "", %tag, %index, "Select A Category");
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
-             %index = GenerateChallegnesMenu(%client, %tag, %index);
+             %index = GenerateChallengesMenu(%client, %tag, %index);
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tWeaponChallenge\t1>Back to weapon challegnes</a>');
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tChallenge\t1>Return to Challenge Menu</a>');
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
              %index++;
@@ -795,38 +774,27 @@ switch$ (%arg1)
         case "OtherTasksSub":
              %client.SCMPage = "SM";
              %cate = %arg2;
-             messageClient( %client, 'SetScoreHudSubheader', "", "Weapon Challenges" );
-             %index = GetNonWeapSubMenu(%client, %tag, %index, %cate);
+             messageClient( %client, 'SetScoreHudSubheader', "", "Challenges" );
+             %index = GenerateChallengeSubMenu(%client, %cate, %tag, %index);
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOtherTasks\t1>Back to challenge categories</a>');
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOtherTasks\t1>Return to General Tasks</a>');
              %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tWeaponChallenge\t1>Back to weapon challegnes</a>');
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tChallenge\t1>Return to Challenge Menu</a>');
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
              %index++;
              return;
 
-        case "WeaponChallenge":
+        case "Challenge":
              %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "Weapon Challenges" );
-             messageClient( %client, 'SetLineHud', "", %tag, %index, "Select An Option");
+             messageClient( %client, 'SetScoreHudSubheader', "", "Challenges" );
+             messageClient( %client, 'SetLineHud', "", %tag, %index, "TWM2 Challenges");
              %index++;
-             //
-             messageClient( %client, 'SetLineHud', "", %tag, %index, "");
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOtherTasks\t1>General Tasks</a>');
              %index++;
-             //
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tCompletedChallenge\t1>Weapon Upgrades</a>');
-             %index++;
-             //
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tWeaponsTasks\t1>Weapon Challenges</a>');
-             %index++;
-             //
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tOtherTasks\t1>Additional Challenges</a>');
-             %index++;
-             //
-             //%index = CreatePerkMenu(%client, %tag, %index);
-             //
+             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tWeaponsTasks\t1>Weapon Specific Challenges</a>');
+             %index++;			 
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
@@ -837,14 +805,13 @@ switch$ (%arg1)
         case "RanksSM":
              messageClient( %client, 'SetScoreHudSubheader', "", ""@%arg2.namebase@"'s Stats Card" );
              %client.SCMPage = "SM";
-			 %targetController = %arg2.TWM2Core;
+	         %targetController = %arg2.TWM2Core;
              //Specs
              if(%targetController.officer $= "") {
                 %targetController.officer = 0;
              }
              %rank = ""@$Prestige::Name[%targetController.officer]@""@%targetController.rank@"";
-             %XP = ((%targetController.millionxp) * 1000000) + %targetController.xp;
-             %mula = %targetController.money;
+             %XP = printCurrentEXP(%arg2);
              %phrs = %targetController.phrase;
              %gmeTime = %targetController.gameTime;
              //Game Time
@@ -864,9 +831,7 @@ switch$ (%arg1)
                 %timeString = ""@%daysFloored@" Days, "@%hoursFloored@" Hours, "@%timeLeft@" Minutes";
              }
              //Card
-             messageClient( %client, 'SetLineHud', "", %tag, %index, "Rank: "@%rank@", XP Points: "@%XP@", Ranked "@%targetController.topRank@" / "@$Rank::numplayers@".");
-             %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, "Money: $"@%mula@"");
+             messageClient( %client, 'SetLineHud', "", %tag, %index, "Rank: "@%rank@" ("@%targetController.rankNumber@"), XP Points: "@%XP@".");
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, "TWM2 Time Played: "@%timeString@".");
              %index++;
@@ -991,7 +956,7 @@ switch$ (%arg1)
                 if(%client.namebase $= $Rank::Top[%i]) {
                    messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>"@%i@". "@$Rank::Top[%i]@" - "@$Rank::TopRank[%i]@" - "@$Rank::TopXP[%i]@"XP");
                    %index++;
-                   CompleteNWChallenge(%client, "Acceptance");
+                   //CompleteNWChallenge(%client, "Acceptance");
                 }
                 else {
                    messageClient( %client, 'SetLineHud', "", %tag, %index, ""@%i@". "@$Rank::Top[%i]@" - "@$Rank::TopRank[%i]@" - "@$Rank::TopXP[%i]@"XP");

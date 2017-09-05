@@ -65,7 +65,7 @@ function ShifterZombiemovetotarget(%zombie){
     if(%closestDistance > 200 || (%zombie.getVelocity() == 0 && !%zombie.RecentShift)) {
         %zombie.setVelocity("0 0 10");
        	%zombie.startFade(500, 0, true);
-        %zombie.schedule(600, "SetPosition", VectorAdd(%closestClient.getPosition(), "0 0 3"));
+        %zombie.schedule(600, "SetPosition", VectorAdd(%closestClient.getPosition(), vectorAdd("0 0 3", TWM2Lib_MainControl("getRandomPosition", "5\t1"))));
         %zombie.startFade(750, 0, false);
         %zombie.RecentShift = 1;
         Schedule(3500, 0, "eval", ""@%zombie@".RecentShift=0;");

@@ -281,7 +281,7 @@ function PlayerSummon(%player, %count) {
       }
    }
    for(%i = 0; %i < %count; %i++) {
-      %pos = vectoradd(%player.getPosition(),getRandomPosition(10,1));
+      %pos = vectoradd(%player.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
       %fpos = vectoradd("0 0 5",%pos);
       StartAZombie(%fpos, %type);
    }
@@ -348,7 +348,7 @@ function PlayerLRAbilities(%Player) {
       %target = FindValidTarget(%z);
       if(isObject(%target.player) && !%target.ignoredbyZombs) {
          MessageAll('MessageAll', "\c4"@getTaggedString(%cl.name)@": Metros Maul!");
-         %fpos = vectoradd(%target.player.getposition(),getRandomposition(50,0));
+         %fpos = vectoradd(%target.player.getposition(),TWM2Lib_MainControl("getRandomPosition", 50 TAB 0));
          %pos2 = vectoradd(%fpos,"0 0 700");
          schedule(500,0,spawnprojectile,JTLMeteorStormFireball,GrenadeProjectile,%pos2,"0 0 -10");
          schedule(1000,0,spawnprojectile,JTLMeteorStormFireball,GrenadeProjectile,%pos2,"0 0 -10");
@@ -415,7 +415,7 @@ function PlayerLRAbilities(%Player) {
       %target = FindValidTarget(%z);
       if(isObject(%target.player) && !%target.ignoredbyZombs) {
          MessageAll('MessageAll', "\c4"@getTaggedString(%cl.name)@": Metros EXTREMITY!!!!");
-         %fpos = vectoradd(%target.player.getposition(),getRandomposition(50,0));
+         %fpos = vectoradd(%target.player.getposition(), TWM2Lib_MainControl("getRandomPosition", 50 TAB 0));
          %pos2 = vectoradd(%fpos,"0 0 700");
          schedule(500,0,spawnprojectile,JTLMeteorStormFireball,GrenadeProjectile,%pos2,"0 0 -10");
          schedule(1000,0,spawnprojectile,JTLMeteorStormFireball,GrenadeProjectile,%pos2,"0 0 -10");

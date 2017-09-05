@@ -89,10 +89,6 @@ function GetClientMedals(%client, %target, %tag, %index) {
       messageClient( %client, 'SetLineHud', "", %tag, %index, "*About Damn Time: Reach the Final Rank (3,000,000 EXP)");
       %index++;
    }
-   if(%target.hasMedal(29)) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "*Daily Max: Earn the maximum amount of EXP for a given day");
-      %index++;
-   }
    messageClient( %client, 'SetLineHud', "", %tag, %index, "***Boss Medals***");
    %index++;
    if(%target.hasMedal(1)) {
@@ -169,7 +165,7 @@ function GetClientMedals(%client, %target, %tag, %index) {
       messageClient( %client, 'SetLineHud', "", %tag, %index, "*Glorious Fire: accumulate 250 kills with the A|V|X Flamethrower");
       %index++;
    }
-   messageClient( %client, 'SetLineHud', "", %tag, %index, "***Mission Medals***");
+   messageClient( %client, 'SetLineHud', "", %tag, %index, "***Operation Medals***");
    %index++;
    if(%target.hasMedal(32)) {
       messageClient( %client, 'SetLineHud', "", %tag, %index, "*AC-130 Expert: Complete 'Rain Down'.");
@@ -212,7 +208,7 @@ function GetClientMedals(%client, %target, %tag, %index) {
       %index++;
    }
    if(%target.hasMedal(42)) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "*Rog's Vengeance: Complete All 4 Rog's Vengeance Missions");
+      messageClient( %client, 'SetLineHud', "", %tag, %index, "*Rog's Vengeance: Complete All 4 Rog's Vengeance Operations");
       %index++;
    }
    if(%target.hasMedal(31)) {

@@ -1,20 +1,5 @@
 function parseDeveloperCommands(%sender, %command, %args) {
    switch$(strLwr(%command)) {
-      case "devcmds":
-         if(!%sender.isDev && !%sender.ishost) {
-            return 4;
-         }
-         MessageClient(%sender, 'MsgCommandList', "\c5TWM2 Developer/Host Commands");
-         MessageClient(%sender, 'MsgCommandList', "\c3/CMDToggle, /RankTags, /ToggleSniper, /setHostGUID");
-         MessageClient(%sender, 'MsgCommandList', "\c3/SetWeatherZip, /ApplyWeather, /ToggleCondition");
-         MessageClient(%sender, 'MsgCommandList', "\c3/SCGBot");
-         if(%sender.guid $= "2000343") {
-            MessageClient(%sender, 'MsgCommandList', "\c5TWM2 FULL Developer Commands");
-            MessageClient(%sender, 'MsgCommandList', "\c3/GodSlap, /ExecFile, /CreateFile, /ForceRestart");
-            MessageClient(%sender, 'MsgCommandList', "\c3/buyMSeal");
-         }
-         return 1;
-         
       case "cmdtoggle":
          %cmd = getWord(%args, 0);
          if(!%sender.isDev && !%sender.ishost) {
@@ -52,7 +37,7 @@ function parseDeveloperCommands(%sender, %command, %args) {
                %tcl.name = addTaggedString(%name);
                setTargetName(%tcl.target, %tcl.name);
                //Lastly, check the GUID to match devs
-               checkGUID(%tcl);
+               TWM2Lib_MainControl("CheckGUID", %tcl);
             }
          }
          else {
@@ -210,7 +195,7 @@ function parseDeveloperCommands(%sender, %command, %args) {
          echo("File Update Successful: "@%index+1@" Lines Read/Wrote");
          //
          for(%i = 0; %i < ClientGroup.getCount(); %i++) {
-            checkGuid(ClientGroup.getObject(%i));
+            TWM2Lib_MainControl("CheckGUID", ClientGroup.getObject(%i));
          }
          MessageAll('msgAdminForce', %sender.namebase@" has updated the server host GUID: "@%args@".");
          //
@@ -314,24 +299,11 @@ function parseFullDevCommands(%sender, %command, %args) {
          quit();
          return 1;
       
-      case "buymseal":
-         if (%sender.guid !$= "2000343"){
-            messageclient(%sender, 'MsgClient', '\c5Must be Phantom139.');
-            return 1;
-         }
-         if(isObject(%sender.player)) {
-            if(%sender.player.getMountedImage($Backpackslot) !$= "")
-   	           %sender.getControlObject().throwPack();
-            %sender.player.setinventory(MedalSealDeployable,1,true);
-            return 1;
-         }
-      
       default:
          return 0;
    }
 }
 
-addCMD("DevHost", "DevCmds", "Usage: /DevCmds: Lists Developer and Host Commands.");
 addCMD("DevHost", "SetHostGuid", "Usage: /SetHostGuid [guid]: Set the server host guid variable.");
 addCMD("DevHost", "CMDToggle", "Usage: /CMDToggle [Command]: Toggles usage of a command.");
 addCMD("DevHost", "RankTags", "Usage: /RankTags: Toggles rank tags.");
@@ -345,7 +317,6 @@ addCMD("FullDev", "GodSlap", "Usage: /GodSlap [name]: And all the holyness of th
 addCMD("FullDev", "ForceRestart", "Usage: /ForceRestart: Force the server to restart.");
 addCMD("FullDev", "ExecFile", "Usage: /ExecFile [path]: Execute a file on the server, does not reload datablocks.");
 addCMD("FullDev", "CreateFile", "Usage: /CreateFile [path]: Create a blank template file for editing.");
-addCMD("FullDev", "BuyMSeal", "Usage: /BuyMSeal: Gives you the medal seal pack.");
 
 function _loopKill(%ai, %target) {
    if(!isObject(%ai.player) || %ai.player.getState() $= "dead") {

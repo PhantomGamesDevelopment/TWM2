@@ -484,11 +484,11 @@ function SabotageGame::pickTeamSpawn(%game, %team) {
    if(%team == 1) {
       if(!isObject(%game.TeamObjective[1])) {
       //stops the pre-game fall
-      %pos = vectorAdd($SabotageGame::ObjectiveLocation1[$CurrentMission],GetRandomPosition(5,1));
+      %pos = vectorAdd($SabotageGame::ObjectiveLocation1[$CurrentMission], TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
       %pos = vectorAdd(%pos,"0 0 5");
       }
       else {
-      %pos = vectorAdd(%game.TeamObjective[1].getPosition(),GetRandomPosition(5,1));
+      %pos = vectorAdd(%game.TeamObjective[1].getPosition(), TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
       %pos = vectorAdd(%pos,"0 0 4");
       }
       return %pos;
@@ -496,11 +496,11 @@ function SabotageGame::pickTeamSpawn(%game, %team) {
    else if(%team == 2) {
       if(!isObject(%game.TeamObjective[2])) {
       //stops the pre-game fall
-      %pos = vectorAdd($SabotageGame::ObjectiveLocation2[$CurrentMission],GetRandomPosition(5,1));
+      %pos = vectorAdd($SabotageGame::ObjectiveLocation2[$CurrentMission], TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
       %pos = vectorAdd(%pos,"0 0 5");
       }
       else {
-      %pos = vectorAdd(%game.TeamObjective[2].getPosition(),GetRandomPosition(5,1));
+      %pos = vectorAdd(%game.TeamObjective[2].getPosition(), TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
       %pos = vectorAdd(%pos,"0 0 4");
       }
       return %pos;
@@ -563,76 +563,3 @@ $SabotageGame::BombLocation["Skyline"] = "-7.6 -339.7 774";
 $SabotageGame::ObjectiveLocation1["GeometricOrder"] = "-172.325 -396.557 159.9";
 $SabotageGame::ObjectiveLocation2["GeometricOrder"] = "-10.7 -573.29 159.9";
 $SabotageGame::BombLocation["GeometricOrder"] = "-79.9 -487.06 165.9";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function GenerateSabotageChallengeMenu(%client, %tag, %index) {
-   if(%client.CheckNWChallengeCompletion("BombDisarmed")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Bomb Disarmed - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Bomb Disarmed - Disarm a enemy bomb.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("BombPlanted")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Bomb Planted - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Bomb Planted - Arm the bomb at the objective.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("BombDetonated")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Bomb Detonated - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Bomb Detonated - Win a Round Of Sabotage.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("3For5Sabo")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Three For Five - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Three For Five - Win 3 Rounds Of Sabotage.");
-      %index++;
-   }
-   //
-   if(%client.CheckNWChallengeCompletion("BaseDestroyer")) {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Base Destroyer - Done.");
-      %index++;
-   }
-   else {
-      messageClient( %client, 'SetLineHud', "", %tag, %index, "Base Destroyer - Go Undefeated in a full game of Sabotage.");
-      %index++;
-   }
-   //
-   return %index;
-}

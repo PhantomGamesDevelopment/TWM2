@@ -25,7 +25,7 @@ function InfectionGame::allowsProtectedStatics(%game) {
 }
 
 function InfectionGame::pickTeamSpawn(%game, %team) {
-   %pos = vectorAdd($InfectionGame::SpawnLocation[$CurrentMission], GetRandomPosition(5,1));
+   %pos = vectorAdd($InfectionGame::SpawnLocation[$CurrentMission], TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
    %pos = vectorAdd(%pos,"0 0 5");
    return %pos;
 }

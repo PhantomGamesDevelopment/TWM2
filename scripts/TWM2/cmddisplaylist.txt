@@ -1,11 +1,10 @@
 CMD TSSF TWM 2, The Story Continues
 CMD MAINPAGE TWM 2 News
 CMD PersControl Settings
-CMD Store TWM Store
-CMD Missions Missions
+CMD Missions Operations
 CMD PC Piece Count
 CMD ContSave Content Saving System
 CMD BL15 Blacklist 15
-CMD WeaponChallenge Weapons Challenges
+CMD Challenge Challenges
 CMD Ranks Player Info Listings
 CMD TWM TWM Mod Website

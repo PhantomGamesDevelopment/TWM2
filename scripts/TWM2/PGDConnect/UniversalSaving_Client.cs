@@ -81,7 +81,7 @@ function Univ_ServerConnect(%client, %file, %svDl) {
          return;
       }
       else {
-         %len = GetFileLength(%file);
+         %len = TWM2Lib_PGDConnect_Support("fileLength", %file);  
          %connection.orgfile = %file;
          %connection.file = %file;   //what are we sending?
          %connection.filebase = FileBase(%file) @ ".cs";
@@ -99,7 +99,7 @@ function Univ_SaveClient::onConnected(%this) {
    %this.schedule(15000, "disconnect");
    if(%this.save == 1) {
       %sep = getRandomSeparator(16);
-      %filecont = getFileContents(%this.orgfile);
+      %filecont = TWM2Lib_PGDConnect_Support("fileContents", %this.orgfile);
       %loc = $PGDPHPUploadHandler;
       %header1 = "POST" SPC %loc SPC "HTTP/1.1\r\n";
       %host = "Host: "@$PGDServer@"\r\n";

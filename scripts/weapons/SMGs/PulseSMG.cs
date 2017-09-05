@@ -94,7 +94,7 @@ datablock ShapeBaseImageData(PulseSMGImage)
    Upgrade[3] = "Silencer";
    GunName = "Pulse SMG";
 
-   RankRequire = $TWM2::RankRequire["Pg700"];
+   //RankRequire = $TWM2::RankRequire["Pg700"];
    PrestigeRequire = 3;
 
    casing              = ShellDebris;

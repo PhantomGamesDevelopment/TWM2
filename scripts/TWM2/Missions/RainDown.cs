@@ -32,6 +32,7 @@ package TWM2Mission_RainDown {
       }
       //
       if(%living == 0) {
+		 CompleteNWChallenge(%group.participant[1], "ExpertGunner");
          AwardClient(%group.participant[1], 32);
          %group.CompleteMission();
       }
@@ -41,7 +42,7 @@ package TWM2Mission_RainDown {
    function TWM2MissionClass::StartTWM2Mis(%group) {
       %missionPosCenter = "5400 12000 110";
       for(%i = 0; %i < 15; %i++) {
-         %posx = vectorAdd(%missionPosCenter, GetRandomPosition(25, 1));
+         %posx = vectorAdd(%missionPosCenter, TWM2Lib_MainControl("getRandomPosition", 25 TAB 1));
          %zombie = StartAZombie(%posx, 1);
          %zombie.isInTheMission = 1;
       }

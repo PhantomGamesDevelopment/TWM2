@@ -16,6 +16,8 @@ package TWM2Mission_EnemyAc130Above {
          %group.participant[%i].player.setPosition(%spF);
 
          AwardClient(%group.participant[%i], 33);
+		 
+		 CompleteNWChallenge(%group.participant[%i], "Invisibreh");
       }
 
       %group.CompleteMission();
@@ -156,7 +158,7 @@ package TWM2Mission_EnemyAc130Above {
       //Move The Players
       %sp = "8045 9471 105";
       for(%i = 1; %i <= %group.participants; %i++) {
-         %spF = vectorAdd(%sp, getRandomPosition(5, 1));
+         %spF = vectorAdd(%sp, TWM2Lib_MainControl("getRandomPosition", 5 TAB 1));
          %group.participant[%i].player.setPosition(%spF);
          //
          %player = %group.participant[%i].player;
@@ -178,7 +180,7 @@ package TWM2Mission_EnemyAc130Above {
       //Spawn The Evil AC-130 of doom
       %obj = new FlyingVehicle() {
          dataBlock    = AC130;
-         position     = vectoradd(%missionPosCenter, "-600 700 400");
+         position     = vectoradd(%missionPosCenter, "700 700 600");
          rotation     = "0 0 0 1";
          team         = 2;
       };
@@ -207,6 +209,7 @@ package TWM2Mission_EnemyAc130Above {
 
          for(%i = 1; %i <= %group.participants; %i++) {
             AwardClient(%group.participant[%i], 34);
+			CompleteNWChallenge(%group.participant[%i], "WeakGunship");
          }
    
          %group.CompleteMission();

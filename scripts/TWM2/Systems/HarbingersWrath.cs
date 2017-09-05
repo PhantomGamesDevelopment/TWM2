@@ -51,8 +51,6 @@ function StartAC130(%client, %unmanned, %unlim) {
    };
    MissionCleanUp.add(%obj);
    %obj.TurretObject.barrel = "Chain";
-   %obj.TurretObject.schedule(2000, SetFrozenState, false);
-   %obj.TurretObject.schedule(2000, SetMoveState, false);
 
    %obj.isHarbinsWrathShip = 1;
    %obj.isUltrAlly = 1; // ah what the heck, you should get 1000 XP for blowing one of these
@@ -69,14 +67,15 @@ function StartAC130(%client, %unmanned, %unlim) {
    if(!%unlim) {
       schedule($TWM2::GunshipControlTime*1000, 0, "EndGunship", %obj, %client);
       if(!%unmanned) {
+		 %obj.TurretObject.setAutoFire(false);
          %obj.isKillstreakVehicle = 1;
-         //%client.schedule(1000, "setControlObject", %obj.turretObject);
-     	 //commandToClient(%client, 'ControlObjectResponse', true, getControlObjectType(%obj.turretObject,%client.player));
+         %client.setControlObject(%obj.turretObject);
+		 commandToClient(%client, 'ControlObjectResponse', true, getControlObjectType(%obj.turretObject,%client.player));
+		 %obj.turretObject.clientControl = %client;
          %client.gunshipControlLoop = schedule(1000, 0, "GunshipControlLoop", %client, %obj);
          messageClient(%client, 'msgControls', "\c3GUNSHIP: Press the [Mine] key to toggle weapons");
          %client.player.lastTransformStuff = %client.player.getTransform();
-         //%client.player.setPosition(VectorAdd(%x SPC %y SPC 0,$Prison::JailPos));
-         %client.player.getDataBlock().onCollision(%client.player, %obj, 1);
+         %client.player.setPosition(VectorAdd(%x SPC %y SPC 0,$Prison::JailPos));
          
          %client.inKillstreak = 1;
       }
@@ -108,8 +107,6 @@ function StartHarbingersWrath(%client, %unmanned, %unlim) {
    };
    MissionCleanUp.add(%obj);
    %obj.TurretObject.barrel = "Chain";
-   %obj.TurretObject.schedule(2000, SetFrozenState, false);
-   %obj.TurretObject.schedule(2000, SetMoveState, false);
    
    %obj.isHarbinsWrathShip = 1;
    %obj.isUltrAlly = 1; // ah what the heck, you should get 1000 XP for blowing one of these
@@ -126,14 +123,15 @@ function StartHarbingersWrath(%client, %unmanned, %unlim) {
    if(!%unlim) {
       schedule($TWM2::GunshipControlTime*1000, 0, "EndGunship", %obj, %client);
       if(!%unmanned) {
+		 %obj.TurretObject.setAutoFire(false);
          %obj.isKillstreakVehicle = 1;
-         //%client.schedule(1000, "setControlObject", %obj.turretObject);
-     	 //commandToClient(%client, 'ControlObjectResponse', true, getControlObjectType(%obj.turretObject,%client.player));
+         %client.setControlObject(%obj.turretObject);
+		 commandToClient(%client, 'ControlObjectResponse', true, getControlObjectType(%obj.turretObject,%client.player));
+		 %obj.turretObject.clientControl = %client;
          %client.gunshipControlLoop = schedule(1000, 0, "GunshipControlLoop", %client, %obj);
          messageClient(%client, 'msgControls', "\c3GUNSHIP: Press the [Mine] key to toggle weapons");
          %client.player.lastTransformStuff = %client.player.getTransform();
-         //%client.player.setPosition(VectorAdd(%x SPC %y SPC 0,$Prison::JailPos));
-         %client.player.getDataBlock().onCollision(%client.player, %obj, 1);
+         %client.player.setPosition(VectorAdd(%x SPC %y SPC 0,$Prison::JailPos));
          
          %client.inKillstreak = 1;
       }
@@ -174,7 +172,6 @@ function EndGunship(%obj, %client) {
 	  return;
    }
    //3.7 Dismount from gunship
-   %client.player.unmount();
    %client.inKillstreak = 0;
    
    Cancel(%obj.ScanLoop);

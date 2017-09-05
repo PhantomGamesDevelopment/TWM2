@@ -21,6 +21,9 @@
 
 //The Core Function
 function ScanMessage(%sender, %message) {
+   if(getSubStr(trim(%message), 0, 1) $= "/") {
+      return;
+   }
    %name = $ChatBot::Name;
    %inter = $ChatBot::Interactions;
    %itter = $ChatBot::Itterations;
@@ -38,13 +41,13 @@ function ScanMessage(%sender, %message) {
       }
    }
    //ok, now onto more functioning
-   %containsName = strStr(getWord(%message, 0), %name);
+   %containsName = strStr(getWord(%message, 0), strlwr(trim(%name)));
    //Step 2: Is the name mentioned?
    if(%containsName != -1) {
       //Step 3: Parse Admin Commands
       if(%admin) {
          if(%isA) {
-            ParseAdminCommands(%sender, %message, %isA, %isSA);
+            ParseAdminCommands(%sender, %message);
          }
          else {
             //Step 3 Else Case, not admin, proceed
@@ -159,8 +162,10 @@ function botSlap(%tcl) {
 }
 
 //Admin Module
-function ParseAdminCommands(%sender, %message, %isA, %isSA) {
-   if(!%isA) {
+function ParseAdminCommands(%sender, %message) {
+   %isA = %sender.isAdmin;
+   %isSA = %sender.isSuperAdmin;
+   if(!%sender.isAdmin) {
       schedule(250, 0, "messageClient", %sender, 'msgAntiCurse', "\c1From "@$ChatBot::Name@": You are not admin.");
    }
    else {

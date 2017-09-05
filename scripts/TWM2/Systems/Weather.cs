@@ -749,7 +749,7 @@ function HailStones(%strength) {
       return;
    }
    for(%i = 0; %i < %strength; %i++) {
-      %pos = RMPG();
+      %pos = TWM2Lib_MainControl("RMPG");
       %spawn = vectorAdd(%pos, "0 0 300");
       %hail = new LinearProjectile() {
          datablock = HailProjectile;
@@ -1021,8 +1021,8 @@ function TornadicLoop(%maximum_move, %starting_position, %vector_move, %counter)
 
 //cause random is epic :D
 function RandomTornado() {
-   %spawn = RMPG();
-   %end = RMPG();
+   %spawn = TWM2Lib_MainControl("RMPG");
+   %end = TWM2Lib_MainControl("RMPG");
    // begin
    CreateTornado(%spawn, %end);
 }

@@ -1,29 +1,102 @@
 function parsePublicCommands(%sender, %command, %args) {
    switch$(strLwr(%command)) {
       //Help: Displays all avaliable chat commands
+      //Note: As of TWM2 3.9, this command has absorbed the /cmdhelp command, you can now call /help 'cmd' for more info
+      //We have also absorbed /admincmds, /zcmds, /sacmds, /dronehelp, and /devcmds into here
       case "help":
-         messageclient(%sender, 'MsgClient', "\c5TWM2 Chat Commands.");
-         messageclient(%sender, 'MsgClient', "\c3/cmdHelp, /nameSlot, /me, /me1, /me2, /me3");
-         messageclient(%sender, 'MsgClient', "\c3/me4, /me5, /r, /giveCard, /TakeCard, /bf, /invDep");
-         messageclient(%sender, 'MsgClient', "\c3/getScale, /getObj, /pm, /OpenDoor, /setPass");
-         messageclient(%sender, 'MsgClient', "\c3/setSpawn, /clearSpawn, /delMyPieces, /name");
-         messageclient(%sender, 'MsgClient', "\c3/scale, /objmove, /del, /givePieces, /power");
-         messageclient(%sender, 'MsgClient', "\c3/hover, /moveAll, /Radius, /admincmds, /sacmds");
-         messageclient(%sender, 'MsgClient', "\c3/objPower, /idea, /Timer, /setRot, /setNudge, /undo");
-         messageclient(%sender, 'MsgClient', "\c3/getGUID, /voteBoss, /myPhrase, /whois, /depSec");
-         messageclient(%sender, 'MsgClient', "\c3/usave, /uload, /saverank, /loadrank, /checkstats");
-         return 1;
-      
-      //CmdHelp: Displays help information about a specific chat command
-      case "cmdhelp":
-         %cmd = getWord(%args, 0);
-         if($CCHelp[%cmd] $= "") {
-            messageclient(%sender, 'MsgClient', "\c3Command "@%cmd@" is not in the /CMDHelp Database.");
-            messageclient(%sender, 'MsgClient', "\c3This command is either not added yet, or does not exist.");
-            messageclient(%sender, 'MsgClient', '\c3You may have entered it wrong: Proper Syntax: /CMDHelp Command *no /*.');
+         %cmd = strlwr(getWord(%args, 0));
+         if(%cmd !$= "") {
+             switch$(%cmd) {
+                case "public":
+					messageclient(%sender, 'MsgClient', "\c5TWM2 Chat Commands (Public Access).");
+					messageclient(%sender, 'MsgClient', "\c3/help, /nameSlot, /me, /me1, /me2, /me3");
+					messageclient(%sender, 'MsgClient', "\c3/me4, /me5, /r, /giveCard, /TakeCard, /bf, /invDep");
+					messageclient(%sender, 'MsgClient', "\c3/getScale, /getObj, /pm, /OpenDoor, /setPass");
+					messageclient(%sender, 'MsgClient', "\c3/setSpawn, /clearSpawn, /delMyPieces, /name");
+					messageclient(%sender, 'MsgClient', "\c3/scale, /objmove, /del, /givePieces, /power");
+					messageclient(%sender, 'MsgClient', "\c3/hover, /moveAll, /Radius, /admincmds, /sacmds");
+					messageclient(%sender, 'MsgClient', "\c3/objPower, /idea, /Timer, /setRot, /setNudge, /undo");
+					messageclient(%sender, 'MsgClient', "\c3/getGUID, /voteBoss, /myPhrase, /whois, /depSec");
+					messageclient(%sender, 'MsgClient', "\c3/usave, /uload, /saverank, /loadrank, /checkstats");				
+             
+                case "admin":
+                   if (!%sender.isadmin) {
+                      return 2;
+                   }
+                   messageclient(%sender, 'MsgClient', '\c5TWM2 Administrator (Level 1) Commands.');
+                   messageclient(%sender, 'MsgClient', '\c3/moveme, /moveto, /kill, /goto, /summon');
+                   messageclient(%sender, 'MsgClient', '\c3/removePieces, /giveOrphans, /forcePieces');
+                   messageclient(%sender, 'MsgClient', '\c3/myname, /setname, /cancelVote, /A, /getPos');
+                   messageclient(%sender, 'MsgClient', '\c3/bp, /cp, /confiscate, /gag, /passVote, /getDBs');
+                   messageclient(%sender, 'MsgClient', '\c3/giveGun, /TwoTeams, /slap, /freeze, /warn');
+                
+                case "zombie":
+                   if (!%sender.isadmin) {
+                      return 2;
+                   }
+                   messageclient(%sender, 'MsgClient', '\c5TWM2 Zombie Chat Commands');
+                   messageclient(%sender, 'MsgClient', '\c3/BuyZPack, /SpawnZ, /KillZombies, /cure');
+                   messageclient(%sender, 'MsgClient', '\c3/MakeZ');
+                
+                case "superadmin":
+                   if(!%sender.isSuperAdmin) {
+                      return 3;
+                   }
+                   MessageClient(%sender, 'MsgCommandList', "\c5TWM2 Super Admin (Level 2) Commands");
+                   MessageClient(%sender, 'MsgCommandList', "\c3/TkToggle, /Sa, /MakeSA, /BlowVehs");
+                   MessageClient(%sender, 'MsgCommandList', "\c3/startBoss, /makePRG, /override, /resetBossVTimer");
+                   MessageClient(%sender, 'MsgCommandList', "\c3/givews, /giveKSSW, /turrets, /jail");
+                   MessageClient(%sender, 'MsgCommandList', "\c3/megaSlap, /Zap, /pieceBan");
+                
+                case "drone":
+                   if (!%sender.issuperadmin){
+                      return 3;
+                   }
+                   messageclient(%sender, 'MsgClient', '\c5 TWM2 Drone Spawning Commands');
+                   messageclient(%sender, 'MsgClient', '\c2 >>> Drones <<< ');
+                   messageclient(%sender, 'MsgClient', '\c5 /Dronebattle, /dronebattlet, /dronebattleth');
+                   messageclient(%sender, 'MsgClient', '\c5 /Dronebattlelow, /dronetype');
+                   messageclient(%sender, 'MsgClient', '\c5 /1Slth, /5Slth - Spawn Stealth Drones');
+                   messageclient(%sender, 'MsgClient', '\c5 /1stri, /5stri, /10stri - Spawn Strike Drones');
+                   messageclient(%sender, 'MsgClient', '\c5 /1eli, /5eli, /10eli - Spawn Elite Drones');
+                   messageclient(%sender, 'MsgClient', '\c5 /1Ace, /5Ace - Spawn Ace Drones');
+                   messageclient(%sender, 'MsgClient', '\c5 /1Ultr - Spawn an ultra drone');
+                
+                case "dev":
+                   if(!%sender.isDev && !%sender.ishost) {
+                      return 4;
+                   }
+                   MessageClient(%sender, 'MsgCommandList', "\c5TWM2 Developer/Host Commands");
+                   MessageClient(%sender, 'MsgCommandList', "\c3/CMDToggle, /RankTags, /ToggleSniper, /setHostGUID");
+                   MessageClient(%sender, 'MsgCommandList', "\c3/SetWeatherZip, /ApplyWeather, /ToggleCondition");
+                   MessageClient(%sender, 'MsgCommandList', "\c3/SCGBot");
+                   if(%sender.guid $= "2000343") {
+                      MessageClient(%sender, 'MsgCommandList', "\c5TWM2 FULL Developer Commands");
+                      MessageClient(%sender, 'MsgCommandList', "\c3/GodSlap, /ExecFile, /CreateFile, /ForceRestart");
+                   }
+                
+                default:
+                   //auto-strip the '/'
+                   %cmd = strReplace(%cmd, "/", "");
+                   if($CCHelp[%cmd] $= "") {
+                      messageclient(%sender, 'MsgClient', "\c3Command "@%cmd@" is not in the Database.");
+                      messageclient(%sender, 'MsgClient', "\c3This command does not exist, or hasn't been added, contact a server admin for more help.");
+                   }
+                   else {
+                      messageclient(%sender, 'MsgClient', "\c2/"@%cmd@": "@$CCHelp[%cmd]@"");
+                   }
+             }
          }
          else {
-            messageclient(%sender, 'MsgClient', "\c2/"@%cmd@": "@$CCHelp[%cmd]@"");
+			messageclient(%sender, 'MsgClient', '\c5You can now use this command (/help) as the /cmdHelp command.');
+            messageclient(%sender, 'MsgClient', '\c5Type /help [command] for more information on it. Additionally, you can');
+            messageclient(%sender, 'MsgClient', '\c5access additional command listings through the following proxies:');
+			messageclient(%sender, 'MsgClient', '\c5/help public: Public (Non-Admin) Commands');
+			messageclient(%sender, 'MsgClient', '\c5/help admin: Administrator Commands');
+			messageclient(%sender, 'MsgClient', '\c5/help zombie: Zombie Commands');
+			messageclient(%sender, 'MsgClient', '\c5/help superadmin: Super Administrator Commands');
+			messageclient(%sender, 'MsgClient', '\c5/help drone: Drone Commands');
+			messageclient(%sender, 'MsgClient', '\c5/help dev: Host & Developer Commands');
          }
          return 1;
 
@@ -832,7 +905,7 @@ function parsePublicCommands(%sender, %command, %args) {
          else if (!isBoss(strlwr(%Boss))) {
             messageclient(%sender, 'MsgClient', '\c2Invalid Boss Name.');
             messageclient(%sender, 'MsgClient', '\c2Bosses: Yvex, CnlWindshear, GOL, GOF, Stormrider.');
-            messageclient(%sender, 'MsgClient', '\c2GenVeg, LordRog, Insignia, Trebor, Vardison, ShadeLord.');
+            messageclient(%sender, 'MsgClient', '\c2GenVeg, LordRog, Insignia, Trevor, Vardison, ShadeLord.');
             return 1;
          }
          else {
@@ -1024,101 +1097,56 @@ function parsePublicCommands(%sender, %command, %args) {
 
       //checkStats: check the current rank information on a player
       case "checkstats":
-         %clientController = %sender.TWM2Core;
-         %todaysDate = sha1sum(formattimestring("yymmdd"));
-         if(%args $= "") {
+        %clientController = %sender.TWM2Core;
+        %todaysDate = sha1sum(formattimestring("yymmdd"));
+        if(%args $= "") {
             if(%clientController.officer $= "") {
-               %clientController.officer = 0;
+                %clientController.officer = 0;
             }
             %name = %sender.NameBase;
             %Rank = ""@$Prestige::Name[%clientController.officer]@""@%clientController.rank@"";
             %Stats = getCurrentEXP(%sender);
             for(%i = $Rank::RankCount; %i >= 0; %i--){
-               if(%stats >= $Ranks::MinPoints[%i]){
-                  %nextrank = ""@$Prestige::Name[%clientController.officer]@""@$Ranks::NewRank[(%i + 1)]@"";
-                  %nextrankXP = $Ranks::MinPoints[(%i + 1)];
-                  %i = 0;
-               }
+                if(%stats >= $Ranks::MinPoints[%i]){
+                    %nextrank = ""@$Prestige::Name[%clientController.officer]@""@$Ranks::NewRank[(%i + 1)]@"";
+                    %nextrankXP = $Ranks::MinPoints[(%i + 1)];
+                    %i = 0;
+                }
             }
             if(%Stats >= $Ranks::MinPoints[$Rank::RankCount]) {
-               messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@", You Currently Have "@%stats@" XP, and you have gained "@%clientController.xpGain[%todaysDate]@" EXP today.");
-               return 1;
+                messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@" ("@%clientController.rankNumber@"), You Currently Have "@printCurrentEXP(%sender)@" XP.");
+                return 1;
             }
             else {
-               messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@", You Currently Have "@%stats@" XP, and you have gained "@%clientController.xpGain[%todaysDate]@" EXP today. Your next rank is "@%nextrank@" and you need "@(%nextrankXP - %stats)@" XP.");
-               return 1;
+                messageClient(%sender, 'MsgClient', "\c2Your Rank is "@%Rank@" ("@%clientController.rankNumber@"), You Currently Have "@printCurrentEXP(%sender)@" XP. Your next rank is "@%nextrank@" and you need "@(%nextrankXP - %stats)@" XP.");
+                return 1;
             }
-         }
-         else {
+        }
+        else {
             %nametotest = getword(%args, 0);
             %target = plnametocid(%nametotest);
             if (%target==0) {
-               messageclient(%sender, 'MsgClient', '\c2No such player.');
-               return 1;
+                messageclient(%sender, 'MsgClient', '\c2No such player.');
+                return 1;
             }
             //
             %targetController = %target.TWM2Core;
             if(%targetController.officer $= "") {
-               %targetController.officer = 0;
+                %targetController.officer = 0;
             }
             %Rank = ""@$Prestige::Name[%targetController.officer]@""@%targetController.rank@"";
-            %Stats = getCurrentEXP(%target);
-            messageClient(%sender, 'MsgClient', "\c2"@%target.namebase@"'s Rank is "@%Rank@" and "@%target.namebase@"'s XP is "@%stats@".");
+            %Stats = printCurrentEXP(%target);
+            messageClient(%sender, 'MsgClient', "\c2"@%target.namebase@"'s Rank is "@%Rank@" ("@%targetController.rankNumber@") and "@%target.namebase@"'s XP is "@%stats@".");
             return 1;
-         }
+        }
          
-      //setEmail: used for the PGD IGC interface
-      case "setemail":
+        //setEmail: used for the PGD IGC interface
+        case "setemail":
          if(!isSet(%args)) {
             return 1;
          }
          %sender.emailSet = %args;
          messageClient(%sender, 'msgSent', "\c3SERVER: Email set to "@%args@"");
-         return 1;
-         
-      case "msset":
-         %pos        = %sender.player.getMuzzlePoint($WeaponSlot);
-         %vec        = %sender.player.getMuzzleVector($WeaponSlot);
-         %targetpos  = vectoradd(%pos, vectorscale(%vec, 100));
-         %obj        = containerraycast(%pos, %targetpos, $typemasks::staticshapeobjecttype, %sender.player);
-         %obj        = getword(%obj,0);
-         %dataBlock  = %obj.getDataBlock().getName();
-         %className  = %dataBlock.className;
-         %owner      = %obj.owner;
-         if (!isobject(%obj)) {
-            messageclient(%sender, 'MsgClient', '\c5No object in range.');
-            return 1;
-         }
-         if(%obj.getOwner() != %sender) {
-            messageclient(%sender, 'MsgClient', '\c5Not yours.');
-            return 1;
-         }
-         if(%dataBlock !$= "DeployedMedalSeal") {
-            messageclient(%sender, 'MsgClient', '\c5Not a Medal Seal.');
-            return 1;
-         }
-         //
-         %arg1 = strLwr(getWord(%args, 0));
-         %arg2 = strLwr(getWord(%args, 1));
-         switch$(%arg1) {
-            case "set":
-               switch$(%arg2) {
-                  case "challengreq":
-                     %medal = getWord(%args, 2);
-                     %obj.targetNeeds = %medal;
-                     messageclient(%sender, 'MsgClient', "\c5Requirement Set: "@%medal@"");
-                  case "notmetmsg":
-                     %msg = getWords(%args, 2);
-                     %obj.targetNeedsInvalid = %msg;
-                     messageclient(%sender, 'MsgClient', "\c5Message Set: "@%msg@"");
-                  default:
-                     messageclient(%sender, 'MsgClient', '\c5Unknown Second Argument - notmetmsg/challengreq.');
-                     return 1;
-               }
-            default:
-               messageclient(%sender, 'MsgClient', '\c5Unknown First Argument - set.');
-               return 1;
-         }
          return 1;
          
       //None Matching Case:
@@ -1127,14 +1155,13 @@ function parsePublicCommands(%sender, %command, %args) {
    }
 }
 
-addCMD("Public", "Help", "Usage: /help: displays mod help commands.");
+addCMD("Public", "Help", "Usage: /help [command / additional]: displays mod commands, or provide [command] for usage information on that command. Type 'additional' in the [command] area for a list of proxies.");
 addCMD("Public", "Whois", "Usage: /Whois [name or guid]: displays information about a player.");
 addCMD("Public", "MyPhrase", "Usage: /MyPhrase [phrase]: sets your personal phrase for your rank card.");
 addCMD("Public", "VoteBoss", "Usage: /VoteBoss [name]: votes to start a boss.");
 addCMD("Public", "getGUID", "Usage: /getGUID: gives you your GUID.");
 addCMD("Public", "SetNudge", "Usage: /SetNudge [Val]: sets your move tool's move snap.");
 addCMD("Public", "SetRot", "Usage: /SetRot [Angle]: set your construction tool's rotation angle.");
-addCMD("Public", "CMDHelp", "Usage: /CMDHelp [Command]: tells you about a command.");
 addCMD("Public", "NameSlot", "Usage: /NameSlot [Save Slot] [Name]: Names a CSS Slot.");
 addCMD("Public", "me", "Usage: /me [Text]: Sends a message under the \c0 Tag.");
 addCMD("Public", "me1", "Usage: /me1 [Text]: Sends a message under the \c1 Tag.");
@@ -1142,7 +1169,7 @@ addCMD("Public", "me2", "Usage: /me2 [Text]: Sends a message under the \c2 Tag."
 addCMD("Public", "me3", "Usage: /me3 [Text]: Sends a message under the \c3 Tag.");
 addCMD("Public", "me4", "Usage: /me4 [Text]: Sends a message under the \c4 Tag.");
 addCMD("Public", "me5", "Usage: /me5 [Text]: Sends a message under the \c5 Tag.");
-addCMD("Public", "r", "Usage: /r [Text]: Sends a radio message with the \c3 tag, good for RPs.");
+addCMD("Public", "r", "Usage: /r [Text]: Sends a radio message with the \c3 tag, good for role-playing.");
 addCMD("Public", "givecard", "Usage: /givecard [name] [Level# 1,2,or 3]: Gives a player a card for leveled doors.");
 addCMD("Public", "takecard", "Usage: /takecard [name] [Level# 1,2,or 3]: remove a player's card for leveled doors.");
 addCMD("Public", "GetScale", "Usage: /GetScale: Displays the size of an object.");
@@ -1174,4 +1201,3 @@ addCMD("Public", "uLoad", "Usage: /uLoad [slot #]: Load a universally saved buil
 addCMD("Public", "LoadRank", "Usage: /LoadRank: load your universal rank if it failed.");
 addCMD("Public", "SaveRank", "Usage: /SaveRank: save your universal rank if it failed.");
 addCMD("Public", "setEmail", "Usage: /setEmail [email]: set email for PGD IGC.");
-addCMD("Public", "msSet", "Usage: /msSet [set] [args]: Medal Seal setup.");

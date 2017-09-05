@@ -90,7 +90,7 @@ datablock ShapeBaseImageData(CrimsonHawkImage)
    HellClipCount = 10;
    //
    
-   RankRequire = $TWM2::RankRequire["CrimsonHawk"];
+   //RankRequire = $TWM2::RankRequire["CrimsonHawk"];
    PrestigeRequire = 5;
    
    //Challenges

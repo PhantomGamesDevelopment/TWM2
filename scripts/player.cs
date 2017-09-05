@@ -2418,9 +2418,6 @@ function Armor::onAdd(%data,%obj)
       %obj.rechargeShields(%data.shieldHeathCharge);
       %obj.activeShieldEffect();
    }
-   //TWM2: Activate Armor Effect
-   if(isClientControlledPlayer(%obj))
-   %obj.client.setActiveAE(%obj.client.getActiveAE());
 }
 
 function Armor::onRemove(%this, %obj)
@@ -3049,7 +3046,7 @@ function Armor::onCollision(%this,%obj,%col,%forceVehicleNode)
           return;
        }
           %obj.scriptkill($DamageType::Admin);
-          %col.setDamageLevel(%col.getDamageLevel() - 25.0);
+          %col.setDamageLevel(%col.getDamageLevel() - 10.0);
           %col.setVelocity("0 0 0");
           if(!%obj.iszombie) {
              ServerPlay3d(BOVHitSound, %obj.getPosition());
@@ -3414,9 +3411,20 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
       }
       return;
    }
-   if(%damageType == $DamageType::Impact)
-      if(%sourceObject.getDamageState() $= "Destroyed")
+   if(%damageType == $DamageType::Impact) {
+      if(%sourceObject.getDamageState() $= "Destroyed") {
          return;
+      }
+	  //Check for the mother of all humiliating deaths :)
+	  if(%targetObject.getState() $= "dead") {
+		  if(%sourceObject.getClassName() $= "FlyingVehicle" && %sourceObject.lastPilot.getState() $= "dead") {
+			 if((%sourceObject.lastPilot.client.lastKilledBy == %targetObject.client) && (%sourceObject.lastPilot.client.lastKilledByPlayer == %targetObject)) {
+		        //You just got rekt....
+				CompleteNWChallenge(%sourceObject.lastPilot.client, "Uncomprehendable");
+			 }
+		  }
+	  }
+   }
    %armortype = %targetobject.getdatablock().getname();
    if (%damageType == $DamageType::ZAcid && %armortype !$= "ZombieArmor" && %armortype !$= "FZombieArmor" && %armortype !$= "LordZombieArmor" && %armortype !$= "DemonZombieArmor" && %armortype !$= "DemonMotherZombieArmor" && %armortype !$= "RapierZombieArmor" && %targetobject.infected != 1 && (%sourceObject.isZombie == 1 || %sourceObject.isBoss == 1)){
 	   %targetObject.Infected = 1;
@@ -3585,31 +3593,9 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
 
    //now call the "onKilled" function if the client was... you know...
    if(%targetObject.getState() $= "Dead") {
-      //Is there a boss going?
-      if(!%targetObject.isZombie && !%targetObject.isBossMinion) {
-         if($TWM2::BossGoing) {
-            //Chalk up the kill count :P
-            $TWM2::BossManager.addKill(%targetObject);
-         }
-      }
-      if(%targetObject.isVardisonMinion) {
-         $TWM2::VardisonManager.minionCount--;
-      }
-   
-      if($TWM2::PlayingSabo) {
-         if(Game.Bomb.Carrier == %targetObject) {
-            if(%damageType == $DamageType::FellOff) {
-               MessageAll('msgWhoops', "\c5SABOTAGE: Bomb Reset.");
-               Game.BombDropped(Game.Bomb, %targetObject);
-               Game.bomb.setPosition($SabotageGame::BombLocation[$CurrentMission]);
-            }
-            else {
-               Game.BombDropped(Game.Bomb, %targetObject);
-            }
-         }
-      }
       // where did this guy get it?
-      %damLoc = %targetObject.getDamageLocation(%position);
+      %damLoc = %targetObject.getDamageLocation(%position);	   
+	  postObjectDestroyed(%sourceObject, %targetObject, %damageType, %damLoc);
 
       // should this guy be blown apart?
       if( %damageType == $DamageType::Explosion ||
@@ -3638,95 +3624,6 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
 
       // If we were killed, max out the flash
       %targetObject.setDamageFlash(0.75);
-
-      %damLoc = %targetObject.getDamageLocation(%position);
-      if($TWM2::UseGoreMod) {
-         CreateBlood(%targetObject);
-      }
-      
-      if(%damageType == $DamageType::RapierShield) {
-         if(%sourceObject.client !$= "") {
-            UpdateWeaponKillFile(%sourceObject.client, "rapierShieldImage");
-         }
-      }
-      
-      if(%targetObject.isZombie) {
-         if($TWM::PlayingHorde == 1) {
-            if($HordeGame::Zombiecount > 0) {  //ha! this should stop multiple waves from spawning
-               $HordeGame::Zombiecount--;
-               messageAll('MsgSPCurrentObjective1' ,"", "Wave "@$HordeGame::CurrentWave@" | Zombies Left: "@$HordeGame::Zombiecount@"");
-            }
-            //Echo("Horde: Zombie Killed, "@$HordeGame::Zombiecount@" remain.");  //was used for debugging
-            if($HordeGame::Zombiecount <= 0) {
-               HordeNextWave($HordeGame::Game, $HordeGame::NextWave); //working on this
-            }
-         }
-         //
-         if($TWM::PlayingHelljump == 1) {
-            if($HellJump::Zombiecount > 0) {  //ha! this should stop multiple waves from spawning
-               $HellJump::Zombiecount--;
-               messageAll('MsgSPCurrentObjective1' ,"", "[W"@$HellJump::CurrentWave@"|G"@$HellJump::CurrentGroup@"|S"@$HellJump::CurrentStrike@"] | Zombies Left: "@$HellJump::Zombiecount@"");
-            }
-            //Echo("Horde: Zombie Killed, "@$HordeGame::Zombiecount@" remain.");  //was used for debugging
-            if($HellJump::Zombiecount <= 0) {
-               $HellJump::Game.GoNextStrike();
-            }
-         }
-         //
-         Game.ZkillUpdateScore(%sourceClient, %sourceObject, %targetObject);
-         %sourceObject.zombiekillsinarow++;
-         DoZKillstreakChecks(%sourceClient);
-      }
-      else {
-         %targetObject.client.playDeathArmorEffect();
-         if(%targetObject.team != %sourceClient.team && !%targetObject.isBoss) {
-            if(isObject(%sourceClient) && %sourceClient.IsActivePerk("Double Down")) {
-               GainExperience(%sourceClient, $TWM2::KillXPGain * 2, "[D-D]Enemy Killed ");
-            }
-            else {
-               GainExperience(%sourceClient, $TWM2::KillXPGain, "Enemy Killed ");
-            }
-            //Team Gain Perk
-            if(isObject(%sourceClient) && %sourceClient.IsActivePerk("Team Gain")) {
-               %TargetSearchMask = $TypeMasks::PlayerObjectType;
-               InitContainerRadiusSearch(%sourceObject.getPosition(), 20, %TargetSearchMask); //small distance
-               while ((%potentialTarget = ContainerSearchNext()) != 0){
-                  if (%potentialTarget.getPosition() != %pos) {
-                     if(%potentialTarget.client.team == %sourceClient.team && %potentialTarget != %sourceObject) {
-                        GainExperience(%potentialTarget.client, $TWM2::KillXPGain, "Team Gain From "@%sourceClient.namebase@" ");
-                     }
-                  }
-               }
-            }
-            //End
-            doChallengeCheck(%sourceClient, %targetClient);
-            %sourceObject.killsinarow++;
-            %sourceObject.killsinarow2++;
-            //TWM2 3.2 -> Successive Kills
-            %sourceObject.kills[%damageType]++;
-            PerformSuccessiveKills(%sourceObject, %damageType);
-            //
-            if(%sourceObject.killsinarow2 == 10) {
-               MessageAll('MsgWOW', "\c2TWM2: "@%sourceClient.namebase@" is on a killsteak of 10");
-               awardClient(%sourceClient, "14");
-            }
-            if(%sourceObject.killsinarow2 == 20) {
-               MessageAll('MsgWOW', "\c2TWM2: "@%sourceClient.namebase@" is on a killsteak of 20");
-            }
-            if(%sourceObject.killsinarow2 == 25) {
-               MessageAll('MsgWOW', "\c2TWM2: "@%sourceClient.namebase@" is on a killsteak of 25");
-            }
-            DoKillstreakChecks(%sourceClient);
-         }
-      }
-      //Challenges!
-      doChallengeKillRecording(%sourceObject, %targetObject);
-      //
-      //martydom
-      if(%targetClient !$= "" && %targetClient.IsActivePerk("Martydom")) {
-         serverPlay3d(SatchelChargeActivateSound, %targetObject.getPosition());
-         schedule(2200, 0, "MartydomExplode", %targetObject.getPosition(), %targetClient);
-      }
       Game.onClientKilled(%targetClient, %sourceClient, %damageType, %sourceObject, %damLoc);
    }
    else if ( %amount > 0.1 )
@@ -3742,8 +3639,7 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
 }
 
 function Armor::onImpact(%data, %playerObject, %collidedObject, %vec, %vecLen) {
-	%data.damageObject(%playerObject, 0, VectorAdd(%playerObject.getPosition(),%vec),
-	%vecLen * %data.speedDamageScale , $DamageType::Ground);
+	%data.damageObject(%playerObject, 0, VectorAdd(%playerObject.getPosition(),%vec), %vecLen * %data.speedDamageScale , $DamageType::Ground);
 //	if (%collidedObject & $TypeMasks::PlayerObjectType) {
 //		if (%collidedObject.getState() !$= "Dead") {
 //			%data.damageObject(%collidedObject, 0, VectorAdd(%playerObject.getPosition(),%vec),

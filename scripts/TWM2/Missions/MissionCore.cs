@@ -11,11 +11,13 @@
 
 //So, without further ado, lets begin
 //Mission Vars!
+//NOTE: For the first set, you can have the menu tag [NEW] in the [F2] screen by adding \t1 after the below,
+// Ex: $Mission::TWM2Mision[4] = "Invasion\t1";
 $Mission::TWM2Mision[0] = "RainDown";
 $Mission::TWM2Mision[1] = "EnemyAc130Above";
 $Mission::TWM2Mision[2] = "Surrounded";
-$Mission::TWM2Mision[3] = "Surrounded2\t1";
-$Mission::TWM2Mision[4] = "Invasion\t1";
+$Mission::TWM2Mision[3] = "Surrounded2";
+$Mission::TWM2Mision[4] = "Invasion";
 
 $Mission::VarSet["RainDown", "TaskDetails"] = "Rain Down\tClear The Zombies with the AC130\t3:00/Gunship Support";
 $Mission::VarSet["RainDown", "Orders"] = "Using the turret, eliminate all zombies, you have 3 minutes.";
@@ -143,31 +145,32 @@ function CheckMissionRequirement(%client, %mission) {
 function CreateTWM2Mission(%client, %mission) {
    %group = NameToID("TWM2Mission");
    if(%group.inProgress) {
-      messageClient(%client, 'msgNope', "\c5MISSION: A mission has been ordered or is in progress.");
+      messageClient(%client, 'msgNope', "\c5OPERATION: A operation has been ordered or is currently in progress, please try again later.");
       return;
    }
    if(!isObject(%client.player) || %client.player.getState() $= "Dead") {
-      messageClient(%client, 'msgNope', "\c5MISSION: Dead people cannot order missions.");
+      messageClient(%client, 'msgNope', "\c5OPERATION: Dead people cannot order operations.");
       return;
    }
-   if(getCurrentEXP(%client) < $Ranks::MinPoints[59] && %client.TWM2Core.officer < 1) {
-      messageClient(%client, 'msgNope', "\c5MISSION: You must be a Commanding Officer (or Higher) to order missions.");
+   if(getCurrentEXP(%client) < $Ranks::MinPoints[49] && %client.TWM2Core.officer < 1) {
+      messageClient(%client, 'msgNope', "\c5OPERATION: You must be a General (or Higher) to order operations.");
       return;
    }
    if($CurrentMissionType !$= "Construction") {
       error("TWM2 Mission: Must be in construction, aborted.");
-      messageClient(%client, 'msgNope', "\c5MISSION: Missions an only be ordered in the construction game mode.");
+      messageClient(%client, 'msgNope', "\c5OPERATION: Operations an only be ordered in the construction game mode.");
       return;
    }
    if($CurrentMission !$= "FlatlandBig" && $CurrentMission !$= "Flatland") {
       error("TWM2 Mission: Must be in FLBig, aborted.");
-      messageClient(%client, 'msgNope', "\c5MISSION: Missions can only be ordered on Flatland.");
+      messageClient(%client, 'msgNope', "\c5OPERATION: This map is incompatible with operations, please request a map change.");
       return;
    }
    %timeleft = $Mission::VarSet[%mission, "TimeLimit"];
    %playerlimit = $Mission::VarSet[%mission, "PlayerLimit"];
    %playerreq = $Mission::VarSet[%mission, "PlayerReq"];
    %missionname = GetField($Mission::VarSet[%mission, "TaskDetails"], 0);
+   messageClient(%client, 'msgNope', "\c5OPERATION: Issuing request to initiate operation: "@%missionname@".");
    %group = new ScriptObject(TWM2Mission) {
       class = "TWM2MissionClass";
    
@@ -187,13 +190,13 @@ function CreateTWM2Mission(%client, %mission) {
       //this group holds our mission aspects
    };
    
-   activatePackage("TWM2Mission_"@%missionname@"");
+   activatePackage("TWM2Mission_"@%mission@"");
    %group.initiateSettings();
    
    %group.schedule(%group.timeToBegin * 1000, "StartTWM2MissionTimer");
    if(%group.playerLimit > 1) {
       //Phantom139: Added TWM2 3.8, obviously we don't want to ask people to join a 1 player mission.
-      messageAll('msgMission', "\c5MISSION: "@%client.namebase@" has ordered a mission, press [F2] -> Mission to join in.");
+      messageAll('msgMission', "\c5OPERATION: "@%client.namebase@" has ordered an operation, press [F2] -> Operations to join in.");
       CompleteNWChallenge(%client, "SimonSays");
    }
 }
@@ -201,26 +204,26 @@ function CreateTWM2Mission(%client, %mission) {
 function AddClientToMission(%client) {
    %group = nameToID("TWM2Mission");
    if(%group.InProgress == 0) {
-      messageClient(%client, 'msgFailed', "\c5MISSION: There is no mission to join.");
+      messageClient(%client, 'msgFailed', "\c5OPERATION: There is no active operation to join.");
       return;
    }
    if(%group.InProgress == 1) {
-      messageClient(%client, 'msgFailed', "\c5MISSION: You cannot join a mission in progress.");
+      messageClient(%client, 'msgFailed', "\c5OPERATION: You cannot join an operation already in progress.");
       return;
    }
    if(!isObject(%client.player) || %client.player.getState() $= "Dead") {
-      messageClient(%client, 'msgNope', "\c5MISSION: Dead people cannot join missions.");
+      messageClient(%client, 'msgNope', "\c5OPERATION: Dead people cannot join operations.");
       return;
    }
    //add them
    if(%group.Participants >= %group.playerLimit) {
-      messageClient(%client, 'msgFailed', "\c5MISSION: This mission cannot take any more soldiers.");
+      messageClient(%client, 'msgFailed', "\c5OPERATION: The fireteam for this operation is to capacity.");
       return;
    }
    //last check, for lulz
    for(%i = 1; %i <= %group.Participants; %i++) {
       if(%client == %group.Participant[%i]) {
-         messageClient(%client, 'msgFailed', "\c5MISSION: Trying to join twice eh?");
+         messageClient(%client, 'msgFailed', "\c5OPERATION: You're already in the operation fireteam, prepare for deployment...");
          return;
       }
    }
@@ -228,8 +231,9 @@ function AddClientToMission(%client) {
    %group.Participants++;
    %group.Participant[%group.Participants] = %client;
    %group.ParticipantAlive[%group.Participants] = true;
-   messageClient(%client, 'msgFailed', "\c5MISSION: Added to the mission squad, prepare for orders.");
+   messageClient(%client, 'msgFailed', "\c5OPERATION: Added to the operation fireteam, prepare for orders.");
    CompleteNWChallenge(%client, "FromTheTop");
+   CompleteNWChallenge(%group.Participant[1], "NaturalLeader");
 }
 
 function TWM2MissionClass::StartTWM2MissionTimer(%group) {
@@ -240,11 +244,11 @@ function TWM2MissionClass::StartTWM2MissionTimer(%group) {
       for(%r = 1; %r <= %counter; %r++) {
          if(%cl == %group.Participant[%r]) {
             if(!isObject(%cl.player) || %cl.player.getState() $= "Dead") {
-               messageClient(%cl, 'msgNope', "\c5MISSION: You have been released from the mission for being dead.");
+               messageClient(%cl, 'msgNope', "\c5OPERATION: You have been released from the operation fireteam for being dead.");
                %cl.missionReady = false;
             }
             else {
-               messageClient(%cl, 'msgNope', "\c5MISSION: Standby.... Relaying orders....");
+               messageClient(%cl, 'msgNope', "\c5OPERATION: Standby.... Relaying orders....");
                %cl.missionReady = true;
             }
          }
@@ -266,7 +270,7 @@ function TWM2MissionClass::StartTWM2MissionTimer(%group) {
    //echo("checking 2");
    if(%group.Participants < %req) {
       for(%lol = 1; %lol <= %group.Participants; %lol++) {
-         messageClient(%group.Participant[%lol], 'msgFailed', "\c5MISSION: Not enough participants, Aborted.");
+         messageClient(%group.Participant[%lol], 'msgFailed', "\c5OPERATION: Not enough participants in the fireteam, operation aborted.");
       }
       %group.EndTWM2Mission();
       //echo("NaP");
@@ -301,8 +305,8 @@ function TWM2MissionClass::TWM2MissionTimerLoop(%group) {
       }
    }
    //
-   %min = getField(FormatTWM2Time(%group.timer), 0);
-   %sec = getField(FormatTWM2Time(%group.timer), 1);
+   %min = getField(TWM2Lib_MainControl("FormatTWM2Time", %group.timer), 0);
+   %sec = getField(TWM2Lib_MainControl("FormatTWM2Time", %group.timer), 1);
    //
    for(%i = 1; %i <= %group.Participants; %i++) {
       if(%group.ParticipantAlive[%i]) {
@@ -320,7 +324,7 @@ function TWM2MissionClass::EndTWM2Mission(%group) {
    if(%group.Status $= "Failed") {
       for(%i = 1; %i <= %group.Participants; %i++) {
          messageClient(%group.Participant[%i], 'msgFailed', "\c5"@%group.commandName@": "@%group.failMessage@"~wfx/misc/flag_lost.wav");
-         messageClient(%group.Participant[%i], 'MsgSPCurrentObjective1', "", ""@%group.MissionName@" - Mission Failed");
+         messageClient(%group.Participant[%i], 'MsgSPCurrentObjective1', "", ""@%group.MissionName@" - Operation Failed");
          schedule(5000, 0, messageClient, %group.Participant[%i], 'MsgSPCurrentObjective1' ,"", "Welcome to TWM2!");
          CompleteNWChallenge(%group.Participant[%i], "EpicFailure");
       }
@@ -329,8 +333,8 @@ function TWM2MissionClass::EndTWM2Mission(%group) {
       if(%group.timer > 0) {
          for(%i = 1; %i <= %group.Participants; %i++) {
             messageClient(%group.Participant[%i], 'msgFailed', "\c5"@%group.commandName@": "@%group.BonusCompleteMessage@"~wfx/misc/hunters_horde.wav");
-            GainExperience(%group.Participant[%i], %group.bonusEXP + %group.completionEXP, "Mission Accomplished, Bonus EXP Recieved ");
-            messageClient(%group.Participant[%i], 'MsgSPCurrentObjective1', "", ""@%group.MissionName@" - Mission Accomplished (Time!)");
+            GainExperience(%group.Participant[%i], %group.bonusEXP + %group.completionEXP, "Operation Accomplished, Bonus EXP Recieved ");
+            messageClient(%group.Participant[%i], 'MsgSPCurrentObjective1', "", ""@%group.MissionName@" - Operation Accomplished (Time Bonus Achieved)");
             schedule(5000, 0, messageClient, %group.Participant[%i], 'MsgSPCurrentObjective1' ,"", "Welcome to TWM2!");
             CompleteNWChallenge(%group.Participant[%i], "GoldStar");
          }
@@ -338,8 +342,8 @@ function TWM2MissionClass::EndTWM2Mission(%group) {
       else {
          for(%i = 1; %i <= %group.Participants; %i++) {
             messageClient(%group.Participant[%i], 'msgFailed', "\c5"@%group.commandName@": "@%group.CompleteMessageNoTime@"~wfx/misc/flag_capture.wav");
-            GainExperience(%group.Participant[%i], %group.completionEXP, "Mission Accomplished! ");
-            messageClient(%group.Participant[%i], 'MsgSPCurrentObjective1', "", ""@%group.MissionName@" - Mission Accomplished");
+            GainExperience(%group.Participant[%i], %group.completionEXP, "Operation Accomplished! ");
+            messageClient(%group.Participant[%i], 'MsgSPCurrentObjective1', "", ""@%group.MissionName@" - Operation Accomplished");
             schedule(5000, 0, messageClient, %group.Participant[%i], 'MsgSPCurrentObjective1' ,"", "Welcome to TWM2!");
             CompleteNWChallenge(%group.Participant[%i], "Faster");
          }
@@ -347,7 +351,7 @@ function TWM2MissionClass::EndTWM2Mission(%group) {
    }
    //
    
-   deactivatePackage("TWM2Mission_"@%group.MissionName@"");
+   deactivatePackage("TWM2Mission_"@%group.mission@"");
    
    CleanGroupAspects(NameToID("TWM2MissionAspectsGroup"));
    for(%i = 1; %i <= %group.Participants; %i++) {

@@ -87,7 +87,7 @@ datablock ShapeBaseImageData(PulseRifleImage)
    GunName = "Pulse Semi-Automatic Rifle";
    //
 
-   RankRequire = $TWM2::RankRequire["G41"];
+   //RankRequire = $TWM2::RankRequire["G41"];
    PrestigeRequire = 2;
 
    casing              = ShellDebris;

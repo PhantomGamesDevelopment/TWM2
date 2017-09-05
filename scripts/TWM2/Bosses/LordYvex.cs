@@ -402,7 +402,7 @@ datablock SeekerProjectileData(YvexZombieMakerMissile) {
 
 datablock PlayerData(YvexZombieArmor) : LightMaleHumanArmor {
    boundingBox = "1.63 1.63 2.6";
-   maxDamage = 500.0;
+   maxDamage = 400.0;
    minImpactSpeed = 35;
    shapeFile = "medium_male.dts";
 
@@ -588,7 +588,7 @@ function Yvexmovetotarget(%zombie){
    if(%z < -300) {
       %zombie.startFade(400, 0, true);
       %zombie.startFade(1000, 0, false);
-      %zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), getRandomPosition(25, 1)));
+      %zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
       %zombie.setVelocity("0 0 0");
       MessageAll('msgYvexAttack', "\c4"@$TWM2::ZombieName[7]@": I shall not fall to my end!");
    }
@@ -629,9 +629,10 @@ function YvexAttacks(%yvex) {
    if(!isObject(%yvex) || %yvex.getState() $= "dead") {
       return;
    }
-   %closestClient = ZombieLookForTarget(%zombie);
-   %closestDistance = getWord(%closestClient,1);
+   %closestClient = ZombieLookForTarget(%yvex);
+   //%closestDistance = getWord(%closestClient,1);
    %closestClient = getWord(%closestClient,0).Player;
+   %closestDistance = vectorDist(%yvex.getPosition(), %closestClient.getPosition());
    
    if(%closestClient) {
       if(%closestDistance <= 150) {
@@ -682,7 +683,7 @@ function YvexAttack_FUNC(%att, %args) {
                messageall('YvexMsg',"\c4"@$TWM2::ZombieName[7]@": Take out the enemy, ALL OF THEM!");
          }
          for(%i = 0; %i < 5; %i++) {
-            %pos = vectoradd(%z.getPosition(), getRandomPosition(10,1));
+            %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
             %fpos = vectoradd("0 0 5",%pos);
             StartAZombie(%fpos, %type);
          }
@@ -698,7 +699,7 @@ function YvexAttack_FUNC(%att, %args) {
          %vec = vectorsub(%target.getworldboxcenter(),%zombie.getMuzzlePoint(0));
          %vec = vectoradd(%vec, vectorscale(%target.getvelocity(),vectorlen(%vec)/100));
          %p = new LinearFlareProjectile() {
-             dataBlock        = YvexSniperShot;
+             dataBlock        = KillerPulse;
              initialDirection = %vec;
              initialPosition  = %zombie.getMuzzlePoint(0);
              sourceObject     = %zombie;
@@ -846,7 +847,7 @@ function Yvexnightmareloop(%zombie,%viewer) {
       %viewer.player.setMoveState(false);
       return;
    }
-   if(%viewer.nightmareticks > 30) {
+   if(%viewer.nightmareticks > 10) {
       %viewer.player.setMoveState(false);
       %viewer.nightmareticks = 0;
       %viewer.nightmared = 0;
@@ -859,14 +860,14 @@ function Yvexnightmareloop(%zombie,%viewer) {
    %viewer.player.setMoveState(true);
    %viewer.nightmared = 1;
    %viewer.player.setActionThread(%emote,true);
-   %viewer.player.setWhiteout(1.8);
-   %viewer.player.setDamageFlash(1.5);
+   %viewer.player.setWhiteout(0.8);
+   %viewer.player.setDamageFlash(0.5);
 
    %zombie.playShieldEffect("1 1 1");
    serverPlay3D(NightmareScreamSound, %viewer.player.position);
    schedule(500,0,"Yvexnightmareloop",%zombie, %viewer);
-   %viewer.player.damage(0, %viewer.player.position, 0.01, $DamageType::Zombie);
-   %zombie.setDamageLevel(%zombie.getDamageLevel() - 0.1);
+   %viewer.player.damage(0, %viewer.player.position, 0.03, $DamageType::Zombie);
+   %zombie.setDamageLevel(%zombie.getDamageLevel() - 0.15);
 
    BottomPrint(%viewer,"You are locked in "@$TWM2::ZombieName[7]@"'s Nightmare.",5,1);
    schedule(1, 0, "messageclient", %viewer, 'MsgClient', "~wvoice/fem1/avo.deathcry_02.wav");
@@ -885,7 +886,7 @@ function Yvexnightmareloop(%zombie,%viewer) {
 }
 
 function KillerPulse::onCollision(%data,%projectile,%targetObject,%modifier,%position,%normal) {
-   if (%targetObject.getClassName() $= "Player" && %targetObject.isBoss) {
+   if (%targetObject.getClassName() $= "Player" && !%targetObject.isBoss) {
       messageall('msgkillcurse', "\c5"@getTaggedString(%targetObject.client.name)@" Took a fatal Hit from "@$TWM2::ZombieName[7]@"'s Dark Energy");
       %targetObject.throwWeapon();
       %targetObject.clearinventory();

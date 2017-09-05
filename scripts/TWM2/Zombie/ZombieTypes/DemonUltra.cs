@@ -69,7 +69,7 @@ function UDemonZombiemovetotarget(%zombie){
 	   %upvec = (%upvec * 5);
 	%vector = %x@" "@%y@" "@%upvec;
 	%zombie.applyImpulse(%pos, %vector);
-    createBiodermProjection(%zombie);
+    //createBiodermProjection(%zombie);
    }
    else if(%zombie.hastarget == 1){
 	%zombie.hastarget = 0;

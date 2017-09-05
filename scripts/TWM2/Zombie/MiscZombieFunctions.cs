@@ -147,6 +147,9 @@ function ChargeEmitter(%zombie){
 //************************************************************
 
 function ZombieLookforTarget(%zombie){
+   if(!isObject(%zombie)) {
+      return;
+   }
    %wbpos = %zombie.getworldboxcenter();
    %z = getWord(%wbpos, 2);
    if(%z < $zombie::FallDieHeight) {
@@ -173,7 +176,7 @@ function ZombieLookforTarget(%zombie){
 
 //conditionals, verifies that the zombies can attack this specific player
 function canAttackPlayer(%client) {
-   if(!%client.player.isFTD && !%client.player.iszombie && !%client.player.stealthed) {
+   if(!%client.player.isFTD && !%client.player.iszombie && !%client.player.stealthed && !%client.player.isGoingToDie) {
       return true;
    }
    else {
@@ -182,7 +185,12 @@ function canAttackPlayer(%client) {
 }
 
 function ZgetFacingDirection(%zombie,%closestClient,%pos){
-   %clpos = %closestClient.getPosition();
+   if(isObject(%closestClient)) {
+      %clpos = %closestClient.getPosition();
+   }
+   else {
+      %clpos = TWM2Lib_MainControl("RMPG");
+   }
    %vector = vectorNormalize(vectorSub(%clpos, %pos));
    %v1 = getword(%vector, 0);
    %v2 = getword(%vector, 1);

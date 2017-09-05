@@ -50,8 +50,8 @@ datablock ShapeBaseImageData(PlasmaTorpedoImage) {
 
    emap = true;
 
-   RankRequire = $TWM2::RankRequire["SCD343"];
-   PrestigeRequire = 4;
+   //RankRequire = $TWM2::RankRequire["SCD343"];
+   PrestigeRequire = 9;
    
    HasChallenges = 1;
    ChallengeCt = 8;

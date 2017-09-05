@@ -17,9 +17,15 @@
 //
 function ProjectileData::onCollision(%data, %projectile, %targetObject, %modifier, %position, %normal) {
    if(isObject(%targetObject)) { // Console spam fix - ToS. z0ddm0d
-      if(!(%targetObject.getType() & ($TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType)) && (%targetObject.getDataBlock().getClassName() $= "PlayerData")) {
-         %damLoc = firstWord(%targetObject.getDamageLocation(%position));
-         %test = TWM2Damage(%projectile, %targetObject, %data.directDamage, %data.directDamageType, %damLoc, "projectile");
+      if(!(%targetObject.getType() & ($TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType)) 
+		  && (%targetObject.getType() & ($TypeMasks::PlayerObjectType | $TypeMasks::VehicleObjectType))) {
+		 if(%targetObject.getType() & $TypeMasks::PlayerObjectType) {
+            %damLoc = firstWord(%targetObject.getDamageLocation(%position));
+		 }
+		 else {
+		    %damLoc = "";
+		 }
+         %test = CalculateProjectileDamage(%projectile, %targetObject, %data.directDamage, %data.directDamageType, %damLoc, "projectile");
          if(%test == 0) {
             return;
          }
@@ -27,9 +33,8 @@ function ProjectileData::onCollision(%data, %projectile, %targetObject, %modifie
       }
       %targetObject.lastDamagedImage = %projectile.getDatablock().ImageSource;
       %targetObject.damage(%projectile.sourceObject, %position, %modifier * %data.directDamage, %data.directDamageType);
-      
-      //After Damage Stuff For Player Objects
-      if(%targetObject.isPlayer()) {
+
+      if (!(%targetObject.getType() & ($TypeMasks::InteriorObjectType | $TypeMasks::TerrainObjectType)) && %targetObject.getDataBlock().getClassName() $= "PlayerData") {
          if(%targetObject.getState() $= "dead") {
             if(%projectile.sourceObject.client !$= "") {
                if(%projectile.getDatablock().getName() !$= "GrenadeShrapnel") {
@@ -595,7 +600,7 @@ function RadiusExplosion(%explosionSource, %position, %radius, %damage, %impulse
       if (%dist > %radius)
          continue;
          
-    %modifier = TWM2Damage(%explosionSource, %targetObject, %damage, %damageType, "", "explosion");
+    %modifier = CalculateProjectileDamage(%explosionSource, %targetObject, %damage, %damageType, "", "explosion");
     if(%modifier == 0) {
        return;
     }

@@ -763,7 +763,7 @@ function MakeTheHeli(%cl, %gunner) {
    if(%gunner) {
       %Heli = new FlyingVehicle() {
          dataBlock = ApacheHelicopter;
-         position = VectorAdd(VectorAdd(getRandomPosition(250, 1), "500 0 150"), %cl.player.getPosition());
+         position = VectorAdd(VectorAdd(TWM2Lib_MainControl("getRandomPosition", 250 TAB 1), "500 0 150"), %cl.player.getPosition());
          team = %cl.team;
       };
       MissionCleanup.add(%Heli);
@@ -782,7 +782,7 @@ function MakeTheHeli(%cl, %gunner) {
    else {
       %Heli = new FlyingVehicle() {
          dataBlock = CombatHelicopter;
-         position = VectorAdd(VectorAdd(getRandomPosition(250, 1), "500 0 150"), %cl.player.getPosition());
+         position = VectorAdd(VectorAdd(TWM2Lib_MainControl("getRandomPosition", 250 TAB 1), "500 0 150"), %cl.player.getPosition());
          team = %cl.team;
       };
       MissionCleanup.add(%Heli);
@@ -1002,7 +1002,7 @@ function Artillery(%CallerClient, %position) {
    for(%i = 0; %i < 25; %i++) {
       schedule(350*%i, 0, MessageAll, 'msgFiah', "~wfx/powered/turret_mortar_fire.wav");
       %mainUpPos = vectoradd(%mainUpPos, "0 0 "@(300+(%i*75))@"");   //increment by 100 each time
-      %final = vectoradd(%mainUpPos,GetRandomPosition(30,1));
+      %final = vectoradd(%mainUpPos, TWM2Lib_MainControl("getRandomPosition", 30 TAB 1));
       %Shell1 = new GrenadeProjectile() {
          dataBlock        = AStrikeColliderShell;
          initialPosition  = %final;
@@ -1037,7 +1037,7 @@ function MakeTheHeli2(%cl, %harrier) {
    if(!%harrier) {
       %Heli = new FlyingVehicle() {
          dataBlock = GunshipHelicopter;
-         position = VectorAdd(VectorAdd(getRandomPosition(250, 1), "500 0 150"), %cl.player.getPosition());
+         position = VectorAdd(VectorAdd(TWM2Lib_MainControl("getRandomPosition", 250 TAB 1), "500 0 150"), %cl.player.getPosition());
          team = %cl.team;
       };
       MissionCleanup.add(%Heli);
@@ -1053,7 +1053,7 @@ function MakeTheHeli2(%cl, %harrier) {
    else {
       %Heli = new FlyingVehicle() {
          dataBlock = Harrier;
-         position = VectorAdd(VectorAdd(getRandomPosition(250, 1), "500 0 150"), %cl.player.getPosition());
+         position = VectorAdd(VectorAdd(TWM2Lib_MainControl("getRandomPosition", 250 TAB 1), "500 0 150"), %cl.player.getPosition());
          team = %cl.team;
       };
       MissionCleanup.add(%Heli);

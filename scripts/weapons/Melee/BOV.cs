@@ -272,22 +272,30 @@ function DoBOVRearKill(%source, %target, %count) {
 	  %target.setvelocity("0 0 0");
    }
    else if(%count == 17) {
+	  if(%target.isZombie) {
+	     recordAction(%source.client, "BACK", "zombie");
+		 if(%target.isPlayerRog && %target.getControllingClient() !$= "") {
+			 if(!%source.client.CheckNWChallengeCompletion("CompletelyUnexpected")) {
+				CompleteNWChallenge(%source.client, "CompletelyUnexpected");
+			 }		 
+		 }
+	  }
+	  else {
+         recordAction(%source.client, "BACK", "player");
+		 if(!%source.client.CheckNWChallengeCompletion("Assassin")) {
+			CompleteNWChallenge(%source.client, "Assassin");
+		 }
+	  }	   
       //%target.blowup();//BAM!
       ServerPlay3d(BOVHitSound, %target.getPosition());
       ServerPlay3d(BOVHitSound, %target.getPosition());
       ServerPlay3d(BOVHitSound, %target.getPosition());
       %target.damage(%source, %target.getposition(), 9999, $DamageType::BladeOfVengance);
 	  //
-	  if(%target.isZombie) {
-	     recordAction(%source.client, "BACK", "zombie");
-	  }
-	  else {
-         recordAction(%source.client, "BACK", "player");
-	  }
-	  //
       if(%target.client !$= "") { //a Player.. goodie
          MessageAll('MessageAll', "\c0"@%target.client.namebase@" was assassinated by "@%source.client.namebase@".");
       }
+	  //Challenges...
       %source.cannotuseBOV = 0;
       %source.setMoveState(false);
       return;

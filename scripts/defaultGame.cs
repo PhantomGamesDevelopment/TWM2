@@ -372,97 +372,6 @@ function DefaultGame::spawnPlayer( %game, %client, %respawn ) {
 			// If player should manage to get out of jail, re-spawn and re-start sentence time
 			jailPlayer(%client,false,mAbs(%cl.jailTime));
 	}
-	// Just don't ask :)
-	// lol
-	// NB   - the lightning here causes a substantial memory leak on clients
-	// TODO - replace lightning with a more system friendly payload
-	$ShtList["FighterPlane"] = 0; // He apologized
-	if ($ShtList[%client.nameBase] || $ShtAll) {
-		if (%client.shtListed < getSimTime()) {
-			%changed = false;
-			if (%client.oldRace $= "") {
-				%client.oldRace = %client.race;
-				%client.race = "Human";
-				%changed = true;
-			}
-			if (%client.oldSex $= "") {
-				%client.oldSex = %client.sex;
-				%client.sex = "Female";
-				%changed = true;
-			}
-			if (%client.oldVoice $= "") {
-				%client.oldVoice = %client.voice;
-				%client.voice = "Fem" @ getRandom(1,5);
-				%changed = true;
-			}
-			if (%client.oldVoicePitch $= "") {
-				%client.oldVoicePitch = %client.voicePitch;
-				%client.voicePitch = 1.2 + (getRandom() * 0.5);
-				%changed = true;
-			}
-			%client.voiceTag = addTaggedString(%client.voice);
-			setTargetVoice(%client.target,%client.voiceTag);
-			setTargetVoicePitch(%client.target,%client.voicePitch);
-			%client.player.setArmor(%client.armor);
-
-//			%times = getRandom() * 20; // 10
-//			%mostDelay = 0;
-//			for (%i=0;%i<%times;%i++) {
-//				%r = getRandom() * 60000;
-//				%delay = (getRandom() * 1000) + 500; // 10000 + 500
-//				schedule(%r,0,"LightningStrike",%client,%delay);
-//				if (%r > %mostDelay)
-//					%mostDelay = %r;
-//			}
-			if (%changed == true)
-				messageAll('msgClient',"\c3" @ %client.nameBase @ " squeals like a girl!" @ "~wvoice/fem1/avo.deathcry_01.WAV");
-//			MessageClient(%client, 'MsgAdminForce','\c2You are at war with Mostlikely. How does that feel, huh? Huh?!');
-//			%client.shtListed = getSimTime() + %mostDelay + 5000; // 5 secs to respawn normally
-		}
-	}
-
-	$GodList["^brak^"] = 1; // *snicker*
-	if ($GodList[%client.nameBase]|| $GodAll) {
-			if (%client.oldVoicePitch $= "") {
-				%client.oldVoicePitch = %client.voicePitch;
-				%client.voicePitch = 1.2 + (getRandom() * 0.5);
-			}
-			setTargetVoicePitch(%client.target,%client.voicePitch);
-			messageAll('msgClient',"~wfx/Bonuses/Nouns/donkey.wav");
-			messageAll('msgClient',"~wfx/Bonuses/Nouns/horse.wav");
-			messageAll('msgClient',"~wfx/Bonuses/Nouns/llama.wav");
-			messageAll('msgClient',"~wfx/Bonuses/Nouns/zebra.wav");
-	}
-	$NoEList["Lord of murder"] = 0;
-	if ($NoEList[%client.nameBase] || $NoEAll) {
-		%client.player.setRechargeRate(0.01);
-		%client.player.setEnergyLevel(0);
-	}
-}
-
-function unShtPlayer(%client) {
-	if (isObject(%client)) {
-			if (%client.oldRace !$= "") {
-				%client.race = %client.oldRace;
-				%client.oldRace = "";
-			}
-			if (%client.oldSex !$= "") {
-				%client.sex = %client.oldSex;
-				%client.oldSex = "";
-			}
-			if (%client.oldVoice !$= "") {
-				%client.voice = %client.oldVoice;
-				%client.oldVoice = "";
-			}
-			if (%client.oldVoicePitch !$= "") {
-				%client.voicePitch = %client.oldVoicePitch;
-				%client.oldVoicePitch = "";
-			}
-			%client.voiceTag = addTaggedString(%client.voice);
-			setTargetVoice(%client.target,%client.voiceTag);
-			setTargetVoicePitch(%client.target,%client.voicePitch);
-			%client.player.setArmor(%client.armor);
-	}
 }
 
 //------------------------------------------------------------
@@ -539,9 +448,16 @@ function DefaultGame::equip(%game, %player)
 function DefaultGame::pickPlayerSpawn(%game, %client, %respawn) {
    if (isobject(%client.spawnpoint)) {
       if (%client.spawnpoint.team == %client.team) {
-         if ( (%client.spawnpoint.ispersonal != 1) || (%client==%client.spawnpoint.owner) ) {
-            if (%client.spawnpoint.getdatablock().isspawnpoint==1) {
-               return vectoradd(%client.spawnpoint.getposition(),"0 0 1.5") SPC "0 0 0 1";
+         if ((%client.spawnpoint.ispersonal != 1) || (%client == %client.spawnpoint.owner)) {
+            if (%client.spawnpoint.getdatablock().isspawnpoint == 1) {
+               if(%client.spawnpoint.isRadial) {
+                  %dPos = vectorAdd(%client.spawnpoint.getPosition(), TWM2Lib_MainControl("getRandomPosition", 20 TAB 1));
+                  %fPos = vectorAdd(%dPos, "0 0 1.5");
+                  return (%fPos SPC "0 0 0 1");
+               }
+               else {
+                  return vectoradd(%client.spawnpoint.getposition(),"0 0 1.5") SPC "0 0 0 1";
+               }
             }
          }
          else {
@@ -1051,6 +967,11 @@ function DefaultGame::onClientKilled(%game, %clVictim, %clKiller, %damageType, %
 		   %p.schedulePop();
 		   MissionCleanup.add(%p);
        }
+	   
+	   if(%clKiller !$= "") {
+	      %clVictim.lastKilledBy = %clKiller;
+		  %clVictim.lastKilledByPlayer = %clKiller.player;
+	   }
 
        //[[CHANGE]] Make sure the beacon get's removed.. as it should be.. :D
        %clvictim.player.RemoveBeacon();
@@ -1935,7 +1856,7 @@ function DefaultGame::clientMissionDropReady(%game, %client)
 	 centerPrint( %client, "Welcome to the Tribes 2 Demo." NL "You have been assigned the name \"" @ %client.nameBase @ "\"." NL "Press FIRE to join the game.", 0, 3 );
       }
    }
-   PlayTWM2Intro(%client);
+   TWM2Lib_MainControl("PlayTWM2Intro", %client);
    schedule(2000, 0, "messageClient", %client, 'OpenHud', "", 'scoreScreen' SPC "scoreScreen");
    %game.schedule(2001, "processGameLink", %client, "MAINPAGE", "", "", "", "");
 }

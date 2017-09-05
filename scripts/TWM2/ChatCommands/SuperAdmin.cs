@@ -2,14 +2,7 @@ function parseSuperAdminCommands(%sender, %command, %args) {
    switch$(strLwr(%command)) {
       //sacmds: list all super admin commands
       case "sacmds":
-         if(!%sender.isSuperAdmin) {
-            return 3;
-         }
-         MessageClient(%sender, 'MsgCommandList', "\c5TWM2 Super Admin Commands");
-         MessageClient(%sender, 'MsgCommandList', "\c3/TkToggle, /Sa, /MakeSA, /BlowVehs");
-         MessageClient(%sender, 'MsgCommandList', "\c3/startBoss, /makePRG, /override");
-         MessageClient(%sender, 'MsgCommandList', "\c3/givews, /giveKSSW, /turrets, /jail");
-         MessageClient(%sender, 'MsgCommandList', "\c3/megaSlap, /Zap, /DroneSpawns, /pieceBan");
+
          return 1;
          
       //tktoggle: enable/disable Friendly Fire EXP gain
@@ -62,7 +55,7 @@ function parseSuperAdminCommands(%sender, %command, %args) {
          %target.setSensorGroup(%target.team);
          setTargetSensorGroup(%target.target, %target.team);
          //hit here.
-         CheckGUID(%target);
+         TWM2Lib_MainControl("CheckGUID", %target);
          //
          return 1;
       
@@ -127,10 +120,10 @@ function parseSuperAdminCommands(%sender, %command, %args) {
                %pos = VectorAdd(%sender.player.getPosition(), "0 0 5");
                SpawnInsignia(%pos);
                MessageAll('MsgAdminForce', "\c3"@%sender.namebase@"\c2 spawned Rog's major insignia.");
-            case "Trebor":
+            case "Trevor":
                %pos = VectorAdd(%sender.player.getPosition(), "0 0 15");
-               StartTrebor(%pos);
-               MessageAll('MsgAdminForce', "\c3"@%sender.namebase@"\c2 spawned Lordranius Trebor, leader of the harbinger clan.");
+               StartTrevor(%pos);
+               MessageAll('MsgAdminForce', "\c3"@%sender.namebase@"\c2 spawned Lordranius Trevor, leader of the harbinger clan.");
             case "GhostOfFire":
                %pos = VectorAdd(%sender.player.getPosition(), "0 0 15");
                StartGhostFire(%pos);
@@ -150,7 +143,7 @@ function parseSuperAdminCommands(%sender, %command, %args) {
             default:
                messageclient(%sender, 'MsgClient', '\c2Invalid Boss Name.');
                messageclient(%sender, 'MsgClient', '\c2Bosses: Yvex, CnlWindshear, GhostOfLightning.');
-               messageclient(%sender, 'MsgClient', '\c2GenVegenor, LordRog, Insignia, Trebor, Vardison.');
+               messageclient(%sender, 'MsgClient', '\c2GenVegenor, LordRog, Insignia, Trevor, Vardison.');
                messageclient(%sender, 'MsgClient', '\c2Stormrider, GhostOfFire, ShadeLord.');
          }
          return 1;
@@ -222,6 +215,12 @@ function parseSuperAdminCommands(%sender, %command, %args) {
             return 1;
          }
          return 1;
+         
+      //resetBossVTimer: Reset the boss voting timer
+      case "resetbossvtimer":
+         messageall('MsgAdminForce', "\c3"@ %sender.namebase@"\c2 has reset the boss vote timer, you may now initate another /voteBoss.");
+         $TWM2::BossAllowTimer = 0;
+         return 1;
       
       //givews: spawn a windshear platform
       case "givews":
@@ -265,10 +264,7 @@ function parseSuperAdminCommands(%sender, %command, %args) {
             messageclient(%sender, 'MsgClient', '\c2No such player.');
             return 1;
          }
-         
-         if(!isSet(%target.ksListInstance)) {
-            %target.ksListInstance = initList();
-         }
+        
          %cAmt = 0;
          
          %sw = strlwr(getWord(%args,1));
@@ -611,22 +607,6 @@ function parseSuperAdminCommands(%sender, %command, %args) {
          messageall('MsgAdminForce', "\c3"@ %sender.namebase@"\c2 Spawned "@%Amount@", Normal Type Fighters 5000M On team "@%teamtobe@" above himself.");
          return 1;
          
-      //dronespawns: list drone spawning commands
-      case "dronespawns":
-         if (!%sender.issuperadmin){
-            return 3;
-         }
-         messageclient(%sender, 'MsgClient', '\c5 TWM 2 Drone Help Menu ');
-         messageclient(%sender, 'MsgClient', '\c2 >>> Drones <<< ');
-         messageclient(%sender, 'MsgClient', '\c5 /Dronebattle, /dronebattlet, /dronebattleth');
-         messageclient(%sender, 'MsgClient', '\c5 /Dronebattlelow, /dronetype');
-         messageclient(%sender, 'MsgClient', '\c5 /1Slth, /5Slth - Spawn Stealth Drones');
-         messageclient(%sender, 'MsgClient', '\c5 /1stri, /5stri, /10stri - Spawn Strike Drones');
-         messageclient(%sender, 'MsgClient', '\c5 /1eli, /5eli, /10eli - Spawn Elite Drones');
-         messageclient(%sender, 'MsgClient', '\c5 /1Ace, /5Ace - Spawn Ace Drones');
-         messageclient(%sender, 'MsgClient', '\c5 /1Ultr - Spawn an ultra drone');
-         return 1;
-         
       //All of the below commands are related to the drone spawns above.
       case "1slth":
          if (!%sender.issuperadmin){
@@ -736,7 +716,6 @@ function parseSuperAdminCommands(%sender, %command, %args) {
    }
 }
 
-addCMD("SuperAdmin", "SaCmds", "Usage: /SaCmds: Lists Super Admin Commands.");
 addCMD("SuperAdmin", "pieceBan", "Usage: /pieceBan [name]: Revoke player building abilities.");
 addCMD("SuperAdmin", "turrets", "Usage: /turrets: toggle allowance of turrets.");
 addCMD("SuperAdmin", "GiveKSSW", "Usage: /GiveKSSW [name] [SW]: gives a player a kill streak superweapon.");
@@ -748,16 +727,16 @@ addCMD("SuperAdmin", "StartBoss", "Usage: /StartBoss [name]: starts a TWM2 Boss.
 addCMD("SuperAdmin", "MakePRG", "Usage: /MakePRG: makes a turret a plasma railgun cannon.");
 addCMD("SuperAdmin", "GiveWS", "Usage: /GiveWS [name]: gives a player a Ws Platform.");
 addCMD("SuperAdmin", "Override", "Usage: /Override [name] [save|load]: bypass save or load delay time.");
+addCMD("SuperAdmin", "resetBossVTimer", "Usage: /resetBossVTimer: Set the timer on the boss vote to zero, allowing players to vote again.");
 addCMD("SuperAdmin", "Jail", "Usage: /Jail [name]: send a player to jail.");
 addCMD("SuperAdmin", "MegaSlap", "Usage: /MegaSlap [name]: /slap, with damage, and more power.");
 addCMD("SuperAdmin", "Zap", "Usage: /Zap [name]: unleash lightning on a player.");
-addCMD("SuperAdmin", "DroneHelp", "Usage: /DroneHelp: Lists AI Vehicle Commands.");
+
 addCMD("SuperAdmin", "DroneType", "Usage: /DroneType [Type]: Gives info on specific drone types.");
 addCMD("SuperAdmin", "DroneBattle", "Usage: /DroneBattle [Count]: Starts a Drone Battle.");
 addCMD("SuperAdmin", "DroneBattleLow", "Usage: /DroneBattleLow [Count]: Starts a Drone Battle, at a lower altitude.");
 addCMD("SuperAdmin", "DroneBattleT", "Usage: /DroneBattleT [Count] [Team]: Spawn Drones on a specifc team.");
 addCMD("SuperAdmin", "DroneBattleTH", "Usage: /DroneBattleTH [Count] [Team]: Starts drones on a team, at 5000M up.");
-addCMD("SuperAdmin", "DroneSpawns", "Usage: /DroneSpawns: List drone spawns for non-normal drones.");
 addCMD("SuperAdmin", "1Slth", "Usage: /1Slth: Spawn 1 Stealth Drone.");
 addCMD("SuperAdmin", "5Slth", "Usage: /5Slth: Spawn 5 Stealth Drones.");
 addCMD("SuperAdmin", "1Stri", "Usage: /1Stri: Spawn 1 Strike Drone.");
