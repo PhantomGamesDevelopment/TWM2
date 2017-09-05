@@ -8,7 +8,7 @@ Web Sites/Pages:
 * https://github.com/PhantomGamesDevelopment/TWM2/ : Official Git Repostitory
 * http://www.phantomdev.net : Offical Website
 
-Current Version: 3.91 {Development}
+Current Version: 3.91 
 
 ====
 
@@ -65,7 +65,7 @@ MOD DEVELOPMENT HISTORY (GIT VERSIONS):
 
 PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY CHANGELOG.md
 
-3.9 -> 3.91 (In Progress):
+3.9 -> 3.91:
 * Reduced the requirement to order missions to the rank of General (49) from Commanding Officer (59)
   * This change also applies to the 'From The Top' Challenge Category
   * In-Game, Missions have been renamed to Operations
@@ -131,11 +131,10 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
 * Cleaned up the player kill logic and moved all TWM2 specific damage and death functioning to a separate file
 * Addressed the bug preventing the challenges for reaching officer ranks from completing
 * Addressed a bug in which vehicle bosses were not recording damage from players to the boss system correctly
-* Weapon Balancing Pass
-  * Grapple Hook
-    * Slowed down the attacher projectile a bit, lowering the range
-	* Grapple hook now requires 60% armor energy and consumes this when firing
-	* There is now a 5 second cooldown when firing to prevent for quick escapes
+* Grapple Hook
+  * Slowed down the attacher projectile a bit, lowering the range
+  * Grapple hook now requires 60% armor energy and consumes this when firing
+  * There is now a 5 second cooldown when firing to prevent for quick escapes
 * Boss Balancing Pass
   * Lord Yvex
     * Health reduced to 40,000 (Was 50,000)
