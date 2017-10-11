@@ -279,55 +279,54 @@ function LordZombieArmor::onTrigger(%data, %player, %triggerNum, %val) {
    }
 }
 
+function SniperZombieArmor::onTrigger(%data, %player, %triggerNum, %val) {
+	if (%triggerNum == 0) { //shooting
+		if(%player.RecentAttack["Shot"] == 1) {
+			return;
+		}
+		else {
+			%player.RecentAttack["Shot"] = 1;
+			schedule(3000, 0, "ResetPlayerDLAttack", %player, "Shot");
+			%p = new TracerProjectile() { //TWM2 Sniper zombies use M1 Snipers :P
+				dataBlock        = M1Bullet;
+				initialDirection = %player.getMuzzleVector(4);
+				initialPosition  = %player.getMuzzlePoint(4);
+				sourceObject     = %player;
+				sourceSlot       = 4;
+			};
+			ServerPlay3D(M1FireSound, %player.getPosition());
+		}
+	}
+	if(%triggerNum == 3) {
+		%pos = %player.getPosition();
+		%vector = %player.getMuzzleVector(4);
+		%x = getWord(%vector, 0);
+		%y = getWord(%vector, 1);
+		%finX = %x * -1;
+		%finY = %y * -1;
+		%finalVec = %finX SPC %finY SPC 0;
+		%finalVec = VectorScale(%finalVec, $Zombie::DForwardSpeed * 3);
+		//Z is unimportant
+		%player.applyImpulse(%pos, %finalVec);
+	}
+}
+
 function DemonZombieArmor::onTrigger(%data, %player, %triggerNum, %val) {
-   if(%player.isSniperZombie) {
-      if (%triggerNum == 0) { //shooting
-         if(%player.RecentAttack["Shot"] == 1) {
-            return;
-         }
-         else {
-            %player.RecentAttack["Shot"] = 1;
-            schedule(3000, 0, "ResetPlayerDLAttack", %player, "Shot");
-            %p = new TracerProjectile() { //TWM2 Sniper zombies use M1 Snipers :P
-               dataBlock        = M1Bullet;
-               initialDirection = %player.getMuzzleVector(4);
-               initialPosition  = %player.getMuzzlePoint(4);
-               sourceObject     = %player;
-               sourceSlot       = 4;
-            };
-            ServerPlay3D(M1FireSound, %player.getPosition());
-         }
-      }
-      if(%triggerNum == 3) {
-         %pos = %player.getPosition();
-         %vector = %player.getMuzzleVector(4);
-         %x = getWord(%vector, 0);
-         %y = getWord(%vector, 1);
-         %finX = %x * -1;
-         %finY = %y * -1;
-         %finalVec = %finX SPC %finY SPC 0;
-         %finalVec = VectorScale(%finalVec, $Zombie::DForwardSpeed * 3);
-         //Z is unimportant
-         %player.applyImpulse(%pos, %finalVec);
-      }
-   }
-   else {
-      if (%triggerNum == 0) { //shooting
-         if(%player.recharging) {
-            return;
-         }
-   	     %p = new GrenadeProjectile() {
-   	      	 dataBlock        = DemonFireball;
-             initialDirection = %player.getMuzzleVector(0);
-             initialPosition  = vectoradd(%player.getMuzzlePoint(0), "0 0 1.5");
-   	   	     sourceObject     = %player;
-   	   	     sourceSlot       = 6;
-   	     };
-         MissionCleanup.add(%p);
-         %player.recharging = 1;
-         schedule(4000,0,"ResetZombieCharge",%player);
-      }
-   }
+	if (%triggerNum == 0) { //shooting
+		if(%player.recharging) {
+			return;
+		}
+		%p = new GrenadeProjectile() {
+		dataBlock        = DemonFireball;
+		initialDirection = %player.getMuzzleVector(0);
+		initialPosition  = vectoradd(%player.getMuzzlePoint(0), "0 0 1.5");
+		sourceObject     = %player;
+		sourceSlot       = 6;
+		};
+		MissionCleanup.add(%p);
+		%player.recharging = 1;
+		schedule(4000,0,"ResetZombieCharge",%player);
+	}
 }
 
 function RapierZombieArmor::onTrigger(%data, %player, %triggerNum, %val) {
@@ -618,7 +617,7 @@ function SummonerZombieArmor::onTrigger(%data, %player, %triggerNum, %val) {
          %c.schedule(((%Ct * 1000) + 500), "delete");
          for(%i = 1; %i <= %ct; %i++) {
             %time = %i * 1000;
-            schedule(%time, 0, "StartAZombie", %SumPos, %type);
+			schedule(%time, 0, "TWM2Lib_Zombie_Core" "SpawnZombie", "zSpawnCommand", %type, %SumPos);
          }
       }
    }
@@ -648,9 +647,9 @@ function DemonUltraZombieArmor::onTrigger(%data, %player, %triggerNum, %val) {
    }
 }
 
-function FZombieArmor::onTrigger(%data, %player, %triggerNum, %val) {
+function VolatileRavagerZombieArmor::onTrigger(%data, %player, %triggerNum, %val) {
    if (%triggerNum == 3) {
-      if(%player.zombieType == 13) {
+      if(!%player.detonatedVRavC4) {
          ServerPlay3D("SatchelChargeExplosionSound", %player.getPosition());
          %c4 = new Item() {
             datablock = C4Deployed;
@@ -661,6 +660,7 @@ function FZombieArmor::onTrigger(%data, %player, %triggerNum, %val) {
          schedule(770, 0, "C4GoBoom", %c4);
          
          %c4.theClient = %player.client;
+		 %player.detonatedVRavC4 = true;
          return;
       }
    }

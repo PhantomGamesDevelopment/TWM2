@@ -3,15 +3,6 @@ $TeamDeployableMax[ZSpawnDeployable] = 9999;
 // Zombie Spawn Point
 //---------------------------------------------------------
 
-$zombie::detectDist = 100;
-$zombie::lungDist = 10;
-$zombie::LKillDist = 5;
-$zombie::Rupvec = 750;
-$zombie::killpoints = 5;
-
-$Zombie::RAAMThread = "cel1";
-$Zombie::RogThread = "cel1";
-
 datablock AudioProfile(ZombieMoan)
 {
    filename    = "fx/environment/growl3.wav";
@@ -441,4 +432,21 @@ function DeployedZSpawnBase::onLosePowerDisabled(%data,%obj) {
    if (%obj.ZCloop !$= "")
    	Cancel(%obj.ZCLoop);
    Parent::onLosePowerDisabled(%data,%obj);
+}
+
+function ZcreateLoop(%obj) {
+	if(isObject(%obj)) {
+		if(%obj.timedout == 0){
+			if(%obj.numZ <= 2 || %obj.numZ $= "") {
+				TWM2Lib_Zombie_Core("SpawnZombie", "zPack", %obj);
+				if(%obj.numZ $= "") {
+					%obj.numZ = 0;
+				}
+				%obj.numZ++;
+				%obj.timedout = 1;
+				schedule(10000, 0, "eval", ""@%obj@".timedout = 0;");
+			}
+		}
+		%obj.ZCLoop = schedule(2000, 0, "ZcreateLoop", %obj);
+	}
 }

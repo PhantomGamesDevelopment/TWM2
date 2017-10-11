@@ -489,10 +489,10 @@ function spawnHunterDropship(%position, %dropPosition, %dropType) {
    };
    MissionCleanup.add(%drop);
    //attach waypoint, spawn pilot/passengers
-   %wraith = StartAZombie(vectorAdd(%position, "0 0 100"), 15);
+   %wraith = TWM2Lib_Zombie_Core("spawnZombie", "zspawncommand", 15, vectorAdd(%position, "0 0 100"));
    %drop.mountObject(%wraith, 0);
    for(%i = 0; %i < getWordCount(%dropType); %i++) {
-      %z = StartAZombie(vectorAdd(%position, "0 0 100"), getWord(%dropType, %i));
+      %z = TWM2Lib_Zombie_Core("spawnZombie", "zspawncommand", getWord(%dropType, %i), vectorAdd(%position, "0 0 100"));
       if(isObject(%z)) {
          %drop.mountObject(%z, %i+2);
          //%z.mountObject(%drop, %i+2);

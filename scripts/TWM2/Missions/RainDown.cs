@@ -43,7 +43,7 @@ package TWM2Mission_RainDown {
       %missionPosCenter = "5400 12000 110";
       for(%i = 0; %i < 15; %i++) {
          %posx = vectorAdd(%missionPosCenter, TWM2Lib_MainControl("getRandomPosition", 25 TAB 1));
-         %zombie = StartAZombie(%posx, 1);
+         %zombie = TWM2Lib_Zombie_Core("SpawnZombie", "zSpawnCommand", 1, %posx);
          %zombie.isInTheMission = 1;
       }
       RainDownMissionLoop(%group, MissionCleanup);

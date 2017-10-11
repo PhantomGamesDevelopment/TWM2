@@ -283,7 +283,7 @@ function PlayerSummon(%player, %count) {
    for(%i = 0; %i < %count; %i++) {
       %pos = vectoradd(%player.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
       %fpos = vectoradd("0 0 5",%pos);
-      StartAZombie(%fpos, %type);
+      TWM2Lib_Zombie_Core("SpawnZombie", "zSpawnCommand", %type, %fpos);
    }
    %player.setMoveState(true);
    %player.setActionThread($Zombie::RogThread,true);

@@ -342,15 +342,15 @@ function LordRogAttack_FUNC(%att, %args) {
          }
          schedule(30000, 0, LordRogAttack_FUNC, "ZombieSummon", %z);
          //--------------------
-         %type = getRandomZombieType("1 2 3 4 5 9 12 13 15"); 
+         %type = TWM2Lib_Zombie_Core("getRandomZombieType", "1 2 3 4 5 9 12 13 15"); 
          messageall('RogMsg',"\c4"@$TWM2::ZombieName[8]@": Attack my target!");
          for(%i = 0; %i < 5; %i++) {
             %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
             %fpos = vectoradd("0 0 5",%pos);
-            StartAZombie(%fpos, %type);
+            TWM2Lib_Zombie_Core("SpawnZombie", "zSpawnCommand", %type, %fpos);
          }
          %z.setMoveState(true);
-         %z.setActionThread($Zombie::RAAMThread, true);
+         %z.setActionThread($Zombie::RogThread, true);
          %z.schedule(3500, "setMoveState", false);
          
       case "DropshipReinforce":
@@ -359,7 +359,7 @@ function LordRogAttack_FUNC(%att, %args) {
             return;
          }
       
-         %type = getRandomZombieType("1 2 3 4 5 9 12 13 15");
+         %type = TWM2Lib_Zombie_Core("getRandomZombieType", "1 2 3 4 5 9 12 13 15");
          MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Additional Reinforcements!!! NOW!");
          %typeCaller = %type SPC %type SPC %type SPC %type;
          %callPos = vectorAdd(%z.getPosition(), "2000 0 400");

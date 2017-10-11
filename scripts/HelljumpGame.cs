@@ -972,7 +972,7 @@ function HelljumpGame::SpawnZombies(%game, %pos, %type) {
    }
    %c = CreateEmitter(%pos, NightmareGlobeEmitter, "0 0 1");
    %c.schedule(1000, "delete");
-   schedule(500, 0, "StartAZombie", %pos, %type);
+   schedule(500, 0, "TWM2Lib_Zombie_Core", "SpawnZombie", "zSpawnCommand", %type, %pos);
 }
 
 function HelljumpGame::StartWave(%game, %wave) {

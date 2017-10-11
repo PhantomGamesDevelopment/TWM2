@@ -1,20 +1,27 @@
+$Boss::Proficiency["CnlWindshear", 0] = "Team Bronze\t1000\tDefeat Colonel Windshear with your team dying no more than 15 times";
+$Boss::ProficiencyCode["CnlWindshear", 0] = "$TWM2::BossManager.bossKills < 15";
+$Boss::Proficiency["CnlWindshear", 1] = "Team Silver\t5000\tDefeat Colonel Windshear with your team dying no more than 10 times";
+$Boss::ProficiencyCode["CnlWindshear", 1] = "$TWM2::BossManager.bossKills < 10";
+$Boss::Proficiency["CnlWindshear", 2] = "Team Gold\t10000\tDefeat Colonel Windshear with your team dying no more than 5 times";
+$Boss::ProficiencyCode["CnlWindshear", 2] = "$TWM2::BossManager.bossKills < 5";
+
 //This sets up the drone and the functions needed to start the drone.
 function StartWindshear(%pos){
    %team = 6;
    %rotation = "1 0 0 0";
    %skill = 10;
     
-   %Drone = new FlyingVehicle() {
+   %drone = new FlyingVehicle() {
       dataBlock    = WindshearPlatform;
       position     = %pos;
       rotation     = %rotation;
       team         = %team;
    };
-   MissionCleanUp.add(%Drone);
+   MissionCleanUp.add(%drone);
 
-   setTargetSensorGroup(%Drone.getTarget(), %team);
+   setTargetSensorGroup(%drone.getTarget(), %team);
 
-   %Drone.isdrone = 1;
+   %drone.isdrone = 1;
    %drone.dodgeGround = 0;
 
    %drone.isace = 1;
@@ -27,11 +34,22 @@ function StartWindshear(%pos){
 
    InitiateBoss(%drone, "CnlWindshear");
    
+   %drone.turretObject.team = %team;
+   setTargetSensorGroup(%drone.turretObject.getTarget(), %team);
+   %drone.turretObject2.team = %team;
+   setTargetSensorGroup(%drone.turretObject2.getTarget(), %team);
+   %drone.turretObject3.team = %team;
+   setTargetSensorGroup(%drone.turretObject3.getTarget(), %team);
+   %drone.turretObject4.team = %team;
+   setTargetSensorGroup(%drone.turretObject4.getTarget(), %team);
+   %drone.turretObject5.team = %team;
+   setTargetSensorGroup(%drone.turretObject5.getTarget(), %team);    
+   
    //Helpers
-   %pos2 = vectoradd(%pos, "15 0 0");
-   %pos3 = vectoradd(%pos, "-15 0 0");
-   %d2 = StartAIGunship(%pos2, "", 6, "ace", 0);
-   %d3 = StartAIGunship(%pos3, "", 6, "ace", 0);
+   %pos2 = vectoradd(%pos, "50 0 0");
+   %pos3 = vectoradd(%pos, "-50 0 0");
+   %d2 = StartAIGunship(%pos2, "0 0 0 1", %team, "ace", 0);
+   %d3 = StartAIGunship(%pos3, "0 0 0 1", %team, "ace", 0);
    %d2.isUltrally = 1;
    %d3.isUltrally = 1;
    //

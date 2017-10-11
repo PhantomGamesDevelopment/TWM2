@@ -207,7 +207,7 @@ function MedPackGunImage::onRepair(%this,%obj,%slot){
          }
 
          if (%targetObject.infected && %targetObject.getState() !$= "dead") {
-            CureInfection(%targetObject);
+            TWM2Lib_Zombie_Core("cureInfection", %targetObject);
             %targetObject.playAudio(0, ShockLanceHitSound);
             messageclient(%obj.client, 'MsgClient', "\c2Applying Zombie Cure To "@%targetObject.client.namebase@".");
             messageclient(%targetObject.client, 'MsgClient', "\c2Zombie Cure Applied By "@%obj.client.namebase@".");

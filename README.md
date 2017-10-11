@@ -66,9 +66,36 @@ MOD DEVELOPMENT HISTORY (GIT VERSIONS):
 PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY CHANGELOG.md
 
 3.91 -> 3.92 (In Progress):
+* Zombie Changes
+  * Global
+    * Massive "spring cleaning" of the zombie code files, fixing a bunch of bad coding practices and a few logic errors.
+    * Redid the zombie targeting and movement methods to make them much "smoother"
+	  * This was done by slicing the movement loop down to 100ms from 500ms.
+	  * To compensate, all zombie speeds were reduced by 5x.
+	* Moved all functioning into a core control script, added additional modifiers and flags to grant more customizability to zombies
+	* **Only Normal Zombies are functional at this moment in time**
 * Added Boss Proficiency
   * Hidden challenges embedded in boss fights that award additional experience for completing tough feats
   * For example: Defeat the shade lord without dying by the elemental shades
+* Living World Mode
+  * Added a new option for admins to toggle (Living World) in the Construction Mode. Players will be able to vote toggle this option
+  * This aspect of the update will be coming soon...
+* Boss Balancing / Updates:
+  * All Bosses
+    * Testing a new difficulty system
+	  * Boss health damage will now scale to the number of players in the game
+	  * Boss attack damage also now scales to the number of players in the game
+	    * NOTE: Some attacks are still designated OHK attacks and will not be affected
+	  * This will allow solo players a fighting chance to actually fight against the bosses
+	  * For the time being, this change will only apply to the Lord Yvex fight, if testing goes well, I will adapt to other bosses
+  * Colonel Windshear
+    * Addressed a silly bug with the Colonel Windshear fight that caused the platform turrets to be on a different team than the gunship
+      * The Harbinger Gunship allies will now properly target players instead of shooting their leader
+	* Colonel Windshear can now call for additional air support during the fight
+  * Stormrider
+	* Re-did his ground detection script to "hopefully" eradicate those funny moments when he suicide bombs the ground, ending the fight
+  * Lord Vardison 
+    * Fixed an erraneous text prompt that would appear when the shadow rift detonated outside of WTF difficulty stating vardison had healed when in fact he did not
 
 3.9 -> 3.91:
 * Reduced the requirement to order missions to the rank of General (49) from Commanding Officer (59)

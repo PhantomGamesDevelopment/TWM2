@@ -256,20 +256,20 @@ function InsigniaAttack_FUNC(%att, %args) {
          }
          schedule(30000, 0, InsigniaAttack_FUNC, "ZombieSummon", %z);
          //--------------------
-         %type = getRandomZombieType("1 2 3 5 9 12 13 15 17");   //omit 4 in place of 17: Demon -> Elite Demon
+         %type = TWM2Lib_Zombie_Core("getRandomZombieType", "1 2 3 5 9 12 13 15 17");   //omit 4 in place of 17: Demon -> Elite Demon
          messageall('RogMsg',"\c4"@$TWM2::BossName["Insignia"]@": Slay the humans!!!");
          for(%i = 0; %i < 6; %i++) {
             %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
             %fpos = vectoradd("0 0 5",%pos);
-            StartAZombie(%fpos, %type);
+            TWM2Lib_Zombie_Core("SpawnZombie", "zSpawnCommand", %type, %fpos);
          }
          %z.setMoveState(true);
-         %z.setActionThread($Zombie::RAAMThread, true);
+         %z.setActionThread($Zombie::RogThread, true);
          %z.schedule(3500, "setMoveState", false);
       
       case "Reinforce":
          %zombie = getWord(%args, 0);
-         %type = getRandomZombieType("1 2 3 5 9 12 13 15 17");
+         %type = TWM2Lib_Zombie_Core("getRandomZombieType", "1 2 3 5 9 12 13 15 17");
          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Insignia"]@": It's time for you to take on my reinforcements!");
          %typeCaller = %type SPC %type SPC %type SPC %type;
          %callPos1 = vectorAdd(%zombie.getPosition(), "2000 100 400");

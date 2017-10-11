@@ -144,6 +144,26 @@ function CalculateProjectileDamage(%projectile, %target, %amount, %dType, %damLo
 			}
 	}
 
+	//Boss Scaling: TWM2 3.9.2
+	// - This system scales fights to make it easier for smaller player counts in harder fights
+	if(%target.isBoss) {
+		%tName = $TWM2::BossManager.activeBoss;
+		if($Boss::DamageScaling[%tName]) {
+			%bossScale = $Boss::DamageScaling[%tName];
+			
+			%playerCountReduction = ClientGroup.getCount() - 1;
+			%reduction = $Boss::ScaleReduction[%tName];
+			
+			%net = %reduction * %playerCountReduction;
+			if(%net >= 1) {
+				%net = 1;
+			}
+			
+			%scale = %bossScale - (%bossScale * %net);
+			%total *= %scale;
+		}
+	}
+	
 	%deal = %total * %amount;
 	if(%target.isBoss) {
 		if(%dType == $DamageType::SuperChaingun) {

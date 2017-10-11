@@ -584,7 +584,7 @@ function DemonMotherDemonSpawn(%obj){
       };
       MissionCleanup.add(%charge);
       %charge.schedule(1100, "delete");
-	schedule(1000, 0, "startAzombie", posFromRaycast(%searchresult), 4);
+	  schedule(1000, 0, "TWM2Lib_Zombie_Core", "SpawnZombie", "zSpawnCommand", 4, posFromRaycast(%searchResult));
    }
    schedule(1500, 0, "DemonMotherThink", %obj);
 }

@@ -876,6 +876,10 @@ function parsePublicCommands(%sender, %command, %args) {
              messageclient(%sender, 'MsgClient', '\c2The server host has disabled boss votes.');
              return 1;
          }
+		 if($Host::LivingWorldMode == 1) {
+             messageclient(%sender, 'MsgClient', '\c2Boss voting is disabled in Living World Mode.');
+             return 1;		 
+		 }
          if($TWM::PlayingHorde || $TWM::PlayingHelljump) {
             messageclient(%sender, 'MsgClient', '\c2No bosses allowed in horde or helljump.');
             return 1;

@@ -10,6 +10,8 @@ $Boss::Proficiency["ShadeLord", 4] = "Smite the Shadows\t50000\tDefeat the Shade
 $Boss::ProficiencyCode["ShadeLord", 4] = "$TWM2::BossManager.bossKills == 0";
 $Boss::Proficiency["ShadeLord", 5] = "Shade Buster\t7500\tDefeat the Shade Lord without dying once by the elemental shade";
 $Boss::ProficiencyCode["ShadeLord", 5] = "[bProf].shadeDeaths == 0";
+$Boss::Proficiency["ShadeLord", 6] = "Invisible\t15000\tDefeat the Shade Lord without being targeted once by shade drops";
+$Boss::ProficiencyCode["ShadeLord", 6] = "[bProf].shadeTargets == 0";
 
 //SHADE LORD
 datablock ParticleData(ShadeSwordParticle) {
@@ -124,6 +126,8 @@ function ShadeLordSword::OnExplode(%data, %proj, %pos, %mod) {
          %potentialTarget.setMoveState(true);
          %potentialTarget.setActionThread("death1", true);
          createBlood(%potentialTarget);
+		 
+		 %potentialTarget.client.bossProficiency.shadeDeaths++;
          //===========================
          schedule(750, 0, createBlood, %potentialTarget);
          schedule(1250, 0, createBlood, %potentialTarget);
@@ -842,6 +846,7 @@ function ShadeLordFunction(%boss, %function, %args) {
 			if(%closestDistance <= $Zombie::detectDist) {
 				if(%closestDistance < 10) {
 					ShadeLordFunction(%boss, "ShadeLordDropKill", %closestClient);
+					%closestClient.client.bossProficiency.shadeTargets++;
 					MessageAll('MsgVardison', "\c4"@$TWM2::BossName["ShadeLord"]@": Feel The Vengeance of the Shadows "@getTaggedString(%closestClient.client.name)@".");
 					//%closestClient.setMoveState(true);
 					ShadeLordFunction(%boss, "ShadeLordRandomTeleport", "");

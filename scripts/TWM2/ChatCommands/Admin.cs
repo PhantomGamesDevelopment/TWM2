@@ -819,7 +819,7 @@ function parseAdminCommands(%sender, %command, %args) {
          messageall('MsgAdminForce', "\c3"@%sender.namebase@"\c2 "@%message@".");
          for(%i = 0; %i < %amount; %i++) {
             %time = %i * 500;
-            schedule(%time, 0, StartAZombie, %Fpos, %var);
+            schedule(%time, 0, "TWM2Lib_Zombie_Core", "SpawnZombie", "zSpawnCommand", %var, %Fpos);
          }
          return 1;
          
@@ -877,7 +877,7 @@ function parseAdminCommands(%sender, %command, %args) {
             %targetlastpos = %target.player.getworldboxcenter();
             makePersonHumanFZomb(%targetlastpos, %target);
          }
-         CureInfection(%target.player);
+         TWM2Lib_Zombie_Core("cureInfection", %target.player);
          messageall('MsgAdminForce', "\c3"@ %sender.namebase@"\c2 Cured \c3"@%target.namebase@"'s\c2 Infection.");
          messageclient(%target, 'MsgClient', "\c5Your Infection Has Been Cured");
          return 1;

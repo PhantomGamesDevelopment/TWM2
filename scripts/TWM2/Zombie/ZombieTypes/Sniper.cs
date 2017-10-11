@@ -1,3 +1,24 @@
+datablock PlayerData(SniperZombieArmor) : LightMaleHumanArmor {
+   boundingBox = "1.63 1.63 2.6";
+   maxDamage = 2.5;
+   minImpactSpeed = 35;
+   shapeFile = "bioderm_heavy.dts";
+
+   debrisShapeName = "bio_player_debris.dts";
+
+   //Foot Prints
+   decalData   = HeavyBiodermFootprint;
+   decalOffset = 0.4;
+
+   waterBreathSound = WaterBreathBiodermSound;
+
+   damageScale[$DamageType::M1700] = 2.0;
+
+	max[RepairKit]			= 0;
+	max[Mine]				= 0;
+	max[Grenade]			= 0;
+};
+
 datablock ShapeBaseImageData(ZSniperImage1) {
    shapeFile = "weapon_sniper.dts";
    emap = true;

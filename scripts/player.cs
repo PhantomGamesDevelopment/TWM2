@@ -2441,7 +2441,7 @@ function Armor::onNewDataBlock(%this,%obj)
 function Armor::onDisabled(%this,%obj,%state) {
    %obj.revived = 0;
    if(%obj.Infected == 1 && !%obj.iszombie){
-	  %obj.createTheZ = schedule(14000, %obj, "CreateZombie", %obj);
+	  %obj.createTheZ = schedule(14000, %obj, "TWM2Lib_Zombie_Core", "spawnZombie", "infectedplayer", %obj);
 	  %obj.revcheck = schedule(($CorpseTimeoutValue) - %fadeTime, %obj, "checkIfRevived", %obj);
    }
    else {
@@ -2982,10 +2982,10 @@ function Armor::onCollision(%this,%obj,%col,%forceVehicleNode)
 	      %Vector = vectorscale(%col.getvelocity(), 100);
 	      %obj.applyimpulse(%obj.getposition(), %Vector);
 	      %obj.Infected = 1;
-	      %obj.InfectedLoop = schedule(10, %obj, "InfectLoop", %obj);
+	      %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
 	      %obj.damage(0, %obj.position, 0.2, $DamageType::Zombie);
 	}
-	else if(%colarmortype $= "FZombieArmor" && %obj.Infected != 1 && %objiszomb != 1 && !%obj.rapierShield){
+	else if(%colarmortype $= "RavagerZombieArmor" && %obj.Infected != 1 && %objiszomb != 1 && !%obj.rapierShield){
 	      if(%obj.hit $= ""){
 		     %obj.hit = 1;
 		     %obj.setWhiteOut("0.5");
@@ -2993,7 +2993,7 @@ function Armor::onCollision(%this,%obj,%col,%forceVehicleNode)
 	      }
 	      else if(%obj.hit == 1){
 	   	     %obj.Infected = 1;
-	   	     %obj.InfectedLoop = schedule(10, %obj, "InfectLoop", %obj);
+	   	     %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
           }
           %Vector = vectorscale(%col.getvelocity(), 100);
 	      %obj.applyimpulse(%obj.getposition(), %Vector);
@@ -3003,7 +3003,7 @@ function Armor::onCollision(%this,%obj,%col,%forceVehicleNode)
 	      %Vector = vectorscale(%col.getvelocity(), 100);
 	      %obj.applyimpulse(%obj.getposition(), %Vector);
 	      %obj.Infected = 1;
-	      %obj.InfectedLoop = schedule(10, %obj, "InfectLoop", %obj);
+	      %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
 	      %obj.damage(0, %obj.position, 0.4, $DamageType::Zombie);
 	}
 	else if(%colarmortype $= "RapierZombieArmor" && %obj.grabbed != 1 && %objiszomb != 1 && !%obj.rapierShield){
@@ -3011,7 +3011,7 @@ function Armor::onCollision(%this,%obj,%col,%forceVehicleNode)
 	      if(%chance == 3 && %obj.Infected != 1){
 		     %obj.damage(0, %obj.position, 0.4, $DamageType::Zombie);
 		     %obj.Infected = 1;
-		     %obj.InfectedLoop = schedule(10, %obj, "InfectLoop", %obj);
+		     %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
 	      }
           else {
 		     %col.iscarrying = 1;
@@ -3024,21 +3024,21 @@ function Armor::onCollision(%this,%obj,%col,%forceVehicleNode)
 	      %Vector = vectorscale(%col.getvelocity(), 100);
 	      %obj.applyimpulse(%obj.getposition(), %Vector);
 	      %obj.Infected = 1;
-	      %obj.InfectedLoop = schedule(10, %obj, "InfectLoop", %obj);
+	      %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
 	      %obj.damage(0, %obj.position, 0.3, $DamageType::Zombie);
 	}
 	else if(%colarmortype $= "SummonerZombieArmor" && %obj.Infected != 1 && %objiszomb != 1 && !%obj.rapierShield){
 	      %Vector = vectorscale(%col.getvelocity(), 100);
 	      %obj.applyimpulse(%obj.getposition(), %Vector);
 	      %obj.Infected = 1;
-	      %obj.InfectedLoop = schedule(10, %obj, "InfectLoop", %obj);
+	      %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
 	      %obj.damage(0, %obj.position, 0.3, $DamageType::Zombie);
 	}
 	else if(%colarmortype $= "DemonUltraZombieArmor" && %obj.Infected != 1 && %objiszomb != 1 && !%obj.rapierShield){
 	      %Vector = vectorscale(%col.getvelocity(), 100);
 	      %obj.applyimpulse(%obj.getposition(), %Vector);
 	      %obj.Infected = 1;
-	      %obj.InfectedLoop = schedule(10, %obj, "InfectLoop", %obj);
+	      %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
 	      %obj.damage(0, %obj.position, 0.5, $DamageType::Zombie);
 	}
     else if((%colarmortype $= "LordRogZombieArmor" && %objiszomb != 1 && !%obj.rapierShield)) {
@@ -3098,7 +3098,7 @@ function Armor::onCollision(%this,%obj,%col,%forceVehicleNode)
 	      if(%obj.Infected != 1) {
 		     %obj.Infected = 1;
 		     %obj.damage(0, %obj.position, 0.8, $DamageType::Zombie);
-		     %obj.InfectedLoop = schedule(10, %obj, "InfectLoop", %obj);
+		     %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
 	      }
           else {
 		     %obj.damage(0, %obj.position, 1.2, $DamageType::Zombie);
@@ -3407,7 +3407,7 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
    // they exist as objects, go figure.
    if(%targetObject.rapiershield && (%damageType != $DamageType::Suicide)) {
       if(%targetObject.Infected) {
-         CureInfection(%targetObject);
+		 TWM2Lib_Zombie_Core("cureInfection", %targetObject);
       }
       return;
    }
@@ -3428,7 +3428,7 @@ function Armor::damageObject(%data, %targetObject, %sourceObject, %position, %am
    %armortype = %targetobject.getdatablock().getname();
    if (%damageType == $DamageType::ZAcid && %armortype !$= "ZombieArmor" && %armortype !$= "FZombieArmor" && %armortype !$= "LordZombieArmor" && %armortype !$= "DemonZombieArmor" && %armortype !$= "DemonMotherZombieArmor" && %armortype !$= "RapierZombieArmor" && %targetobject.infected != 1 && (%sourceObject.isZombie == 1 || %sourceObject.isBoss == 1)){
 	   %targetObject.Infected = 1;
-	   %targetObject.InfectedLoop = schedule(10, %targetObject, "InfectLoop", %targetObject);
+	   %targetObject.InfectedLoop = schedule(10, %targetObject, "TWM2Lib_Zombie_Core", "InfectLoop", %targetObject);
    }
    if (%damageType == $DamageType::RapierShield) {
       CreateBlood(%targetObject);

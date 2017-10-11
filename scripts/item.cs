@@ -233,79 +233,43 @@ function RepairKit::onUse(%data,%obj) {
 		%obj.decInventory(%data,1);
 		%obj.applyRepair(0.2);
 		messageClient(%obj.client, 'MsgRepairKitUsed', '\c2Health Patch Taken.');
-        }
+	}
 	else if (%obj.getDamageLevel() == 0 && %obj.infected && !%obj.onfire) {
 		%obj.decInventory(%data,1);
-        %obj.infected = 0;
-        if(isEventPending(%obj.infectedDamage))
-        {
-        cancel(%obj.infectedDamage);
-        %obj.infectedDamage = "";
-        %obj.beats = 0;
-        %obj.canZkill = 0;
-        %obj.setcancelimpulse = 1;
-        schedule(1000,0, "resetattackImpulse" ,%obj); //goodie
-        }
+		TWM2Lib_Zombie_Core("cureInfection", %obj);
 		messageClient(%obj.client, 'MsgRepairKitUsed', '\c2Infection Cure Taken.');
-        }
+	}
 	else if (%obj.getDamageLevel() == 0 && !%obj.infected && %obj.onfire) {
 		%obj.decInventory(%data,1);
-        %obj.onfire = 0;
+		%obj.onfire = 0;
 		messageClient(%obj.client, 'MsgRepairKitUsed', '\c2Burn Patch Taken.');
-        }
+	}
 	else if (%obj.getDamageLevel() != 0 && %obj.infected && !%obj.onfire) {
 		%obj.decInventory(%data,1);
 		%obj.applyRepair(0.2);
-        %obj.infected = 0;
-        if(isEventPending(%obj.infectedDamage))
-        {
-        cancel(%obj.infectedDamage);
-        %obj.infectedDamage = "";
-        %obj.beats = 0;
-        %obj.canZkill = 0;
-        %obj.setcancelimpulse = 1;
-        schedule(1000,0, "resetattackImpulse" ,%obj); //goodie
-        }
+		TWM2Lib_Zombie_Core("cureInfection", %obj);
 		messageClient(%obj.client, 'MsgRepairKitUsed', '\c2Health Patch And Infection Cure Taken.');
-        }
+	}
 	else if (%obj.getDamageLevel() != 0 && !%obj.infected && %obj.onfire) {
 		%obj.decInventory(%data,1);
 		%obj.applyRepair(0.2);
-        %obj.onfire = 0;
+		%obj.onfire = 0;
 		messageClient(%obj.client, 'MsgRepairKitUsed', '\c2Health Patch And Burn Patch Taken.');
-        }
+	}
 	else if (%obj.getDamageLevel() == 0 && %obj.infected && %obj.onfire) {
 		%obj.decInventory(%data,1);
 		%obj.onfire = 0;
-        %obj.infected = 0;
-        if(isEventPending(%obj.infectedDamage))
-        {
-        cancel(%obj.infectedDamage);
-        %obj.infectedDamage = "";
-        %obj.beats = 0;
-        %obj.canZkill = 0;
-        %obj.setcancelimpulse = 1;
-        schedule(1000,0, "resetattackImpulse" ,%obj); //goodie
-        }
+		TWM2Lib_Zombie_Core("cureInfection", %obj);
 		messageClient(%obj.client, 'MsgRepairKitUsed', '\c2Burn Patch And Infection Cure Taken.');
-        }
+	}
 	else if (%obj.getDamageLevel() != 0 && %obj.infected && %obj.onfire) {
 		%obj.decInventory(%data,1);
-        %obj.onfire = 0;
+		%obj.onfire = 0;
 		%obj.applyRepair(0.2);
-        %obj.infected = 0;
-        if(isEventPending(%obj.infectedDamage))
-        {
-        cancel(%obj.infectedDamage);
-        %obj.infectedDamage = "";
-        %obj.beats = 0;
-        %obj.canZkill = 0;
-        %obj.setcancelimpulse = 1;
-        schedule(1000,0, "resetattackImpulse" ,%obj); //goodie
-        }
+		TWM2Lib_Zombie_Core("cureInfection", %obj);
 		messageClient(%obj.client, 'MsgRepairKitUsed', '\c2Health Patch, Burn Patch, And Infection Cure Taken.');
-        }
 	}
+}
 
 //----------------------------------------------------------------------------
 

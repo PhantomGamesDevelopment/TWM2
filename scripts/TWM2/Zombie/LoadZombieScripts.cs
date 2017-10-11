@@ -7,7 +7,6 @@ for($file = findFirstFile($search); $file !$= ""; $file = findNextFile($search))
    exec("scripts/TWM2/Zombie/ZombieTypes/" @$type @ ".cs");
 }
 
-exec("scripts/TWM2/Zombie/ZombieCreation.cs");
-exec("scripts/TWM2/Zombie/MiscZombieFunctions.cs");
+exec("scripts/TWM2/Zombie/ZombieCore.cs");
 exec("scripts/TWM2/Zombie/PlayerZombieFunctions.cs");
 exec("scripts/TWM2/Zombie/PlayerZombieAttacks.cs");

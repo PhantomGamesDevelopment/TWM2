@@ -11,6 +11,7 @@ exec("serverControl.cs");                          //Server Settings
 exec("scripts/TWM2/Systems/Directorate.cs");        //Client Container Objects
 exec("scripts/TWM2/Systems/AdvancedRankSystem.cs"); //Adv. Ranks
 exec("scripts/TWM2/Systems/MainControl.cs");        //TWM2 Core Functions
+exec("scripts/TWM2/Systems/LivingWorldMode.cs");    //Living World Mode (Construction 2.0)
 exec("scripts/TWM2/Systems/ObjectDamage.cs");       //Object Damage Functioning
 exec("scripts/TWM2/Systems/Scoremenucmds.cs");      //Score Menu
 exec("scripts/TWM2/Systems/BossSystem.cs");         //Bosses

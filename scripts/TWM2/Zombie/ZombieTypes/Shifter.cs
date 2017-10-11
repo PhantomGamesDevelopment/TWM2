@@ -63,12 +63,13 @@ function ShifterZombiemovetotarget(%zombie){
 
     //tis shift timez :)
     if(%closestDistance > 200 || (%zombie.getVelocity() == 0 && !%zombie.RecentShift)) {
-        %zombie.setVelocity("0 0 10");
-       	%zombie.startFade(500, 0, true);
-        %zombie.schedule(600, "SetPosition", VectorAdd(%closestClient.getPosition(), vectorAdd("0 0 3", TWM2Lib_MainControl("getRandomPosition", "5\t1"))));
-        %zombie.startFade(750, 0, false);
+		%zombie.setMoveState(true);
+       	%zombie.startFade(1500, 0, true);
+        %zombie.schedule(1600, "SetPosition", VectorAdd(%closestClient.getPosition(), vectorAdd("0 0 3", TWM2Lib_MainControl("getRandomPosition", "5\t1"))));
+        %zombie.startFade(1750, 0, false);
+		%zombie.schedule(2000, setMoveState, false);
         %zombie.RecentShift = 1;
-        Schedule(3500, 0, "eval", ""@%zombie@".RecentShift=0;");
+        Schedule(10500, 0, "eval", ""@%zombie@".RecentShift=0;");
     }
 
 	if(%closestDistance <= $zombie::lungDist && %zombie.canjump == 1){

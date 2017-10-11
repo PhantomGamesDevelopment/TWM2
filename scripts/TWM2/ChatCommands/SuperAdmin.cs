@@ -83,6 +83,10 @@ function parseSuperAdminCommands(%sender, %command, %args) {
          if (!%sender.issuperadmin){
             return 3;
          }
+		 if($Host::LivingWorldMode == 1) {
+            messageClient(%sender, 'MsgClient', '\c2Cannot spawn bosses in living world mode');
+            return 1;		 
+		 }
          if($TWM::PlayingHellJump || $TWM::PlayingHorde) {
             messageClient(%sender, 'MsgClient', '\c2Cannot spawn bosses in horde or helljump');
             return 1;

@@ -2856,6 +2856,27 @@ function DefaultGame::sendGameVoteMenu( %game, %client, %key )
 		messageClient( %client, 'MsgVoteItem', "", %key, 'VotePurebuild', 'disable pure building', '[\c1pure\c0] Vote to Disable Pure Building' );
 	 else
 		messageClient( %client, 'MsgVoteItem', "", %key, 'VotePurebuild', 'enable pure building', '[\c1pure\c0] Vote to Enable Pure Building' );
+	
+	 //Phantom139: TWM2 3.9.2: Living World
+	 if($CurrentMissionType $= "Construction") {
+		if($Host::Purebuild == 0) {
+			if($Host::LivingWorldMode == 1) {
+				messageClient( %client, 'MsgVoteItem', "", %key, 'VoteLivingWorldMode', 'disable living world mode', '[\c1pure\c0] Vote to Disable Living World Mode' );
+			}
+			else {
+				messageClient( %client, 'MsgVoteItem', "", %key, 'VoteLivingWorldMode', 'enable living world mode', '[\c1pure\c0] Vote to Enable Living World Mode' );
+			}
+		}
+		else {
+			if($Host::LivingWorldMode == 1) {
+				messageClient( %client, 'MsgVoteItem', "", %key, 'VoteLivingWorldMode', 'disable living world mode', '[\c1pure\c0] Vote to Disable Living World Mode' );
+			}
+			else {
+				messageClient( %client, 'MsgVoteItem', "", %key, 'VoteLivingWorldMode', 'enable living world mode', '[\c1pure\c0] Vote to Enable Living World Mode (Will Disable Purebuild)' );
+			}
+		}
+	 }
+	 
 	if ( $Host::ExpertMode == 1)
 		messageClient( %client, 'MsgVoteItem', "", %key, 'VoteExpertMode', 'disable expert mode', '[\c1pure\c0] Vote to Disable Expert Mode' );
 	else
@@ -2887,10 +2908,27 @@ function DefaultGame::sendGameVoteMenu( %game, %client, %key )
 	    else
 	       messageClient( %client, 'MsgVoteItem', "", %key, 'VoteTeamDamage', 'enable team damage', 'Enable Team Damage' );
 
-	  if ( $Host::Purebuild == 1 )
+	  if ( $Host::Purebuild == 1 ) {
 	     messageClient( %client, 'MsgVoteItem', "", %key, 'VotePurebuild', 'disable pure building', '[\c1pure\c0] Disable Pure Building' );
+         if($CurrentMissionType $= "Construction") { 
+			if($Host::LivingWorldMode == 1) {
+				messageClient( %client, 'MsgVoteItem', "", %key, 'VoteLivingWorldMode', 'disable living world mode', '[\c1LWM\c0] Disable Living World Mode' );
+			}
+			else {
+				messageClient( %client, 'MsgVoteItem', "", %key, 'VoteLivingWorldMode', 'enable living world mode', '[\c1LWM\c0] Enable Living World Mode (Will Disable Purebuild)' );
+			}
+		 }
+	  }
 	  else
 	     messageClient( %client, 'MsgVoteItem', "", %key, 'VotePurebuild', 'enable pure building', '[\c1pure\c0] Enable Pure Building' );
+         if($CurrentMissionType $= "Construction") { 
+			if($Host::LivingWorldMode == 1) {
+				messageClient( %client, 'MsgVoteItem', "", %key, 'VoteLivingWorldMode', 'disable living world mode', '[\c1LWM\c0] Disable Living World Mode' );
+			}
+			else {
+				messageClient( %client, 'MsgVoteItem', "", %key, 'VoteLivingWorldMode', 'enable living world mode', '[\c1LWM\c0] Enable Living World Mode' );
+			}
+		 }	 
       }
    }
 
@@ -3018,6 +3056,7 @@ function DefaultGame::evalVote(%game, %typeName, %admin, %arg1, %arg2, %arg3, %a
       case                   "voteGreedMode": %game.voteGreedMode(%admin, %arg1, %arg2, %arg3, %arg4);
       case                   "voteHoardMode": %game.voteHoardMode(%admin, %arg1, %arg2, %arg3, %arg4);
       case                   "votePurebuild": %game.votePurebuild(%admin, %arg1, %arg2, %arg3, %arg4);
+      case             "VoteLivingWorldMode": %game.voteLivingWorldMode(%admin, %arg1, %arg2, %arg3, %arg4);	  
       case                 "voteCascadeMode": %game.voteCascadeMode(%admin, %arg1, %arg2, %arg3, %arg4);
       case                  "voteExpertMode": %game.voteExpertMode(%admin, %arg1, %arg2, %arg3, %arg4);
       case                    "VoteVehicles": %game.VoteVehicles(%admin, %arg1, %arg2, %arg3, %arg4);
@@ -3043,8 +3082,11 @@ function DefaultGame::evalVote(%game, %typeName, %admin, %arg1, %arg2, %arg3, %a
    }
 }
 
-function DefaultGame::voteStartBoss(%game, %admin, %boss, %abbrev)
-{
+function DefaultGame::voteStartBoss(%game, %admin, %boss, %abbrev) {
+   if($Host::LivingWorldMode == 1) {
+	  messageAll('MsgVoteFailed', "\c2Boss spawn vote not allowed in Living World Mode, Vote Failed...");
+	  return;
+   }
    if(%admin)
    {
       messageAll('MsgAdminForce', "\c2"@%admin.namebase@" has forcibly spawned "@%boss@" (TWM 2 Boss).");
@@ -3238,6 +3280,57 @@ function DefaultGame::votePurebuild(%game, %admin)
    }
    if(%setto !$= "")
       logEcho("purebuild "@%setto SPC %cause);
+}
+
+//------------------------------------------------------------------------------
+function DefaultGame::voteLivingWorldMode(%game, %admin) {
+	%setto = "";
+	%cause = "";
+	if(%admin) {
+		if($Host::LivingWorldMode == 1) {
+			messageAll('MsgAdminForce', "\c2"@%admin.namebase@" has disabled living world mode.");
+			livingWorldOff();
+			%setto = "disabled";
+		}
+		else {
+			messageAll('MsgAdminForce', "\c2"@%admin.namebase@" has enabled living world mode.");
+			livingWorldOn();
+			%setto = "enabled";
+			if($Host::Purebuild == 1) {
+				messageAll('MsgAdminForce', "\c2Purebuild has been forced off due to living world mode being enabled.");
+				purebuildOff();
+			}
+		}
+		%cause = "(admin)";
+	}
+	else {
+		%totalVotes = %game.totalVotesFor + %game.totalVotesAgainst;
+		if(%totalVotes > 0 && (%game.totalVotesFor / (ClientGroup.getCount() - $HostGameBotCount)) > ($Host::VotePasspercent / 100)) {
+			if($Host::Purebuild == 1) {
+				messageAll('MsgVotePassed', '\c2Living world mode was disabled by vote.');
+				livingWorldOff();
+				%setto = "disabled";
+			}
+			else {
+				messageAll('MsgVotePassed', '\c2Living world mode was enabled by vote.');
+				livingWorldOn();
+				%setto = "enabled";
+				if($Host::Purebuild == 1) {
+					messageAll('MsgAdminForce', "\c2Purebuild has been forced off due to living world mode being enabled.");
+					purebuildOff();
+				}				
+			}
+			%cause = "(vote)";
+		}
+		else {
+			if($Host::Purebuild == 1)
+				messageAll('MsgVoteFailed', '\c2Disable living world mode vote did not pass: %1 percent.', mFloor(%game.totalVotesFor/(ClientGroup.getCount() - $HostGameBotCount) * 100));
+			else
+				messageAll('MsgVoteFailed', '\c2Enable living world mode vote did not pass: %1 percent.', mFloor(%game.totalVotesFor/(ClientGroup.getCount() - $HostGameBotCount) * 100));
+		}
+	}
+	if(%setto !$= "")
+		logEcho("livingworldmode "@%setto SPC %cause);
 }
 
 //------------------------------------------------------------------------------

@@ -263,7 +263,7 @@ function VegenorAttack_FUNC(%att, %args) {
          //schedule the next one
          schedule(30000, 0, "VegenorAttack_FUNC", "Summon", %z);
          //--------------------
-         %type = getRandomZombieType("1 2 3 4 5 9 12 13 14");
+         %type = TWM2Lib_Zombie_Core("getRandomZombieType", "1 2 3 4 5 9 12 13 14");
          %msg = getrandom(1,2);
          switch(%msg) {
             case 1:
@@ -274,10 +274,10 @@ function VegenorAttack_FUNC(%att, %args) {
          for(%i = 0; %i < 6; %i++) {
             %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
             %fpos = vectoradd("0 0 5",%pos);
-            StartAZombie(%fpos, %type);
+            TWM2Lib_Zombie_Core("SpawnZombie", "zSpawnCommand", %type, %fpos)
          }
          %z.setMoveState(true);
-         %z.setActionThread($Zombie::RAAMThread, true);
+         %z.setActionThread($Zombie::RogThread, true);
          %z.schedule(3500, "setMoveState", false);
       case "SetFire":
          %t = getWord(%args, 0);

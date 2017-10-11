@@ -1,3 +1,26 @@
+//LordYvex.cs
+//Phantom139
+//TWM2
+
+//Contains all of the datablocks and functioning for the Lord Yvex boss
+
+$Boss::Proficiency["Yvex", 0] = "Team Bronze\t1000\tDefeat Lord Yvex with your team dying no more than 25 times";
+$Boss::ProficiencyCode["Yvex", 0] = "$TWM2::BossManager.bossKills < 25";
+$Boss::Proficiency["Yvex", 1] = "Team Silver\t5000\tDefeat Lord Yvex with your team dying no more than 15 times";
+$Boss::ProficiencyCode["Yvex", 1] = "$TWM2::BossManager.bossKills < 15";
+$Boss::Proficiency["Yvex", 2] = "Team Gold\t10000\tDefeat Lord Yvex with your team dying no more than 10 times";
+$Boss::ProficiencyCode["Yvex", 2] = "$TWM2::BossManager.bossKills < 10";
+$Boss::Proficiency["Yvex", 3] = "Foolproof\t25000\tDefeat Lord Yvex without being killed by his Marvolic Pulse attack";
+$Boss::ProficiencyCode["Yvex", 3] = "[bProf].pulseDeaths == 0";
+$Boss::Proficiency["Yvex", 4] = "I'll Stick With Bullets\t10000\tDefeat Lord Yvex without using the Aegis of Dawn";
+$Boss::ProficiencyCode["Yvex", 4] = "[bProf].aegisUses == 0";
+$Boss::Proficiency["Yvex", 5] = "Sleepless\t25000\tDefeat Lord Yvex without falling victim to his nightmare once";
+$Boss::ProficiencyCode["Yvex", 5] = "[bProf].totalNightmareTicks == 0";
+
+//TWM2 3.9.2: Boss Scaling Factor
+$Boss::DamageScaling["Yvex"] = 5.0;
+$Boss::ScaleReduction["Yvex"] = 0.15;
+
 //DATABLOCKS
 datablock ParticleData(InflictionNightmareGlobeSmoke) {
    dragCoefficient = 50;/////////-----------------------
@@ -672,7 +695,7 @@ function YvexAttack_FUNC(%att, %args) {
          //schedule the next one
          schedule(40000, 0, "YvexAttack_FUNC", "ZombieSummon", %z);
          //--------------------
-         %type = getRandomZombieType("1 2 3 4 5 9 12 13");
+         %type = TWM2Lib_Zombie_Core("getRandomZombieType", "1 2 3 4 5 9 12 13");
          %msg = getrandom(1, 3);
          switch(%msg) {
             case 1:
@@ -685,10 +708,10 @@ function YvexAttack_FUNC(%att, %args) {
          for(%i = 0; %i < 5; %i++) {
             %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
             %fpos = vectoradd("0 0 5",%pos);
-            StartAZombie(%fpos, %type);
+            TWM2Lib_Zombie_Core("SpawnZombie", "zSpawnCommand", %type, %fpos);
          }
          %z.setMoveState(true);
-         %z.setActionThread($Zombie::RAAMThread, true);
+         %z.setActionThread($Zombie::RogThread, true);
          %z.schedule(3500, "setMoveState", false);
          
       case "FireCurse":
@@ -862,6 +885,8 @@ function Yvexnightmareloop(%zombie,%viewer) {
    %viewer.player.setActionThread(%emote,true);
    %viewer.player.setWhiteout(0.8);
    %viewer.player.setDamageFlash(0.5);
+   
+   %viewer.bossProficiency.totalNightmareTicks++;
 
    %zombie.playShieldEffect("1 1 1");
    serverPlay3D(NightmareScreamSound, %viewer.player.position);
@@ -891,6 +916,8 @@ function KillerPulse::onCollision(%data,%projectile,%targetObject,%modifier,%pos
       %targetObject.throwWeapon();
       %targetObject.clearinventory();
       YvexAttack_FUNC("KillLoop", %targetObject);
+	  
+	  %targetObject.client.bossProficiency.pulseDeaths++;
    }
 }
 
@@ -900,7 +927,7 @@ function YvexZombieMakerMissile::OnExplode(%data, %proj, %pos, %mod) {
    %c.schedule(%rand * 750, "delete");
    for(%i = 0; %i < %rand; %i++) {
       %time = %i * 750;
-      %type = getRandomZombieType("1 2 3 4 5 9 12 13");
-      schedule(%time, 0, "StartAZombie", vectoradd(%pos, "0 0 1"), %type);
+      %type = TWM2Lib_Zombie_Core("getRandomZombieType", "1 2 3 4 5 9 12 13");
+	  schedule(%time, 0, "TWM2Lib_Zombie_Core", "SpawnZombie", "zSpawnCommand", %type, vectorAdd(%pos, "0 0 1"));
    }
 }

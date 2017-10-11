@@ -1,6 +1,6 @@
 //TWM2 Functions
-$TWM2::Version = 3.91;
-$TWM2::ModVersionString = "3.91 {Dev}";
+$TWM2::Version = 3.92;
+$TWM2::ModVersionString = "3.92 {Dev}";
 
 function TWM2Lib_MainControl(%functionName, %arguments) {
     switch$(strlwr(%functionName)) {
@@ -479,21 +479,6 @@ function serverCmdCheckHTilt(%client) {
 
 function serverCmdCheckendTilt(%client) {
 
-}
-
-function CureInfection(%player) {
-   if(%player.infected) {
-      %player.infected = 0;
-      if(isEventPending(%player.infectedDamage)) {
-         cancel(%player.infectedDamage);
-         %player.infectedDamage = "";
-         %player.beats = 0;
-         %player.canZkill = 0;
-         cancel(%player.zombieAttackImpulse);
-         %player.setcancelimpulse = 1;
-         schedule(5000,0, "eval", ""@%player@".setcancelimpulse=0;"); //goodie
-      }
-   }
 }
 
 function DoMedalCheck(%client, %image) {

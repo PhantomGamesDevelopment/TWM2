@@ -23,6 +23,19 @@
 //    - Shadow Orb at all Phases
 //    - Shadow Orb regenerates Vardison's HP
 
+$Boss::Proficiency["Vardison3", 0] = "Team Bronze\t1000\tDefeat Lord Vardison with your team dying no more than 25 times";
+$Boss::ProficiencyCode["Vardison3", 0] = "$TWM2::BossManager.bossKills < 25";
+$Boss::Proficiency["Vardison3", 1] = "Team Silver\t5000\tDefeat Lord Vardison with your team dying no more than 15 times";
+$Boss::ProficiencyCode["Vardison3", 1] = "$TWM2::BossManager.bossKills < 15";
+$Boss::Proficiency["Vardison3", 2] = "Team Gold\t10000\tDefeat Lord Vardison with your team dying no more than 10 times";
+$Boss::ProficiencyCode["Vardison3", 2] = "$TWM2::BossManager.bossKills < 10";
+$Boss::Proficiency["Vardison3", 3] = "Demon Slayer\t25000\tDefeat Lord Vardison's Third Phase without dying, and dealing more than 15% damage to him";
+$Boss::ProficiencyCode["Vardison3", 3] = "[bProf].bossDeaths == 0 && [dPerc] > 15";
+$Boss::Proficiency["Vardison3", 4] = "Shadow Disconnect\t10000\tDeny Lord Vardison all Shadow Orb detonations";
+$Boss::ProficiencyCode["Vardison3", 4] = "$TWM2::VardisonDifficulty >= 2 && [bProf].orbDetonates == 0";
+$Boss::Proficiency["Vardison3", 5] = "The Unholy One\t75000\tDefeat Lord Vardison's Third Phase without dying, and dealing more than 15% damage to him on WTF difficulty";
+$Boss::ProficiencyCode["Vardison3", 5] = "$TWM2::VardisonDifficulty == 4 && [bProf].bossDeaths == 0 && [dPerc] > 15";
+
 $TWM2::VardisonDifficulty = 1;
 $TWM2::Vardison_DMsg[1] = "Lord Vardison Fight [EASY]: The Standard Battle... Work Togther and Be Victorious.";
 $TWM2::Vardison_DMsg[2] = "Lord Vardison Fight [NORMAL]: Vardison Has Enhanced His Skills, Will you prove stronger?";
@@ -1031,7 +1044,7 @@ function VardisonDoMinionSummon(%Boss) {
 }
 
 function SpawnVMinion(%position) {
-   %minion = StartAZombie(%position, 17);
+   %minion = TWM2Lib_Zombie_Core("SpawnZombie", "zSpawnCommand", 17, %position);
    if(isObject(%minion)) {
       //Apply minion settings & increase count
       $TWM2::VardisonManager.minionCount++;
@@ -1683,6 +1696,7 @@ function VardisonManager::orbKill(%this, %boss, %orb) {
    %restoreCount = 0;
    for(%i = 0; %i < ClientGroup.getCount(); %i++) {
       %cl = ClientGroup.getObject(%i);
+	  %cl.bossProficiency.orbDetonates++;
       if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {
          //Bye Bye :)
          %cl.player.rapierShield = false;
@@ -1697,7 +1711,9 @@ function VardisonManager::orbKill(%this, %boss, %orb) {
          }
       }
    }
-   MessageAll('msgRestore', "\c5Lord Vardison has absorbed the life energy of "@%restoreCount@" combatants.");
+   if($TWM2::Vardison_OrbRegenHP[$TWM2::VardisonDifficulty]) {
+      MessageAll('msgRestore', "\c5Lord Vardison has absorbed the life energy of "@%restoreCount@" combatants.");
+   }
    %wipeEmit = new ParticleEmissionDummy(){
       position = %orb.getPosition();
       dataBlock = "defaultEmissionDummy";
