@@ -31,11 +31,11 @@ datablock PlayerData(ZombieArmor) : LightMaleHumanArmor {
 
 function ZombieArmor::AI(%datablock, %zombie) {
 	//Normal zombies do not employ any "AI" other than target and move, fork off to main move function
-	%datablock.MoveToTarget(%zombie);
+	%datablock.Move(%zombie);
 }
 
-function ZombieArmor::MoveToTarget(%datablock, %zombie) {
-	if(!isobject(%zombie) || %zombie.getState() $= "dead") {
+function ZombieArmor::Move(%datablock, %zombie) {
+	if(!isObject(%zombie) || %zombie.getState() $= "dead") {
 		return;
 	}
 	%pos = %zombie.getWorldBoxCenter();
@@ -56,7 +56,7 @@ function ZombieArmor::MoveToTarget(%datablock, %zombie) {
 				serverPlay3d("ZombieHOWL", %zombie.getWorldBoxCenter());
 			}
 		}
-		%vector = TWM2Lib_Zombie_Core("zombieGetFacingDirection", %zombie, %closestClient, %pos);
+		%vector = TWM2Lib_Zombie_Core("zombieGetFacingDirection", %zombie, %closestClient.getPosition());
 	
 		if(Game.CheckModifier("SuperLunge") == 1) {
 			%ld = $Zombie::LungeDistance * 5;
@@ -85,7 +85,7 @@ function ZombieArmor::MoveToTarget(%datablock, %zombie) {
 	}
 	else if(%zombie.hastarget == 1) {
 		%zombie.hastarget = 0;
-		%zombie.zombieRmove = schedule($Zombie::SpeedUpdateTime, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
+		%zombie.zombieRmove = schedule(%zombie.updateTimeFrequency, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
 	}
-	%zombie.moveloop = %datablock.schedule($Zombie::SpeedUpdateTime, %datablock, "MoveToTarget", %zombie);
+	%zombie.moveloop = %datablock.schedule(%zombie.updateTimeFrequency, %datablock, "Move", %zombie);
 }

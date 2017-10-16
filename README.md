@@ -70,10 +70,14 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
   * Global
     * Massive "spring cleaning" of the zombie code files, fixing a bunch of bad coding practices and a few logic errors.
     * Redid the zombie targeting and movement methods to make them much "smoother"
-	  * This was done by slicing the movement loop down to 100ms from 500ms.
-	  * To compensate, all zombie speeds were reduced by 5x.
+	  * Scaled down zombie movement times on some types to smooth movement
+	  * To compensate for speed, these zombies saw a reduction of total speed to match the factor
+	  * This should result in smoother looking movement at the same speed
 	* Moved all functioning into a core control script, added additional modifiers and flags to grant more customizability to zombies
-	* **Only Normal Zombies are functional at this moment in time**
+	* **WARNING: Only specific zombies are functional at this moment in time**
+  * Ravager
+    * Ravagers will now perform ambush style attacks on targets, making them much more challenging
+	* Increased the XP reward from killing ravager zombies	
 * Added Boss Proficiency
   * Hidden challenges embedded in boss fights that award additional experience for completing tough feats
   * For example: Defeat the shade lord without dying by the elemental shades
@@ -89,8 +93,10 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
 	  * This will allow solo players a fighting chance to actually fight against the bosses
 	  * For the time being, this change will only apply to the Lord Yvex fight, if testing goes well, I will adapt to other bosses
   * Colonel Windshear
-    * Addressed a silly bug with the Colonel Windshear fight that caused the platform turrets to be on a different team than the gunship
-      * The Harbinger Gunship allies will now properly target players instead of shooting their leader
+    * Addressed a silly bug with the Colonel Windshear fight that caused the platform turrets to be on a different team than the gunship itself
+      * This will address the following two problems:
+	    * 1. Turrets targeting the gunship allies
+		* 2. Gunship allies targeting the boss
 	* Colonel Windshear can now call for additional air support during the fight
   * Stormrider
 	* Re-did his ground detection script to "hopefully" eradicate those funny moments when he suicide bombs the ground, ending the fight

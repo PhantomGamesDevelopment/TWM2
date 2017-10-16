@@ -20,7 +20,7 @@ $Zombie::FallDieHeight = -500;
 $Zombie::BaseSpeed = 150;
 //$Zombie::TypeSpeed[#]: The speed of a specific zombie type instance, overrides BaseSpeed for that specific type
 $Zombie::TypeSpeed[2] = 300;
-$Zombie::TypeSpeed[3] = 800;
+$Zombie::TypeSpeed[3] = 4000;
 $Zombie::TypeSpeed[4] = 240;
 $Zombie::TypeSpeed[5] = 300;
 
@@ -32,8 +32,10 @@ $Zombie::SpeedMultiplier[2] = 0.6;
 $Zombie::SpeedMultiplier[3] = 0.8;
 $Zombie::SpeedMultiplier[4] = 0.75;
 
-//$Zombie::SpeedUpdateTime: How long (in ms) between each zombie update. The lower the number, the smoother the movement, but the more processing needed
-$Zombie::SpeedUpdateTime = 100;
+//$Zombie::BaseSpeedUpdateTime: How long (in ms) between each zombie update. The lower the number, the smoother the movement, but the more processing needed
+$Zombie::BaseSpeedUpdateTime = 100;
+//$Zombie::SpeedUpdateTime[#]: An override to the base update type, use for specific types that need slower or faster processing between AI steps
+$Zombie::SpeedUpdateTime[3] = 500;
 
 //$Zombie::LungeDistance: How far (m) a zombie must be to lunge at a target
 $Zombie::LungeDistance = 10;
@@ -41,6 +43,11 @@ $Zombie::LungeDistance = 10;
 $Zombie::LordGrabDistance = 5;
 //$Zombie::RapierUpwardScaling: How fast a rapier zombie will ascend when holding a player
 $Zombie::RapierUpwardScaling = 750;
+
+//$Zombie::ZombieLordShieldHealth: How much health the zombie lord energy barrier hasCP
+$Zombie::ZombieLordShieldHealth = 10.0;
+//$Zombie::ZombieLordShieldEnergy: How much energy the shield starts with. Note: Multiply this value by $Zombie::SpeedUpdateTime[3] to determine how long in MS the shield will be up.
+$Zombie::ZombieLordShieldEnergy = 50;
 
 //MISC Globals, Do not edit.
 $Zombie::killpoints = 5;
@@ -188,8 +195,10 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%arg1.canJump = %arg3;
 				case "recentshift":
 					%arg1.recentShift = %arg3;
+				case "canshield":
+					%arg1.canShield = %arg3;
 					
-		//lookForTarget(%zombie): Identify the closest target, and the distance to that target
+		//lookForTarget(%zombie, [%pilot], [%groundVeh]): Identify the closest target, and the distance to that target
 		case "lookfortarget":
 			if(!isObject(%arg1) || %arg1.getState() $= "dead") {
 				return;
@@ -200,12 +209,49 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 				%arg1.scriptKill(0);
 				return;
 			}
+			//Are we looking for pilots?
+			if(isSet(%arg2) && %arg2 == true) {
+				%needPilot = true;
+				if(isSet(%arg3)) {
+					if(%arg3 == true) {
+						%needTank = true;
+					}
+					else {
+						%needJet = true;
+					}
+				}
+			}
 			%clientCount = ClientGroup.getCount();
 			%closestClient = -1;
 			%closestDistance = 999999;
 			for(%i = 0; %i < ClientGroup.getCount(); %i++) {
 				%cl = ClientGroup.getObject(%i);
 				if(isObject(%cl.player) && %cl.player.getState() !$= "dead" && TWM2Lib_Zombie_Core("ZombieTargetingAllowed", %arg1, %cl.player)) {
+					if(%needPilot) {
+						//Are we a pilot?
+						if(!%cl.player.isPilot()) {
+							//Nope...
+							continue;
+						}
+						%vObj = %cl.vehicleMounted;
+						if(isObject(%vObj)) {
+							//Check the type...
+							if(%needTank) {
+								if(%vObj.classname !$= "HoverVehicle" && %vObj.classname !$= "WheeledVehicle") {
+									continue;
+								}
+							}
+							else if(%needJet) {
+								if(%vObj.classname !$= "FlyingVehicle") {
+									continue;
+								}
+							}
+						}
+						else {
+							//Not mounted... move along
+							continue;
+						}
+					}
 					%vDist = vectorDist(%worldPos, %cl.player.getWorldBoxCenter());
 					if(%vDist > 0 && %vDist < %closestDistance) {
 						%closestClient = %cl;
@@ -231,20 +277,21 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			//NOTE: If you want to add additional targeting constraints, do so here.
 			return true;
 			
-		//zombieGetFacingDirection(%zombie, %player, %position): Fetch the direction the zombie needs to look at for a specific player target
+		//zombieGetFacingDirection(%zombie, %lookPos): Rotate a zombie object to the correct "look" direction
+		// NOTE: I revised this function to be a lot more effective, and to allow having zombies able to do lookAt when moving to non-player positions
 		case "zombiegetfacingdirection":
 			if(!isObject(%arg1) || %arg1.getState() $= "dead") {
 				return;
 			}
 			//
-			if(isObject(%arg2) && %arg2.getState !$= "dead") {
-				%tPos = %arg2.getPosition();
-			}
-			else {
+			if(!isSet(%arg2)) {
 				%tPos = TWM2Lib_MainControl("RMPG");
 			}
+			else {
+				%tPos = %arg2;
+			}
 			//
-			%vec = vectorNormalize(vectorSub(%tPos, %arg3));
+			%vec = vectorNormalize(vectorSub(%tPos, %arg1.getWorldBoxCenter()));
 			%vx = getWord(%vector, 0)
 			%vy = getWord(%vector, 1)
 			%nvx = %vy
@@ -463,7 +510,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			}			
 			//Post spawn arguments
 			%zombie.team = 30;
-			%zname = $TWM2::ZombieName[%type]; // <- To Hosts, Enjoy, You can
+			%zname = $TWM2::ZombieName[%spawnType]; // <- To Hosts, Enjoy, You can
 											   //Change the Zombie Names now!!!
 			%zombie.target = createTarget(%zombie, %zname, "", "Derm3", '', %zombie.team, PlayerSensor);
 			setTargetSensorData(%zombie.target, PlayerSensor);
@@ -504,6 +551,11 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			else {
 				%zombie.speed = $Zombie::BaseSpeed;
 			}
+			
+			if(!isSet($Zombie::SpeedUpdateTime[%spawnType])) {
+				%zombie.updateTimeFrequency = $Zombie::BaseSpeedUpdateTime;
+			}
+			%zombie.updateTimeFrequency = $Zombie::SpeedUpdateTime[%spawnType];			
 
 			%zombie.getDatablock().AI(%zombie);
 			return %zombie;

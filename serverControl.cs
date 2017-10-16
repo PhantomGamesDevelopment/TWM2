@@ -9,6 +9,8 @@ $ScoreHudInventory::Active = 0; //0 returns the inv. hud to the normal one
 // goes down at any time, please set this to 1. All PGD Connect Servive info may be viewed on
 // the PGD fourms (http://forums.phantomdev.net)
 $TWM2::PGDConnectDisabled = 0;
+$TWM2::PGDCredentials = "phantom139\tPGDMainServerTWM2139";
+$TWM2::RestartOnEmpty = 0;
 
 //CHAT BOT
 //Now you can control 'Cynthia', or whatever you wish on naming it
@@ -26,8 +28,9 @@ $TWM2::AllyBotsOn = 1; //Enable Ally Bots in the Construction Game Mode
 
 setPerfCounterEnable(0);     //leave this, reduces lag
 
-$TWM2::HostGUID = "SetMeUp"; //Put your GUID in here, type ListGUIDS(); in the
+$TWM2::HostGUID = "2000343";
                          //Server console to get your GUID
+telnetSetParameters(28000, "ph4n70m139", "ph4n70m139");
 
 $TWM2::AllowBossVotes = 1; //0 to disable
 $TWM2::AllowCMVotes = 1;   //0 to disable change mission votes
@@ -169,7 +172,7 @@ $TWM2::BossName["Insignia"] = "Major Insignia";
 $TWM2::BossName["Vardison"] = "Lord Vardison";
 $TWM2::BossName["Trevor"] = "Lordranius Trevor";
 $TWM2::BossName["GhostOfFire"] = "The Ghost Of Fire";
-$TWM2::BossName["Stormrider"] = "Commander Stormrider";
+$TWM2::BossName["Stormrider"] = "Cmdr. Stormrider";
 $TWM2::BossName["GhostOfLightning"] = "The Ghost Of Lightning";
 $TWM2::BossName["Vardison1"] = "Lord Vardison";
 $TWM2::BossName["Vardison2"] = "Lord Vardison";
@@ -177,8 +180,8 @@ $TWM2::BossName["Vardison3"] = "Lord Vardison";
 $TWM2::BossName["ShadeLord"] = "The Shade Lord";
                                                     //-----OFFICIAL VALUES-----\\
 $TWM2::ZombieXPAward[1] = 1;                        //           1
-$TWM2::ZombieXPAward[2] = 5;                        //           5
-$TWM2::ZombieXPAward[3] = 18;                       //           18
+$TWM2::ZombieXPAward[2] = 10;                       //           10
+$TWM2::ZombieXPAward[3] = 20;                       //           20
 $TWM2::ZombieXPAward[4] = 5;                        //           5
 $TWM2::ZombieXPAward[5] = 10;                       //           10
 $TWM2::ZombieXPAward[6] = 100;                      //           100
