@@ -9,7 +9,7 @@ $ScoreHudInventory::Active = 0; //0 returns the inv. hud to the normal one
 // goes down at any time, please set this to 1. All PGD Connect Servive info may be viewed on
 // the PGD fourms (http://forums.phantomdev.net)
 $TWM2::PGDConnectDisabled = 0;
-$TWM2::PGDCredentials = "phantom139\tPGDMainServerTWM2139";
+$TWM2::PGDCredentials = "";
 $TWM2::RestartOnEmpty = 0;
 
 //CHAT BOT
@@ -28,9 +28,7 @@ $TWM2::AllyBotsOn = 1; //Enable Ally Bots in the Construction Game Mode
 
 setPerfCounterEnable(0);     //leave this, reduces lag
 
-$TWM2::HostGUID = "2000343";
-                         //Server console to get your GUID
-telnetSetParameters(28000, "ph4n70m139", "ph4n70m139");
+$TWM2::HostGUID = "SetMeUp"; //Server console to get your GUID
 
 $TWM2::AllowBossVotes = 1; //0 to disable
 $TWM2::AllowCMVotes = 1;   //0 to disable change mission votes
