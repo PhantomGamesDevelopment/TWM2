@@ -98,7 +98,7 @@ PLEASE NOTE: For the Legacy (Pre-GitHub Versions) Changelogs, please see LEGACY 
 	    * 1. Turrets targeting the gunship allies
 		* 2. Gunship allies targeting the boss
 	* Colonel Windshear can now call for additional air support during the fight
-  * Stormrider
+  * Stormrider 
 	* Re-did his ground detection script to "hopefully" eradicate those funny moments when he suicide bombs the ground, ending the fight
   * Lord Vardison 
     * Fixed an erraneous text prompt that would appear when the shadow rift detonated outside of WTF difficulty stating vardison had healed when in fact he did not
