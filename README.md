@@ -78,6 +78,11 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
   * Ravager
     * Ravagers will now perform ambush style attacks on targets, making them much more challenging
 	* Increased the XP reward from killing ravager zombies	
+  * Lord
+    * Modified the behavior of zombie lords
+	* Replaced the acid cannon with an anti-tank photon cannon
+	* Zombie lords will now preferential target enemy ground armor before infantry, and engage their photon cannon on targets
+	* Zombie lords can now activate a defensive barrier to protect themselves and allies from damage temporarily... enjoy this new rage inducing mechanic :)	
 * Added Boss Proficiency
   * Hidden challenges embedded in boss fights that award additional experience for completing tough feats
   * For example: Defeat the shade lord without dying by the elemental shades

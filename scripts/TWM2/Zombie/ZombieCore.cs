@@ -39,15 +39,20 @@ $Zombie::SpeedUpdateTime[3] = 500;
 
 //$Zombie::LungeDistance: How far (m) a zombie must be to lunge at a target
 $Zombie::LungeDistance = 10;
+
+// SPECIFIC ZOMBIE TYPE GLOBALS
+
 //$Zombie::LordGrabDistance: How far (m) a zombie lord must be to grab a target
 $Zombie::LordGrabDistance = 5;
-//$Zombie::RapierUpwardScaling: How fast a rapier zombie will ascend when holding a player
-$Zombie::RapierUpwardScaling = 750;
-
 //$Zombie::ZombieLordShieldHealth: How much health the zombie lord energy barrier hasCP
 $Zombie::ZombieLordShieldHealth = 10.0;
 //$Zombie::ZombieLordShieldEnergy: How much energy the shield starts with. Note: Multiply this value by $Zombie::SpeedUpdateTime[3] to determine how long in MS the shield will be up.
 $Zombie::ZombieLordShieldEnergy = 50;
+//$Zombie::ZombieLordWeaponCooldown: How long in MS that the zombie lord's photon cannon must cool down for
+$Zombie::ZombieLordPhotonCooldown = 15000;
+
+//$Zombie::RapierUpwardScaling: How fast a rapier zombie will ascend when holding a player
+$Zombie::RapierUpwardScaling = 750;
 
 //MISC Globals, Do not edit.
 $Zombie::killpoints = 5;
@@ -197,6 +202,10 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%arg1.recentShift = %arg3;
 				case "canshield":
 					%arg1.canShield = %arg3;
+				case "firingweapon":
+					%arg1.firingWeapon = %arg3;
+				case "canfireweapon":
+					%arg1.canFireWeapon = %arg3;
 					
 		//lookForTarget(%zombie, [%pilot], [%groundVeh]): Identify the closest target, and the distance to that target
 		case "lookfortarget":
@@ -398,9 +407,9 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%zombie.mountImage(ZBack, 4);
 					%zombie.mountImage(ZDummyslotImg, 5);
 					%zombie.mountImage(ZDummyslotImg2, 6);
-					%zombie.setInventory(AcidCannon, 1, true);
-					%zombie.use(AcidCannon);
-					%zombie.firstFired = 0;
+					%zombie.mountImage(zLordPhotonCannonImg, 7);
+					%zombie.canFireWeapon = 1;
+					%zombie.canShield = 1;
 					%zombie.canmove = 1;				
 				
 				//Demon Zombie
