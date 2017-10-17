@@ -10,6 +10,7 @@
 //   - Reduce Function Count
 //   - Smooth Zombie Movement
 //   - Simplify Zombie Logic
+//   - Add more customizability to zombie movement, abilities, etc via globals
 
 //$Zombie::detectDist: The maximum distance in which a zombie may target a player
 $Zombie::detectDist = 9999;
@@ -27,7 +28,7 @@ $Zombie::TypeSpeed[5] = 300;
 //$Zombie::BaseJumpCooldown: The time zombies must elapse before jumping / lunging
 $Zombie::BaseJumpCooldown = 1500;
 
-//$Zombie::SpeedMultiplier[#]: An additional multiplier to be applied to the zombie's base speed when calculating the impulse
+//$Zombie::SpeedMultiplier[#]: An additional multiplier to be applied to the zombie's base speed when calculating the impulse, used to fine tune speed values
 $Zombie::SpeedMultiplier[2] = 0.6;
 $Zombie::SpeedMultiplier[3] = 0.8;
 $Zombie::SpeedMultiplier[4] = 0.75;
@@ -44,12 +45,21 @@ $Zombie::LungeDistance = 10;
 
 //$Zombie::LordGrabDistance: How far (m) a zombie lord must be to grab a target
 $Zombie::LordGrabDistance = 5;
-//$Zombie::ZombieLordShieldHealth: How much health the zombie lord energy barrier hasCP
+//$Zombie::ZombieLordShieldHealth: How much health the zombie lord energy barrier has
 $Zombie::ZombieLordShieldHealth = 10.0;
 //$Zombie::ZombieLordShieldEnergy: How much energy the shield starts with. Note: Multiply this value by $Zombie::SpeedUpdateTime[3] to determine how long in MS the shield will be up.
-$Zombie::ZombieLordShieldEnergy = 50;
-//$Zombie::ZombieLordWeaponCooldown: How long in MS that the zombie lord's photon cannon must cool down for
+$Zombie::ZombieLordShieldEnergy = 30;
+//$Zombie::ZombieLordPhotonCooldown: How long (in ms) that the zombie lord's photon cannon must cool down for
 $Zombie::ZombieLordPhotonCooldown = 15000;
+//$Zombie::ZombieLordPhotonMinRange: The minimum range required for photon cannon strikes (Infantry only)
+$Zombie::ZombieLordPhotonMinRange = 35;
+
+//$Zombie::DemonZombieFireBombCooldown: How long (in ms) that a demon zombie must wait in between firebomb attacks
+$Zombie::DemonZombieFireBombCooldown = 4500;
+//$Zombie::DemonZombieFireBombMinRange: The minimum required distance that a demon firebomb can be thrown from
+$Zombie::DemonZombieFireBombMinRange = 20;
+//$Zombie::DemonZombieFireBombMaxRange: The maximum range of the demon firebomb attack
+$Zombie::DemonZombieFireBombMaxRange = 250; 
 
 //$Zombie::RapierUpwardScaling: How fast a rapier zombie will ascend when holding a player
 $Zombie::RapierUpwardScaling = 750;
@@ -72,6 +82,23 @@ $Zombie::RogThread = "cel1";
 
 function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 	switch$(strlwr(%functionName)) {
+		
+		//definezspeed(%type): Called upon creation, determines the zombie's base speed
+		case "definezspeed":
+			%type = %arg1;
+			if(!isSet(%type)) {
+				%type = 1;
+			}
+			%speed = $Zombie::BaseSpeed;
+			if(isSet($Zombie::TypeSpeed[%type])) {
+				%speed = $Zombie::TypeSpeed[%type];
+			}
+			%multiplier = 1;
+			if(isSet($Zombie::SpeedMultiplier[%type])) {
+				%multiplier = $Zombie::SpeedMultiplier[%type];
+			}
+			%final = %speed * %multiplier;
+			return %final;		
 		
 		//zsetrandommove(%zombie): Activated when the zombie needs to begin random movement
 		case "zsetrandommove":
@@ -554,12 +581,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 				revivestand(%zombie, 0);			
 			}
 
-			if($Zombie::TypeSpeed[%spawnType] !$= "") {
-				%zombie.speed = $Zombie::TypeSpeed[%spawnType];
-			}
-			else {
-				%zombie.speed = $Zombie::BaseSpeed;
-			}
+			%zombie.speed = TWM2Lib_Zombie_Core("defineZSpeed", %spawnType);
 			
 			if(!isSet($Zombie::SpeedUpdateTime[%spawnType])) {
 				%zombie.updateTimeFrequency = $Zombie::BaseSpeedUpdateTime;

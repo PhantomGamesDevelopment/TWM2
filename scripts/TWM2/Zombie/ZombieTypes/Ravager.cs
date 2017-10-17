@@ -124,7 +124,7 @@ function RavagerZombieArmor::Move(%datablock, %zombie) {
 		schedule($Zombie::BaseJumpCooldown, 0, TWM2Lib_Zombie_Core, "setZFlag", %zombie, "canJump", 1);
 	}
 	//Scale to speed
-	%vector = vectorScale(vectorScale(%vector, %zombie.speed), $Zombie::SpeedMultiplier[%zombie.type]);
+	%vector = vectorScale(%vector, %zombie.speed);
 	%x = getWord(%vector, 0);
 	%y = getWord(%vector, 1);	
 	%vector = %x@" "@%y@" "@%upvec;

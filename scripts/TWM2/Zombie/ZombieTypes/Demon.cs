@@ -33,7 +33,7 @@ function DemonZombieArmor::AI(%datablock, %zombie) {
 		}
 		%tPos = %zombie.targetedPlayer.getPosition();		
 		%distance = vectorDist(%zPos, %tPos);
-		if(%distance > 20 && %distance <= 250) {
+		if(%distance > $Zombie::DemonZombieFireBombMinRange && %distance <= $Zombie::DemonZombieFireBombMaxRange) {
 			if(%zombie.canFireWeapon) {
 				%datablock.zFire(%zombie, %zombie.targetedPlayer);
 			}
@@ -50,6 +50,7 @@ function DemonZombieArmor::AI(%datablock, %zombie) {
 				%zombie.hasTarget = 1;
 				%zombie.targetedPlayer = %target.player;
 			}
+			%datablock.move(%zombie);
 		}
 		//Nothing to hunt... random movement...
 		if(!%zombie.hasTarget) {
@@ -122,5 +123,5 @@ function DemonZombieArmor::zFire(%datablock, %zombie, %targetObject) {
 			sourceSlot       = 4;
 		};
 	}	
-	schedule(4000, 0, "TWM2Lib_Zombie_Core", "setZFlag", %zombie, "canFireWeapon", 1);
+	schedule($Zombie::DemonZombieFireBombCooldown, 0, "TWM2Lib_Zombie_Core", "setZFlag", %zombie, "canFireWeapon", 1);
 }

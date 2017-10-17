@@ -290,7 +290,7 @@ function LordZombieArmor::AI(%datablock, %zombie) {
 				}			
 			}
 			//Should I fire?
-			if(%zombie.canFireWeapon && %distance > 35) {
+			if(%zombie.canFireWeapon && %distance > $Zombie::ZombieLordPhotonMinRange) {
 				if(getRandom(1, 20) == 1) {
 					//Fire!
 					%datablock.zFire(%zombie, %zombie.targetedPlayer);
@@ -360,7 +360,7 @@ function LordZombieArmor::Move(%datablock, %zombie) {
 		}		
 	}
 	//Scale to speed
-	%vector = vectorScale(vectorScale(%vector, %zombie.speed), $Zombie::SpeedMultiplier[%zombie.type]);
+	%vector = vectorScale(%vector, %zombie.speed);
 	%vector = vectorScale(%vector, %mult);
 	%x = getWord(%vector, 0);
 	%y = getWord(%vector, 1);
