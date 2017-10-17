@@ -157,7 +157,7 @@ function RapierZombieArmor::zCarryLoop(%datablock, %zombie, %target, %count) {
 	if(%count == 50) {
 		%chance = getRandom(1, 3);
 		if(%chance == 3) {
-			%target.damage(0, %tpos, 10.0, $DamageType::Zombie);
+			%target.damage(0, %target.getPosition(), 10.0, $DamageType::Zombie);
 		}
 		else {
 			%target.isFTD = 1;
