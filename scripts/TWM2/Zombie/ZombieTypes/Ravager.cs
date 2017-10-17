@@ -125,6 +125,8 @@ function RavagerZombieArmor::Move(%datablock, %zombie) {
 	}
 	//Scale to speed
 	%vector = vectorScale(vectorScale(%vector, %zombie.speed), $Zombie::SpeedMultiplier[%zombie.type]);
+	%x = getWord(%vector, 0);
+	%y = getWord(%vector, 1);	
 	%vector = %x@" "@%y@" "@%upvec;
 	%zombie.applyImpulse(%pos, %vector);	
 }
