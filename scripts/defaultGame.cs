@@ -4770,7 +4770,7 @@ function DefaultGame::ToggleModifiers(%game, %modifier, %toggleTo) {
          %ModifierDesc = "Normal zombies are now cloaked... mwuhahaha!!!";
          $HellJump::Modifier["YouCantSeeMe"] = %toggleTo;
       case "Oh Lordy":
-         %ModifierDesc = "Zombie lords shoot 4 pulses instead of 2";
+         %ModifierDesc = "Reduces the cooldown rate of the Zombie Lord Photon Cannon by 50%";
          $HellJump::Modifier["OhLordy"] = %toggleTo;
       case "It BURNS!":
          %ModifierDesc = "Demon Zombie Fireballs now cause Burns";

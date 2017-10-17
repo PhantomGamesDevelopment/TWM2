@@ -202,6 +202,15 @@ function LordZombieArmor::AI(%datablock, %zombie) {
 	}
 	//Am I engaged with something?
 	if(%zombie.hasTarget) {
+		if(!isObject(%zombie.targetedPlayer) || %zombie.targetedPlayer.getState() $= "dead") {
+			%zombie.targetIsTank = 0;
+			%zombie.targetedPlayer = 0;
+			%zombie.hasTarget = 0;
+			%zombie.movePoint = 0;
+			%zombie.movingToPosition = 0;
+			%datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
+			return;			
+		}		
 		//Is it a tank?
 		%tPos = %zombie.targetedPlayer.getPosition();
 		if(%zombie.targetIsTank) {
@@ -379,7 +388,11 @@ function LordZombieArmor::zFire(%datablock, %zombie, %targetObject) {
 	};	
 	MissionCleanup.add(%p);
 	schedule(2000, 0, "TWM2Lib_Zombie_Core", "setZFlag", %zombie, "firingWeapon", 0);
-	schedule($Zombie::ZombieLordPhotonCooldown, 0, "TWM2Lib_Zombie_Core", "setZFlag", %zombie, "canFireWeapon", 1);
+	%cooldown = $Zombie::ZombieLordPhotonCooldown;
+	if(Game.CheckModifier("OhLordy") == 1) {
+		%cooldown *= 0.5;
+	}
+	schedule(%cooldown, 0, "TWM2Lib_Zombie_Core", "setZFlag", %zombie, "canFireWeapon", 1);
 }
 
 function LordZombieArmor::makeShield(%datablock, %zombie) {

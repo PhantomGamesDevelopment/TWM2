@@ -118,7 +118,7 @@ function RavagerZombieArmor::Move(%datablock, %zombie) {
 	//Lunge behavior
 	if(!%zombie.ambushing && vectorDist(%zombie.targetedPlayer.getPosition(), %zombie.getPosition()) <= $Zombie::LungeDistance && %zombie.canJump && getWord(%vector, 2) <= 0.8) {
 		%zombie.setVelocity("0 0 0");
-		%vector = vectorScale(%vector, %zombie.speed * 2);
+		%vector = vectorScale(%vector, 2);
 		%upvec *= 3.5;
 		TWM2Lib_Zombie_Core("setZFlag", %zombie, "canJump", 0);
 		schedule($Zombie::BaseJumpCooldown, 0, TWM2Lib_Zombie_Core, "setZFlag", %zombie, "canJump", 1);

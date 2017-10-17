@@ -65,7 +65,7 @@ function ZombieArmor::Move(%datablock, %zombie) {
 			%ld = $Zombie::LungeDistance;
 		}
 		if(%closestDistance <= %ld && %zombie.canjump == 1) {
-			%vector = vectorScale(%vector, (%zombie.speed * 4));
+			%vector = vectorScale(%vector, 4);
 		}
 		%vector = vectorScale(%vector, %zombie.speed);
 		%upvec = "150";
