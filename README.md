@@ -83,6 +83,8 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	* Replaced the acid cannon with an anti-tank photon cannon
 	* Zombie lords will now preferential target enemy ground armor before infantry, and engage their photon cannon on targets
 	* Zombie lords can now activate a defensive barrier to protect themselves and allies from damage temporarily... enjoy this new rage inducing mechanic :)	
+  * Air Rapier
+	* Modified the damage scalar of missiles to be a OHK on rapier zombies	
 * Added Boss Proficiency
   * Hidden challenges embedded in boss fights that award additional experience for completing tough feats
   * For example: Defeat the shade lord without dying by the elemental shades

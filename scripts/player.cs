@@ -3017,7 +3017,7 @@ function Armor::onCollision(%this,%obj,%col,%forceVehicleNode)
 		     %col.iscarrying = 1;
 		     %obj.grabbed = 1;
 		     %obj.damage(0, %obj.position, 0.2, $DamageType::Zombie);
-		     %col.killingPlayer = schedule(10, 0, "RkillLoop", %col, %obj, 0);
+		     %col.killingPlayer = %col.getDatablock().zCarryLoop(%col, %obj, 0); // schedule(10, 0, "RkillLoop", %col, %obj, 0);
 	      }
 	}
 	else if(%colarmortype $= "ShifterZombieArmor" && %obj.Infected != 1 && %objiszomb != 1 && !%obj.rapierShield){

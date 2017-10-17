@@ -23,7 +23,7 @@ $Zombie::BaseSpeed = 150;
 $Zombie::TypeSpeed[2] = 300;
 $Zombie::TypeSpeed[3] = 4000;
 $Zombie::TypeSpeed[4] = 240;
-$Zombie::TypeSpeed[5] = 300;
+$Zombie::TypeSpeed[5] = 1500;
 
 //$Zombie::BaseJumpCooldown: The time zombies must elapse before jumping / lunging
 $Zombie::BaseJumpCooldown = 1500;
@@ -37,6 +37,7 @@ $Zombie::SpeedMultiplier[4] = 0.75;
 $Zombie::BaseSpeedUpdateTime = 100;
 //$Zombie::SpeedUpdateTime[#]: An override to the base update type, use for specific types that need slower or faster processing between AI steps
 $Zombie::SpeedUpdateTime[3] = 500;
+$Zombie::SpeedUpdateTime[5] = 500;
 
 //$Zombie::LungeDistance: How far (m) a zombie must be to lunge at a target
 $Zombie::LungeDistance = 10;
@@ -436,15 +437,15 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%zombie.mountImage(ZDummyslotImg2, 6);
 					%zombie.mountImage(zLordPhotonCannonImg, 7);
 					%zombie.canFireWeapon = 1;
-					%zombie.canShield = 1;
-					%zombie.canmove = 1;				
+					%zombie.canShield = 1;				
 				
 				//Demon Zombie
 				case 4:
 					%zombie = new player() {
 						Datablock = "DemonZombieArmor";
 					};
-					%zombie.mountImage(ZdummyslotImg, 4);				
+					%zombie.mountImage(ZdummyslotImg, 4);	
+					%zombie.canFireWeapon = 1;
 				
 				//Air-Rapier Zombie
 				case 5:
