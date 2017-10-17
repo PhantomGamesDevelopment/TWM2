@@ -88,34 +88,34 @@ function UpdateClientRank(%client) {
 	}
 	%scriptController = %client.TWM2Core;
 	if($XPArray[%client] <= 0) {
+		$XPArray[%client] = 0;
 		return; //kill it here, no need to go into the loop
 	}
 	if(%scriptController.officer $= "") {
 		%scriptController.officer = 0;
 	}
 	%file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
-	//If I ever do so implement an EXP cap, here is where it is placed
-	%multi = $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB TWM2Lib_MainControl("FormatTWM2Time", formattimestring("yymmdd")))];
-	if(!isSet(%multi) || %multi < 1) {
-		%multi = 1;
-	}
 	// convert it to second form
 	if(!isSet(%scriptController.millionxp)) {
 		%scriptController.millionxp = 0;
 	}
-	if((%scriptController.xp + $XPArray[%client]) >= 1000000) {
-		%scriptController.xp = 0;
-		%scriptController.millionxp++;
-		$XPArray[%client] = (%scriptController.xp + $XPArray[%client]) - 1000000;
-		if($XPArray[%client] < 0) {
-			//Hmmm.... something wierd going on here...
-			$XPArray[%client] = 0;
-		}
-	}
-	%scriptController.xp += $XPArray[%client];
-
-	checkForXPAwards(%client);
+	// TWM2 3.9.2: If the total gain is more than 1 million, store the millions in a separate field.
+	%millions = mFloor($XPArray[%client] / 1000000);
+	%netLeft = $XPArray[%client] % 1000000;
+	// Once we capture the fields, reset this immediately so other gains are non gobbled into this.
 	$XPArray[%client] = 0;
+	
+	%newNonMillions = %scriptController.xp + %netLeft;
+	if(%newNonMillions >= 1000000) {
+		%newNonMillions -= 1000000;
+		%millions++;
+	}
+	%newMillions = %scriptController.millionxp + %millions;
+	
+	%scriptController.millionxp = %newMillions;
+	%scriptController.xp += newNonMillions;
+	//End
+	checkForXPAwards(%client);
 	%j = $Rank::RankCount;
 	runRankUpdateLoop(%client, %j, 1);
 }
@@ -152,8 +152,9 @@ function runRankUpdateLoop(%client, %j, %continue) {
 			if(!$TWM2::PGDConnectDisabled) {
 				PrepareUpload(%client);
 			}
-			%j = 1;
-			runRankUpdateLoop(%client, %j, 0);
+			//Phantom139: 10/17/17: Why is this block here??? It's just a NOP on the next call...
+			//%j = 1;
+			//runRankUpdateLoop(%client, %j, 0);
 		}
 	}
 	else {
