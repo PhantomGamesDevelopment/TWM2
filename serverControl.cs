@@ -206,6 +206,18 @@ $TWM2::BossXPAward["GhostOfFire"] = 65000;          //          65000
 $TWM2::BossXPAward["ShadeLord"] = 70000;            //          70000
 $TWM2::BossXPAward["Vardison3"] = 75000;            //          75000
 
+
+$TWM2::HarbingerSentryName[1] = "H1-CMS Drone";
+$TWM2::HarbingerSentryName[2] = "H2-APDS Drone";
+$TWM2::HarbingerSentryName[3] = "H3-MSEDS Drone";
+$TWM2::HarbingerSentryName[4] = "HX-SHADOW Drone";
+
+                                                    //-----OFFICIAL VALUES-----\\
+$TWM2::HarbingerDroneXPAward[1] = 20;               //            20
+$TWM2::HarbingerDroneXPAward[2] = 50;               //            50
+$TWM2::HarbingerDroneXPAward[3] = 175;              //            175
+$TWM2::HarbingerDroneXPAward[4] = 300;              //            300
+
 $Host::UseDevelopersList = 1;
 
 $Host::RankSystem = 1;
