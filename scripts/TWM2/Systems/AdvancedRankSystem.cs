@@ -113,7 +113,7 @@ function UpdateClientRank(%client) {
 	%newMillions = %scriptController.millionxp + %millions;
 	
 	%scriptController.millionxp = %newMillions;
-	%scriptController.xp += newNonMillions;
+	%scriptController.xp += %newNonMillions;
 	//End
 	checkForXPAwards(%client);
 	%j = $Rank::RankCount;
@@ -230,8 +230,6 @@ function printCurrentEXP(%client) {
 //PRESTIGE RANKS
 function PromoteToPrestige(%client) {
    %scriptController = %client.TWM2Core;
-   %savedGameTime = %scriptController.gameTime;
-   %savedPhrs = %scriptController.phrase;
    if(%scriptController.officer $= "" || %scriptController.officer == 0) {
       %next = 1;
    }
@@ -247,10 +245,12 @@ function PromoteToPrestige(%client) {
 	  return;
    }
 
-   DumpStats(%client);
+   //Phantom139 TWM2 3.9.2: Removed the "reset" of progression, we only reset EXP and the rank for office progression now.
+   //DumpStats(%client);
    
    %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
    
+   //Reset player settings as perks and streaks tied to levels will reset.
    %name = "ClientSettings"@%client.guid@"";
    %check = nameToID(%name);
    if(isObject(%check)) {
@@ -260,12 +260,9 @@ function PromoteToPrestige(%client) {
    %client.container.add(%script);
 
    //now apply the base settings for this new file.
-   %client.TWM2Core.name = %client.namebase;
    %client.TWM2Core.xp = 0;
    %client.TWM2Core.millionxp = 0;
    %client.TWM2Core.rank = "Private";
-   %client.TWM2Core.phrase = %savedPhrs;
-   %client.TWM2Core.gameTime = %savedGameTime;
    %client.TWM2Core.officer = %next;
    //and save the new file
    //%scriptController.save(%file);
@@ -282,6 +279,8 @@ function PromoteToPrestige(%client) {
 
 //STAT Cleaner:
 //Phantom139: Changed in 3.4 to support the newer system
+// TWM2 3.9.2 Note: This function is no longer used but is kept for internal definition purposes, and to fix completely
+//  broken files.
 function DumpStats(%c) { 
    echo("Resetting" SPC %c.guid@"'s stats.");
    %sO = %c.TWM2Core;
@@ -313,41 +312,4 @@ function GainExperience(%client, %variable, %tagToGain) {
    }
    $XPArray[%client] += %variable;
    updateClientRank(%client);
-}
-
-function WipeStats(%client) {
-   %scriptController = %client.TWM2Core;
-   %savedGameTime = %scriptController.gameTime;
-   %savedPhrs = %scriptController.phrase;
-   if(%scriptController.officer < 15) {
-      error("Client "@%client@" is attempting to wipe stats??? Not max level...");
-	  return;
-   }
-
-   DumpStats(%client);
-   
-   %file = ""@$TWM::RanksDirectory@"/"@%client.guid@"/Saved.TWMSave";
-   
-   %name = "ClientSettings"@%client.guid@"";
-   %check = nameToID(%name);
-   if(isObject(%check)) {
-      %check.delete(); //kill current settings, as they are no longer valid.
-   }
-   %script = new ScriptObject(%name) {};
-   %client.container.add(%script);
-
-   //now apply the base settings for this new file.
-   %client.TWM2Core.name = %client.namebase;
-   %client.TWM2Core.xp = 0;
-   %client.TWM2Core.millionxp = 0;
-   %client.TWM2Core.rank = "Private";
-   %client.TWM2Core.phrase = %savedPhrs;
-   %client.TWM2Core.gameTime = %savedGameTime;
-   %client.TWM2Core.officer = 0;
-   //and save the new file
-   //%scriptController.save(%file);
-   SaveClientFile(%client);
-
-   MessageAll('msgAdminForce', "\c5"@%client.namebase@" has hit the reset button and is back at level 1!!!");
-   recordAction(%client, "", ""); //record blank action for the challenges to pick off any officer challenges
 }

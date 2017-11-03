@@ -91,6 +91,9 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 * Living World Mode
   * Added a new option for admins to toggle (Living World) in the Construction Mode. Players will be able to vote toggle this option
   * This aspect of the update will be coming soon...
+* Challenges / Medals
+  * All Challenges and Medals are now persistent, such that progress is not lost through officer promotion
+    * Go get those bronze, silver, gold, and titan commendations!!!  
 * Boss Balancing / Updates:
   * All Bosses
     * Testing a new difficulty system
