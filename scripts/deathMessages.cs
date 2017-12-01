@@ -115,11 +115,55 @@ $DeathMessageSelfKill[$DamageType::Fire, 2] = '\c0%1 burns %2self with %3 flamet
 $DeathMessageSelfKill[$DamageType::Fire, 3] = '\c0%1 burns %2self down to cinders.';
 $DeathMessageSelfKill[$DamageType::Fire, 4] = '\c0%1 engulfs %2self in flames.';
 
-$DeathMessageSelfKill[$DamageType::FissionBomb, 0] = '\c0%1 Unleashed a fission bomb.';
-$DeathMessageSelfKill[$DamageType::FissionBomb, 1] = '\c0%1 Unleashed a fission bomb.';
-$DeathMessageSelfKill[$DamageType::FissionBomb, 2] = '\c0%1 Unleashed a fission bomb.';
-$DeathMessageSelfKill[$DamageType::FissionBomb, 3] = '\c0%1 Unleashed a fission bomb.';
-$DeathMessageSelfKill[$DamageType::FissionBomb, 4] = '\c0%1 Unleashed a fission bomb.';
+$DeathMessageSelfKill[$DamageType::FissionBomb, 0] = '\c0%1\'s super powered fission bomb turned on it\'s owner with lethal ferocity.';
+$DeathMessageSelfKill[$DamageType::FissionBomb, 1] = '\c0%1 stared a bit too long at the bright fission bomb flash.';
+$DeathMessageSelfKill[$DamageType::FissionBomb, 2] = '\c0%1 pushed the big red button, and then didn\'t run.';
+$DeathMessageSelfKill[$DamageType::FissionBomb, 3] = '\c0%1 forgot to execute the third step of fission bomb operation, running.';
+$DeathMessageSelfKill[$DamageType::FissionBomb, 4] = '\c0%1 sets off a bright reaction of decimation, upon %2self.';
+
+$DeathMessageSelfKill[$DamageType::Javelin, 0] = '\c0%1 obtained long range missile locking upon %2self.';
+$DeathMessageSelfKill[$DamageType::Javelin, 1] = '\c0%1 pointed the javelin launching tube in the wrong direction.';
+$DeathMessageSelfKill[$DamageType::Javelin, 2] = '\c0%1 obliterates %2self with %3 javelin.';
+$DeathMessageSelfKill[$DamageType::Javelin, 3] = '\c0%1 looks up in the sky at %3 javelin rocket as it goes up... and then back down.';
+$DeathMessageSelfKill[$DamageType::Javelin, 4] = '\c0%1 took self-artillery javelin practice too literally...';
+
+$DeathMessageSelfKill[$DamageType::Stinger, 0] = '\c0%1 performed the ritual of anti-anti-aircraft upon %2self.';
+$DeathMessageSelfKill[$DamageType::Stinger, 1] = '\c0%1 obtains missile locking upon %2self.';
+$DeathMessageSelfKill[$DamageType::Stinger, 2] = '\c0%1 punts the stinger missile out of the park, along with %3 life.';
+$DeathMessageSelfKill[$DamageType::Stinger, 3] = '\c0%1\'s missile launching skills have been increased to explosively spectacular levels.';
+$DeathMessageSelfKill[$DamageType::Stinger, 4] = '\c0%1 blows %2self away with a stinger rocket';
+
+$DeathMessageSelfKill[$DamageType::StaticGrenade, 0] = '\c0%1 took electrically induced explosives to a whole new meaning.';
+$DeathMessageSelfKill[$DamageType::StaticGrenade, 1] = '\c0%1 pulled the pin on a static grenade, and then walked into it.';
+$DeathMessageSelfKill[$DamageType::StaticGrenade, 2] = '\c0%1 tossed a static grenade and then performed boomerang logic on it.';
+$DeathMessageSelfKill[$DamageType::StaticGrenade, 3] = '\c0%1\'s static grenade tossing skills have exploded into new proportions.';
+$DeathMessageSelfKill[$DamageType::StaticGrenade, 4] = '\c0%1 blows %2self away with a static grenade';
+
+//These three are impossible deaths, but w/e
+$DeathMessageSelfKill[$DamageType::Plasmasaber, 0] = '\c0%1 turned %3 plasma energy sword upon %2self.';
+$DeathMessageSelfKill[$DamageType::Plasmasaber, 1] = '\c0%1 turned %3 plasma energy sword upon %2self.';
+$DeathMessageSelfKill[$DamageType::Plasmasaber, 2] = '\c0%1 turned %3 plasma energy sword upon %2self.';
+$DeathMessageSelfKill[$DamageType::Plasmasaber, 3] = '\c0%1 turned %3 plasma energy sword upon %2self.';
+$DeathMessageSelfKill[$DamageType::Plasmasaber, 4] = '\c0%1 turned %3 plasma energy sword upon %2self.';
+
+$DeathMessageSelfKill[$DamageType::BladeOfVengance, 0] = '\c0%1 turned %3 blade of vengeance upon %2self.';
+$DeathMessageSelfKill[$DamageType::BladeOfVengance, 1] = '\c0%1 turned %3 blade of vengeance upon %2self.';
+$DeathMessageSelfKill[$DamageType::BladeOfVengance, 2] = '\c0%1 turned %3 blade of vengeance upon %2self.';
+$DeathMessageSelfKill[$DamageType::BladeOfVengance, 3] = '\c0%1 turned %3 blade of vengeance upon %2self.';
+$DeathMessageSelfKill[$DamageType::BladeOfVengance, 4] = '\c0%1 turned %3 blade of vengeance upon %2self.';
+
+$DeathMessageSelfKill[$DamageType::BladeOfVengance_Assassination, 0] = '\c0%1 turned %3 blade of vengeance upon %2self.';
+$DeathMessageSelfKill[$DamageType::BladeOfVengance_Assassination, 1] = '\c0%1 turned %3 blade of vengeance upon %2self.';
+$DeathMessageSelfKill[$DamageType::BladeOfVengance_Assassination, 2] = '\c0%1 turned %3 blade of vengeance upon %2self.';
+$DeathMessageSelfKill[$DamageType::BladeOfVengance_Assassination, 3] = '\c0%1 turned %3 blade of vengeance upon %2self.';
+$DeathMessageSelfKill[$DamageType::BladeOfVengance_Assassination, 4] = '\c0%1 turned %3 blade of vengeance upon %2self.';
+
+$DeathMessageSelfKill[$DamageType::PTorpedo, 0] = '\c0%1 pointed %3 proton torpedo cannon in the wrong direction.';
+$DeathMessageSelfKill[$DamageType::PTorpedo, 1] = '\c0%1 decimates %3 local area with a proton torpedo cannon.';
+$DeathMessageSelfKill[$DamageType::PTorpedo, 2] = '\c0%1 took proton detonation to a whole new level.';
+$DeathMessageSelfKill[$DamageType::PTorpedo, 3] = '\c0%1\'s proton torpedo aiming skills are self-evident.';
+$DeathMessageSelfKill[$DamageType::PTorpedo, 4] = '\c0%1 annihilates %2self into dust with a proton torpedo';
+
 
 //used when a player is killed by a teammate
 $DeathMessageTeamKillCount = 1;
@@ -138,7 +182,7 @@ $DeathMessageTeamKill[$DamageType::SatchelCharge, 0] = '\c0%4 blew up TEAMMATE %
 $DeathMessageTeamKill[$DamageType::Impact, 0] = '\c0%4 runs down TEAMMATE %1!';
 $DeathMessageTeamKill[$DamageType::SuperChaingun, 0] = '\c0%4 TEAMKILLED %1 with a super chaingun!';
 $DeathMessageTeamKill[$DamageType::Pistol, 0] = '\c0%4 TEAMKILLED %1 with a colt pistol!';
-$DeathMessageTeamKill[$DamageType::Melee, 0] = '\c0%4 Swings at TEAMMATE %1, and doesn\'t stop in time!';
+$DeathMessageTeamKill[$DamageType::Melee, 0] = '\c0%4 swings for the fences in the general direction of TEAMMATE %1.';
 $DeathMessageTeamKill[$DamageType::S3, 0] = '\c0%4 Nailed TEAMMATE %1 with an S3 Combat Rifle!';
 $DeathMessageTeamKill[$DamageType::W1700, 0] = '\c0%4 Blasts TEAMMATE %1 with a W1700 Shotgun!';
 $DeathMessageTeamKill[$DamageType::G41, 0] = '\c0%4 Kills TEAMMATE %1 with Semi-Automatic G41 Fire!';
@@ -149,12 +193,23 @@ $DeathMessageTeamKill[$DamageType::M1, 0] = '\c0%4 Nails TEAMMATE %1 with an M1 
 $DeathMessageTeamKill[$DamageType::RP432, 0] = '\c0%4 Shreds up TEAMMATE %1 with %6 RP432 MG!';
 $DeathMessageTeamKill[$DamageType::RPG, 0] = '\c0%4 Blows TEAMMATE %1 away with an RPG!';
 $DeathMessageTeamKill[$DamageType::GravBolt, 0] = '\c0%4 ships TEAMMATE %1 to the upper atmosphere with a grav cannon!';
-$DeathMessageTeamKill[$DamageType::LaserRifle, 0] = '\c0%4 burns TEAMMATE %1 with %6 RSA Laser Rifle';
+$DeathMessageTeamKill[$DamageType::LaserRifle, 0] = '\c0%4 burns TEAMMATE %1 with %6 UR-22 Laser Rifle';
 $DeathMessageTeamKill[$DamageType::Fire, 0] = '\c0%4 burns TEAMMATE %1 with a flamethrower';
 $DeathMessageTeamKill[$DamageType::SA2400, 0] = '\c0%4 Nails TEAMMATE %1 with a SA2400';
 $DeathMessageTeamKill[$DamageType::DesertEagle, 0] = '\c0%4 blasts TEAMMATE %1 with a desert eagle pistol';
-$DeathMessageTeamKill[$DamageType::FissionBomb, 0] = '\c0%4 kills %1 with a Fission Bomb.';
-
+$DeathMessageTeamKill[$DamageType::FissionBomb, 0] = '\c0%4 annihilates TEAMMATE %1 with a Fission Bomb.';
+$DeathMessageTeamKill[$DamageType::Javelin, 0] = '\c0%4 nails TEAMMATE %1 with a javelin rocket.';
+$DeathMessageTeamKill[$DamageType::Stinger, 0] = '\c0%4 ends TEAMMATE %1\'s vehicle experience with a stinger missile.';
+$DeathMessageTeamKill[$DamageType::StaticGrenade, 0] = '\c0%4 TEAMKILLED %1 with a static grenade.';
+$DeathMessageTeamKill[$DamageType::Plasmasaber, 0] = '\c0%4 strikes down TEAMMATE %1 with a plasmasaber.';
+$DeathMessageTeamKill[$DamageType::BladeOfVengance, 0] = '\c0%4 strikes down TEAMMATE %1 with %6 blade of vengeance.';
+$DeathMessageTeamKill[$DamageType::BladeOfVengance_Assassination, 0] = '\c0%4 assassinated TEAMMATE %1 with %6 blade of vengeance, oops.';
+$DeathMessageTeamKill[$DamageType::MG42, 0] = '\c0%4 guns down TEAMMATE %1 with %6 MG42!';
+$DeathMessageTeamKill[$DamageType::MRXX, 0] = '\c0%4 perforates TEAMMATE %1 with %6 MRXX ZC4 machine gun!';
+$DeathMessageTeamKill[$DamageType::PTorpedo, 0] = '\c0%4 vaporized TEAMMATE %1 with a proton torpedo cannon!';
+$DeathMessageTeamKill[$DamageType::CrimsonHawk, 0] = '\c0%4 eliminates TEAMMATE %1 with %6 crimson hawk pistol!';
+$DeathMessageTeamKill[$DamageType::M93, 0] = '\c0%4 nails TEAMMATE %1 with a burst fired M93 pistol!';
+$DeathMessageTeamKill[$DamageType::ES77PulsePhaser, 0] = '\c0%4 eliminates TEAMMATE %1 with %6 ES-77 Pulse Phaser!';
 
 //these used when a player is killed by an enemy
 $DeathMessageCount = 5;
@@ -526,7 +581,7 @@ $DeathMessage[$DamageType::Pg700, 4] = '\c0%1 is rapidly gunned down from %4\'s 
 
 $DeathMessage[$DamageType::FellOff, 0] = '\c0%1 began %3 high flying sky diving career a little too close to the ground.';//
 $DeathMessage[$DamageType::FellOff, 1] = '\c0%1 must have thougt staying close to the edge was a great idea.';//
-$DeathMessage[$DamageType::FellOff, 2] = '\c0%1 now realizes that gravity is the law, and everyone must obey it.';//
+$DeathMessage[$DamageType::FellOff, 2] = '\c0%1 learned about Newton\'s Law of Gravity a bit too late.';//
 $DeathMessage[$DamageType::FellOff, 3] = '\c0%1 couldn\'t handle the gravity of the situation.';//
 $DeathMessage[$DamageType::FellOff, 4] = '\c0%1 takes a nice long trip down the edge.';//
 
@@ -548,10 +603,10 @@ $DeathMessage[$DamageType::RPG, 2] = '\c0%4 blasted %1 with %6 RPG';
 $DeathMessage[$DamageType::RPG, 3] = '\c0%4 blows %1 into epic explosive proportions.';
 $DeathMessage[$DamageType::RPG, 4] = '\c0%1 died after taking a RPG to the face from %4.';
 
-$DeathMessage[$DamageType::LaserRifle, 0] = '\c0%4 beamed down %1 with an RSA Laser Rifle.';
+$DeathMessage[$DamageType::LaserRifle, 0] = '\c0%4 beamed down %1 with a Laser Rifle.';
 $DeathMessage[$DamageType::LaserRifle, 1] = '\c0%4 blasts ultimate laser beams into %1.';
-$DeathMessage[$DamageType::LaserRifle, 2] = '\c0%4 utilizes advanced RSA Laser Technology on %1';
-$DeathMessage[$DamageType::LaserRifle, 3] = '\c0%4 burns holes into %1 from %6 RSA laser rifle.';
+$DeathMessage[$DamageType::LaserRifle, 2] = '\c0%4 utilizes advanced Laser Technology on %1';
+$DeathMessage[$DamageType::LaserRifle, 3] = '\c0%4 burns holes into %1 from %6 laser rifle.';
 $DeathMessage[$DamageType::LaserRifle, 4] = '\c0%4 gives %1 some laser therapy, too bad it was lethal.';
 
 $DeathMessage[$DamageType::Burn, 0] = '\c0%1 screams fire, nobody comes to aid %2.';
@@ -573,10 +628,10 @@ $DeathMessage[$DamageType::SA2400, 3] = '\c0%4 unloads a full clip of buckshot u
 $DeathMessage[$DamageType::SA2400, 4] = '\c0%1 has many tiny buckshot holes from %4 in %2.';
 
 $DeathMessage[$DamageType::deserteagle, 0] = '\c0%4 blows %1 away with a desert eagle pistol.';
-$DeathMessage[$DamageType::deserteagle, 1] = '\c0%4 blasts a pistol shot that %1 will never forger.';
-$DeathMessage[$DamageType::deserteagle, 2] = '\c0%4 uses the most powerful pistol on %1';
+$DeathMessage[$DamageType::deserteagle, 1] = '\c0%4 blasts a pistol shot that %1 will never forget.';
+$DeathMessage[$DamageType::deserteagle, 2] = '\c0%4 unleashes the most powerful pistol on %1';
 $DeathMessage[$DamageType::deserteagle, 3] = '\c0%4 shows %1 some desert eagle skillz.';
-$DeathMessage[$DamageType::deserteagle, 4] = '\c0%4 gives %1 some D.Eagle bullets, they are murderous.';
+$DeathMessage[$DamageType::deserteagle, 4] = '\c0%4 gives %1 a rocking wonderful time with a desert eagle barrage.';
 
 $DeathMessage[$DamageType::FissionBomb, 0] = '\c0%4 kills %1 with a Fission Bomb..';
 $DeathMessage[$DamageType::FissionBomb, 1] = '\c0%4 kills %1 with a Fission Bomb..';
@@ -584,3 +639,74 @@ $DeathMessage[$DamageType::FissionBomb, 2] = '\c0%4 kills %1 with a Fission Bomb
 $DeathMessage[$DamageType::FissionBomb, 3] = '\c0%4 kills %1 with a Fission Bomb..';
 $DeathMessage[$DamageType::FissionBomb, 4] = '\c0%4 kills %1 with a Fission Bomb..';
 
+$DeathMessage[$DamageType::Javelin, 0] = '\c0%4 fires a rocket which goes up.. %1 stares in astonishment as it comes back down.';
+$DeathMessage[$DamageType::Javelin, 1] = '\c0%1 was blasted out of existence by %4\'s javelin rocket.';
+$DeathMessage[$DamageType::Javelin, 2] = '\c0%1 has been scattered across the battlefield thanks to %4\'s javelin.';
+$DeathMessage[$DamageType::Javelin, 3] = '\c0%4 strikes down %1 with a javelin rocket from afar.';
+$DeathMessage[$DamageType::Javelin, 4] = '\c0%1 experiences explosive javelin decomposition from %4.';
+
+$DeathMessage[$DamageType::Stinger, 0] = '\c0%4 ends %1\'s vehicular journey with a stinger missile.';
+$DeathMessage[$DamageType::Stinger, 1] = '\c0%1 is knocked out of the sky by %4\'s stinger missile.';
+$DeathMessage[$DamageType::Stinger, 2] = '\c0%1\'s floating bits and remains rain down from %4\'s stinger missile.';
+$DeathMessage[$DamageType::Stinger, 3] = '\c0%4 shoots %1 out of the sky with a stinger missile.';
+$DeathMessage[$DamageType::Stinger, 4] = '\c0%1 gets that seeking feeling from %4\'s stinger missile.';
+
+$DeathMessage[$DamageType::StaticGrenade, 0] = '\c0%4 ends %1 with an electrical explosive charge.';
+$DeathMessage[$DamageType::StaticGrenade, 1] = '\c0%1 experiences violent electrical fury thanks to %4.';
+$DeathMessage[$DamageType::StaticGrenade, 2] = '\c0%4 tosses the static grenade of life ending power at %1.';
+$DeathMessage[$DamageType::StaticGrenade, 3] = '\c0%4 nails %1 with a static grenade.';
+$DeathMessage[$DamageType::StaticGrenade, 4] = '\c0%1\'s life ends with violent electrical blasts, curtosey of %4.';
+
+$DeathMessage[$DamageType::Plasmasaber, 0] = '\c0%4 strikes down %1 with %6 plasmasaber.';
+$DeathMessage[$DamageType::Plasmasaber, 1] = '\c0%1 endures lethal heated stab wounds courtesy of %4\'s plasmasaber.';
+$DeathMessage[$DamageType::Plasmasaber, 2] = '\c0%4 swings to the fences with a plasmasaber in %1\'s general direction.';
+$DeathMessage[$DamageType::Plasmasaber, 3] = '\c0%4 nails %1 with a plasmasaber.';
+$DeathMessage[$DamageType::Plasmasaber, 4] = '\c0%1\'s death was swift and vengeful, thanks to %4\'s saber skills.';
+
+$DeathMessage[$DamageType::BladeOfVengance, 0] = '\c0%4 strikes down %1 with %6 blade of vengeance.';
+$DeathMessage[$DamageType::BladeOfVengance, 1] = '\c0%1 endures lethal sword wounds from %4.';
+$DeathMessage[$DamageType::BladeOfVengance, 2] = '\c0%4 stabs %1 lethaly with the blade of vengeance.';
+$DeathMessage[$DamageType::BladeOfVengance, 3] = '\c0%4 hacks and slashes at %1 with a blade of vengeance.';
+$DeathMessage[$DamageType::BladeOfVengance, 4] = '\c0%1\'s swordmanship skills were outmatched by %4 and %6 blade of vengeance.';
+
+$DeathMessage[$DamageType::BladeOfVengance_Assassination, 0] = '\c0%4 holds %1 in that close, rear, and stabtastic aspect.';
+$DeathMessage[$DamageType::BladeOfVengance_Assassination, 1] = '\c0%1 takes a sword to the back courtesy of %4.';
+$DeathMessage[$DamageType::BladeOfVengance_Assassination, 2] = '\c0%4 assassinated %1 with %6 blade of vengeance.';
+$DeathMessage[$DamageType::BladeOfVengance_Assassination, 3] = '\c0%4 strikes down %1 in that lethal backstabbing fashion.';
+$DeathMessage[$DamageType::BladeOfVengance_Assassination, 4] = '\c0%1\'s unexpected blade of vengeance death came quickly from %4.';
+
+$DeathMessage[$DamageType::MG42, 0] = '\c0%4 unleashes the full power of %6 MG42 upon %1.';
+$DeathMessage[$DamageType::MG42, 1] = '\c0%4 tears apart %1 with an MG42 machine gun.';
+$DeathMessage[$DamageType::MG42, 2] = '\c0%4 shows %1 the full power of an MG42 machine gun';
+$DeathMessage[$DamageType::MG42, 3] = '\c0%4 blows numerous holes into %1, MG42 sized holes.';
+$DeathMessage[$DamageType::MG42, 4] = '\c0%1 is rapidly perforated by %4\'s MG42.';
+
+$DeathMessage[$DamageType::MRXX, 0] = '\c0%4 turns %6 trusted harbinger machine gun in %1\'s general direction.';
+$DeathMessage[$DamageType::MRXX, 1] = '\c0%4 annihilates %1 with %6 MRXX ZC4 machine gun.';
+$DeathMessage[$DamageType::MRXX, 2] = '\c0%4 shreds %1 with an MRXX ZC4 machine gun.';
+$DeathMessage[$DamageType::MRXX, 3] = '\c0%4 rips apart %1 with an MRXX ZC4.';
+$DeathMessage[$DamageType::MRXX, 4] = '\c0%1 is shown the power of harbinger machine gun weaponry by %4.';
+
+$DeathMessage[$DamageType::PTorpedo, 0] = '\c0%4 aims down the scope on %6 proton torpedo cannon, %1 ceased to exist.';
+$DeathMessage[$DamageType::PTorpedo, 1] = '\c0%4 vaporizes %1 with %6 proton torpedo cannon.';
+$DeathMessage[$DamageType::PTorpedo, 2] = '\c0%4 turns %1 to dust with a single proton torpedo strike.';
+$DeathMessage[$DamageType::PTorpedo, 3] = '\c0%4 ended the existence of %1 with a proton torpedo cannon.';
+$DeathMessage[$DamageType::PTorpedo, 4] = '\c0%1 gets one sight of a flash, followed by the destructive end thanks to %4.';
+
+$DeathMessage[$DamageType::CrimsonHawk, 0] = '\c0%4 strikes down %1 with %6 crimson hawk pulse pistol.';
+$DeathMessage[$DamageType::CrimsonHawk, 1] = '\c0%4 takes down %1 with rapid energy pulses from a crimson hawk.';
+$DeathMessage[$DamageType::CrimsonHawk, 2] = '\c0%4 shows %1 what happens when you face down Trevor Haliade\'s pistol.';
+$DeathMessage[$DamageType::CrimsonHawk, 3] = '\c0%4 unloads rapid pulse bursts upon %1 with a crimson hawk pistol.';
+$DeathMessage[$DamageType::CrimsonHawk, 4] = '\c0%1 has nowhere to run or hide once %4\'s rapid fire pulses engage.';
+
+$DeathMessage[$DamageType::M93, 0] = '\c0%4 unleashes burst fired pistol rounds upon %1.';
+$DeathMessage[$DamageType::M93, 1] = '\c0%4 eliminates %1 with %6 M93 pistol.';
+$DeathMessage[$DamageType::M93, 2] = '\c0%4 hits %1 with burst fired precision small arms fire.';
+$DeathMessage[$DamageType::M93, 3] = '\c0%4 overpowers %1 with %6 M93 burst fire pistol.';
+$DeathMessage[$DamageType::M93, 4] = '\c0%1 is put down by %4\'s M93 bursts.';
+
+$DeathMessage[$DamageType::ES77PulsePhaser, 0] = '\c0%4 nails %1 with repeated heated energy pulses.';
+$DeathMessage[$DamageType::ES77PulsePhaser, 1] = '\c0%4 eliminates %1 with %6 ES-77 Pulse Phaser.';
+$DeathMessage[$DamageType::ES77PulsePhaser, 2] = '\c0%4 shows %1 the power of the pulse phaser.';
+$DeathMessage[$DamageType::ES77PulsePhaser, 3] = '\c0%4 fires off superheated pulse shots in %1\'s direction.';
+$DeathMessage[$DamageType::ES77PulsePhaser, 4] = '\c0%4 makes short work of %1 with a pulse phaser.';

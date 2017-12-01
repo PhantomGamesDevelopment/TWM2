@@ -1,3 +1,5 @@
+$TWM2::ArmorHasCollisionFunction[RapierZombieArmor] = true;
+
 datablock PlayerData(RapierZombieArmor) : LightMaleBiodermArmor {
 	maxDamage = 1.0;
 	minImpactSpeed = 50;
@@ -17,8 +19,13 @@ datablock PlayerData(RapierZombieArmor) : LightMaleBiodermArmor {
 
 	boundingBox = "2.0 2.0 1.2";
 
-	damageScale[$DamageType::M1700] = 2.0;
+	damageScale[$DamageType::M1700] = 4.5;
+	damageScale[$DamageType::Wp400] = 4.0;
+	damageScale[$DamageType::SCD343] = 4.0;
+	damageScale[$DamageType::SA2400] = 5.0;
+	damageScale[$DamageType::Model1887] = 4.0;
 	damageScale[$DamageType::Missile] = 100.0;
+	damageScale[$DamageType::CrimsonHawk] = 1.9;
 
 	max[RepairKit]			= 0;
 	max[Mine]			= 0;
@@ -56,6 +63,41 @@ datablock ShapeBaseImageData(ZWingAltImage2) {
 	offset = "0 0 0"; // L/R - F/B - T/B
 	rotation = "-0.5 -2 0 35"; // L/R - F/B - T/B
 };
+
+function RapierZombieArmor::armorCollisionFunction(%datablock, %zombie, %colPlayer) {
+	if(!isObject(%zombie) || %zombie.getState() $= "dead") {
+		return;
+	}
+	if(!isObject(%colPlayer) || %colPlayer.getState() $= "dead") {
+		return;
+	}
+	//Check to make sure we're not hitting another zombie / boss
+	if(%colPlayer.isBoss || %colPlayer.isZombie || %colPlayer.rapierShield) {
+		return;
+	}
+	
+	//Damage.
+	%causeInfect = %zombie.damage_infectOnTouch;
+	%baseDamage = %zombie.damage_amountOnTouch;
+	%multiplier = %zombie.damage_alreadyInfectedMultiplier;
+	
+	%total = %colPlayer.infected ? (%baseDamage * %multiplier) : %baseDamage;	
+	
+	%chance = getRandom(1, 3);
+	if(%chance != 3) {
+		%zombie.iscarrying = true;
+		%colPlayer.grabbed = true;
+		%colPlayer.damage(0, %colPlayer.getPosition(), %baseDamage, $DamageType::Zombie);
+		%zombie.killingPlayer = %datablock.zCarryLoop(%zombie, %colPlayer, 0);
+	}
+	else {
+		%colPlayer.damage(0, %colPlayer.getPosition(), %total, $DamageType::Zombie);
+		if(%causeInfect) {
+			%colPlayer.Infected = 1;
+			%colPlayer.InfectedLoop = schedule(10, %colPlayer, "TWM2Lib_Zombie_Core", "InfectLoop", %colPlayer);		
+		}
+	}
+}
 
 function RapierZombieArmor::AI(%datablock, %zombie) {
 	//No special AI here, we'll let %block.move() handle it...

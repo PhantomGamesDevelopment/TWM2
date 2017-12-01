@@ -1,18 +1,23 @@
 datablock PlayerData(SniperZombieArmor) : LightMaleHumanArmor {
-   boundingBox = "1.63 1.63 2.6";
-   maxDamage = 2.5;
-   minImpactSpeed = 35;
-   shapeFile = "bioderm_heavy.dts";
+	boundingBox = "1.63 1.63 2.6";
+	maxDamage = 2.5;
+	minImpactSpeed = 35;
+	shapeFile = "bioderm_heavy.dts";
 
-   debrisShapeName = "bio_player_debris.dts";
+	debrisShapeName = "bio_player_debris.dts";
 
-   //Foot Prints
-   decalData   = HeavyBiodermFootprint;
-   decalOffset = 0.4;
+	//Foot Prints
+	decalData   = HeavyBiodermFootprint;
+	decalOffset = 0.4;
 
-   waterBreathSound = WaterBreathBiodermSound;
+	waterBreathSound = WaterBreathBiodermSound;
 
-   damageScale[$DamageType::M1700] = 2.0;
+	damageScale[$DamageType::M1700] = 4.5;
+	damageScale[$DamageType::Wp400] = 4.0;
+	damageScale[$DamageType::SCD343] = 4.0;
+	damageScale[$DamageType::SA2400] = 5.0;
+	damageScale[$DamageType::Model1887] = 4.0;
+	damageScale[$DamageType::CrimsonHawk] = 1.9;
 
 	max[RepairKit]			= 0;
 	max[Mine]				= 0;
@@ -20,17 +25,17 @@ datablock PlayerData(SniperZombieArmor) : LightMaleHumanArmor {
 };
 
 datablock ShapeBaseImageData(ZSniperImage1) {
-   shapeFile = "weapon_sniper.dts";
-   emap = true;
-   armThread = looksn;
+	shapeFile = "weapon_sniper.dts";
+	emap = true;
+	armThread = looksn;
 };
 
 datablock ShapeBaseImageData(ZSniperImage2) {
-   shapeFile = "weapon_targeting.dts";
-   offset = "0.0 1.0 0.41";
-   rotation = "90 0 0 90";
-   armThread = looksn;
-   emap = true;
+	shapeFile = "weapon_targeting.dts";
+	offset = "0.0 1.0 0.41";
+	rotation = "90 0 0 90";
+	armThread = looksn;
+	emap = true;
 };
 
 function SniperZombiemovetotarget(%zombie){

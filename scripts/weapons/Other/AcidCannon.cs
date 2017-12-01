@@ -155,49 +155,6 @@ datablock TracerProjectileData(LZombieAcidBall) {
    emap = true;
 };
 
-datablock TracerProjectileData(EliteRapierAcidBomb) {
-   doDynamicClientHits = true;
-
-   projectileShapeName = "";
-   directDamage        = 0.0;
-   directDamageType    = $DamageType::ZAcid;
-   hasDamageRadius     = true;
-   indirectDamage      = 0.6;
-   damageRadius        = 7.5;
-   kickBackStrength    = 0.0;
-   radiusDamageType    = $DamageType::ZAcid;
-   sound          	   = BlasterProjectileSound;
-   explosion           = ZAcidBombExplosion;
-
-   ImageSource         = "AcidCannonImage";
-
-   dryVelocity       = 100.0;
-   wetVelocity       = 100.0;
-   velInheritFactor  = 1.0;
-   fizzleTimeMS      = 4000;
-   lifetimeMS        = 1000;
-   explodeOnDeath    = false;
-   reflectOnWaterImpactAngle = 0.0;
-   explodeOnWaterImpact      = true;
-   deflectionOnWaterImpact   = 0.0;
-   fizzleUnderwaterMS        = -1;
-
-   activateDelayMS = 100;
-
-   tracerLength    = 10;
-   tracerAlpha     = false;
-   tracerMinPixels = 6;
-   tracerColor     = "0 1 0 1";
-	tracerTex[0]  	 = "special/landSpikeBolt";
-	tracerTex[1]  	 = "special/landSpikeBoltCross";
-	tracerWidth     = 0.8;
-   crossSize       = 0.79;
-   crossViewAng    = 0.990;
-   renderCross     = true;
-   emap = true;
-};
-
-
 datablock TracerProjectileData(SSZombieAcidBall) {
    doDynamicClientHits = true;
 

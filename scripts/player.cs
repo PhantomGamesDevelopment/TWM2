@@ -2691,462 +2691,366 @@ $ammoType[47] = "Model1887Ammo";
 $ammoType[48] = "NapalmAmmo";
 
 
-function Armor::onCollision(%this,%obj,%col,%forceVehicleNode)
-{
-   if (%obj.getState() $= "Dead")
-      return;
-
-   %dataBlock = %col.getDataBlock();
-   %colarmortype = %Datablock.getname();
-   %className = %dataBlock.className;
-   %objarmortype = %obj.getdatablock().getname();
-   %client = %obj.client;
-   // player collided with a vehicle
-   %node = -1;
-   if (%forceVehicleNode !$= "" || (%className $= WheeledVehicleData || %className $= FlyingVehicleData || %className $= HoverVehicleData) &&
-         %obj.mountVehicle && %obj.getState() $= "Move" && %col.mountable && !%obj.inStation && %col.getDamageState() !$= "Destroyed") {
-
-	// Escape pod
-	if (%dataBlock == EscapePodVehicle.getID()) {
-		if (%dataBlock.isBlocked(%col,%obj)) {
-			if (%col.blockedTime + 1000 < getSimTime()) {
-				%col.blockedTime = getSimTime();
-				%col.play3D(TelePadAccessDeniedSound);
-				messageClient(%obj.client,'msgClient','\c2Unable to launch, escape pod is blocked!');
-			}
-			return;
-		}
+function Armor::onCollision(%this, %obj, %col, %forceVehicleNode) {
+	if (%obj.getState() $= "Dead") {
+		return;
 	}
 
-      //if the player is an AI, he should snap to the mount points in node order,
-      //to ensure they mount the turret before the passenger seat, regardless of where they collide...
-      if (!%obj.isZombie && %obj.client.isAIControlled())
-      {
-         %transform = %col.getTransform();
+	%dataBlock = %col.getDataBlock();
+	%colarmortype = %Datablock.getname();
+	%className = %dataBlock.className;
+	%objarmortype = %obj.getdatablock().getname();
+	%client = %obj.client;
+	// player collided with a vehicle
+	%node = -1;
+	if (%forceVehicleNode !$= "" || (%className $= WheeledVehicleData || %className $= FlyingVehicleData || %className $= HoverVehicleData) 
+		&& %obj.mountVehicle && %obj.getState() $= "Move" && %col.mountable && !%obj.inStation && %col.getDamageState() !$= "Destroyed") {
 
-         //either the AI is *required* to pilot, or they'll pick the first available passenger seat
-         if (%client.pilotVehicle)
-         {
-            //make sure the bot is in light armor
-            if (%client.player.getArmorSize() $= "Light")
-            {
-               //make sure the pilot seat is empty
-               if (!%col.getMountNodeObject(0))
-                  %node = 0;
-            }
-         }
-         else
-            %node = findAIEmptySeat(%col, %obj);
-      }
-      else
-         %node = findEmptySeat(%col, %obj, %forceVehicleNode);
+		// Escape pod
+		if (%dataBlock == EscapePodVehicle.getID()) {
+			if (%dataBlock.isBlocked(%col,%obj)) {
+				if (%col.blockedTime + 1000 < getSimTime()) {
+					%col.blockedTime = getSimTime();
+					%col.play3D(TelePadAccessDeniedSound);
+					messageClient(%obj.client,'msgClient','\c2Unable to launch, escape pod is blocked!');
+				}
+				return;
+			}
+		}
 
-      //now mount the player in the vehicle
-      if(%node >= 0)
-      {
-         // players can't be pilots, bombardiers or turreteers if they have
-         // "large" packs -- stations, turrets, turret barrels
-         if(hasLargePack(%obj)) {
-            // check to see if attempting to enter a "sitting" node
-            if(nodeIsSitting(%datablock, %node)) {
-               // send the player a message -- can't sit here with large pack
-               if(!%obj.noSitMessage)
-               {
-                  %obj.noSitMessage = true;
-                  %obj.schedule(2000, "resetSitMessage");
-                  messageClient(%obj.client, 'MsgCantSitHere', '\c2Pack too large, can\'t occupy this seat.~wfx/misc/misc.error.wav');
-               }
-               return;
-            }
-         }
-         if(%col.noEnemyControl && %obj.team != %col.team)
-            return;
+		//if the player is an AI, he should snap to the mount points in node order,
+		//to ensure they mount the turret before the passenger seat, regardless of where they collide...
+		if (!%obj.isZombie && %obj.client.isAIControlled()) {
+			%transform = %col.getTransform();
+			//either the AI is *required* to pilot, or they'll pick the first available passenger seat
+			if (%client.pilotVehicle) {
+				//make sure the bot is in light armor
+				if (%client.player.getArmorSize() $= "Light") {
+					//make sure the pilot seat is empty
+					if (!%col.getMountNodeObject(0)) {
+						%node = 0;
+					}
+				}
+			}
+			else {
+				%node = findAIEmptySeat(%col, %obj);
+			}
+		}
+		else {
+			%node = findEmptySeat(%col, %obj, %forceVehicleNode);
+		}
 
-         commandToClient(%obj.client,'SetDefaultVehicleKeys', true);
-         //If pilot or passenger then bind a few extra keys
-         if(%node == 0)
-            commandToClient(%obj.client,'SetPilotVehicleKeys', true);
-         else
-            commandToClient(%obj.client,'SetPassengerVehicleKeys', true);
+		//now mount the player in the vehicle
+		if(%node >= 0) {
+			// players can't be pilots, bombardiers or turreteers if they have
+			// "large" packs -- stations, turrets, turret barrels
+			if(hasLargePack(%obj)) {
+				// check to see if attempting to enter a "sitting" node
+				if(nodeIsSitting(%datablock, %node)) {
+				// send the player a message -- can't sit here with large pack
+					if(!%obj.noSitMessage) {
+						%obj.noSitMessage = true;
+						%obj.schedule(2000, "resetSitMessage");
+						messageClient(%obj.client, 'MsgCantSitHere', '\c2Pack too large, can\'t occupy this seat.~wfx/misc/misc.error.wav');
+					}
+					return;
+				}
+			}
+			if(%col.noEnemyControl && %obj.team != %col.team) {
+				return;
+			}
 
-         if(!%obj.inStation)
-            %col.lastWeapon = ( %col.getMountedImage($WeaponSlot) == 0 ) ? "" : %col.getMountedImage($WeaponSlot).getName().item;
-         else
-            %col.lastWeapon = %obj.lastWeapon;
+			commandToClient(%obj.client,'SetDefaultVehicleKeys', true);
+			//If pilot or passenger then bind a few extra keys
+			if(%node == 0) {
+				commandToClient(%obj.client,'SetPilotVehicleKeys', true);
+			}
+			else {
+				commandToClient(%obj.client,'SetPassengerVehicleKeys', true);
+			}
 
-	%obj.preVehicleMountPos = %obj.getPosition();
+			if(!%obj.inStation) {
+				%col.lastWeapon = ( %col.getMountedImage($WeaponSlot) == 0 ) ? "" : %col.getMountedImage($WeaponSlot).getName().item;
+			}
+			else {
+				%col.lastWeapon = %obj.lastWeapon;
+			}
+			%obj.preVehicleMountPos = %obj.getPosition();
 
-         %col.mountObject(%obj,%node);
-         %col.playAudio(0, MountVehicleSound);
-         %obj.mVehicle = %col;
+			%col.mountObject(%obj,%node);
+			%col.playAudio(0, MountVehicleSound);
+			%obj.mVehicle = %col;
 
 			// if player is repairing something, stop it
-			if(%obj.repairing)
+			if(%obj.repairing) {
 				stopRepairing(%obj);
-
-         //this will setup the huds as well...
-         %dataBlock.playerMounted(%col,%obj, %node);
-      }
-   }
+			}
+			//this will setup the huds as well...
+			%dataBlock.playerMounted(%col, %obj, %node);
+		}
+	}
 	// TODO - keep these up to date
 	else if (%className $= "wall" || %className $= "wwall" || %className $= "spine" || %className $= "mspine" || %className $= "floor") {
 		%obj.playAudio(0,(GetRandom()*2 >1) ? LFootMediumMetalSound : RFootMediumMetalSound);
 		%obj.lastDepCol = %col;
 		%obj.lastDepColPos = %obj.getPosition();
-                if (%className $= "wall")
-	            doorfunction(%obj,%col);
+		if (%className $= "wall") {
+			doorfunction(%obj, %col);
+		}
 	}
-   else if (%className $= "Armor") {
-      // player has collided with another player
-	  if(%obj.isZombie) {
-	     %objiszomb = 1;
-      }
-	  else {
-	     %objiszomb = 0;
-      }
-      if(%col.onfire == 1 && %obj.onfire != 1 && !%obj.rapierShield){
-	     %obj.maxfirecount = (%col.maxfirecount - %col.firecount);
-	     %obj.onfire = 1;
-	     schedule(10, %obj, "burnloop", %obj);
-      }
-      if(%col.getState() $= "Dead" && !%objiszomb) {
-         %obj.lasttouchedcorpse = %col;
-         %gotSomething = false;
-         // it's corpse-looting time!
-         // weapons -- don't pick up more than you are allowed to carry!
-         for(%i = 0; ( %obj.weaponCount < %obj.getDatablock().maxWeapons ) && $InvWeapon[%i] !$= ""; %i++)
-         {
-            %weap = $NameToInv[$InvWeapon[%i]];
-            if ( %col.hasInventory( %weap ) )
-            {
-               if ( %obj.incInventory(%weap, 1) > 0 )
-               {
-                  %col.decInventory(%weap, 1);
-                  %gotSomething = true;
-                  messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', %weap.pickUpName);
-               }
-               //New Clip Stuff
-               %WImg = %weap @ "Image"; //I love how there are so many ways
-                                        //To get The WeaponImage with only
-                                        //Ammo or NameToInv :p -Phantom
-               %ClipsLeft = %obj.ClipCount[%WImg.ClipName];
-               %MaxClips = %WImg.InitialClips; //Initial == Max?
-               %ColClipsLeft = %col.ClipCount[%WImg.ClipName];
-               //AHA! Pickup time
-               if(%ClipsLeft < %MaxClips) {
-                  %clipsToAdd = %MaxClips - %ClipsLeft;
-                  //this if checks the dead player's remaining clips
-                  //If needed is more than what we have, we go to the
-                  //else, otherwise, we add it.
-                  if(%ColClipsLeft > 1 && (%ColClipsLeft - %clipsToAdd >= 0)) {
-                     %ClipPickUpName = %WImg.ClipPickupName[%WImg.ClipName];
-                     %col.ClipCount[%WImg.ClipName] -= %clipsToAdd;
-                     %obj.ClipCount[%WImg.ClipName] += %clipsToAdd;
-                     %GotSomething = true;
-                     messageClient(%obj.client, 'MsgItemPickup', "\c0You picked up "@%ClipPickUpName@".");
-                     //check if reload needs to be done?
-                     
-                  }
-                  else {
-                     %clipsToAdd = %ColClipsLeft;
-                     %ClipPickUpName = %WImg.ClipPickupName[%WImg.ClipName];
-                     %col.ClipCount[%WImg.ClipName] -= %clipsToAdd;
-                     %obj.ClipCount[%WImg.ClipName] += %clipsToAdd;
-                     %GotSomething = true;
-                     messageClient(%obj.client, 'MsgItemPickup', "\c0You picked up "@%ClipPickUpName@".");
-                  }
-               }
-            }
-         }
-         // targeting laser:
-         if ( %col.hasInventory( "TargetingLaser" ) )
-         {
-            if ( %obj.incInventory( "TargetingLaser", 1 ) > 0 )
-            {
-               %col.decInventory( "TargetingLaser", 1 );
-               %gotSomething = true;
-               messageClient( %obj.client, 'MsgItemPickup', '\c0You picked up a targeting laser.' );
-            }
-         }
-         // ammo
-         for(%j = 0; $ammoType[%j] !$= ""; %j++)
-         {
-            %ammoAmt = %col.inv[$ammoType[%j]];
-            if(%ammoAmt)
-            {
-               // incInventory returns the amount of stuff successfully grabbed
-               %grabAmt = %obj.incInventory($ammoType[%j], %ammoAmt);
-               if(%grabAmt > 0)
-               {
-                  %col.decInventory($ammoType[%j], %grabAmt);
-                  %gotSomething = true;
-                  messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', $ammoType[%j].pickUpName);
-                  %obj.client.setWeaponsHudAmmo($ammoType[%j], %obj.getInventory($ammoType[%j]));
-               }
-            }
-         }
-         // figure out what type, if any, grenades the (live) player has
-         %playerGrenType = "None";
-         for(%x = 0; $InvGrenade[%x] !$= ""; %x++) {
-            %gren = $NameToInv[$InvGrenade[%x]];
-            %playerGrenAmt = %obj.inv[%gren];
-            if(%playerGrenAmt > 0)
-            {
-               %playerGrenType = %gren;
-               break;
-            }
-         }
-         // grenades
-         for(%k = 0; $InvGrenade[%k] !$= ""; %k++)
-         {
-            %gren = $NameToInv[$InvGrenade[%k]];
-            %corpseGrenAmt = %col.inv[%gren];
-            // does the corpse hold any of this grenade type?
-            if(%corpseGrenAmt)
-            {
-               // can the player pick up this grenade type?
-               if((%playerGrenType $= "None") || (%playerGrenType $= %gren))
-               {
-                  %taken = %obj.incInventory(%gren, %corpseGrenAmt);
-                  if(%taken > 0)
-                  {
-                     %col.decInventory(%gren, %taken);
-                     %gotSomething = true;
-                     messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', %gren.pickUpName);
-                     %obj.client.setInventoryHudAmount(%gren, %obj.getInventory(%gren));
-                  }
-               }
-               break;
-            }
-         }
-         // figure out what type, if any, mines the (live) player has
-         %playerMineType = "None";
-         for(%y = 0; $InvMine[%y] !$= ""; %y++)
-         {
-            %mType = $NameToInv[$InvMine[%y]];
-            %playerMineAmt = %obj.inv[%mType];
-            if(%playerMineAmt > 0)
-            {
-               %playerMineType = %mType;
-               break;
-            }
-         }
-         // mines
-         for(%l = 0; $InvMine[%l] !$= ""; %l++)
-         {
-            %mine = $NameToInv[$InvMine[%l]];
-            %mineAmt = %col.inv[%mine];
-            if(%mineAmt) {
-               if((%playerMineType $= "None") || (%playerMineType $= %mine))
-               {
-                  %grabbed = %obj.incInventory(%mine, %mineAmt);
-                  if(%grabbed > 0)
-                  {
-                     %col.decInventory(%mine, %grabbed);
-                     %gotSomething = true;
-                     messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', %mine.pickUpName);
-                     %obj.client.setInventoryHudAmount(%mine, %obj.getInventory(%mine));
-                  }
-               }
-               break;
-            }
-         }
-         // beacons
-         %beacAmt = %col.inv[Beacon];
-         if(%beacAmt)
-         {
-            %bTaken = %obj.incInventory(Beacon, %beacAmt);
-            if(%bTaken > 0)
-            {
-               %col.decInventory(Beacon, %bTaken);
-               %gotSomething = true;
-               messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', Beacon.pickUpName);
-               %obj.client.setInventoryHudAmount(Beacon, %obj.getInventory(Beacon));
-            }
-         }
-         // repair kit
-         %rkAmt = %col.inv[RepairKit];
-         if(%rkAmt)
-         {
-            %rkTaken = %obj.incInventory(RepairKit, %rkAmt);
-            if(%rkTaken > 0)
-            {
-               %col.decInventory(RepairKit, %rkTaken);
-               %gotSomething = true;
-               messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', RepairKit.pickUpName);
-               %obj.client.setInventoryHudAmount(RepairKit, %obj.getInventory(RepairKit));
-            }
-         }
-      }
-	else if((%colarmortype $= "ZombieArmor" || %col.canZkill == 1) && %obj.Infected != 1 && %objiszomb != 1 && !%obj.rapierShield){
-	      %Vector = vectorscale(%col.getvelocity(), 100);
-	      %obj.applyimpulse(%obj.getposition(), %Vector);
-	      %obj.Infected = 1;
-	      %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
-	      %obj.damage(0, %obj.position, 0.2, $DamageType::Zombie);
-	}
-	else if(%colarmortype $= "RavagerZombieArmor" && %obj.Infected != 1 && %objiszomb != 1 && !%obj.rapierShield){
-	      if(%obj.hit $= ""){
-		     %obj.hit = 1;
-		     %obj.setWhiteOut("0.5");
-		     playPain(%obj);
-	      }
-	      else if(%obj.hit == 1){
-	   	     %obj.Infected = 1;
-	   	     %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
-          }
-          %Vector = vectorscale(%col.getvelocity(), 100);
-	      %obj.applyimpulse(%obj.getposition(), %Vector);
-	      %obj.damage(0, %obj.position, 0.2, $DamageType::Zombie);
-       }
-	else if(%colarmortype $= "DemonZombieArmor" && %obj.Infected != 1 && %objiszomb != 1 && !%obj.rapierShield){
-	      %Vector = vectorscale(%col.getvelocity(), 100);
-	      %obj.applyimpulse(%obj.getposition(), %Vector);
-	      %obj.Infected = 1;
-	      %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
-	      %obj.damage(0, %obj.position, 0.4, $DamageType::Zombie);
-	}
-	else if(%colarmortype $= "RapierZombieArmor" && %obj.grabbed != 1 && %objiszomb != 1 && !%obj.rapierShield){
-	      %chance = getRandom(1,3);
-	      if(%chance == 3 && %obj.Infected != 1){
-		     %obj.damage(0, %obj.position, 0.4, $DamageType::Zombie);
-		     %obj.Infected = 1;
-		     %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
-	      }
-          else {
-		     %col.iscarrying = 1;
-		     %obj.grabbed = 1;
-		     %obj.damage(0, %obj.position, 0.2, $DamageType::Zombie);
-		     %col.killingPlayer = %col.getDatablock().zCarryLoop(%col, %obj, 0); // schedule(10, 0, "RkillLoop", %col, %obj, 0);
-	      }
-	}
-	else if(%colarmortype $= "ShifterZombieArmor" && %obj.Infected != 1 && %objiszomb != 1 && !%obj.rapierShield){
-	      %Vector = vectorscale(%col.getvelocity(), 100);
-	      %obj.applyimpulse(%obj.getposition(), %Vector);
-	      %obj.Infected = 1;
-	      %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
-	      %obj.damage(0, %obj.position, 0.3, $DamageType::Zombie);
-	}
-	else if(%colarmortype $= "SummonerZombieArmor" && %obj.Infected != 1 && %objiszomb != 1 && !%obj.rapierShield){
-	      %Vector = vectorscale(%col.getvelocity(), 100);
-	      %obj.applyimpulse(%obj.getposition(), %Vector);
-	      %obj.Infected = 1;
-	      %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
-	      %obj.damage(0, %obj.position, 0.3, $DamageType::Zombie);
-	}
-	else if(%colarmortype $= "DemonUltraZombieArmor" && %obj.Infected != 1 && %objiszomb != 1 && !%obj.rapierShield){
-	      %Vector = vectorscale(%col.getvelocity(), 100);
-	      %obj.applyimpulse(%obj.getposition(), %Vector);
-	      %obj.Infected = 1;
-	      %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
-	      %obj.damage(0, %obj.position, 0.5, $DamageType::Zombie);
-	}
-    else if((%colarmortype $= "LordRogZombieArmor" && %objiszomb != 1 && !%obj.rapierShield)) {
-       if(%col.isAllyBot && !%col.isAttacking) {
-          return;
-       }
-          %obj.scriptkill($DamageType::Admin);
-          %col.setDamageLevel(%col.getDamageLevel() - 10.0);
-          %col.setVelocity("0 0 0");
-          if(!%obj.iszombie) {
-             ServerPlay3d(BOVHitSound, %obj.getPosition());
-             %randMessage = getrandom(3)+1;
-             switch(%randMessage) {
-                case 1:
-                   MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Slice And Dice "@%obj.client.namebase@"!");
-                case 2:
-                   MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Die... "@%obj.client.namebase@" Painfully.");
-                case 3:
-                   MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Your life "@%obj.client.namebase@", is now mine!");
-                default:
-                   MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Slice And Dice "@%obj.client.namebase@"!");
-             }
-          }
-    }
-    else if((%colarmortype $= "ROGZombieArmor" && %objiszomb != 1 && !%obj.rapierShield && !%col.isPlayerRog)) {
-       if(%col.isAllyBot && !%col.isAttacking) {
-          return;
-       }
-          %obj.scriptkill($DamageType::Admin);
-          %col.setDamageLevel(%col.getDamageLevel() - 10.0);
-          %col.setVelocity("0 0 0");
-          if(!%obj.iszombie) {
-             ServerPlay3d(BOVHitSound, %obj.getPosition());
-             %randMessage = getrandom(3)+1;
-             switch(%randMessage) {
-                case 1:
-                   MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[16]@": Slice And Dice "@%obj.client.namebase@"!");
-                case 2:
-                   MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[16]@": Die... "@%obj.client.namebase@" Painfully.");
-                case 3:
-                   MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[16]@": Your life "@%obj.client.namebase@", is now mine!");
-                default:
-                   MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[16]@": Slice And Dice "@%obj.client.namebase@"!");
-             }
-          }
-    }
-	else if((%colarmortype $= "ZombieArmor" || %col.canZkill == 1) && %objiszomb != 1 && !%obj.rapierShield) {
-	      %obj.damage(0, %obj.position, 0.2, $DamageType::Zombie);
-    }
-	else if(%colarmortype $= "FZombieArmor" && %objiszomb != 1 && !%obj.rapierShield) {
-	      %obj.damage(0, %obj.position, 0.4, $DamageType::Zombie);
-    }
-	else if((%colarmortype $= "DemonZombieArmor" || %colarmortype $= "WraithZombieArmor")  && %objiszomb != 1 && !%obj.rapierShield) {
-	      %obj.damage(0, %obj.position, 0.4, $DamageType::Zombie);
-    }
-	else if(%colarmortype $= "DemonMotherZombieArmor" && %objiszomb != 1 && !%obj.rapierShield) {
-	      if(%obj.Infected != 1) {
-		     %obj.Infected = 1;
-		     %obj.damage(0, %obj.position, 0.8, $DamageType::Zombie);
-		     %obj.InfectedLoop = schedule(10, %obj, "TWM2Lib_Zombie_Core", "InfectLoop", %obj);
-	      }
-          else {
-		     %obj.damage(0, %obj.position, 1.2, $DamageType::Zombie);
-          }
-	}
-	else if ($PlayerSnapTo == true) {
-		if (!isObject(%col.getMountedObject(0))) {
-			if (!isObject(%obj.getMountedObject(0)) || %obj.getMountedObject(0) != %col) {
-				%col.mountObject(%obj,$BackPackSlot);
-				%gotSomething = true;
+	else if (%className $= "Armor") {
+		// player has collided with another player
+		if(%col.onfire == 1 && %obj.onfire != 1 && !%obj.rapierShield){
+			%obj.maxfirecount = (%col.maxfirecount - %col.firecount);
+			%obj.onfire = 1;
+			schedule(10, %obj, "burnloop", %obj);
+		}
+		if(%col.getState() $= "Dead" && (!%obj.isZombie && !%col.isZombie)) {
+			%obj.lasttouchedcorpse = %col;
+			%gotSomething = false;
+			// it's corpse-looting time!
+			// weapons -- don't pick up more than you are allowed to carry!
+			for(%i = 0; ( %obj.weaponCount < %obj.getDatablock().maxWeapons ) && $InvWeapon[%i] !$= ""; %i++) {
+				%weap = $NameToInv[$InvWeapon[%i]];
+				if ( %col.hasInventory( %weap ) ) {
+					if ( %obj.incInventory(%weap, 1) > 0 ) {
+						%col.decInventory(%weap, 1);
+						%gotSomething = true;
+						messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', %weap.pickUpName);
+					}
+					//New Clip Stuff
+					%WImg = %weap @ "Image"; //I love how there are so many ways
+					//To get The WeaponImage with only
+					//Ammo or NameToInv :p -Phantom
+					%ClipsLeft = %obj.ClipCount[%WImg.ClipName];
+					%MaxClips = %WImg.InitialClips; //Initial == Max?
+					%ColClipsLeft = %col.ClipCount[%WImg.ClipName];
+					//AHA! Pickup time
+					if(%ClipsLeft < %MaxClips) {
+						%clipsToAdd = %MaxClips - %ClipsLeft;
+						//this if checks the dead player's remaining clips
+						//If needed is more than what we have, we go to the
+						//else, otherwise, we add it.
+						if(%ColClipsLeft > 1 && (%ColClipsLeft - %clipsToAdd >= 0)) {
+							%ClipPickUpName = %WImg.ClipPickupName[%WImg.ClipName];
+							%col.ClipCount[%WImg.ClipName] -= %clipsToAdd;
+							%obj.ClipCount[%WImg.ClipName] += %clipsToAdd;
+							%GotSomething = true;
+							messageClient(%obj.client, 'MsgItemPickup', "\c0You picked up "@%ClipPickUpName@".");
+							//check if reload needs to be done?
+							if(%col.inv[%WImg.ammo] == 0) {
+								AttemptReload(%WImg, %obj, $WeaponSlot);
+							}
+						}
+						else {
+							%clipsToAdd = %ColClipsLeft;
+							%ClipPickUpName = %WImg.ClipPickupName[%WImg.ClipName];
+							%col.ClipCount[%WImg.ClipName] -= %clipsToAdd;
+							%obj.ClipCount[%WImg.ClipName] += %clipsToAdd;
+							%GotSomething = true;
+							messageClient(%obj.client, 'MsgItemPickup', "\c0You picked up "@%ClipPickUpName@".");
+						}
+					}
+				}
+			}
+			// targeting laser:
+			if ( %col.hasInventory( "TargetingLaser" ) ) {
+				if ( %obj.incInventory( "TargetingLaser", 1 ) > 0 ) {
+					%col.decInventory( "TargetingLaser", 1 );
+					%gotSomething = true;
+					messageClient( %obj.client, 'MsgItemPickup', '\c0You picked up a targeting laser.' );
+				}
+			}
+			// ammo
+			for(%j = 0; $ammoType[%j] !$= ""; %j++) {
+				%ammoAmt = %col.inv[$ammoType[%j]];
+				if(%ammoAmt) {
+					// incInventory returns the amount of stuff successfully grabbed
+					%grabAmt = %obj.incInventory($ammoType[%j], %ammoAmt);
+					if(%grabAmt > 0) {
+						%col.decInventory($ammoType[%j], %grabAmt);
+						%gotSomething = true;
+						messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', $ammoType[%j].pickUpName);
+						%obj.client.setWeaponsHudAmmo($ammoType[%j], %obj.getInventory($ammoType[%j]));
+					}
+				}
+			}
+			// figure out what type, if any, grenades the (live) player has
+			%playerGrenType = "None";
+			for(%x = 0; $InvGrenade[%x] !$= ""; %x++) {
+				%gren = $NameToInv[$InvGrenade[%x]];
+				%playerGrenAmt = %obj.inv[%gren];
+				if(%playerGrenAmt > 0) {
+					%playerGrenType = %gren;
+					break;
+				}
+			}
+			// grenades
+			for(%k = 0; $InvGrenade[%k] !$= ""; %k++) {
+				%gren = $NameToInv[$InvGrenade[%k]];
+				%corpseGrenAmt = %col.inv[%gren];
+				// does the corpse hold any of this grenade type?
+				if(%corpseGrenAmt) {
+					// can the player pick up this grenade type?
+					if((%playerGrenType $= "None") || (%playerGrenType $= %gren)) {
+						%taken = %obj.incInventory(%gren, %corpseGrenAmt);
+						if(%taken > 0) {
+							%col.decInventory(%gren, %taken);
+							%gotSomething = true;
+							messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', %gren.pickUpName);
+							%obj.client.setInventoryHudAmount(%gren, %obj.getInventory(%gren));
+						}
+					}
+					break;
+				}
+			}
+			// figure out what type, if any, mines the (live) player has
+			%playerMineType = "None";
+			for(%y = 0; $InvMine[%y] !$= ""; %y++) {
+				%mType = $NameToInv[$InvMine[%y]];
+				%playerMineAmt = %obj.inv[%mType];
+				if(%playerMineAmt > 0) {
+					%playerMineType = %mType;
+					break;
+				}
+			}
+			// mines
+			for(%l = 0; $InvMine[%l] !$= ""; %l++) {
+				%mine = $NameToInv[$InvMine[%l]];
+				%mineAmt = %col.inv[%mine];
+				if(%mineAmt) {
+					if((%playerMineType $= "None") || (%playerMineType $= %mine)) {
+						%grabbed = %obj.incInventory(%mine, %mineAmt);
+						if(%grabbed > 0) {
+							%col.decInventory(%mine, %grabbed);
+							%gotSomething = true;
+							messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', %mine.pickUpName);
+							%obj.client.setInventoryHudAmount(%mine, %obj.getInventory(%mine));
+						}
+					}
+					break;
+				}
+			}
+			// beacons
+			%beacAmt = %col.inv[Beacon];
+			if(%beacAmt) {
+				%bTaken = %obj.incInventory(Beacon, %beacAmt);
+				if(%bTaken > 0) {
+					%col.decInventory(Beacon, %bTaken);
+					%gotSomething = true;
+					messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', Beacon.pickUpName);
+					%obj.client.setInventoryHudAmount(Beacon, %obj.getInventory(Beacon));
+				}
+			}
+			// repair kit
+			%rkAmt = %col.inv[RepairKit];
+			if(%rkAmt) {
+				%rkTaken = %obj.incInventory(RepairKit, %rkAmt);
+				if(%rkTaken > 0) {
+					%col.decInventory(RepairKit, %rkTaken);
+					%gotSomething = true;
+					messageClient(%obj.client, 'MsgItemPickup', '\c0You picked up %1.', RepairKit.pickUpName);
+					%obj.client.setInventoryHudAmount(RepairKit, %obj.getInventory(RepairKit));
+				}
 			}
 		}
-	}
-	else if ($NaughtyMode == true) {
-		playPain(%obj);
-		playPain(%col);
-	}
-	else if ($AngstMode == true) {
-		playDeathCry(%obj);
-		playDeathCry(%col);
-	}
-	if ($JumpyMode == true) {
-		%obj.applyImpulse(%obj.getPosition(),"0 0 500");
-		%col.applyImpulse(%col.getPosition(),"0 0 500");
-	}
-	if (%obj.client.race $= "Human" && $SexChangeMode == true) {
-		if (%obj.client.oldSex $= "")
-			%obj.client.oldSex = %obj.client.sex;
-		if (%obj.client.oldVoice $= "")
-			%obj.client.oldVoice = %obj.client.voice;
-		%voice = getTaggedString(getTargetVoice(%obj.client.target));
-		%voiceNum = getSubStr(%voice,strLen(%voice)-1,1);
-		if (%obj.client.sex $= "Male") {
-			%obj.client.sex = "Female";
-			%obj.client.voiceTag =  addTaggedString("Fem" @ %voiceNum);
-			setTargetVoice(%obj.client.target,%obj.client.voiceTag);
+		// Phantom139:
+		// TWM2 3.9.2: Major cleaning of zombie logic
+		//  All zombie damage on collision is now handled by the individual datablocks in the zombieTypes/*.cs files.
+		//  These #'s can be tweaked via the ZombieCore.cs file in the globals list at the top.
+		else if($TWM2::ArmorHasCollisionFunction[%colarmortype]) {
+			%datablock.armorCollisionFunction(%col, %obj);
 		}
-		else {
-			%obj.client.sex = "Male";
-			%obj.client.voiceTag =  addTaggedString("Male" @ %voiceNum);
-			setTargetVoice(%obj.client.target,%obj.client.voiceTag);
+		else if ($PlayerSnapTo == true) {
+			if (!isObject(%col.getMountedObject(0))) {
+				if (!isObject(%obj.getMountedObject(0)) || %obj.getMountedObject(0) != %col) {
+					%col.mountObject(%obj,$BackPackSlot);
+					%gotSomething = true;
+				}
+			}
 		}
-		%obj.setArmor(%client.armor);
+		else if ($NaughtyMode == true) {
+			playPain(%obj);
+			playPain(%col);
+		}
+		else if ($AngstMode == true) {
+			playDeathCry(%obj);
+			playDeathCry(%col);
+		}
+		if ($JumpyMode == true) {
+			%obj.applyImpulse(%obj.getPosition(),"0 0 500");
+			%col.applyImpulse(%col.getPosition(),"0 0 500");
+		}
+		if (%obj.client.race $= "Human" && $SexChangeMode == true) {
+			if (%obj.client.oldSex $= "") {
+				%obj.client.oldSex = %obj.client.sex;
+			}
+			if (%obj.client.oldVoice $= "") {
+				%obj.client.oldVoice = %obj.client.voice;
+			}
+			%voice = getTaggedString(getTargetVoice(%obj.client.target));
+			%voiceNum = getSubStr(%voice,strLen(%voice)-1,1);
+			if (%obj.client.sex $= "Male") {
+				%obj.client.sex = "Female";
+				%obj.client.voiceTag =  addTaggedString("Fem" @ %voiceNum);
+				setTargetVoice(%obj.client.target,%obj.client.voiceTag);
+			}
+			else {
+				%obj.client.sex = "Male";
+				%obj.client.voiceTag =  addTaggedString("Male" @ %voiceNum);
+				setTargetVoice(%obj.client.target,%obj.client.voiceTag);
+			}
+			%obj.setArmor(%client.armor);
+		}
+		if(%gotSomething) {
+			%col.playAudio(0, CorpseLootingSound);
+		}
 	}
-	if(%gotSomething)
-		%col.playAudio(0, CorpseLootingSound);
-   }
 }
+//else if((%colarmortype $= "LordRogZombieArmor" && %objiszomb != 1 && !%obj.rapierShield)) {
+//   if(%col.isAllyBot && !%col.isAttacking) {
+//      return;
+//   }
+//      %obj.scriptkill($DamageType::Admin);
+//      %col.setDamageLevel(%col.getDamageLevel() - 10.0);
+//      %col.setVelocity("0 0 0");
+//      if(!%obj.iszombie) {
+//         ServerPlay3d(BOVHitSound, %obj.getPosition());
+//         %randMessage = getrandom(3)+1;
+//         switch(%randMessage) {
+//            case 1:
+//               MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Slice And Dice "@%obj.client.namebase@"!");
+//            case 2:
+//               MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Die... "@%obj.client.namebase@" Painfully.");
+//            case 3:
+//               MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Your life "@%obj.client.namebase@", is now mine!");
+//            default:
+//               MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Slice And Dice "@%obj.client.namebase@"!");
+//         }
+//      }
+//}
+//else if((%colarmortype $= "ROGZombieArmor" && %objiszomb != 1 && !%obj.rapierShield && !%col.isPlayerRog)) {
+//   if(%col.isAllyBot && !%col.isAttacking) {
+//      return;
+//   }
+//      %obj.scriptkill($DamageType::Admin);
+//      %col.setDamageLevel(%col.getDamageLevel() - 10.0);
+//      %col.setVelocity("0 0 0");
+//      if(!%obj.iszombie) {
+//         ServerPlay3d(BOVHitSound, %obj.getPosition());
+//         %randMessage = getrandom(3)+1;
+//         switch(%randMessage) {
+//            case 1:
+//               MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[16]@": Slice And Dice "@%obj.client.namebase@"!");
+//            case 2:
+//               MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[16]@": Die... "@%obj.client.namebase@" Painfully.");
+//            case 3:
+//               MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[16]@": Your life "@%obj.client.namebase@", is now mine!");
+//            default:
+//               MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[16]@": Slice And Dice "@%obj.client.namebase@"!");
+//         }
+//      }
+//}
 
 function Player::resetSitMessage(%obj)
 {

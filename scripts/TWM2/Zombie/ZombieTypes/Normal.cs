@@ -1,3 +1,5 @@
+$TWM2::ArmorHasCollisionFunction[ZombieArmor] = true;
+
 datablock PlayerData(ZombieArmor) : LightMaleHumanArmor {
 	runForce = 60.20 * 90;
 	runEnergyDrain = 0.0;
@@ -22,12 +24,44 @@ datablock PlayerData(ZombieArmor) : LightMaleHumanArmor {
 
 	waterBreathSound = WaterBreathBiodermSound;
 
-	damageScale[$DamageType::M1700] = 3.0;
+	damageScale[$DamageType::M1700] = 4.5;
+	damageScale[$DamageType::Wp400] = 4.0;
+	damageScale[$DamageType::SCD343] = 4.0;
+	damageScale[$DamageType::SA2400] = 5.0;
+	damageScale[$DamageType::Model1887] = 4.0;
+	damageScale[$DamageType::CrimsonHawk] = 1.9;
 
 	max[RepairKit]			= 0;
 	max[Mine]			= 0;
 	max[Grenade]			= 0;
 };
+
+function ZombieArmor::armorCollisionFunction(%datablock, %zombie, %colPlayer) {
+	if(!isObject(%zombie) || %zombie.getState() $= "dead") {
+		return;
+	}
+	if(!isObject(%colPlayer) || %colPlayer.getState() $= "dead") {
+		return;
+	}
+	//Check to make sure we're not hitting another zombie / boss
+	if(%colPlayer.isBoss || %colPlayer.isZombie || %colPlayer.rapierShield) {
+		return;
+	}
+	//Damage.
+	%causeInfect = %zombie.damage_infectOnTouch;
+	%baseDamage = %zombie.damage_amountOnTouch;
+	%multiplier = %zombie.damage_alreadyInfectedMultiplier;
+	
+	%total = %colPlayer.infected ? (%baseDamage * %multiplier) : %baseDamage;
+	
+	%pushVector = vectorscale(%colPlayer.getvelocity(), 100);
+	%colPlayer.applyimpulse(%colPlayer.getposition(), %pushVector);
+	if(%causeInfect) {
+		%colPlayer.Infected = 1;
+		%colPlayer.InfectedLoop = schedule(10, %colPlayer, "TWM2Lib_Zombie_Core", "InfectLoop", %colPlayer);
+	}
+	%colPlayer.damage(0, %colPlayer.getPosition(), %total, $DamageType::Zombie);	
+}
 
 function ZombieArmor::AI(%datablock, %zombie) {
 	//Normal zombies do not employ any "AI" other than target and move, fork off to main move function

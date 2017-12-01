@@ -1,9 +1,14 @@
 datablock PlayerData(VolatileRavagerZombieArmor) : LightMaleBiodermArmor {
-   maxDamage = 1.0;
-   minImpactSpeed = 50;
-   speedDamageScale = 0.015;
+	maxDamage = 1.0;
+	minImpactSpeed = 50;
+	speedDamageScale = 0.015;
 
-   damageScale[$DamageType::M1700] = 2.0;
+	damageScale[$DamageType::M1700] = 4.5;
+	damageScale[$DamageType::Wp400] = 4.0;
+	damageScale[$DamageType::SCD343] = 4.0;
+	damageScale[$DamageType::SA2400] = 5.0;
+	damageScale[$DamageType::Model1887] = 4.0;
+	damageScale[$DamageType::CrimsonHawk] = 1.9;
 
 	max[RepairKit]			= 0;
 	max[Mine]			= 0;
@@ -11,8 +16,8 @@ datablock PlayerData(VolatileRavagerZombieArmor) : LightMaleBiodermArmor {
 };
 
 datablock ShapeBaseImageData(ZExplosivePack) {
-   shapeFile = "pack_upgrade_satchel.dts";
-   emap = false;
+	shapeFile = "pack_upgrade_satchel.dts";
+	emap = false;
 };
 
 function VRavZombiemovetotarget(%zombie){

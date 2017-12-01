@@ -1,29 +1,33 @@
-datablock PlayerData(SummonerZombieArmor) : LightMaleHumanArmor
-{
-   runForce = 60.20 * 90;
-   runEnergyDrain = 0.0;
-   minRunEnergy = 10;
-   maxForwardSpeed = 9;
-   maxBackwardSpeed = 7;
-   maxSideSpeed = 7;
+datablock PlayerData(SummonerZombieArmor) : LightMaleHumanArmor {
+	runForce = 60.20 * 90;
+	runEnergyDrain = 0.0;
+	minRunEnergy = 10;
+	maxForwardSpeed = 9;
+	maxBackwardSpeed = 7;
+	maxSideSpeed = 7;
 
-   jumpForce = 14.0 * 90;
+	jumpForce = 14.0 * 90;
 
-   maxDamage = 2.8;
-   minImpactSpeed = 35;
-   shapeFile = "light_male.dts";
-   jetEmitter = BiodermArmorJetEmitter;
-   jetEffect =  BiodermArmorJetEffect;
+	maxDamage = 2.8;
+	minImpactSpeed = 35;
+	shapeFile = "light_male.dts";
+	jetEmitter = BiodermArmorJetEmitter;
+	jetEffect =  BiodermArmorJetEffect;
 
-   debrisShapeName = "bio_player_debris.dts";
+	debrisShapeName = "bio_player_debris.dts";
 
-   //Foot Prints
-   decalData   = LightBiodermFootprint;
-   decalOffset = 0.3;
+	//Foot Prints
+	decalData   = LightBiodermFootprint;
+	decalOffset = 0.3;
 
-   waterBreathSound = WaterBreathBiodermSound;
+	waterBreathSound = WaterBreathBiodermSound;
 
-   damageScale[$DamageType::M1700] = 3.0;
+	damageScale[$DamageType::M1700] = 4.5;
+	damageScale[$DamageType::Wp400] = 4.0;
+	damageScale[$DamageType::SCD343] = 4.0;
+	damageScale[$DamageType::SA2400] = 5.0;
+	damageScale[$DamageType::Model1887] = 4.0;
+	damageScale[$DamageType::CrimsonHawk] = 1.9;
 
 	max[RepairKit]			= 0;
 	max[Mine]			= 0;

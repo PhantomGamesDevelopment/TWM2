@@ -1,23 +1,27 @@
-datablock PlayerData(WraithZombieArmor) : LightMaleHumanArmor
-{
-   boundingBox = "1.63 1.63 2.6";
-   maxDamage = 4.0;
-   minImpactSpeed = 35;
-   shapeFile = "bioderm_heavy.dts";
+datablock PlayerData(WraithZombieArmor) : LightMaleHumanArmor {
+	boundingBox = "1.63 1.63 2.6";
+	maxDamage = 4.0;
+	minImpactSpeed = 35;
+	shapeFile = "bioderm_heavy.dts";
 
-   //shields mo-fo's
-   shieldHealthCharge = 0.05;
-   maxShieldLevel = 4.0;
+	//shields mo-fo's
+	shieldHealthCharge = 0.05;
+	maxShieldLevel = 4.0;
 
-   debrisShapeName = "bio_player_debris.dts";
+	debrisShapeName = "bio_player_debris.dts";
 
-   //Foot Prints
-   decalData   = HeavyBiodermFootprint;
-   decalOffset = 0.4;
+	//Foot Prints
+	decalData   = HeavyBiodermFootprint;
+	decalOffset = 0.4;
 
-   waterBreathSound = WaterBreathBiodermSound;
+	waterBreathSound = WaterBreathBiodermSound;
 
-   damageScale[$DamageType::M1700] = 2.0;
+	damageScale[$DamageType::M1700] = 4.5;
+	damageScale[$DamageType::Wp400] = 4.0;
+	damageScale[$DamageType::SCD343] = 4.0;
+	damageScale[$DamageType::SA2400] = 5.0;
+	damageScale[$DamageType::Model1887] = 4.0;
+	damageScale[$DamageType::CrimsonHawk] = 1.9;
 
 	max[RepairKit]			= 0;
 	max[Mine]				= 0;

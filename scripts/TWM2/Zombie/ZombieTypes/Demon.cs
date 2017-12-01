@@ -1,3 +1,5 @@
+$TWM2::ArmorHasCollisionFunction[DemonZombieArmor] = true;
+
 datablock PlayerData(DemonZombieArmor) : LightMaleHumanArmor {
 	boundingBox = "1.63 1.63 2.6";
 	maxDamage = 4.0;
@@ -12,12 +14,54 @@ datablock PlayerData(DemonZombieArmor) : LightMaleHumanArmor {
 
 	waterBreathSound = WaterBreathBiodermSound;
 
-	damageScale[$DamageType::M1700] = 2.0;
+	damageScale[$DamageType::M1700] = 4.5;
+	damageScale[$DamageType::Wp400] = 4.0;
+	damageScale[$DamageType::SCD343] = 4.0;
+	damageScale[$DamageType::SA2400] = 5.0;
+	damageScale[$DamageType::Model1887] = 4.0;
+	damageScale[$DamageType::plasma] = 0.001;
+	damageScale[$DamageType::Burn] = 0.001;
+	damageScale[$DamageType::Fire] = 0.001;	
+	damageScale[$DamageType::CrimsonHawk] = 1.9;
 
 	max[RepairKit]			= 0;
 	max[Mine]				= 0;
 	max[Grenade]			= 0;
 };
+
+function DemonZombieArmor::armorCollisionFunction(%datablock, %zombie, %colPlayer) {
+	if(!isObject(%zombie) || %zombie.getState() $= "dead") {
+		return;
+	}
+	if(!isObject(%colPlayer) || %colPlayer.getState() $= "dead") {
+		return;
+	}
+	//Check to make sure we're not hitting another zombie / boss
+	if(%colPlayer.isBoss || %colPlayer.isZombie || %colPlayer.rapierShield) {
+		return;
+	}
+	//Damage.
+	%causeInfect = %zombie.damage_infectOnTouch;
+	%baseDamage = %zombie.damage_amountOnTouch;
+	%multiplier = %zombie.damage_alreadyInfectedMultiplier;
+	
+	//Phantom139 (11/20): Demons light players on fire, need to check for .onfire instead of the .infected flag.
+	%total = %colPlayer.onfire ? (%baseDamage * %multiplier) : %baseDamage;
+	
+	%pushVector = vectorscale(%colPlayer.getvelocity(), 1000);
+	%colPlayer.applyimpulse(%colPlayer.getposition(), %pushVector);
+	if(%causeInfect) {
+		//Phantom139: Demon Zombies now cause burns instead of infects
+		//%colPlayer.Infected = 1;
+		//%colPlayer.InfectedLoop = schedule(10, %colPlayer, "TWM2Lib_Zombie_Core", "InfectLoop", %colPlayer);
+		%colPlayer.maxfirecount += (75 * (%total / 0.5));
+		if(%colPlayer.onfire == 0 || %colPlayer.onfire $= ""){
+			%colPlayer.onfire = 1;
+			schedule(10, %colPlayer, "burnloop", %colPlayer);
+		}		
+	}
+	%colPlayer.damage(0, %colPlayer.getPosition(), %total, $DamageType::Zombie);	
+}
 
 function DemonZombieArmor::AI(%datablock, %zombie) {
 	if(!isObject(%zombie) || %zombie.getState() $= "dead") {

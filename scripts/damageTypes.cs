@@ -57,7 +57,7 @@ $DamageType::ZombieL = 58;
 $DamageType::Pistol = 59;
 $DamageType::Melee = 60;
 $DamageType::S3 = 61;
-$DamageType::W1700 = 62;
+$DamageType::M1700 = 62;
 $DamageType::G41 = 63;
 $DamageType::R700 = 64;
 $DamageType::MP26 = 65;
@@ -75,14 +75,30 @@ $DamageType::deserteagle = 76;
 $DamageType::FissionBomb = 77;
 $DamageType::RapierShield = 78;
 
+//Phantom139: TWM2 3.9.2: Added in damage types for every weapon, attack, etc for balancing individually
+$DamageType::Javelin = 79;
+$DamageType::Stinger = 80;
+$DamageType::StaticGrenade = 81;
+$DamageType::Plasmasaber = 82;
+$DamageType::BladeOfVengance_Assassination = 83;
+$DamageType::MG42 = 84;
+$DamageType::MRXX = 85;
+$DamageType::PTorpedo = 86;
+$DamageType::CrimsonHawk = 87;
+$DamageType::M93 = 88;
+$DamageType::ES77PulsePhaser = 89;
+$DamageType::Wp400 = 90;
+$DamageType::SCD343 = 91;
+$DamageType::Model1887 = 92;
+
+
+//Phantom139: TWM2 3.9.2: Updated these "special" damage types to have much higher index values
 // DMM -- added so MPBs that blow up under water get a message
-$DamageType::Water                      = 97;
-
+$DamageType::Water = 997;
 //Tinman - used in Hunters for cheap bastards  ;)
-$DamageType::NexusCamping		= 98;
-
+$DamageType::NexusCamping = 998;
 // MES -- added so CTRL-K can get a distinctive message
-$DamageType::Suicide			= 99;
+$DamageType::Suicide = 999;
 
 // Etc, etc.
 
@@ -120,14 +136,14 @@ $DamageTypeText[30] = 'tank mortar';
 $DamageTypeText[31] = 'satchel charge';
 $DamageTypeText[32] = 'MPB missile';
 $DamageTypeText[33] = 'lighting';
-$DamageTypeText[35] = 'ForceField';
+$DamageTypeText[35] = 'Force Field';
 $DamageTypeText[36] = 'Crash';
 
 $DamageTypeText[50] = 'Meteor';
 $DamageTypeText[51] = 'Cursing';
 $DamageTypeText[52] = 'Idiocy';
-$DamageTypeText[53] = 'SuperChaingun';
-$DamageTypeText[54] = 'KillerFog';
+$DamageTypeText[53] = 'Super Chaingun';
+$DamageTypeText[54] = 'Killer Fog';
 
 $DamageTypeText[55] = 'Zombie';
 $DamageTypeText[56] = 'ZAcid';
@@ -144,18 +160,24 @@ $DamageTypeText[66] = 'Pg700';
 $DamageTypeText[67] = 'FellOff';
 $DamageTypeText[68] = 'M1';
 $DamageTypeText[69] = 'RP432';
-$DamageTypeText[70] = 'BladeOfVengance';
+$DamageTypeText[70] = 'Blade Of Vengance';
 $DamageTypeText[71] = 'RPG';
-$DamageTypeText[72] = 'GravBolt';
-$DamageTypeText[73] = 'LaserRifle';
+$DamageTypeText[72] = 'Grav Bolt';
+$DamageTypeText[73] = 'Laser Rifle';
 $DamageTypeText[74] = 'Burn';
 $DamageTypeText[75] = 'SA2400';
-$DamageTypeText[76] = 'deserteagle';
-$DamageTypeText[77] = 'FissionBomb';
-$DamageTypeText[78] = 'RapierShield';
+$DamageTypeText[76] = 'desert eagle';
+$DamageTypeText[77] = 'Fission Bomb';
+$DamageTypeText[78] = 'Rapier Shield';
 
-$DamageTypeText[98] = 'nexus camping';
-$DamageTypeText[99] = 'suicide';
+$DamageTypeText[79] = 'Javelin';
+$DamageTypeText[80] = 'Stinger';
+$DamageTypeText[81] = 'Static Grenade';
+$DamageTypeText[82] = 'Plasmasaber';
+
+$DamageTypeText[998] = 'water';
+$DamageTypeText[998] = 'nexus camping';
+$DamageTypeText[999] = 'suicide';
 
 
 // ##### PLEASE DO NOT REORDER THE DAMAGE PROFILE TABLES BELOW #####

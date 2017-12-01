@@ -17,6 +17,23 @@ $Zombie::detectDist = 9999;
 //$Zombie::FallDieHeight: The minimum altitude a zombie may be before being script killed
 $Zombie::FallDieHeight = -500;
 
+//$Zombie::BaseDamage: The default damage taken when touching a zombie.
+$Zombie::BaseDamage = 0.2;
+//$Zombie::TypeDamage[#]: Overrides the BaseDamage with this value
+$Zombie::TypeDamage[4] = 0.4;
+$Zombie::TypeDamage[5] = 0.4;
+$Zombie::TypeDamage[6] = 0.5;
+$Zombie::TypeDamage[9] = 0.3;
+$Zombie::TypeDamage[10] = 0.3;
+$Zombie::TypeDamage[12] = 0.5;
+$Zombie::TypeDamage[15] = 0.6;
+ 
+//$Zombie::InfectOnCollide[#]: Special flag to determine if infection is applied upon contact, by default, this is true
+
+//$Zombie::TypeInfectedMultiplier[#]: A damage multiplier to apply to infected targets, ie: Total Damage = $Zombie::TypeDamage[#] * $Zombie::TypeInfectedMultiplier[#] 
+// when the player taking damage is already infected.
+$Zombie::TypeInfectedMultiplier[1] = 1.5;
+
 //$Zombie::BaseSpeed: The default speed setting on zombies, any zombie that does not have a TypeSpeed var. set will default to the BaseSpeed
 $Zombie::BaseSpeed = 150;
 //$Zombie::TypeSpeed[#]: The speed of a specific zombie type instance, overrides BaseSpeed for that specific type
@@ -127,9 +144,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 				%y = getWord(%arg1.direction, 0) * -1;
 				%vec = %x @ SPC @ %y @ SPC @ 0;
 				%arg1.setRotation(fullrot("0 0 0", %vec));
-				//Check for speed enhancement
-				%multiplier = $Zombie::SpeedMultiplier[%arg1.type] $= "" ? 1 : $Zombie::SpeedMultiplier[%arg1.type];
-				%speed = %arg1.speed * %multiplier;
+				%speed = %arg1.speed;
 				%vector = vectorScale(%vec, %speed);
 				%arg1.applyImpulse(%arg1.direction, %vector);
 				%arg1.Mnum -= 1;
@@ -456,9 +471,17 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%zombie.mountImage(ZWingImage2, 4);
 					%zombie.setActionThread("scoutRoot",true);				
 				
-				//Demon Mother Zombie
+				//Demon Mother (Lord) Zombie
 				case 6:
-					return DemonMotherCreate(%spawnPos);
+					%zombie = new player() {
+						Datablock = "DemonMotherZombieArmor";
+					};	
+					%zombie.mountImage(ZdummyslotImg, 4);
+					%zombie.setInventory(AcidCannon, 1, true);
+					%zombie.use(AcidCannon);	
+					%zombie.justshot = 0;
+					%zombie.justmelee = 0;
+					%zombie.noHS = 1;					
 				
 				//Shifter Zombie
 				case 9:
@@ -581,54 +604,38 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 				%zombie.zapObject();
 				revivestand(%zombie, 0);			
 			}
-
-			%zombie.speed = TWM2Lib_Zombie_Core("defineZSpeed", %spawnType);
-			
+			//Define Speed Parameters
+			%zombie.speed = TWM2Lib_Zombie_Core("defineZSpeed", %spawnType);		
 			if(!isSet($Zombie::SpeedUpdateTime[%spawnType])) {
 				%zombie.updateTimeFrequency = $Zombie::BaseSpeedUpdateTime;
 			}
 			%zombie.updateTimeFrequency = $Zombie::SpeedUpdateTime[%spawnType];			
-
+			//Define Damage Parameters
+			if(!isSet($Zombie::InfectOnCollide[%spawnType])) {
+				%zombie.damage_infectOnTouch = true;
+			}
+			else {
+				%zombie.damage_infectOnTouch = $Zombie::InfectOnCollide[%spawnType];
+			}
+			
+			if(!isSet($Zombie::TypeDamage[%spawnType])) {
+				%zombie.damage_amountOnTouch = $Zombie::BaseDamage;
+			}
+			else {
+				%zombie.damage_amountOnTouch = $Zombie::TypeDamage[%spawnType];
+			}
+			
+			if(!isSet($Zombie::TypeInfectedMultiplier[%spawnType])) {
+				%zombie.damage_alreadyInfectedMultiplier = 1;
+			}
+			else {
+				%zombie.damage_alreadyInfectedMultiplier = $Zombie::TypeInfectedMultiplier[%spawnType];
+			}
+			//Begin the AI
 			%zombie.getDatablock().AI(%zombie);
 			return %zombie;
 	}
 }
-
-//************************************************************
-//*****************Zomb Attack Stuff**************************
-//************************************************************
-
-function ChargeEmitter(%zombie){
-   if(!isobject(%zombie))
-	return;
-   if(%zombie.chargecount >= 2){
-   	%charge2 = new ParticleEmissionDummy()
-   	{
-   	   position = %zombie.getMuzzlePoint(6);
-   	   dataBlock = "defaultEmissionDummy";
-   	   emitter = "burnEmitter";
-      };
-	MissionCleanup.add(%charge2);
-	%charge2.schedule(100, "delete");
-   }
-   if(%zombie.chargecount <= 7){
-   	%charge = new ParticleEmissionDummy()
-   	{
-   	   position = %zombie.getMuzzlePoint(5);
-   	   dataBlock = "defaultEmissionDummy";
-   	   emitter = "burnEmitter";
-      };
-	MissionCleanup.add(%charge);
-	%charge.schedule(100, "delete");
-   }
-   if(%zombie.chargecount <= 9){
-      %zombie.Fire = schedule(100, %zombie, "ChargeEmitter", %zombie);
-	%zombie.chargecount++;
-   }
-   else
-	%zombie.chargecount = 0;
-}
-
 
 //-----------------------------------------------------------
 //DEATH

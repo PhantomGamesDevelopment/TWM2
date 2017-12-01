@@ -10,45 +10,53 @@ function GenerateChallengesMenu(%client, %tag, %index) {
 	messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:16>Select a category to view challenges:");
 	%index++;
 	//
-	messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14><a:gamelink\tOtherTasksSub\t6>PGD Challenges (Daily/Weekly/Monthly)</a>");
+	messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14><a:gamelink\tOtherTasksSub\t1>PGD Challenges (Daily/Weekly/Monthly)</a>");
 	%index++;
-	for(%i = 1; $Challenge::Category[%i] !$= ""; %i++) {
-		if(%i != 6) {
-			%categoryReq = getField($Challenge::Category[%i], 2);
-			if(getWord(%categoryReq, 0) $= "Officer") {
-				%offLevel = getWord(%categoryReq, 1);
-				if(%scriptController.officer >= %offLevel) {
-					messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14><a:gamelink\tOtherTasksSub\t"@%i@">"@getField($Challenge::Category[%i], 0)@"</a>: "@getField($Challenge::Category[%i], 1));
-					%index++;				
-				}
-				else {
-					messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14>"@getField($Challenge::Category[%i], 0)@": Locked, Requires officer level "@%offLevel@" ("@strReplace($Prestige::Name[%offLevel], " ", "")@")");
-					%index++;				
-				}
+	for(%i = 2; $Challenge::Category[%i] !$= ""; %i++) {
+		%categoryReq = getField($Challenge::Category[%i], 2);
+		if(getWord(%categoryReq, 0) $= "Officer") {
+			%offLevel = getWord(%categoryReq, 1);
+			if(%scriptController.officer >= %offLevel) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14><a:gamelink\tOtherTasksSub\t"@%i@">"@getField($Challenge::Category[%i], 0)@"</a>: "@getField($Challenge::Category[%i], 1));
+				%index++;				
 			}
-			else {	
-				if(%categoryReq == -1) {
+			else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14>"@getField($Challenge::Category[%i], 0)@": Locked, Requires officer level "@%offLevel@" ("@strReplace($Prestige::Name[%offLevel], " ", "")@")");
+				%index++;				
+			}
+		}
+		else if(getWord(%categoryReq, 0) $= "MaxRank") {
+			if(%scriptController.officer >= 15 && %scriptController.millionxp >= 3) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14><a:gamelink\tOtherTasksSub\t"@%i@">"@getField($Challenge::Category[%i], 0)@"</a>: "@getField($Challenge::Category[%i], 1));
+				%index++;				
+			}
+			else {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14><color:BB0000>=== CLASSIFIED: CONTINUE PLAYING TWM2 TO UNLOCK ===");
+				%index++;				
+			}			
+		}
+		else {	
+			if(%categoryReq == -1) {
+				messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14><a:gamelink\tOtherTasksSub\t"@%i@">"@getField($Challenge::Category[%i], 0)@"</a>: "@getField($Challenge::Category[%i], 1));
+				%index++;					
+			}
+			else {
+				if(%xp >= $Rank::MinPoints[%categoryReq]) {
 					messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14><a:gamelink\tOtherTasksSub\t"@%i@">"@getField($Challenge::Category[%i], 0)@"</a>: "@getField($Challenge::Category[%i], 1));
 					%index++;					
 				}
 				else {
-					if(%xp >= $Rank::MinPoints[%categoryReq]) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14><a:gamelink\tOtherTasksSub\t"@%i@">"@getField($Challenge::Category[%i], 0)@"</a>: "@getField($Challenge::Category[%i], 1));
-						%index++;					
-					}
-					else {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14>"@getField($Challenge::Category[%i], 0)@": Locked, Requires Rank of "@$Ranks::NewRank[%categoryReq]@".");
-						%index++;					
-					}
-				}			
-			}
+					messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14>"@getField($Challenge::Category[%i], 0)@": Locked, Requires Rank of "@$Ranks::NewRank[%categoryReq]@".");
+					%index++;					
+				}
+			}			
 		}
 	}
 	return %index;
 }
 
 function GenerateChallengeSubMenu(%client, %subMenu, %tag, %index) {
-	if(%subMenu == 6) {
+	if(%subMenu == 1) {
 		return GenerateDWMChallengeMenu(%client, %tag, %index);
 	}
 	

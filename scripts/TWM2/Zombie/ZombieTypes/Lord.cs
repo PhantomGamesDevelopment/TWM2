@@ -1,3 +1,5 @@
+$TWM2::ArmorHasCollisionFunction[LordZombieArmor] = false;
+
 datablock AudioProfile(ZLordFootSound) {
 	filename    = "fx/weapons/grenade_explode_UW.wav";
 	description = AudioBomb3d;
@@ -29,7 +31,16 @@ datablock PlayerData(LordZombieArmor) : HeavyMaleBiodermArmor {
 	LFootSnowSound       = ZLordFootSound;
 	RFootSnowSound       = ZLordFootSound;
 
-	damageScale[$DamageType::M1700] = 1.5;
+	damageScale[$DamageType::RP432] = 3.5;
+	damageScale[$DamageType::MG42] = 4.0;
+	damageScale[$DamageType::MRXX] = 4.5;
+	damageScale[$DamageType::PTorpedo] = 10.0;
+	damageScale[$DamageType::CrimsonHawk] = 1.9;
+	damageScale[$DamageType::M1700] = 4.5;
+	damageScale[$DamageType::Wp400] = 4.0;
+	damageScale[$DamageType::SCD343] = 4.0;
+	damageScale[$DamageType::SA2400] = 5.0;
+	damageScale[$DamageType::Model1887] = 4.0;	
 
 	max[RepairKit]			= 0;
 	max[Mine]			= 0;

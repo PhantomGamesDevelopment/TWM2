@@ -1,308 +1,302 @@
-datablock PlayerData(DemonMotherZombieArmor) : LightMaleHumanArmor
-{
-   boundingBox = "1.5 1.5 2.6";
-   maxDamage = 9.0;
-   minImpactSpeed = 35;
-   shapeFile = "medium_female.dts";
+$TWM2::ArmorHasCollisionFunction[DemonMotherZombieArmor] = true;
 
-   debrisShapeName = "bio_player_debris.dts";
+datablock PlayerData(DemonMotherZombieArmor) : LightMaleHumanArmor {
+	boundingBox = "1.5 1.5 2.6";
+	maxDamage = 9.0;
+	minImpactSpeed = 35;
+	shapeFile = "medium_female.dts";
 
-   //Foot Prints
-   decalData   = HeavyBiodermFootprint;
-   decalOffset = 0.4;
+	debrisShapeName = "bio_player_debris.dts";
 
-   waterBreathSound = WaterBreathBiodermSound;
+	//Foot Prints
+	decalData   = HeavyBiodermFootprint;
+	decalOffset = 0.4;
 
-   damageScale[$DamageType::M1700] = 2.0;
+	waterBreathSound = WaterBreathBiodermSound;
+
+	damageScale[$DamageType::M1700] = 4.5;
+	damageScale[$DamageType::Wp400] = 4.0;
+	damageScale[$DamageType::SCD343] = 4.0;
+	damageScale[$DamageType::SA2400] = 5.0;
+	damageScale[$DamageType::Model1887] = 4.0;
+	damageScale[$DamageType::CrimsonHawk] = 1.9;
 
 	max[RepairKit]			= 0;
 	max[Mine]				= 0;
 	max[Grenade]			= 0;
 };
 
-datablock StaticShapeData(SubBeacon)
-{
-   shapeFile = "turret_muzzlepoint.dts";
-   targetNameTag = 'beacon';
-   isInvincible = true;
+datablock StaticShapeData(SubBeacon) {
+	shapeFile = "turret_muzzlepoint.dts";
+	targetNameTag = 'beacon';
+	isInvincible = true;
 
-   dynamicType = $TypeMasks::SensorObjectType;
+	dynamicType = $TypeMasks::SensorObjectType;
 };
 
-datablock SeekerProjectileData(DMMissile)
-{
-   casingShapeName     = "weapon_missile_casement.dts";
-   projectileShapeName = "weapon_missile_projectile.dts";
-   hasDamageRadius     = true;
-   indirectDamage      = 0.5;
-   damageRadius        = 5.0;
-   radiusDamageType    = $DamageType::Zombie;
-   kickBackStrength    = 2000;
+datablock SeekerProjectileData(DMMissile) {
+	casingShapeName     = "weapon_missile_casement.dts";
+	projectileShapeName = "weapon_missile_projectile.dts";
+	hasDamageRadius     = true;
+	indirectDamage      = 0.5;
+	damageRadius        = 5.0;
+	radiusDamageType    = $DamageType::Zombie;
+	kickBackStrength    = 2000;
 
-   explosion           = "MissileExplosion";
-   splash              = MissileSplash;
-   velInheritFactor    = 1.0;    // to compensate for slow starting velocity, this value
-                                 // is cranked up to full so the missile doesn't start
-                                 // out behind the player when the player is moving
-                                 // very quickly - bramage
+	explosion           = "MissileExplosion";
+	splash              = MissileSplash;
+	velInheritFactor    = 1.0;    // to compensate for slow starting velocity, this value
+								 // is cranked up to full so the missile doesn't start
+								 // out behind the player when the player is moving
+								 // very quickly - bramage
 
-   baseEmitter         = MortarSmokeEmitter;
-   delayEmitter        = MissileFireEmitter;
-   puffEmitter         = MissilePuffEmitter;
-   bubbleEmitter       = GrenadeBubbleEmitter;
-   bubbleEmitTime      = 1.0;
+	baseEmitter         = MortarSmokeEmitter;
+	delayEmitter        = MissileFireEmitter;
+	puffEmitter         = MissilePuffEmitter;
+	bubbleEmitter       = GrenadeBubbleEmitter;
+	bubbleEmitTime      = 1.0;
 
-   exhaustEmitter      = MissileLauncherExhaustEmitter;
-   exhaustTimeMs       = 300;
-   exhaustNodeName     = "muzzlePoint1";
+	exhaustEmitter      = MissileLauncherExhaustEmitter;
+	exhaustTimeMs       = 300;
+	exhaustNodeName     = "muzzlePoint1";
 
-   lifetimeMS          = 10000; // z0dd - ZOD, 4/14/02. Was 6000
-   muzzleVelocity      = 10.0;
-   maxVelocity         = 35.0; // z0dd - ZOD, 4/14/02. Was 80.0
-   turningSpeed        = 23.0;
-   acceleration        = 15.0;
+	lifetimeMS          = 10000; // z0dd - ZOD, 4/14/02. Was 6000
+	muzzleVelocity      = 10.0;
+	maxVelocity         = 35.0; // z0dd - ZOD, 4/14/02. Was 80.0
+	turningSpeed        = 23.0;
+	acceleration        = 15.0;
 
-   proximityRadius     = 2.5;
+	proximityRadius     = 2.5;
 
-   terrainAvoidanceSpeed = 10;
-   terrainScanAhead      = 7;
-   terrainHeightFail     = 1;
-   terrainAvoidanceRadius = 3;
+	terrainAvoidanceSpeed = 10;
+	terrainScanAhead      = 7;
+	terrainHeightFail     = 1;
+	terrainAvoidanceRadius = 3;
 
-   flareDistance = 40;
-   flareAngle    = 20;
-   minSeekHeat   = 0.0;
+	flareDistance = 40;
+	flareAngle    = 20;
+	minSeekHeat   = 0.0;
 
-   sound = MissileProjectileSound;
+	sound = MissileProjectileSound;
 
-   hasLight    = true;
-   lightRadius = 5.0;
-   lightColor  = "0.2 0.05 0";
+	hasLight    = true;
+	lightRadius = 5.0;
+	lightColor  = "0.2 0.05 0";
 
-   useFlechette = true;
-   flechetteDelayMs = 250;
-   casingDeb = FlechetteDebris;
+	useFlechette = true;
+	flechetteDelayMs = 250;
+	casingDeb = FlechetteDebris;
 
-   explodeOnWaterImpact = false;
+	explodeOnWaterImpact = false;
 };
 
-datablock LinearFlareProjectileData(DMPlasma)
-{
-   doDynamicClientHits = true;
+datablock LinearFlareProjectileData(DMPlasma) {
+	doDynamicClientHits = true;
 
-   directDamage        = 0;
-   directDamageType    = $DamageType::Zombie;
-   hasDamageRadius     = true;
-   indirectDamage      = 0.8;  // z0dd - ZOD, 4/25/02. Was 0.5
-   damageRadius        = 15.0;
-   kickBackStrength    = 1500;
-   radiusDamageType    = $DamageType::Zombie;
-   explosion           = MortarExplosion;
-   splash              = PlasmaSplash;
+	directDamage        = 0;
+	directDamageType    = $DamageType::Zombie;
+	hasDamageRadius     = true;
+	indirectDamage      = 0.8;  // z0dd - ZOD, 4/25/02. Was 0.5
+	damageRadius        = 15.0;
+	kickBackStrength    = 1500;
+	radiusDamageType    = $DamageType::Zombie;
+	explosion           = MortarExplosion;
+	splash              = PlasmaSplash;
 
-   dryVelocity       = 85.0; // z0dd - ZOD, 4/25/02. Was 50. Velocity of projectile out of water
-   wetVelocity       = -1;
-   velInheritFactor  = 1.0;
-   fizzleTimeMS      = 4000;
-   lifetimeMS        = 2500; // z0dd - ZOD, 4/25/02. Was 6000
-   explodeOnDeath    = true;
-   reflectOnWaterImpactAngle = 0.0;
-   explodeOnWaterImpact      = true;
-   deflectionOnWaterImpact   = 0.0;
-   fizzleUnderwaterMS        = -1;
+	dryVelocity       = 85.0; // z0dd - ZOD, 4/25/02. Was 50. Velocity of projectile out of water
+	wetVelocity       = -1;
+	velInheritFactor  = 1.0;
+	fizzleTimeMS      = 4000;
+	lifetimeMS        = 2500; // z0dd - ZOD, 4/25/02. Was 6000
+	explodeOnDeath    = true;
+	reflectOnWaterImpactAngle = 0.0;
+	explodeOnWaterImpact      = true;
+	deflectionOnWaterImpact   = 0.0;
+	fizzleUnderwaterMS        = -1;
 
-   activateDelayMS = 100;
+	activateDelayMS = 100;
 
-   scale             = "3.0 3.0 3.0";
-   numFlares         = 30;
-   flareColor        = "0.1 0.3 1.0";
-   flareModTexture   = "flaremod";
-   flareBaseTexture  = "flarebase";
+	scale             = "3.0 3.0 3.0";
+	numFlares         = 30;
+	flareColor        = "0.1 0.3 1.0";
+	flareModTexture   = "flaremod";
+	flareBaseTexture  = "flarebase";
 };
 
-function DemonMotherCreate(%pos){
-   %obj = new player(){
-	Datablock = "DemonMotherZombieArmor";
-   };
-   %obj.setTransform(%pos);
-   %obj.team = 30;
-   MissionCleanup.add(%obj);
-   schedule(1000, 0, "DemonMotherInitiate", %obj);
-   
-   %obj.isZombie = 1;
-   %obj.type = 6;
-   
-   %obj.setInventory(AcidCannon, 1, true);
-   %obj.use(AcidCannon);
-
-   %zname = $TWM2::ZombieName[%obj.type]; // <- To Hosts, Enjoy, You can
-                                      //Change the Zombie Names now!!!
-   %obj.target = createTarget(%obj, %zname, "", "Derm3", '', %obj.team, PlayerSensor);
-   setTargetSensorData(%obj.target, PlayerSensor);
-   setTargetSensorGroup(%obj.target, 30);
-   setTargetName(%obj.target, addtaggedstring(%zname));
-   setTargetSkin(%obj.target, 'Horde');
-   
-   return %obj;
+function DemonMotherZombieArmor::AI(%datablock, %zombie) {
+	//Fork off to both of the AI functions
+	%zombie.defenseLoop = %datablock.defenseLoop(%zombie);
+	%zombie.aiRoutine = %datablock.AIRoutine(%zombie);
 }
 
-function DemonMotherInitiate(%obj){
-   if(!isObject(%obj))
-	return;
-   DemonMotherDefense(%obj);
-   DemonMotherThink(%obj);
-   %obj.mountImage(ZdummyslotImg, 4);
-   %obj.justshot = 0;
-   %obj.justmelee = 0;
-   %obj.noHS = 1;
-}
-
-function DemonMotherThink(%obj){
-   if(!isObject(%obj))
-	return;
-   if(%obj.getState() $= "dead") {
-      //I've been killed, throw my weapon
-      %obj.throwweapon(1);
-      return;
-   }
-   %pos = %obj.getposition();
-   %closestClient = ZombieLookForTarget(%zombie);
-   %closestDistance = getWord(%closestClient,1);
-   %closestClient = getWord(%closestClient,0).Player;
-   
-   if(%closestClient != -1){
-	%searchobject = %closestclient;
-	%dist = vectorDist(%pos,%searchobject.getPosition());
-	if(%dist <= 100){
-	   if(%dist <= 50){		//ok were now in combat mode, lets decide on what we should do, move attack, or shoot.
-		if(%obj.justmelee == 1){	 //if we just used a melee attack, maybe we should follow it up with a shot attack.
-		   if(%dist >= 10){	//good were far enough away, lets shoot em.
-			%rand = getrandom(1,3);
-			if(%rand <= 2)
-			   DemonMotherSpermAttack(%obj,%searchobject);
-			else
-			   DemonMotherFireRainAttack(%obj,%searchobject);
-		   }
-		   else			//damn, to close, ok lung at him
-			DemonMotherLungAttack(%obj,%searchobject);
-		}
-		else{
-		   %rand = getRandom(1,5); //ok so theres 3 good possible attacks here, so lets get a random variable and decide what to do.
-		   if(%rand == 1)
-			DemonMotherPlasmaAttack(%obj,%searchobject);
-		   else if(%rand <= 3)
-			DemonMotherStrafeAttack(%obj,%searchobject);
-		   else
-			DemonMotherFlyAttack(%obj,%searchobject);
-		}
-	   }
-	   else{		//ok, were to far away, maybe we should shoot at them.
-		if(%obj.justshot == 1)		//humm we just attacked, ok, let charge him, get in close
-		   DemonMotherChargeIn(%obj,%searchobject);
-		else{			//were good to fire, FIRE AWAY!
-		   %rand = getRandom(1,5);	//ok so theres 3 good possible attacks here, so lets get a random variable and decide what to do.
-		   if(%rand == 1)
-			DemonMotherFireRainAttack(%obj,%searchobject);
-		   else if(%rand <= 3)
-			DemonMotherMissileAttack(%obj,%searchobject);
-		   else
-			DemonMotherSpermAttack(%obj,%searchobject);
-		}
-	   }
+function DemonMotherZombieArmor::defenseLoop(%datablock, %zombie) {
+	if(!isObject(%zombie) || %zombie.getState() $= "dead") {
+		return;
 	}
-	else if(%dist > 100){
-	   %rand = getrandom(1,120);
-	   if(%rand == 94)		//please, dont ask why i choose this number, it just poped in my head
-		DemonMotherDemonSpawn(%obj);
-	   else
-		DemonMotherMoveToTarget(%obj,%searchobject);
+	%pos = %zombie.getposition();
+	InitContainerRadiusSearch(%pos, 250, $TypeMasks::ProjectileObjectType);
+	while ((%searchObject = containerSearchNext()) != 0) {
+		%projpos = %searchobject.getPosition();
+		%dist = vectorDist(%pos, %projpos);
+		if(%dist <= 100) {
+			if(%searchobject.lastpos) {
+				%zombie.playShieldEffect("1 1 1");
+				%searchobject.delete();
+			}
+		}
+		else {
+			%searchobject.lastpos = %projpos;
+		}
 	}
-	else
-	   DemonMotherMoveToTarget(%obj,%searchobject);
-
-	%obj.justshot = 0;
-	%obj.justmelee = 0;
-   }
-   else{
-	schedule(500, 0, "DemonMotherThink", %obj);
-   }
+	%zombie.defenseLoop = %datablock.schedule(50, "defenseLoop", %zombie);
 }
 
-function DemonMotherDefense(%obj){
-   if(!isObject(%obj))
-	return;
-   if(%obj.getState() $= "dead")
-	return;
-   %pos = %obj.getposition();
-   InitContainerRadiusSearch(%pos, 250, $TypeMasks::ProjectileObjectType);
-   while ((%searchObject = containerSearchNext()) != 0){
-	%projpos = %searchobject.getPosition();
-	%dist = vectorDist(%pos,%projpos);
-	if(%dist <= 100){
-	   if(%searchobject.lastpos)
-		%searchobject.delete();
+function DemonMotherZombieArmor::AIRoutine(%datablock, %zombie) {
+	if(!isObject(%zombie) || %zombie.getState() $= "dead") {
+		%zombie.throwWeapon(1);
+		return;
 	}
-	else
-	   %searchobject.lastpos = %projpos;
-   }
-   schedule(50, "DemonMotherDefense", %obj);
+	%pos = %zombie.getWorldBoxCenter();
+	%closestClient = TWM2Lib_Zombie_Core("lookForTarget", %zombie);
+	%closestDistance = getWord(%closestClient, 1);
+	%closestClient = getWord(%closestClient, 0).Player;
+	if(%closestClient != -1){
+		%searchobject = %closestclient;
+		%dist = vectorDist(%pos, %searchobject.getPosition());
+		if(%dist <= 100) {
+			//ok were now in combat mode, lets decide on what we should do, move attack, or shoot.
+			if(%dist <= 50) {		
+				//if we just used a melee attack, maybe we should follow it up with a shot attack.
+				if(%zombie.justmelee == 1) {	 
+					//good were far enough away, lets shoot em.
+					if(%dist >= 10) {	
+						%rand = getrandom(1,3);
+						if(%rand <= 2) {
+							%zombie.attackFunction = %datablock.AttackFunction(%zombie, "AcidStrike", %searchObject); 
+						}
+						else {
+							DemonMotherFireRainAttack(%zombie, %searchobject);
+						}
+					}
+					//damn, to close, ok lung at him
+					else {			
+						DemonMotherLungAttack(%zombie, %searchobject);
+					}
+				}
+				else {
+					//ok so theres 3 good possible attacks here, so lets get a random variable and decide what to do.
+					%rand = getRandom(1, 5); 
+					if(%rand == 1) {
+						DemonMotherPlasmaAttack(%zombie, %searchobject);
+					}
+					else if(%rand <= 3) {
+						DemonMotherStrafeAttack(%zombie, %searchobject);
+					}
+					else {
+						DemonMotherFlyAttack(%zombie, %searchobject);
+					}
+				}
+			}
+			//ok, were to far away, maybe we should shoot at them.
+			else {		
+				//humm we just attacked, ok, let charge him, get in close
+				if(%zombie.justshot == 1) {	
+					DemonMotherChargeIn(%zombie, %searchobject);
+				}
+				//were good to fire, FIRE AWAY!
+				else {	
+					//ok so theres 3 good possible attacks here, so lets get a random variable and decide what to do.
+					%rand = getRandom(1, 5);	
+					if(%rand == 1) {
+						DemonMotherFireRainAttack(%zombie, %searchobject);
+					}
+					else if(%rand <= 3) {
+						DemonMotherMissileAttack(%zombie, %searchobject);
+					}
+					else {
+						%zombie.attackFunction = %datablock.AttackFunction(%zombie, "AcidStrike", %searchObject); 
+					}
+				}
+			}
+		}
+		else if(%dist > 100) {
+			%rand = getrandom(1,120);
+			//please, dont ask why i choose this number, it just popped in my head
+			if(%rand == 94)	{
+				DemonMotherDemonSpawn(%zombie);
+			}
+			else {
+				DemonMotherMoveToTarget(%zombie,%searchobject);
+			}
+		}
+		else {
+			DemonMotherMoveToTarget(%zombie,%searchobject);
+		}
+		%zombie.justshot = 0;
+		%zombie.justmelee = 0;
+	}
+	else {
+		%zombie.aiRoutine = %datablock.schedule(500, 0, "AIRoutine", %zombie);
+	}	
 }
 
-function DemonMotherSpermAttack(%obj,%target){
-   if(!isObject(%obj))
-	return;
-   if(%obj.getState() $= "dead")
-	return;
-   if(!isObject(%target)){
-	DemonMotherThink(%obj);
-	return;
-   }
-   FaceTarget(%obj,%target);
-   if(%obj.chargecount $= "")
-	%obj.chargecount = 0;
-   %charge = new ParticleEmissionDummy()
-   {
-   	position = %obj.getMuzzlePoint(4);
-   	dataBlock = "defaultEmissionDummy";
-   	emitter = "BurnEmitter";
-   };
-   MissionCleanup.add(%charge);
-   %charge.schedule(100, "delete");
-
-   	if(%obj.chargecount == 7){
-         %vec = vectorsub(%target.getworldboxcenter(),%obj.getMuzzlePoint(4));
-	   %vec = vectoradd(%vec, vectorscale(%target.getvelocity(),vectorlen(%vec)/100));
-   	   %p = new TracerProjectile()
-   	   {
-   	   	dataBlock        = LZombieAcidBall;
-   	   	initialDirection = %vec;
-   	   	initialPosition  = %obj.getMuzzlePoint(4);
-   	   	sourceObject     = %obj;
-   	   	sourceSlot       = 6;
-   	   };
-   	}
-   	if(%obj.chargecount == 9){
-         %vec = vectorsub(%target.getworldboxcenter(),%obj.getMuzzlePoint(4));
-	   %vec = vectoradd(%vec, vectorscale(%target.getvelocity(),vectorlen(%vec)/100));
-   	   %p = new TracerProjectile()
-   	   {
-   	   	dataBlock        = LZombieAcidBall;
-   	   	initialDirection = %vec;
-   	   	initialPosition  = %obj.getMuzzlePoint(4);
-   	   	sourceObject     = %obj;
-   	   	sourceSlot       = 6;
-   	   };
-   	}
-
-   if(%obj.chargecount <= 9){
-      schedule(100, 0, "DemonMotherSpermAttack", %obj, %target);
-	%obj.chargecount++;
-   }
-   else{
-	%obj.chargecount = 0;
-	%obj.justshot = 1;
-	DemonMotherThink(%obj);
-   }
+function DemonMotherZombieArmor::AttackFunction(%datablock, %zombie, %attackFunction, %target) {
+	if(!isObject(%zombie) || %zombie.getState() $= "dead") {
+		return;
+	}
+	switch$(%attackFunction) {
+		case "AcidStrike":
+			if(!isObject(%target) || %target.getState() $= "dead") {
+				%zombie.aiRoutine = %datablock.AIRoutine(%zombie);
+				return;
+			}
+			%vector = TWM2Lib_Zombie_Core("zombieGetFacingDirection", %zombie, %target.getPosition());
+			if(%zombie.chargeCount $= "") {
+				%zombie.chargeCount = 0;
+			}
+			%chargeEmitter = new ParticleEmissionDummy() {
+				datablock = "defaultEmissionDummy";
+				emitter = "BurnEmitter";
+				position = %zombie.getMuzzlePoint(4);
+			};
+			MissionCleanup.add(%chargeEmitter);
+			%chargeEmitter.schedule(100, "delete");
+			//
+			if(%zombie.chargeCount == 7 || %zombie.chargeCount == 9) {
+				%vec = vectorSub(%target.getWorldBoxCenter(), %zombie.getMuzzlePoint(4));
+				%vec = vectorAdd(%vec, vectorScale(%target.getVelocity(), vectorLen(%vec) / 100));
+				%p = new TracerProjectile() {
+					dataBlock        = LZombieAcidBall;
+					initialDirection = %vec;
+					initialPosition  = %zombie.getMuzzlePoint(4);
+					sourceObject     = %zombie;
+					sourceSlot       = 6;
+				};			
+			}
+			if(%obj.chargecount <= 9) {
+				%zombie.attackFunction = %datablock.schedule(100, 0, "AttackFunction", %zombie, %attackFunction, %target);
+				%zombie.chargeCount++;
+			}
+			else {
+				%zombie.chargecount = 0;
+				%zombie.justshot = 1;
+				%zombie.aiRoutine = %datablock.AIRoutine(%zombie);
+			}			
+		
+		case "FireLunge":
+		
+		case "StrafeMove":
+		
+		case "FlyAttack":
+		
+		case "Firestorm":
+		
+		case "MissileStrike":
+		
+		case "PlasmaStrike":
+		
+		case "ChargeAttack":
+	}
 }
 
 function DemonMotherLungAttack(%obj,%target){
@@ -587,14 +581,4 @@ function DemonMotherDemonSpawn(%obj){
 	  schedule(1000, 0, "TWM2Lib_Zombie_Core", "SpawnZombie", "zSpawnCommand", 4, posFromRaycast(%searchResult));
    }
    schedule(1500, 0, "DemonMotherThink", %obj);
-}
-
-function FaceTarget(%obj,%target){
-   %vector = vectorNormalize(vectorSub(%target.getPosition(), %obj.getPosition()));
-   %v1 = getword(%vector, 0);
-   %v2 = getword(%vector, 1);
-   %nv1 = %v2;
-   %nv2 = (%v1 * -1);
-   %vector2 = %nv1@" "@%nv2@" 0";
-   %obj.setRotation(fullrot("0 0 0",%vector2));
 }
