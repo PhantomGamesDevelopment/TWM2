@@ -640,73 +640,114 @@ $ProjectileSeek["RapierShieldForwardProjectile", "ProjectileControls"] = "8 10 1
 $ProjectileSeek["RapierShieldForwardProjectile", "CancelList"] = "FlareGrenadeProj";
 
 function createSeekingProjectile(%projectile, %pType, %iPos, %iDir, %source, %target, %seekActivation) {
-   %proj = spawnprojectile(%projectile, %pTYpe, %iPos, %iDir, %source);
-   schedule(%seekActivation, 0, projectileSeeking, %proj, %target);
-   
-   return %proj;
+	%proj = spawnprojectile(%projectile, %pTYpe, %iPos, %iDir, %source);
+	schedule(%seekActivation, 0, projectileSeeking, %proj, %target);
+
+	return %proj;
 }
 
 function projectileSeeking(%p, %target) {
-   %pName = %p.getDatablock().getName();
-   %pArgs = $ProjectileSeek[%pName, "ProjectileControls"];
+	%pName = %p.getDatablock().getName();
+	%pArgs = $ProjectileSeek[%pName, "ProjectileControls"];
 
-   %projpos = %p.position;
-   %projdir = %p.initialdirection;
-   %s       = %p.sourceObject;
-   
-   if(!isobject(%p)) {
-      return;
-   }
-   if(isobject(%p)) {
-      %p.delete();
-   }
-   if(!isobject(%target)) {
-      return;
-   }
-   if(%target.getClassName() $= "Player") {
-      if(%target.getState() $= "Dead") {
-         return;
-      }
-   }
-   
-   %iX = getWord(%projdir, 0);
-   %iY = getWord(%projdir, 1);
-   %iZ = getWord(%projdir, 2);
+	%projpos = %p.position;
+	%projdir = %p.initialdirection;
+	%s       = %p.sourceObject;
 
-   %projdir = vectornormalize(vectorsub(%target.getPosition(), %projpos));
-   %nDx = getWord(%projdir, 0);
-   %nDy = getWord(%projdir, 1);
-   %nDz = getWord(%projdir, 2);
+	if(!isobject(%p)) {
+		return;
+	}
+	if(isobject(%p)) {
+		%p.delete();
+	}
+	if(!isobject(%target)) {
+		return;
+	}
+	if(%target.getClassName() $= "Player") {
+		if(%target.getState() $= "Dead") {
+			return;
+		}
+	}
 
-   %xCalc = %iX - %nDx;
-   %xCalc = ((%xCalc / getWord(%pArgs, 0)) * -1) + %iX;
-   %yCalc = %iY - %nDy;
-   %yCalc = ((%yCalc / getWord(%pArgs, 1)) * -1) + %iY;
-   %zCalc = %iZ - %nDz;
-   %zCalc = ((%zCalc / getWord(%pArgs, 2)) * -1) + %iZ;
+	%iX = getWord(%projdir, 0);
+	%iY = getWord(%projdir, 1);
+	%iZ = getWord(%projdir, 2);
 
-   %_newDir = %xCalc SPC %yCalc SPC %zCalc;
-   
-   %cnS = %pName.className;
-   %type = strReplace(%cnS, "Data", "");
-   
-   %p = new (%type)() {
-      dataBlock        = %pName;
-      initialDirection = %_newDir;
-      initialPosition  = %projpos;
-   };
-   %p.sourceobject = %s;
-   MissionCleanup.add(%p);
-   if(getWord(%pArgs, 3) == 1) {
-      %searchmask = $TypeMasks::ProjectileObjectType;
-      InitContainerRadiusSearch(%projpos, 12, %searchmask);
-      while ((%testTarget = containerSearchNext())) {
-         if(%testTarget.getdatablock().getname() $= $ProjectileSeek[%pName, "CancelList"]) {
-            %testTarget.delete();
-            return;
-         }
-      }
-   }
-   
-   %p.seeksched = schedule( 80,0, "projectileSeeking", %p, %target);
+	%projdir = vectornormalize(vectorsub(%target.getPosition(), %projpos));
+	%nDx = getWord(%projdir, 0);
+	%nDy = getWord(%projdir, 1);
+	%nDz = getWord(%projdir, 2);
+
+	%xCalc = %iX - %nDx;
+	%xCalc = ((%xCalc / getWord(%pArgs, 0)) * -1) + %iX;
+	%yCalc = %iY - %nDy;
+	%yCalc = ((%yCalc / getWord(%pArgs, 1)) * -1) + %iY;
+	%zCalc = %iZ - %nDz;
+	%zCalc = ((%zCalc / getWord(%pArgs, 2)) * -1) + %iZ;
+
+	%_newDir = %xCalc SPC %yCalc SPC %zCalc;
+
+	%cnS = %pName.className;
+	%type = strReplace(%cnS, "Data", "");
+
+	%p = new (%type)() {
+		dataBlock        = %pName;
+		initialDirection = %_newDir;
+		initialPosition  = %projpos;
+	};
+	%p.sourceobject = %s;
+	MissionCleanup.add(%p);
+	if(getWord(%pArgs, 3) == 1) {
+		%searchmask = $TypeMasks::ProjectileObjectType;
+		InitContainerRadiusSearch(%projpos, 12, %searchmask);
+		while ((%testTarget = containerSearchNext())) {
+			if(%testTarget.getdatablock().getname() $= $ProjectileSeek[%pName, "CancelList"]) {
+				%testTarget.delete();
+				return;
+			}
+		}
+	}
+
+	%p.seeksched = schedule(80,0, "projectileSeeking", %p, %target);
+}
+
+function createMissileSeekingProjectile(%datablockName, %targetObject, %sourceObject, %sourcePosition, %sourceVector, %sourceSlot, %updateDelay) {
+	if(!isObject(%targetObject)) {
+		return;
+	}
+	//Phantom139: Scheduling updates lower than 23ms is dangerous, let's enforce this as a minimum limit.
+	if(%updateDelay $= "" || %updateDelay < 23) {
+		error("* Warning: Call to createMissileSeekingProjectile() with an updateDelay undefined or lower than 23ms, check call stack and correct.");
+		%updateDelay = 100;
+	}
+	%missileProjectileInstance = new SeekerProjectile() {
+		dataBlock        = %datablockName;
+		initialDirection = %sourceVector;
+		initialPosition  = %sourcePosition;
+		sourceObject     = %sourceObject;
+		sourceSlot       = %sourceSlot;
+	};
+	%beacon = new BeaconObject() {
+		dataBlock = "SubBeacon";
+		beaconType = "vehicle";
+		position = %targetObject.getWorldBoxCenter();
+	};
+	%beacon.team = 0;
+	%beacon.setTarget(0);
+	MissionCleanup.add(%beacon);
+	%missileProjectileInstance.setObjectTarget(%beacon);
+	%missileProjectileInstance.updateLoop = updateMissileSeekingProjectile(%missileProjectileInstance, %beacon, %targetObject, %updateDelay);	
+}
+
+function updateMissileSeekingProjectile(%missileProjectile, %beaconObject, %targetObject, %updateDelay) {
+	if(!isObject(%targetObject)){
+		%beaconObject.delete();
+		return;
+	}
+	if(!isObject(%missileProjectile)) {
+		%beaconObject.delete();
+		return;
+	}
+	%beaconObject.setPosition(%targetObject.getWorldBoxCenter());
+	%missileProjectile.updateLoop = schedule(updateDelay, 0, "updateMissileSeekingProjectile", %missileProjectile, %beaconObject, %targetObject, %updateDelay);
 }

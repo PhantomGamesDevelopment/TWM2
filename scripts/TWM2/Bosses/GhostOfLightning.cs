@@ -260,23 +260,7 @@ function DoGoLAttacks(%ghost) {
          }
          MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoL"]@": Watch Electricity Chase You!!!");
 	     %vec = vectorNormalize(vectorSub(%target.player.getPosition(),%ghost.getPosition()));
-         %p = new SeekerProjectile() {
-	        dataBlock        = IonMissile;
-	        initialDirection = %vec;
-	        initialPosition  = %ghost.getMuzzlePoint(0);
-	        sourceObject     = %ghost;
-	        sourceSlot       = 4;
-   	     };
-   	     %beacon = new BeaconObject() {
-            dataBlock = "SubBeacon";
-            beaconType = "vehicle";
-            position = %target.player.getWorldBoxCenter();
-         };
-   	     %beacon.team = 0;
-   	     %beacon.setTarget(0);
-   	     MissionCleanup.add(%beacon);
-         %p.setObjectTarget(%beacon);
-	     DemonMotherMissileFollow(%target.player,%beacon,%p);
+         createMissileSeekingProjectile("IonMissile", %target, %ghost, %ghost.getMuzzlePoint(0), %vec, 4, 100);
       case 3:
          %target = FindValidTarget(%ghost);
          if(!isObject(%target.player)) {
@@ -307,23 +291,7 @@ function DoGoLAttacks(%ghost) {
             %cl = ClientGroup.getObject(%i);
             if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {
                %vec = vectorNormalize(vectorSub(%cl.player.getPosition(),%ghost.getPosition()));
-               %p = new SeekerProjectile() {
-	              dataBlock        = IonMissile;
-	              initialDirection = %vec;
-	              initialPosition  = %ghost.getMuzzlePoint(0);
-	              sourceObject     = %ghost;
-	              sourceSlot       = 4;
-   	           };
-   	           %beacon = new BeaconObject() {
-                  dataBlock = "SubBeacon";
-                  beaconType = "vehicle";
-                  position = %cl.player.getWorldBoxCenter();
-               };
-               %beacon.team = 0;
-   	           %beacon.setTarget(0);
-   	           MissionCleanup.add(%beacon);
-               %p.setObjectTarget(%beacon);
-	           DemonMotherMissileFollow(%cl.player,%beacon,%p);
+               createMissileSeekingProjectile("IonMissile", %cl.player, %ghost, %ghost.getMuzzlePoint(4), %vec, 4, 100);
             }
          }
    }

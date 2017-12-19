@@ -1443,23 +1443,7 @@ function VardisonNamedAttack(%Boss, %attack, %args) {
          %target = getField(%args, 0);
          %sPos = vectorAdd(%bPos, "0 0 25");
          %vec = vectorNormalize(vectorSub(%target.getPosition(), %sPos));
-   	     %p = new SeekerProjectile() {
-            dataBlock        = YvexNightmareMissile;
-            initialDirection = %vec;
-            initialPosition  = %sPos;
-            sourceSlot       = 4;
-         };
-         %p.sourceObject     = %Boss;
-   	     %beacon = new BeaconObject() {
-            dataBlock = "SubBeacon";
-            beaconType = "vehicle";
-            position = %target.getWorldBoxCenter();
-         };
-   	     %beacon.team = 0;
-   	     %beacon.setTarget(0);
-   	     MissionCleanup.add(%beacon);
-         %p.setObjectTarget(%beacon);
-         DemonMotherMissileFollow(%target, %beacon, %p);
+   	     createMissileSeekingProjectile("YvexNightmareMissile", %target, %Boss, %Boss.getMuzzlePoint(4), %vec, 4, 100);
          
       case "ShadowFissure":
          %sPos = getField(%args, 0);
@@ -1485,23 +1469,7 @@ function VardisonNamedAttack(%Boss, %attack, %args) {
          %target = getField(%args, 0);
          %sPos = vectorAdd(%bPos, "0 0 25");
          %vec = vectorNormalize(vectorSub(%target.getPosition(), %sPos));
-         %p = new SeekerProjectile() {
-            dataBlock        = VegenorFireMissile;
-            initialDirection = %vec;
-            initialPosition  = %sPos;
-            sourceSlot       = 4;
-         };
-         %p.sourceObject     = %Boss;
-         %beacon = new BeaconObject() {
-            dataBlock = "SubBeacon";
-            beaconType = "vehicle";
-            position = %target.getWorldBoxCenter();
-         };
-         %beacon.team = 0;
-         %beacon.setTarget(0);
-         MissionCleanup.add(%beacon);
-         %p.setObjectTarget(%beacon);
-         DemonMotherMissileFollow(%target, %beacon, %p);
+         createMissileSeekingProjectile("VegenorFireMissile", %target, %Boss, %Boss.getMuzzlePoint(4), %vec, 4, 100);
          
       case "MinionFlood":
          //Summon Maximum Minions & then Phase out until the team drops them

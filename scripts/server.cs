@@ -58,6 +58,10 @@ function CreateServer(%mission, %missionType)
    exec("scripts/particleEmitter.cs");    // Must exist before item.cs and explosion.cs
    exec("scripts/particleDummies.cs");
    exec("scripts/projectiles.cs");        // Must exits before item.cs
+   echo("*********************");
+   echo("* LOADING TWM2 DATABLOCKS");
+   exec("scripts/TWM2/MultiUseDatablocks.cs");    
+   echo("*********************");   
    exec("scripts/player.cs");
    exec("scripts/gameBase.cs");
    exec("scripts/staticShape.cs");

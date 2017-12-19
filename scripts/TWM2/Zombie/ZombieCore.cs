@@ -35,12 +35,14 @@ $Zombie::TypeDamage[15] = 0.6;
 $Zombie::TypeInfectedMultiplier[1] = 1.5;
 
 //$Zombie::BaseSpeed: The default speed setting on zombies, any zombie that does not have a TypeSpeed var. set will default to the BaseSpeed
+// Be mindful of the $Zombie::SpeedUpdateTime[#] value when tuning, these two numbers augment closely so you need to be careful on tweaking
 $Zombie::BaseSpeed = 150;
 //$Zombie::TypeSpeed[#]: The speed of a specific zombie type instance, overrides BaseSpeed for that specific type
 $Zombie::TypeSpeed[2] = 300;
 $Zombie::TypeSpeed[3] = 4000;
 $Zombie::TypeSpeed[4] = 240;
 $Zombie::TypeSpeed[5] = 1500;
+$Zombie::TypeSpeed[6] = 1200;
 
 //$Zombie::BaseJumpCooldown: The time zombies must elapse before jumping / lunging
 $Zombie::BaseJumpCooldown = 1500;
@@ -55,6 +57,7 @@ $Zombie::BaseSpeedUpdateTime = 100;
 //$Zombie::SpeedUpdateTime[#]: An override to the base update type, use for specific types that need slower or faster processing between AI steps
 $Zombie::SpeedUpdateTime[3] = 500;
 $Zombie::SpeedUpdateTime[5] = 500;
+$Zombie::SpeedUpdateTime[6] = 500;
 
 //$Zombie::LungeDistance: How far (m) a zombie must be to lunge at a target
 $Zombie::LungeDistance = 10;
@@ -81,6 +84,9 @@ $Zombie::DemonZombieFireBombMaxRange = 250;
 
 //$Zombie::RapierUpwardScaling: How fast a rapier zombie will ascend when holding a player
 $Zombie::RapierUpwardScaling = 750;
+
+//$Zombie::DemonLord_FirestormTrigger: How long in miliseconds between the firestorm charge up and the attack itself
+$Zombie::DemonLord_FirestormTrigger = 1000;
 
 //MISC Globals, Do not edit.
 $Zombie::killpoints = 5;
@@ -169,7 +175,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 				}
 			}		
 			
-		//infectloop(%player): Performs the infection loop.
+		//infectloop(%player, %infectSource): Performs the infection loop.
 		case "infectloop":
 			//Check for flags that disable this.
 			if($TWM::PlayingHellJump || !$TWM::AllowZombieInfection) {
@@ -187,6 +193,14 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%arg1.playShieldEffect("1 1 1");
 					%arg1.infected = 0;
 					return;
+				}
+			}
+			//
+			if(%arg2 $= "impact") {
+				if(%arg1.usingPlasmasaber) {
+					%arg1.playShieldEffect("1 1 1");
+					%arg1.infected = 0;
+					return;				
 				}
 			}
 			//Once we reach this point, we're good to go...

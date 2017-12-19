@@ -89,6 +89,11 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
     * Players will be knocked back with a higher force when hit by demon zombies		
   * Air Rapier
 	* Modified the damage scalar of missiles to be a OHK on rapier zombies	
+  * Demon Lord
+    * Cleaned up this script file substantially
+	* Replaced the standard lunge with a fire lunge which creates a firey explosion on impact
+	* Reduced the hit damage of the demon lord from 0.8 to 0.5
+	* Demon Lords, like the regular demons will no longer infect on collision, but set the player on fire instead	
 * Added Boss Proficiency
   * Hidden challenges embedded in boss fights that award additional experience for completing tough feats
   * For example: Defeat the shade lord without dying by the elemental shades
@@ -117,6 +122,8 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
   * Lord Vardison 
     * Fixed an erraneous text prompt that would appear when the shadow rift detonated outside of WTF difficulty stating vardison had healed when in fact he did not
 * General Enhancements
+  * Centralized some of the datablocks that were shared across the mod to allow for easier access / modification
+  * Centralized the demon lord's missile seeking logic that was used across multiple zombies & bosses to allow for easier access and editing
   * Modified the vote logic in admin.cs to clean up a ton of redundant if/else paths
   * Re-did the player collision logic in player.cs to make things a whole lot easier to modify in the future
   * Did a pass through all of the weapon files, cleaning the code up and making each unique weapon have its own damage type.
@@ -141,10 +148,13 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	  * Added a 100.0 damage modifier to all zombie types for Blade of Vengeance
 	    * This includes player zombies.
 	  * Removed the clause that bosses could not be damaged by the Blade of Vengeance
-	    * Bosses now take 65HP damage from the blade.
+	    * Bosses now take 6.5 (650 HP) damage from the blade.
     * Plasmasaber
       * Removed the damage flag on player type
-	  * Now deals a flat damage of 5.0 to all targets (OHK to all players, low tier zombies), 500HP damage to bosses.
+	  * Now deals a flat damage of 5.0 to all targets (OHK to all players, low tier zombies), 500 HP damage to bosses.
+	  * Reduced the melee attack cooldown from 1.5 seconds to 0.8 seconds.
+	  * Holding the Plasmasaber will grant you a protective buff preventing zombie infection from impact damage.
+	    * You can still be infected by taking zombie based projectile damage. 
   * Sidearms
     * At the moment, the two statistical outliers in the pool (Crimson Hawk and Pulse Phaser) feel close to being perfect, some minor tuning will help get them there.
     * Crimson Hawk Pistol

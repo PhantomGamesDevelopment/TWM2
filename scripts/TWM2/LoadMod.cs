@@ -5,8 +5,9 @@ echo("********************************************");
 echo("******** EXECUTING TWM2 MOD SCRIPTS ********");
 echo("********************************************");
 echo("********************************************");
-                                                   //Mod Systems
-exec("serverControl.cs");                          //Server Settings
+
+                                                    //Mod Systems
+exec("serverControl.cs");                           //Server Settings
 
 exec("scripts/TWM2/Systems/Directorate.cs");        //Client Container Objects
 exec("scripts/TWM2/Systems/AdvancedRankSystem.cs"); //Adv. Ranks
@@ -37,20 +38,20 @@ exec("scripts/TWM2/Systems/weaponModes.cs");        //Global Defines for Weapon 
 exec("scripts/TWM2/AI/DroneAI.cs");                 //Drones
 exec("scripts/TWM2/Systems/HarbingersWrath.cs");    //Harbinger's Wrath
 
-                                                   //Mod Objects
+                                                    //Mod Objects
 exec("scripts/TWM2/ModObjects/UAMS.cs");            //UAMS Missile Satellite
 
-                                                   //Mod Dependancies
+                                                    //Mod Dependancies
 
-exec("scripts/TWM2/loadmenu.cs");                  //loadscreen
-exec("scripts/TWM2/WeaponFunctions.cs");           //TWM2 Weapon Functions
-exec("scripts/TWM2/Zombie/LoadZombieScripts.cs");  //TWM2 Zombie Script Load
-exec("scripts/TWM2/CustomCamera.cs");              //TWM2 Cameras
-exec("scripts/TWM2/CustomArmors.cs");              //TWM2 Armors
-exec("scripts/TWM2/ArmorFunctions.cs");            //TWM2 Armors Functions
-exec("scripts/TWM2/VehicleReticles.cs");           //Vehicle Reticles
+exec("scripts/TWM2/loadmenu.cs");                   //loadscreen
+exec("scripts/TWM2/WeaponFunctions.cs");            //TWM2 Weapon Functions
+exec("scripts/TWM2/Zombie/LoadZombieScripts.cs");   //TWM2 Zombie Script Load
+exec("scripts/TWM2/CustomCamera.cs");               //TWM2 Cameras
+exec("scripts/TWM2/CustomArmors.cs");               //TWM2 Armors
+exec("scripts/TWM2/ArmorFunctions.cs");             //TWM2 Armors Functions
+exec("scripts/TWM2/VehicleReticles.cs");            //Vehicle Reticles
 
-                                                   //Universal Systems
+                                                    //Universal Systems
 exec("scripts/TWM2/PGDConnect/ConnectionQueue.cs");       //TCP Connection List
 exec("scripts/TWM2/PGDConnect/UniversalSupport.cs");      //Support Script
 exec("scripts/TWM2/PGDConnect/UniversalSaving_Client.cs");//Saver

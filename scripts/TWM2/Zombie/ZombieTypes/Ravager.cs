@@ -39,7 +39,7 @@ function RavagerZombieArmor::armorCollisionFunction(%datablock, %zombie, %colPla
 	%colPlayer.applyimpulse(%colPlayer.getposition(), %pushVector);
 	if(%causeInfect) {
 		%colPlayer.Infected = 1;
-		%colPlayer.InfectedLoop = schedule(10, %colPlayer, "TWM2Lib_Zombie_Core", "InfectLoop", %colPlayer);
+		%colPlayer.InfectedLoop = schedule(10, %colPlayer, "TWM2Lib_Zombie_Core", "InfectLoop", %colPlayer, "impact");
 	}
 	%colPlayer.damage(0, %colPlayer.getPosition(), %total, $DamageType::Zombie);	
 }

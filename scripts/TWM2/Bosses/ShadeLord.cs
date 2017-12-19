@@ -464,23 +464,7 @@ function ShadeLordFunction(%boss, %function, %args) {
 				%neg = %i % 2 == 0 ? 1 : -1;
 				%start = vectorAdd(%start1, %neg*%interval*%i@" 0 0");
 				%vec = vectorNormalize(vectorSub(%go,%start));
-				%p = new SeekerProjectile() {
-					dataBlock        = ShadeLordSword;
-					initialDirection = %vec;
-					initialPosition  = %start;
-				};
-				%p.sourceObject = %boss;
-				%p.targetedPlayer = %target;
-				%beacon = new BeaconObject() {
-					dataBlock = "SubBeacon";
-					beaconType = "vehicle";
-					position = %target.player.getWorldBoxCenter();
-				};
-				%beacon.team = 0;
-				%beacon.setTarget(0);
-				MissionCleanup.add(%beacon);
-				%p.setObjectTarget(%beacon);
-				DemonMotherMissileFollow(%target,%beacon,%p);
+				createMissileSeekingProjectile("ShadeLordSword", %target, %boss, %start, %vec, 4, 100);
 			}
 
 		case "Att_HealSequence":
@@ -883,23 +867,7 @@ function ShadeLordFunction(%boss, %function, %args) {
 			%target = getWord(%args, 0); 
 			%incoming = vectorAdd(%target.getPosition(), vectorAdd(TWM2Lib_MainControl("getRandomPosition", 70 TAB 1), "0 0 250"));
 			%vec = vectorNormalize(vectorSub(%target.getPosition(),%incoming));
-			%p = new SeekerProjectile() {
-				dataBlock        = ShadeLordSword;
-				initialDirection = %vec;
-				initialPosition  = %incoming;
-			};
-			%p.sourceObject = %boss;
-			%p.targetedPlayer = %target;
-			%beacon = new BeaconObject() {
-				dataBlock = "SubBeacon";
-				beaconType = "vehicle";
-				position = %target.getWorldBoxCenter();
-			};
-			%beacon.team = 0;
-			%beacon.setTarget(0);
-			MissionCleanup.add(%beacon);
-			%p.setObjectTarget(%beacon);
-			DemonMotherMissileFollow(%target,%beacon,%p); 
+			createMissileSeekingProjectile("ShadeLordSword", %target, %boss, %incoming, %vec, 4, 100);
 
 		//-------------
 		//Misc Functions

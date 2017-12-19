@@ -110,7 +110,7 @@ datablock ShapeBaseImageData(PlasmasaberImage) {
 
 	stateName[4]                  = "Reload";
 	stateTransitionOnTimeout[4]   = "Ready";
-	stateTimeoutValue[4]          = 1.5;
+	stateTimeoutValue[4]          = 0.8;
 	stateAllowImageChange[4]      = false;
 };
 

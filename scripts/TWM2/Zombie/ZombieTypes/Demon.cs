@@ -20,6 +20,7 @@ datablock PlayerData(DemonZombieArmor) : LightMaleHumanArmor {
 	damageScale[$DamageType::SA2400] = 5.0;
 	damageScale[$DamageType::Model1887] = 4.0;
 	damageScale[$DamageType::plasma] = 0.001;
+	damageScale[$DamageType::Napalm] = 0.001;
 	damageScale[$DamageType::Burn] = 0.001;
 	damageScale[$DamageType::Fire] = 0.001;	
 	damageScale[$DamageType::CrimsonHawk] = 1.9;

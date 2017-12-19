@@ -292,23 +292,7 @@ function VegenorAttack_FUNC(%att, %args) {
       case "FlameMissileSingle":
          %Tobj = getWord(%args, 0);
          %vec = vectorNormalize(vectorSub(%Tobj.getPosition(), %z.getPosition()));
-         %p = new SeekerProjectile() {
-            dataBlock        = VegenorFireMissile;
-            initialDirection = %vec;
-            initialPosition  = %z.getMuzzlePoint(4);
-            sourceObject     = %z;
-            sourceSlot       = 4;
-         };
-         %beacon = new BeaconObject() {
-            dataBlock = "SubBeacon";
-            beaconType = "vehicle";
-            position = %Tobj.getWorldBoxCenter();
-         };
-         %beacon.team = 0;
-         %beacon.setTarget(0);
-         MissionCleanup.add(%beacon);
-         %p.setObjectTarget(%beacon);
-         DemonMotherMissileFollow(%Tobj, %beacon,%p);
+         createMissileSeekingProjectile("VegenorFireMissile", %Tobj, %z, %z.getMuzzlePoint(4), %vec, 4, 100);
       case "MeteorDrop":
          %t = getWord(%args, 0);
          %fpos = vectoradd(%t.getposition(), TWM2Lib_MainControl("getRandomPosition", 50 TAB 0));
