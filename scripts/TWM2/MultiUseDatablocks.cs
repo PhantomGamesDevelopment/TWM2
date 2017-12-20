@@ -22,6 +22,24 @@ datablock AudioProfile(ZombieHOWL) {
 	preload = true;
 };
 
+datablock AudioProfile(ZombieDeathSound1) {
+	filename    = "voice/Derm3/avo.deathcry_01.wav";
+	description = AudioClose3d;
+	preload = true;
+};
+
+datablock AudioProfile(ZombieDeathSound2) {
+	filename    = "voice/Derm2/avo.deathcry_01.wav";
+	description = AudioClose3d;
+	preload = true;
+};
+
+datablock AudioProfile(ZombieDeathSound3) {
+	filename    = "voice/Derm1/avo.deathcry_01.wav";
+	description = AudioClose3d;
+	preload = true;
+};
+
 //**********************************************
 // PARTICLE DATABLOCKS
 //**********************************************

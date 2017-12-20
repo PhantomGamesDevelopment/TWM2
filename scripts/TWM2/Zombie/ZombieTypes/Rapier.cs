@@ -128,16 +128,7 @@ function RapierZombieArmor::move(%datablock, %zombie) {
 			%Zombie.mountImage(ZWingaltImage, 3);
 			%Zombie.mountImage(ZWingaltImage2, 4);
 		}
-		%chance = (getrandom() * 20);
-		if(%chance >= 19) {
-			%chance = (getRandom() * 12);
-			if(%chance <= 11) {
-				serverPlay3d("ZombieMoan", %zombie.getWorldBoxCenter());
-			}
-			else {
-				serverPlay3d("ZombieHOWL", %zombie.getWorldBoxCenter());
-			}
-		}
+		TWM2Lib_Zombie_Core("playZAudio", %zombie, 20, 12);
 		if(%zombie.iscarrying == 1) {
 			%vector = vectorscale(%zombie.getForwardVector(), (%zombie.speed / 2));
 			%vector = getword(%vector, 0)@" "@getword(%vector, 1)@" "@($Zombie::RapierUpwardScaling * 1.5);

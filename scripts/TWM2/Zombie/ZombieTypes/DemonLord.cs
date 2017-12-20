@@ -161,9 +161,8 @@ function DemonMotherZombieArmor::AIRoutine(%datablock, %zombie) {
 			}
 		}
 		else if(%dist > 100) {
-			%rand = getrandom(1,120);
-			//please, dont ask why i choose this number, it just popped in my head
-			if(%rand == 94)	{
+			%rand = getRandom(1, $Zombie::DemonLord_MinionSpawnChance);
+			if(%rand == (($Zombie::DemonLord_MinionSpawnChance / 2) + 1)) {
 				%datablock.AttackFunction(%zombie, "SpawnZombies"); 
 			}
 			else {
@@ -253,7 +252,7 @@ function DemonMotherZombieArmor::AttackFunction(%datablock, %zombie, %attackFunc
 			if(%zombie.chargeCount == 0) {
 				TWM2Lib_Zombie_Core("zombieGetFacingDirection", %zombie, %target.getPosition());
 				%vector = vectorNormalize(vectorSub(%target.getPosition(), %zombie.getPosition()));
-				%vector = vectorscale(%vector, 4000);
+				%vector = vectorscale(%vector, $Zombie::DemonLord_FireLunge_Thrust);
 				%x = Getword(%vector, 0);
 				%y = Getword(%vector, 1);
 				%z = Getword(%vector, 2);
@@ -272,7 +271,7 @@ function DemonMotherZombieArmor::AttackFunction(%datablock, %zombie, %attackFunc
 				%zombie.attackFunction = %datablock.schedule(300, 0, "AttackFunction", %zombie, %attackFunction, %target);
 			}
 			else {
-				if(vectorDist(%zombie.getPosition(), %target.getPosition()) < 10) {
+				if(vectorDist(%zombie.getPosition(), %target.getPosition()) < $Zombie::DemonLord_FireLunge_MinimumRange) {
 					%p = new TracerProjectile() {
 						dataBlock        = napalmSubExplosion;
 						initialDirection = "0 0 -10";
@@ -328,7 +327,7 @@ function DemonMotherZombieArmor::AttackFunction(%datablock, %zombie, %attackFunc
 			if(%zombie.chargecount $= "") {
 				%zombie.chargecount = 0;
 			}
-			if(%zombie.chargecount <= 9){
+			if(%zombie.chargecount <= 9) {
 				TWM2Lib_Zombie_Core("zombieGetFacingDirection", %zombie, %target.getPosition());
 				%zombie.setvelocity("0 0 10");
 				%zombie.chargecount++;
@@ -346,7 +345,7 @@ function DemonMotherZombieArmor::AttackFunction(%datablock, %zombie, %attackFunc
 				%zombie.chargecount++;
 				%zombie.attackFunction = %datablock.schedule(400, 0, "AttackFunction", %zombie, %attackFunction, %target);
 			}
-			else if(%zombie.chargecount >= 11){
+			else if(%zombie.chargecount >= 11) {
 				%zombie.startFade(500, 0, false);
 				%zombie.setPosition(%zombie.attackpos);
 				%zombie.setvelocity(vectorscale(%zombie.attackdir, 25));

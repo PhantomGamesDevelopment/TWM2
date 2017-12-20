@@ -85,8 +85,21 @@ $Zombie::DemonZombieFireBombMaxRange = 250;
 //$Zombie::RapierUpwardScaling: How fast a rapier zombie will ascend when holding a player
 $Zombie::RapierUpwardScaling = 750;
 
+//$Zombie::DemonLord_FireLunge_Thrust: The velocity scalar of the thrust associated with the fire lunge attack
+$Zombie::DemonLord_FireLunge_Thrust = 4000;
+//$Zombie::DemonLord_FireLunge_MinimumRange: The minimum range following the burst of speed to trigger the fire explosion
+$Zombie::DemonLord_FireLunge_MinimumRange = 10;
 //$Zombie::DemonLord_FirestormTrigger: How long in miliseconds between the firestorm charge up and the attack itself
 $Zombie::DemonLord_FirestormTrigger = 1000;
+//$Zombie::DemonLord_MinionSpawnChance: The chance scalar associated with the minion summon attack (The larger this number, the less likely)
+$Zombie::DemonLord_MinionSpawnChance = 120;
+
+//$Zombie::Shifter_Teleport_MaximumRange: The maximum range at which a shifter is allowed to teleport from
+$Zombie::Shifter_Teleport_MaximumRange = 400;
+//$Zombie::Shifter_Teleport_PrepTime: The amount of time (in ms) that it takes for the shifter to lock down before teleporting
+$Zombie::Shifter_Teleport_PrepTime = 1500;
+//$Zombie::Shifter_Teleport_Cooldown: The cooldown between each teleport
+$Zombie::Shifter_Teleport_Cooldown = 12500;
 
 //MISC Globals, Do not edit.
 $Zombie::killpoints = 5;
@@ -124,9 +137,31 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			%final = %speed * %multiplier;
 			return %final;		
 		
+		//playzaudio(%zombie, %chanceToPlay, %chanceHowl): Plays the moaning sounds associated with zombies
+		case "playzaudio":
+			if(!isObject(%arg1) || %arg1.getState() $= "dead") {
+				return;
+			}
+			if(!isSet(%arg2)) {
+				%arg2 = 50;
+			}
+			if(!isSet(%arg3)) {
+				%arg3 = 35;
+			}
+			%chance = (getrandom() * %arg2);
+			if(%chance >= (%arg2 - 1)) {
+				%chance = (getRandom() * %arg3);
+				if(%chance <= (%arg3 - 1)) {
+					serverPlay3d("ZombieMoan", %arg1.getWorldBoxCenter());
+				}
+				else {
+					serverPlay3d("ZombieHOWL", %arg1.getWorldBoxCenter());
+				}
+			}			
+		
 		//zsetrandommove(%zombie): Activated when the zombie needs to begin random movement
 		case "zsetrandommove":
-			if(!isObject(%arg1)) {
+			if(!isObject(%arg1) || arg1.getState() $= "dead") {
 				return;
 			}
 			%rx = getRandom(-10, 10);
@@ -650,26 +685,3 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			return %zombie;
 	}
 }
-
-//-----------------------------------------------------------
-//DEATH
-datablock AudioProfile(ZombieDeathSound1)
-{
-   filename    = "voice/Derm3/avo.deathcry_01.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
-datablock AudioProfile(ZombieDeathSound2)
-{
-   filename    = "voice/Derm2/avo.deathcry_01.wav";
-   description = AudioClose3d;
-   preload = true;
-};
-
-datablock AudioProfile(ZombieDeathSound3)
-{
-   filename    = "voice/Derm1/avo.deathcry_01.wav";
-   description = AudioClose3d;
-   preload = true;
-};

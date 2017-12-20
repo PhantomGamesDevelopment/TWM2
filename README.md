@@ -94,6 +94,11 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	* Replaced the standard lunge with a fire lunge which creates a firey explosion on impact
 	* Reduced the hit damage of the demon lord from 0.8 to 0.5
 	* Demon Lords, like the regular demons will no longer infect on collision, but set the player on fire instead	
+  * Shifter
+    * The change to the shifter teleportation in 3.91 made these zombies ridiculously overpowered, they will be tuned down
+	* Increased the maximum targeting range of the teleport attack from 200m to 400m
+	* Increased the cooldown of the teleport attack from 7 seconds to 12.5 seconds
+	* Shifter zombies will now have to "lock down" for a 1.5 seconds before teleporting, during this time they will be easily targetable	
 * Added Boss Proficiency
   * Hidden challenges embedded in boss fights that award additional experience for completing tough feats
   * For example: Defeat the shade lord without dying by the elemental shades

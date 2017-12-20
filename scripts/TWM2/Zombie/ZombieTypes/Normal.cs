@@ -65,7 +65,7 @@ function ZombieArmor::armorCollisionFunction(%datablock, %zombie, %colPlayer) {
 
 function ZombieArmor::AI(%datablock, %zombie) {
 	//Normal zombies do not employ any "AI" other than target and move, fork off to main move function
-	%datablock.Move(%zombie);
+	%zombie.moveloop = %datablock.Move(%zombie);
 }
 
 function ZombieArmor::Move(%datablock, %zombie) {
@@ -80,16 +80,7 @@ function ZombieArmor::Move(%datablock, %zombie) {
 		if(%zombie.hastarget != 1) {
 			%zombie.hastarget = 1;
 		}
-		%chance = (getrandom() * 20);
-		if(%chance >= 19) {
-			%chance = (getRandom() * 12);
-			if(%chance <= 11) {
-				serverPlay3d("ZombieMoan", %zombie.getWorldBoxCenter());
-			}
-			else {
-				serverPlay3d("ZombieHOWL", %zombie.getWorldBoxCenter());
-			}
-		}
+		TWM2Lib_Zombie_Core("playZAudio", %zombie, 100, 40);
 		%vector = TWM2Lib_Zombie_Core("zombieGetFacingDirection", %zombie, %closestClient.getPosition());
 	
 		if(Game.CheckModifier("SuperLunge") == 1) {

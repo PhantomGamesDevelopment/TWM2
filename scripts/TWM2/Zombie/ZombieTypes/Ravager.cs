@@ -132,16 +132,7 @@ function RavagerZombieArmor::Move(%datablock, %zombie) {
 	%pos = %zombie.getWorldBoxCenter();
 	%upVec = "250";
 	//moanStuff
-	%chance = (getrandom() * 50);
-	if(%chance >= 49) {
-		%chance = (getRandom() * 12);
-		if(%chance <= 11) {
-			serverPlay3d("ZombieMoan", %zombie.getWorldBoxCenter());
-		}
-		else {
-			serverPlay3d("ZombieHOWL", %zombie.getWorldBoxCenter());
-		}
-	}
+	TWM2Lib_Zombie_Core("playZAudio", %zombie, 250, 40);
 	//Determine target location
 	if(%zombie.ambushing) {
 		%vector = TWM2Lib_Zombie_Core("zombieGetFacingDirection", %zombie, %zombie.ambushPosition);
