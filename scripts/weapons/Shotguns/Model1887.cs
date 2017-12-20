@@ -161,7 +161,7 @@ datablock ShapeBaseImageData(Model1887Image) {
 	stateTransitionOnNotWet[8] = "Fire";
 };
 
-datablock ItemData(Model1887 {
+datablock ItemData(Model1887) {
 	className    = Weapon;
 	catagory     = "Spawn Items";
 	shapeFile    = "weapon_plasma.dts";

@@ -426,7 +426,7 @@ function LordZombieArmor::makeShield(%datablock, %zombie) {
 	//Next, find the first object we hit below the point that can serve as the shield base.
 	%mask = $TypeMasks::TerrainObjectType | $TypeMasks::InteriorObjectType | $TypeMasks::StaticShapeObjectType;
 	%tH = getTerrainHeight(%shieldPos);
-	%shieldSpawnPos = getWord(%shieldPos, 0) SPC getWord(%shieldPos, 1) spc %tH;
+	%shieldSpawnPos = getWord(%shieldPos, 0) @ " " @ getWord(%shieldPos, 1) @ " " @ %tH;
 	%lookVector = vectorSub(%shieldSpawnPos, %eyePoint);
 	%searchResult = containerRayCast(%eyePoint, %lookVector, %mask, 0);
 	if(getWord(%searchResult, 0) == 0) {

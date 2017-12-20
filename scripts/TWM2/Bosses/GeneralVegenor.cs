@@ -274,7 +274,7 @@ function VegenorAttack_FUNC(%att, %args) {
          for(%i = 0; %i < 6; %i++) {
             %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
             %fpos = vectoradd("0 0 5",%pos);
-            TWM2Lib_Zombie_Core("SpawnZombie", "zSpawnCommand", %type, %fpos)
+            TWM2Lib_Zombie_Core("SpawnZombie", "zSpawnCommand", %type, %fpos);
          }
          %z.setMoveState(true);
          %z.setActionThread($Zombie::RogThread, true);

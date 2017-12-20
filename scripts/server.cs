@@ -57,11 +57,7 @@ function CreateServer(%mission, %missionType)
    exec("scripts/camera.cs");
    exec("scripts/particleEmitter.cs");    // Must exist before item.cs and explosion.cs
    exec("scripts/particleDummies.cs");
-   exec("scripts/projectiles.cs");        // Must exits before item.cs
-   echo("*********************");
-   echo("* LOADING TWM2 DATABLOCKS");
-   exec("scripts/TWM2/MultiUseDatablocks.cs");    
-   echo("*********************");   
+   exec("scripts/projectiles.cs");        // Must exits before item.cs   
    exec("scripts/player.cs");
    exec("scripts/gameBase.cs");
    exec("scripts/staticShape.cs");
@@ -95,6 +91,10 @@ function CreateServer(%mission, %missionType)
    exec("scripts/vehicles/vehicle_Stormseige.cs");
    exec("scripts/vehicles/vehicle_strikeFighter.cs");
    exec("scripts/vehicles/vehicle.cs");            // Must be added after all other vehicle files or EVIL BAD THINGS
+   echo("*********************");
+   echo("* LOADING TWM2 DATABLOCKS");
+   exec("scripts/TWM2/MultiUseDatablocks.cs");    
+   echo("*********************");   
    exec("scripts/ai.cs");
    exec("scripts/item.cs");
    exec("scripts/station.cs");

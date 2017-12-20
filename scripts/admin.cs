@@ -73,8 +73,8 @@ function serverCmdStartNewVote(%client, %typeName, %arg1, %arg2, %arg3, %arg4, %
 	// if not a valid vote, turn back.
 	//Phantom139: Spring Cleaning... TWM2 3.9.2
 	// Old format: if( $VoteMessage[ %typeName ] $= "" && %typeName !$= "VoteOnlyOwnerCascade" )
-	if($VoteMessage[%typeName $= "") {
-		switch$(%typeName):
+	if($VoteMessage[%typeName] $= "") {
+		switch$(%typeName) {
 			case "VoteTeamDamage" or "VoteHoardMode" or "VoteGreedMode" or "VotePurebuild" or "VoteLivingWorldMode"
 				or "VoteCascadeMode" or "VoteExpertMode" or "VoteVehicles" or "VoteSatchelCharge" or "VoteOnlyOwnerDeconstruct"
 				or "VoteOnlyOwnerCascade" or "VoteOnlyOwnerRotate" or "VoteOnlyOwnerCubicReplace" or "VoteRemoveDeployables"
@@ -84,6 +84,7 @@ function serverCmdStartNewVote(%client, %typeName, %arg1, %arg2, %arg3, %arg4, %
 				// Looks like we missed a message, but the type is ok, allow pass.
 			default:
 				%typePass = false;
+		}
 	}
 	// End JTL
 

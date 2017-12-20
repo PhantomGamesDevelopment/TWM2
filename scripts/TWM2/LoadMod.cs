@@ -74,7 +74,6 @@ exec("scripts/TWM2/ExteriorFunctioning/cmdArmor.cs");  //cmdArmor patch
 
 exec("scripts/TWM2/ChatCommands/Public.cs");       //Public CCs
 exec("scripts/TWM2/ChatCommands/Admin.cs");        //Admin CCs
-exec("scripts/TWM2/ChatCommands/Zombie.cs");       //Zombie CCs
 exec("scripts/TWM2/ChatCommands/SuperAdmin.cs");   //SuperAdmin CCs
 exec("scripts/TWM2/ChatCommands/DevAndHost.cs");   //Dev/Host CCs
 

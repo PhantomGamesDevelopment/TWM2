@@ -576,7 +576,7 @@ function SummonerZombieArmor::onTrigger(%data, %player, %triggerNum, %val) {
 			%c.schedule(((%Ct * 1000) + 500), "delete");
 			for(%i = 1; %i <= %ct; %i++) {
 				%time = %i * 1000;
-				schedule(%time, 0, "TWM2Lib_Zombie_Core" "SpawnZombie", "zSpawnCommand", %type, %SumPos);
+				schedule(%time, 0, "TWM2Lib_Zombie_Core", "SpawnZombie", "zSpawnCommand", %type, %SumPos);
 			}
 		}
 	}

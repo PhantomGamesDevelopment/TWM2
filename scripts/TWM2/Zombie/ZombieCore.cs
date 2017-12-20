@@ -169,7 +169,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			}
 			%rx = getRandom(-10, 10);
 			%ry = getRandom(-10, 10);
-			%vec = %rx @ SPC @ %ry @ SPC @ 0;
+			%vec = %rx @ " " @ %ry @ " " @ 0;
 			%arg1.direction = vectorNormalize(%vec);
 			%arg1.Mnum = getRandom(1, 20);
 			%arg1.zombieRmove = schedule($Zombie::SpeedUpdateTime, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
@@ -186,7 +186,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			if(%arg1.Mnum >= 1) {
 				%x = getWord(%arg1.direction, 1);
 				%y = getWord(%arg1.direction, 0) * -1;
-				%vec = %x @ SPC @ %y @ SPC @ 0;
+				%vec = %x @ " " @ %y @ " " @ 0;
 				%arg1.setRotation(fullrot("0 0 0", %vec));
 				%speed = %arg1.speed;
 				%vector = vectorScale(%vec, %speed);
@@ -290,7 +290,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			if(!isSet(%arg3)) {
 				%arg3 = 0;
 			}
-			switch$(strlwr(%arg2)):
+			switch$(strlwr(%arg2)) {
 				case "canjump":
 					%arg1.canJump = %arg3;
 				case "recentshift":
@@ -303,6 +303,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%arg1.firingWeapon = %arg3;
 				case "canfireweapon":
 					%arg1.canFireWeapon = %arg3;
+			}
 					
 		//lookForTarget(%zombie, [%pilot], [%groundVeh]): Identify the closest target, and the distance to that target
 		case "lookfortarget":
@@ -398,11 +399,11 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			}
 			//
 			%vec = vectorNormalize(vectorSub(%tPos, %arg1.getWorldBoxCenter()));
-			%vx = getWord(%vector, 0)
-			%vy = getWord(%vector, 1)
-			%nvx = %vy
-			%nvy = (%vx * -1)
-			%lookVector = %nvx @ SPC @ %nvy @ SPC @ 0;
+			%vx = getWord(%vector, 0);
+			%vy = getWord(%vector, 1);
+			%nvx = %vy;
+			%nvy = (%vx * -1);
+			%lookVector = %nvx @ " " @ %nvy @ " " @ 0;
 			%arg1.setRotation(fullRot("0 0 0", %lookVector));
 			
 			return %vec;
