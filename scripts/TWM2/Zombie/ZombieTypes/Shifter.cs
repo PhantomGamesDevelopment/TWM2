@@ -118,5 +118,5 @@ function ShifterZombieArmor::Move(%datablock, %zombie) {
 		%zombie.hastarget = 0;
 		%zombie.zombieRmove = schedule(%zombie.updateTimeFrequency, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
 	}
-	%zombie.moveloop = %datablock.schedule(%zombie.updateTimeFrequency, %datablock, "Move", %zombie);	
+	%zombie.moveloop = %datablock.schedule(%zombie.updateTimeFrequency, "Move", %zombie);	
 }

@@ -101,6 +101,9 @@ $Zombie::Shifter_Teleport_PrepTime = 1500;
 //$Zombie::Shifter_Teleport_Cooldown: The cooldown between each teleport
 $Zombie::Shifter_Teleport_Cooldown = 12500;
 
+//$Zombie::Summoner_Cooldown: The cooldown of the summoner zombie's summon ability
+$Zombie::Summoner_Cooldown = 25000;
+
 //MISC Globals, Do not edit.
 $Zombie::killpoints = 5;
 $Zombie::RogThread = "cel1";
@@ -292,6 +295,8 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%arg1.canJump = %arg3;
 				case "recentshift":
 					%arg1.recentShift = %arg3;
+				case "cansummon":
+					%arg1.cansummon = %arg3;
 				case "canshield":
 					%arg1.canShield = %arg3;
 				case "firingweapon":
@@ -542,7 +547,8 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 				case 10:
 					%zombie = new player() {
 						Datablock = "SummonerZombieArmor";
-					};				
+					};
+					%zombie.canSummon = 1;
 				
 				//Sniper Zombie
 				case 11:
