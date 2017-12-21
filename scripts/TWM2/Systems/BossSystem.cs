@@ -22,31 +22,31 @@ function InitiateBoss(%Boss, %name) {
 	$TWM2::BossGoing = 1;
 	switch$(%name) {
 		case "Yvex":
-			%print = "<color:FF0000>BOSS BATTLE \n LORD YVEX";
+			%print = "<color:FF0000>BOSS BATTLE \n LORD YVEX \n Fist Of Vengeance Field Commander";
 		case "CnlWindshear":
-			%print = "<color:FF0000>BOSS BATTLE \n COLONEL WINDSHEAR";
+			%print = "<color:FF0000>BOSS BATTLE \n COLONEL WINDSHEAR \n Harbinger Aerial Admiral";
 		case "GhostOfLightning":
-			%print = "<color:FF0000>BOSS BATTLE \n GHOST OF LIGHTNING";
+			%print = "<color:FF0000>BOSS BATTLE \n THE GHOST OF LIGHTNING \n Dark Shadow Entity";
 		case "Vengenor":
-			%print = "<color:FF0000>BOSS BATTLE \n GENERAL VENGENOR";
+			%print = "<color:FF0000>BOSS BATTLE \n GENERAL VENGENOR \n Fist of Vengeance Siege General";
 		case "LordRog":
-			%print = "<color:FF0000>BOSS BATTLE \n LORD ROG";
+			%print = "<color:FF0000>BOSS BATTLE \n LORD ROG \n Fist Of Vengeance Field Commander";
 		case "Insignia":
-			%print = "<color:FF0000>BOSS BATTLE \n MAJOR INSIGNIA";
+			%print = "<color:FF0000>BOSS BATTLE \n MAJOR INSIGNIA \n Fist of Vengeance Space Fleet Commander";
 		case "Vardison1":
-			%print = "<color:FF0000>BOSS BATTLE \n LORD VARDISON";
+			%print = "<color:FF0000>BOSS BATTLE \n LORD VARDISON \n Leader of the Fist of Vengeance";
 		case "Vardison2":
 			%print = "<color:FF0000>BOSS ALERT \n LORD VARDISON HAS ENTERED HIS SECOND FORM";
 		case "Vardison3":
 			%print = "<color:FF0000>BOSS ALERT \n LORD VARDISON HAS ENTERED HIS FINAL FORM";
 		case "Trevor":
-			%print = "<color:FF0000>BOSS BATTLE \n LORDRANIUS TREVOR";
+			%print = "<color:FF0000>BOSS BATTLE \n LORDRANIUS TREVOR \n Leader of the Harbinger Clan";
 		case "Stormrider":
-			%print = "<color:FF0000>CLASSIC BOSS BATTLE \n COMMANDER STORMRIDER";
+			%print = "<color:FF0000>CLASSIC BOSS BATTLE \n COMMANDER STORMRIDER \n Harbinger Air Assault Commander";
 		case "GhostOfFire":
-			%print = "<color:FF0000>CLASSIC BOSS BATTLE \n GHOST OF FIRE";
+			%print = "<color:FF0000>CLASSIC BOSS BATTLE \n THE GHOST OF FIRE \n Dark Shadow Entity";
 		case "ShadeLord":
-			%print = "<color:FF0000>BOSS BATTLE \n THE SHADE LORD";
+			%print = "<color:FF0000>BOSS BATTLE \n THE SHADE LORD \n Guardian of the Realm of Shadows";
 	}
 	//INITIATE TO CLIENTS
 	%count = ClientGroup.getCount();
@@ -77,7 +77,7 @@ function resetBossProficiency(%client) {
 
 function BossCheckUp(%boss, %name) {
 	%percentage = (mFloor(%boss.getDamageLeft()*100) / mFloor(%boss.getMaxDamage()*100)) * 100;
-	MessageAll('MsgSPCurrentObjective1', "", "Boss Battle: "@$TWM2::BossName[%name]@" [Boss Kill Count: "@$TWM2::BossManager.bossKills@"]");
+	MessageAll('MsgSPCurrentObjective1', "", "Boss Battle: "@$TWM2::BossNameInternal[%name]@" [Boss Kill Count: "@$TWM2::BossManager.bossKills@"]");
 	MessageAll('MsgSPCurrentObjective2', "", "Boss HP: "@mFloor(%boss.getDamageLeft()*100)@"/"@mFloor(%boss.getMaxDamage()*100)@" ("@%percentage@"%)");
 
 	if(%name !$= "CnlWindshear" && %name !$= "Trevor" && %name !$= "Stormrider") {
@@ -199,7 +199,7 @@ function GameConnection::GiveBossAward(%client, %bossName) {
 		%scriptController.save(%file);
 
 		%award = mFloor($TWM2::BossXPAward[%bossName] / %scriptController.bossDefeatCount[%bossName]);
-		GainExperience(%client, %award, ""@%bossName@" defeated, congratulations! ");
+		GainExperience(%client, %award, ""@$TWM2::BossNameInternal[%bossName]@" defeated, congratulations! ");
 		CheckBossChallenge(%client, %bossName);
 		CheckBossProficiency(%client, %bossName);
 	}

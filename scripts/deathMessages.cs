@@ -164,6 +164,11 @@ $DeathMessageSelfKill[$DamageType::PTorpedo, 2] = '\c0%1 took proton detonation 
 $DeathMessageSelfKill[$DamageType::PTorpedo, 3] = '\c0%1\'s proton torpedo aiming skills are self-evident.';
 $DeathMessageSelfKill[$DamageType::PTorpedo, 4] = '\c0%1 annihilates %2self into dust with a proton torpedo';
 
+$DeathMessageSelfKill[$DamageType::AcidCannon, 0] = '\c0%1 applied a lethal dose of acid upon %2self.';
+$DeathMessageSelfKill[$DamageType::AcidCannon, 1] = '\c0%1 turned %3 acid cannon on %2self.';
+$DeathMessageSelfKill[$DamageType::AcidCannon, 2] = '\c0%1 still doesn\'t have the hang of FoV acid weapon technology.';
+$DeathMessageSelfKill[$DamageType::AcidCannon, 3] = '\c0%1\'s self melting skills speak for themself.';
+$DeathMessageSelfKill[$DamageType::AcidCannon, 4] = '\c0%1 melts %2self into a liquid pool with the acid cannon.';
 
 //used when a player is killed by a teammate
 $DeathMessageTeamKillCount = 1;
@@ -210,6 +215,7 @@ $DeathMessageTeamKill[$DamageType::PTorpedo, 0] = '\c0%4 vaporized TEAMMATE %1 w
 $DeathMessageTeamKill[$DamageType::CrimsonHawk, 0] = '\c0%4 eliminates TEAMMATE %1 with %6 crimson hawk pistol!';
 $DeathMessageTeamKill[$DamageType::M93, 0] = '\c0%4 nails TEAMMATE %1 with a burst fired M93 pistol!';
 $DeathMessageTeamKill[$DamageType::ES77PulsePhaser, 0] = '\c0%4 eliminates TEAMMATE %1 with %6 ES-77 Pulse Phaser!';
+$DeathMessageTeamKill[$DamageType::AcidCannon, 0] = '\c0%4 metled TEAMMATE %1 with %6 Acid Cannon!';
 
 //these used when a player is killed by an enemy
 $DeathMessageCount = 5;
@@ -516,7 +522,7 @@ $DeathMessage[$DamageType::Zombie, 4] = '\c0%1 is sliced and diced by a zombie.'
 $DeathMessage[$DamageType::ZAcid, 0] = '\c0%1 gets blasted by zombie acid.';
 $DeathMessage[$DamageType::ZAcid, 1] = '\c0%1 is in horrible pain from the infectious acid.';
 $DeathMessage[$DamageType::ZAcid, 2] = '\c0%1 will be a zombie soon, thanks to that acid.';
-$DeathMessage[$DamageType::ZAcid, 3] = '\c0%1 is blasted by a lord zombie.';
+$DeathMessage[$DamageType::ZAcid, 3] = '\c0%1 is blasted by a zombie acid cannon.';
 $DeathMessage[$DamageType::ZAcid, 4] = '\c0%1 burns in pain from zombie acid.';
 
 $DeathMessage[$DamageType::Fire, 0] = '\c0%1 gets %2self burnt again.';
@@ -607,7 +613,7 @@ $DeathMessage[$DamageType::LaserRifle, 0] = '\c0%4 beamed down %1 with a Laser R
 $DeathMessage[$DamageType::LaserRifle, 1] = '\c0%4 blasts ultimate laser beams into %1.';
 $DeathMessage[$DamageType::LaserRifle, 2] = '\c0%4 utilizes advanced Laser Technology on %1';
 $DeathMessage[$DamageType::LaserRifle, 3] = '\c0%4 burns holes into %1 from %6 laser rifle.';
-$DeathMessage[$DamageType::LaserRifle, 4] = '\c0%4 gives %1 some laser therapy, too bad it was lethal.';
+$DeathMessage[$DamageType::LaserRifle, 4] = '\c0%4 gives %1 some laser therapy, unfortunately, it was lethal.';
 
 $DeathMessage[$DamageType::Burn, 0] = '\c0%1 screams fire, nobody comes to aid %2.';
 $DeathMessage[$DamageType::Burn, 1] = '\c0%1 is to the ³rd Degree.';
@@ -616,7 +622,7 @@ $DeathMessage[$DamageType::Burn, 3] = '\c0%1 becomes engulfed in fire, and dies.
 $DeathMessage[$DamageType::Burn, 4] = '\c0%1 experiences spontanious combustion.';
 
 $DeathMessage[$DamageType::Fire, 0] = '\c0%4 burns %1 with a flamethrower.';
-$DeathMessage[$DamageType::Fire, 1] = '\c0%4 burns %1, then flips the switch again to ensure.';
+$DeathMessage[$DamageType::Fire, 1] = '\c0%4 burns %1, then flips the switch again to ensure the job is done.';
 $DeathMessage[$DamageType::Fire, 2] = '\c0%1 walks into %4\'s stream of flames';
 $DeathMessage[$DamageType::Fire, 3] = '\c0%4 defines the words third degree for %1.';
 $DeathMessage[$DamageType::Fire, 4] = '\c0%1 experiences spontanious combustion from %4.';
@@ -710,3 +716,9 @@ $DeathMessage[$DamageType::ES77PulsePhaser, 1] = '\c0%4 eliminates %1 with %6 ES
 $DeathMessage[$DamageType::ES77PulsePhaser, 2] = '\c0%4 shows %1 the power of the pulse phaser.';
 $DeathMessage[$DamageType::ES77PulsePhaser, 3] = '\c0%4 fires off superheated pulse shots in %1\'s direction.';
 $DeathMessage[$DamageType::ES77PulsePhaser, 4] = '\c0%4 makes short work of %1 with a pulse phaser.';
+
+$DeathMessage[$DamageType::AcidCannon, 0] = '\c0%4 strikes down %1 with an acid cannon.';
+$DeathMessage[$DamageType::AcidCannon, 1] = '\c0%4 melts %1 into a puddle with the FoV acid cannon.';
+$DeathMessage[$DamageType::AcidCannon, 2] = '\c0%4 turned FoV weapon\'s tech in %1\'s direction.';
+$DeathMessage[$DamageType::AcidCannon, 3] = '\c0%4 nails %1 with an acid cannon.';
+$DeathMessage[$DamageType::AcidCannon, 4] = '\c0%4 ends %1 quickly and painfully with an acid cannon.';

@@ -21,6 +21,7 @@ datablock PlayerData(EliteDemonZombieArmor) : LightMaleHumanArmor {
 	damageScale[$DamageType::Fire] = 0.1;
 	damageScale[$DamageType::Napalm] = 0.1;
 	damageScale[$DamageType::Plasma] = 0.1;
+	damageScale[$DamageType::AcidCannon] = 3.0;
 
 	max[RepairKit]			= 0;
 	max[Mine]				= 0;

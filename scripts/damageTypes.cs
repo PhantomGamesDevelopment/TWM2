@@ -90,6 +90,7 @@ $DamageType::ES77PulsePhaser = 89;
 $DamageType::Wp400 = 90;
 $DamageType::SCD343 = 91;
 $DamageType::Model1887 = 92;
+$DamageType::AcidCannon = 93;
 
 
 //Phantom139: TWM2 3.9.2: Updated these "special" damage types to have much higher index values
@@ -174,6 +175,17 @@ $DamageTypeText[79] = 'Javelin';
 $DamageTypeText[80] = 'Stinger';
 $DamageTypeText[81] = 'Static Grenade';
 $DamageTypeText[82] = 'Plasmasaber';
+$DamageTypeText[83] = 'Blade of Vengance Assassination';
+$DamageTypeText[84] = 'MG42';
+$DamageTypeText[85] = 'MRXX ZC4';
+$DamageTypeText[86] = 'Plasma Torpedo';
+$DamageTypeText[87] = 'Crimson Hawk';
+$DamageTypeText[88] = 'M93 Trafca';
+$DamageTypeText[89] = 'ES-77 Pulse Phaser';
+$DamageTypeText[90] = 'WP 400';
+$DamageTypeText[91] = 'SCD-343';
+$DamageTypeText[92] = 'Model 1887';
+$DamageTypeText[93] = 'Acid Cannon';
 
 $DamageTypeText[998] = 'water';
 $DamageTypeText[998] = 'nexus camping';

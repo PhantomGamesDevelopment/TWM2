@@ -923,7 +923,7 @@ function VardisonDoMove(%Boss) {
          if(%clDst < 6) {
             //Insta-Kill xD
             %clPlayer.setInvincible(false);
-            MessageAll('msgDie', "\c4Lord Vardision: DIE "@getWord(%closest, 0).namebase@"!!!");
+            MessageAll('msgDie', "\c4"@$TWM2::BossNameInternal["Vardison"]@": DIE "@getWord(%closest, 0).namebase@"!!!");
             %clPlayer.damage(%boss, %clPlayer.getPosition(), 10000, $DamageType::Idiocy);
             return;
          }

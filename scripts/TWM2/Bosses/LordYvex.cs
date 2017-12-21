@@ -153,7 +153,7 @@ function SpawnYvex(%position) {
 		Datablock = "YvexZombieArmor";
 	};
 	%Cpos = vectorAdd(%position, "0 0 5");
-	MessageAll('MsgYvexreturn', "\c4"@$TWM2::ZombieName[7]@": Did you miss me? Because... I WANT MY REVENGE!!!");
+	MessageAll('MsgYvexreturn', "\c4"@$TWM2::BossNameInternal["Yvex"]@": Did you miss me? Because... I WANT MY REVENGE!!!");
 
 	%command = "Yvexmovetotarget";
 	%zombie.ticks = 0;
@@ -163,7 +163,7 @@ function SpawnYvex(%position) {
 	YvexAttacks(%zombie);
 
 	%Zombie.team = 30;
-	%zname = $TWM2::ZombieName[7]; // <- To Hosts, Enjoy, You can
+	%zname = $TWM2::BossName["Yvex"]; // <- To Hosts, Enjoy, You can
 								  //Change the Zombie Names now!!!
 	%zombie.target = createTarget(%zombie, %zname, "", "Derm3", '', %zombie.team, PlayerSensor);
 	setTargetSensorData(%zombie.target, PlayerSensor);
@@ -195,7 +195,7 @@ function Yvexmovetotarget(%zombie){
 		%zombie.startFade(1000, 0, false);
 		%zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
 		%zombie.setVelocity("0 0 0");
-		MessageAll('msgYvexAttack', "\c4"@$TWM2::ZombieName[7]@": I shall not fall to my end!");
+		MessageAll('msgYvexAttack', "\c4"@$TWM2::BossNameInternal["Yvex"]@": I shall not fall to my end!");
 	}
 	%closestClient = ZombieLookForTarget(%zombie);
 	%closestDistance = getWord(%closestClient,1);
@@ -281,11 +281,11 @@ function YvexAttack_FUNC(%att, %args) {
          %msg = getrandom(1, 3);
          switch(%msg) {
             case 1:
-               messageall('YvexMsg',"\c4"@$TWM2::ZombieName[7]@": Enlisted for revenge... ATTACK");
+               messageall('YvexMsg',"\c4"@$TWM2::BossNameInternal["Yvex"]@": Enlisted for revenge... ATTACK");
             case 2:
-               messageall('YvexMsg',"\c4"@$TWM2::ZombieName[7]@": Attack my soldiers.. REVENGE is ours");
+               messageall('YvexMsg',"\c4"@$TWM2::BossNameInternal["Yvex"]@": Attack my soldiers.. REVENGE is ours");
             case 3:
-               messageall('YvexMsg',"\c4"@$TWM2::ZombieName[7]@": Take out the enemy, ALL OF THEM!");
+               messageall('YvexMsg',"\c4"@$TWM2::BossNameInternal["Yvex"]@": Take out the enemy, ALL OF THEM!");
          }
          for(%i = 0; %i < 5; %i++) {
             %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
@@ -297,7 +297,7 @@ function YvexAttack_FUNC(%att, %args) {
          %z.schedule(3500, "setMoveState", false);
          
       case "FireCurse":
-         MessageAll('msgWTFH', "\c4"@$TWM2::ZombieName[7]@": DIE!!!");
+         MessageAll('msgWTFH', "\c4"@$TWM2::BossNameInternal["Yvex"]@": DIE!!!");
          %zombie = getWord(%args, 0);
          %target = getWord(%args, 1);
 
@@ -387,13 +387,13 @@ function YvexSniperShot::onCollision(%data, %projectile, %targetObject, %modifie
    %randMessage = getrandom(3)+1;
    switch(%randMessage) {
       case 1:
-         MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[7]@": Let the revenge begin, "@getTaggedString(%targ.name)@".");
+         MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Yvex"]@": Let the revenge begin, "@getTaggedString(%targ.name)@".");
       case 2:
-         MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[7]@": Taste my vengance... "@getTaggedString(%targ.name)@".");
+         MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Yvex"]@": Taste my vengance... "@getTaggedString(%targ.name)@".");
       case 3:
-         MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[7]@": Sleep Forever... "@getTaggedString(%targ.name)@".");
+         MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Yvex"]@": Sleep Forever... "@getTaggedString(%targ.name)@".");
       default:
-         MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[7]@": This Nightmare will lock you forever "@getTaggedString(%targ.name)@"!");
+         MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Yvex"]@": This Nightmare will lock you forever "@getTaggedString(%targ.name)@"!");
    }
 }
 
@@ -444,7 +444,7 @@ function Yvexnightmareloop(%zombie,%viewer) {
    %viewer.player.damage(0, %viewer.player.position, 0.03, $DamageType::Zombie);
    %zombie.setDamageLevel(%zombie.getDamageLevel() - 0.15);
 
-   BottomPrint(%viewer,"You are locked in "@$TWM2::ZombieName[7]@"'s Nightmare.",5,1);
+   BottomPrint(%viewer,"You are locked in "@$TWM2::BossNameInternal["Yvex"]@"'s Nightmare.",5,1);
    schedule(1, 0, "messageclient", %viewer, 'MsgClient', "~wvoice/fem1/avo.deathcry_02.wav");
    schedule(5, 0, "messageclient", %viewer, 'MsgClient', "~wvoice/fem2/avo.deathcry_02.wav");
    schedule(10, 0, "messageclient", %viewer, 'MsgClient', "~wvoice/fem3/avo.deathcry_02.wav");
@@ -462,7 +462,7 @@ function Yvexnightmareloop(%zombie,%viewer) {
 
 function KillerPulse::onCollision(%data,%projectile,%targetObject,%modifier,%position,%normal) {
    if (%targetObject.getClassName() $= "Player" && !%targetObject.isBoss) {
-      messageall('msgkillcurse', "\c5"@getTaggedString(%targetObject.client.name)@" Took a fatal Hit from "@$TWM2::ZombieName[7]@"'s Dark Energy");
+      messageall('msgkillcurse', "\c5"@getTaggedString(%targetObject.client.name)@" Took a fatal Hit from "@$TWM2::BossNameInternal["Yvex"]@"'s Dark Energy");
       %targetObject.throwWeapon();
       %targetObject.clearinventory();
       YvexAttack_FUNC("KillLoop", %targetObject);

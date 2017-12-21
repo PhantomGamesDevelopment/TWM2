@@ -245,7 +245,7 @@ function SpawnLordRog(%position) {
       Datablock = "LordRogZombieArmor";
    };
    %Cpos = vectorAdd(%position, "0 0 5");
-   MessageAll('msgBossAlertreturn', "\c4"@$TWM2::ZombieName[8]@": I AM ALIVE!!! I SHALL KILL YOU ALL");
+   MessageAll('msgBossAlertreturn', "\c4"@$TWM2::BossNameInternal["LordRog"]@": I AM ALIVE!!! I SHALL KILL YOU ALL");
 
    %zombie.iszombie = 1;
    StartLRAbilities(%zombie);
@@ -257,7 +257,7 @@ function SpawnLordRog(%position) {
    InitiateBoss(%zombie, "LordRog");
 
    %Zombie.team = 30;
-   %zname = $TWM2::ZombieName[8]; // <- To Hosts, Enjoy, You can
+   %zname = $TWM2::BossName["LordRog"]; // <- To Hosts, Enjoy, You can
                                       //Change the Zombie Names now!!!
    %zombie.target = createTarget(%zombie, %zname, "", "Derm3", '', %zombie.team, PlayerSensor);
    setTargetSensorData(%zombie.target, PlayerSensor);
@@ -287,7 +287,7 @@ function LordRogmovetotarget(%zombie){
       %zombie.startFade(1000, 0, false);
       %zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
       %zombie.setVelocity("0 0 0");
-      MessageAll('msgBossAlertAttack', "\c4"@$TWM2::ZombieName[8]@": You think I will fall to my death!?!?");
+      MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["LordRog"]@": You think I will fall to my death!?!?");
    }
    %closestDistance = getWord(%closestClient,1);
    %closestClient = getWord(%closestClient,0).Player;
@@ -343,7 +343,7 @@ function LordRogAttack_FUNC(%att, %args) {
          schedule(30000, 0, LordRogAttack_FUNC, "ZombieSummon", %z);
          //--------------------
          %type = TWM2Lib_Zombie_Core("getRandomZombieType", "1 2 3 4 5 9 12 13 15"); 
-         messageall('RogMsg',"\c4"@$TWM2::ZombieName[8]@": Attack my target!");
+         messageall('RogMsg',"\c4"@$TWM2::BossNameInternal["LordRog"]@": Attack my target!");
          for(%i = 0; %i < 5; %i++) {
             %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
             %fpos = vectoradd("0 0 5",%pos);
@@ -360,7 +360,7 @@ function LordRogAttack_FUNC(%att, %args) {
          }
       
          %type = TWM2Lib_Zombie_Core("getRandomZombieType", "1 2 3 4 5 9 12 13 15");
-         MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Additional Reinforcements!!! NOW!");
+         MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["LordRog"]@": Additional Reinforcements!!! NOW!");
          %typeCaller = %type SPC %type SPC %type SPC %type;
          %callPos = vectorAdd(%z.getPosition(), "2000 0 400");
          spawnHunterDropship(%callPos, "AA", %typeCaller);
@@ -496,53 +496,53 @@ function StartLRAbilities(%zombie) {
       case 1:
          %target = FindValidTarget(%z);
          if(isObject(%target.player) && !%target.ignoredbyZombs) {
-            MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Launch!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["LordRog"]@": Launch!");
             LordRogAttack_FUNC("TwinLaunch", %z SPC %target.player);
          }
          else {
-            MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Fools, you cannot withstand my power!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["LordRog"]@": Fools, you cannot withstand my power!");
          }
 
       case 2:
          %target = FindValidTarget(%z);
          if(isObject(%target.player) && !%target.ignoredbyZombs) {
             %z.laserStormSount = 0;
-            MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Laser Storm Begin!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["LordRog"]@": Laser Storm Begin!");
             LordRogAttack_FUNC("LaserStrike", %z SPC %target.player);
          }
          else {
-            MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Fools, you cannot withstand my power!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["LordRog"]@": Fools, you cannot withstand my power!");
          }
 
       case 3:
          %target = FindValidTarget(%z);
          if(isObject(%target.player) && !%target.ignoredbyZombs) {
-            MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Metros Maul!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["LordRog"]@": Metros Maul!");
             LordRogAttack_FUNC("MetrosMaul", %target.player);
          }
          else {
-            MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Fools, you cannot withstand my power!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["LordRog"]@": Fools, you cannot withstand my power!");
          }
 
       case 4:
          %target = FindValidTarget(%z);
          if(isObject(%target.player) && !%target.ignoredbyZombs) {
-            MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Storm Begins!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["LordRog"]@": Storm Begins!");
             LordRogAttack_FUNC("LaunchStorm", %z SPC %target.player);
          }
          
       case 5 or 6:
          LordRogAttack_FUNC("StaticDischarge", %z);
-         MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Static Discharge!");
+         MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["LordRog"]@": Static Discharge!");
 
       case 7:
          %target = FindValidTarget(%z);
          if(isObject(%target.player) && !%target.ignoredbyZombs) {
-            MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Metros EXTREMITY!!!!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["LordRog"]@": Metros EXTREMITY!!!!");
             LordRogAttack_FUNC("MeteorOblivion", %target.player);
          }
          else {
-            MessageAll('MessageAll', "\c4"@$TWM2::ZombieName[8]@": Fools, you cannot withstand my power!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["LordRog"]@": Fools, you cannot withstand my power!");
          }
          
       case 8:

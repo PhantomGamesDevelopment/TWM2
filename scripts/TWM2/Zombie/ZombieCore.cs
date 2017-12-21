@@ -43,6 +43,7 @@ $Zombie::TypeSpeed[3] = 4000;
 $Zombie::TypeSpeed[4] = 240;
 $Zombie::TypeSpeed[5] = 1500;
 $Zombie::TypeSpeed[6] = 1200;
+$Zombie::TypeSpeed[11] = 240;
 
 //$Zombie::BaseJumpCooldown: The time zombies must elapse before jumping / lunging
 $Zombie::BaseJumpCooldown = 1500;
@@ -558,6 +559,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					};
 					%zombie.mountImage(ZSniperImage1, 4);
 					%zombie.mountImage(ZSniperImage2, 5);
+					%zombie.mountImage(ZSniperImage3, 6);
 				
 				//Ultra-Demon Zombie
 				case 12:
@@ -611,7 +613,16 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%zombie = new player(){
 						Datablock = "EliteDemonZombieArmor";
 					};
-					%zombie.mountImage(ZdummyslotImg, 4);				
+					%zombie.mountImage(ZdummyslotImg, 4);	
+
+				//Flareguide Sniper Zombie (Mini-Boss)
+				case 11:
+					%zombie = new player(){
+						Datablock = "FlareguideSniperZombieArmor";
+					};
+					%zombie.mountImage(ZSniperImage1, 4);
+					%zombie.mountImage(ZSniperImage2, 5);
+					%zombie.mountImage(ZSniperImage3, 6);					
 			}
 			//Verify that we spawned a zombie object, force spawn a normal zombie if we did not.
 			if(!isObject(%zombie)) {

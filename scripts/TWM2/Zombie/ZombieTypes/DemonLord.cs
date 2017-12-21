@@ -23,7 +23,8 @@ datablock PlayerData(DemonMotherZombieArmor) : LightMaleHumanArmor {
 	damageScale[$DamageType::plasma] = 0.001;
 	damageScale[$DamageType::Napalm] = 0.001;
 	damageScale[$DamageType::Burn] = 0.001;
-	damageScale[$DamageType::Fire] = 0.001;		
+	damageScale[$DamageType::Fire] = 0.001;	
+	damageScale[$DamageType::AcidCannon] = 3.0;	
 
 	max[RepairKit]			= 0;
 	max[Mine]				= 0;
@@ -224,7 +225,7 @@ function DemonMotherZombieArmor::AttackFunction(%datablock, %zombie, %attackFunc
 				%vec = vectorSub(%target.getWorldBoxCenter(), %zombie.getMuzzlePoint(4));
 				%vec = vectorAdd(%vec, vectorScale(%target.getVelocity(), vectorLen(%vec) / 100));
 				%p = new TracerProjectile() {
-					dataBlock        = LZombieAcidBall;
+					dataBlock        = ZombieAcidPulse;
 					initialDirection = %vec;
 					initialPosition  = %zombie.getMuzzlePoint(4);
 					sourceObject     = %zombie;

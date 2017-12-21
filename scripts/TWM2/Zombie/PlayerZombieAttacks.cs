@@ -17,7 +17,7 @@ function PlayerLordFire1(%Player) {
 
 function PlayerLordFire2(%player) {
    %p = new TracerProjectile() {
-  	  dataBlock        = LZombieAcidBall;
+  	  dataBlock        = ZombieAcidPulse;
       initialDirection = %player.getMuzzleVector(6);
       initialPosition  = %player.getMuzzlePoint(6);
   	  sourceObject     = %player;

@@ -419,8 +419,8 @@ function SpawnShadeLord(%position) {
       Datablock = "ShadeLordArmor";
    };
    %Cpos = vectorAdd(%position, "0 0 5");
-   MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": Take your stand, and prepare to face your destined fate of death!");
-   schedule(3000, 0, MessageAll, 'MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": And so it begins... Let's see how you face your fears...");
+   MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": Take your stand, and prepare to face your destined fate of death!");
+   schedule(3000, 0, MessageAll, 'MsgBossSpawn', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": And so it begins... Let's see how you face your fears...");
    schedule(3500, 0, "ShadeLordFunction", %boss, "ShadeLordToggleCondition", 1);
 
    %Boss.ticks = 0;
@@ -428,7 +428,7 @@ function SpawnShadeLord(%position) {
 
    %Boss.team = 30;
    %zname = $TWM2::BossName["ShadeLord"]; // <- To Hosts, Enjoy, You can
-                                      //Change the Zombie Names now!!!
+                                          //Change the Zombie Names now!!!
                                       
    $ShadeLordBoss::AllowedNighttime = 1;
    %Boss.target = createTarget(%Boss, %zname, "", "Derm3", '', %Boss.team, PlayerSensor);
@@ -597,19 +597,19 @@ function ShadeLordFunction(%boss, %function, %args) {
 			%attack = getRandom(1, 3);
 			switch(%attack) {
 				case 1:
-					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": SHALDORVAAAAAAAAAAAAAAH!!!!!!!");
+					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": SHALDORVAAAAAAAAAAAAAAH!!!!!!!");
 					ShadeLordFunction(%boss, "Att_ShadeLordScream", "");
 				case 2:
-					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": Descend Mighty Shade Storm, Destroy all who dare oppose us!");
+					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": Descend Mighty Shade Storm, Destroy all who dare oppose us!");
 					ShadeLordFunction(%boss, "Att_ShadeLordDecend", 0);
 				case 3:
 					%target = FindValidTarget(%boss);
-					MessageAll('MessageAll', "\c4"@$TWM2::BossName["ShadeLord"]@": Come forth my shade, Destroy "@getTaggedString(%target.name)@"!");              
+					MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": Come forth my shade, Destroy "@getTaggedString(%target.name)@"!");              
 					if(isObject(%target.player)) {           
 						ShadeLordFunction(%boss, "Att_ShadeStrike", %target.player);
 					}
 					else {
-						MessageAll('MessageAll', "\c4"@$TWM2::BossName["ShadeLord"]@": Hiding in death does not save you "@getTaggedString(%target.name)@"");
+						MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": Hiding in death does not save you "@getTaggedString(%target.name)@"");
 					}
 			}
 			%boss.attacks = schedule(25000, %boss, "ShadeLordFunction", %boss, "ShadeLordDarkAttacks", "");
@@ -633,10 +633,10 @@ function ShadeLordFunction(%boss, %function, %args) {
 			%attack = getRandom(1, 2);
 			switch(%attack) {
 				case 1:
-					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": SHALDORVAAAAAAAAAAAAAAH!!!!!!!");
+					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": SHALDORVAAAAAAAAAAAAAAH!!!!!!!");
 					ShadeLordFunction(%boss, "Att_ShadeLordScream", "");
 				case 2:
-					MessageAll('MsgBossEvilness', "\c4"@$TWM2::BossName["ShadeLord"]@": Come forth, and return to me the power of the shadows!");
+					MessageAll('MsgBossEvilness', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": Come forth, and return to me the power of the shadows!");
 					ShadeLordFunction(%boss, "Att_HealSequence", 0);
 			}
 			%boss.attacks = schedule(25000, %boss, "ShadeLordFunction", %boss, "ShadeLordLightAttacks", "");
@@ -770,14 +770,14 @@ function ShadeLordFunction(%boss, %function, %args) {
 				if($ShadeLordBoss::AllowedNighttime == 1) {
 					$ShadeLordBoss::AllowedNighttime = 0;
 					ShadeLordFunction(%boss, "ShadeLordToggleCondition", 0);
-					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": No, You will not break the barrier of dark!");
+					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": No, You will not break the barrier of dark!");
 				}
 			}
 			else {
 				if($ShadeLordBoss::AllowedNighttime == 0) {
 					$ShadeLordBoss::AllowedNighttime = 1;
 					ShadeLordFunction(%boss, "ShadeLordToggleCondition", 1);
-					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["ShadeLord"]@": Awaken, mighty storm of shade, bring forth the doom of our foes!");
+					MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": Awaken, mighty storm of shade, bring forth the doom of our foes!");
 				}
 			}
 			if(isObject(%boss.dayCloak) && !%boss.inDeath) {
@@ -823,7 +823,7 @@ function ShadeLordFunction(%boss, %function, %args) {
 				%boss.startFade(1000, 0, false);
 				%boss.setPosition(vectorAdd(vectoradd(%closestclient.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
 				%boss.setVelocity("0 0 0");
-				MessageAll('MsgVardison', "\c4"@$TWM2::BossName["ShadeLord"]@": I'm back....");
+				MessageAll('MsgVardison', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": I'm back....");
 			}
 			%closestDistance = getWord(%closestClient,1);
 			%closestClient = getWord(%closestClient,0).Player;
@@ -831,7 +831,7 @@ function ShadeLordFunction(%boss, %function, %args) {
 				if(%closestDistance < 10) {
 					ShadeLordFunction(%boss, "ShadeLordDropKill", %closestClient);
 					%closestClient.client.bossProficiency.shadeTargets++;
-					MessageAll('MsgVardison', "\c4"@$TWM2::BossName["ShadeLord"]@": Feel The Vengeance of the Shadows "@getTaggedString(%closestClient.client.name)@".");
+					MessageAll('MsgVardison', "\c4"@$TWM2::BossNameInternal["ShadeLord"]@": Feel The Vengeance of the Shadows "@getTaggedString(%closestClient.client.name)@".");
 					//%closestClient.setMoveState(true);
 					ShadeLordFunction(%boss, "ShadeLordRandomTeleport", "");
 				}

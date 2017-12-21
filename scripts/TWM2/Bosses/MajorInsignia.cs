@@ -172,7 +172,7 @@ function SpawnInsignia(%position) {
       Datablock = "InsigniaZombieArmor";
    };
    %Cpos = vectorAdd(%position, "0 0 5");
-   MessageAll('msgBossAlertreturn', "\c4"@$TWM2::BossName["Insignia"]@": The battle begins, and now you shall all die...");
+   MessageAll('msgBossAlertreturn', "\c4"@$TWM2::BossNameInternal["Insignia"]@": The battle begins, and now you shall all die...");
 
    %command = "Insigniamovetotarget";
    %zombie.ticks = 0;
@@ -214,7 +214,7 @@ function Insigniamovetotarget(%zombie){
       %zombie.startFade(1000, 0, false);
       %zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
       %zombie.setVelocity("0 0 0");
-      MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": I won't go away that easily...");
+      MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": I won't go away that easily...");
    }
    %closestDistance = getWord(%closestClient,1);
    %closestClient = getWord(%closestClient,0).Player;
@@ -257,7 +257,7 @@ function InsigniaAttack_FUNC(%att, %args) {
          schedule(30000, 0, InsigniaAttack_FUNC, "ZombieSummon", %z);
          //--------------------
          %type = TWM2Lib_Zombie_Core("getRandomZombieType", "1 2 3 5 9 12 13 15 17");   //omit 4 in place of 17: Demon -> Elite Demon
-         messageall('RogMsg',"\c4"@$TWM2::BossName["Insignia"]@": Slay the humans!!!");
+         messageall('RogMsg',"\c4"@$TWM2::BossNameInternal["Insignia"]@": Slay the humans!!!");
          for(%i = 0; %i < 6; %i++) {
             %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
             %fpos = vectoradd("0 0 5",%pos);
@@ -270,7 +270,7 @@ function InsigniaAttack_FUNC(%att, %args) {
       case "Reinforce":
          %zombie = getWord(%args, 0);
          %type = TWM2Lib_Zombie_Core("getRandomZombieType", "1 2 3 5 9 12 13 15 17");
-         MessageAll('MessageAll', "\c4"@$TWM2::BossName["Insignia"]@": It's time for you to take on my reinforcements!");
+         MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Insignia"]@": It's time for you to take on my reinforcements!");
          %typeCaller = %type SPC %type SPC %type SPC %type;
          %callPos1 = vectorAdd(%zombie.getPosition(), "2000 100 400");
          spawnHunterDropship(%callPos1, "AA", %typeCaller);
@@ -320,7 +320,7 @@ function InsigniaAttack_FUNC(%att, %args) {
             %vec = vectorsub(%target.getworldboxcenter(),%zombie.getMuzzlePoint(6));
             %vec = vectoradd(%vec, vectorscale(%target.getvelocity(),vectorlen(%vec)/100));
             %p = new TracerProjectile() {
-               dataBlock        = LZombieAcidBall;
+               dataBlock        = ZombieAcidPulse;
                initialDirection = %vec;
                initialPosition  = %zombie.getMuzzlePoint(6);
                sourceObject     = %zombie;
@@ -431,10 +431,10 @@ function InsigniaAttack(%zombie) {
          %target = FindValidTarget(%zombie);
          %target = %target.player;
          if(!isObject(%target) || %target.getState() $= "Dead") {
-            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": I suppose I can wait...");
+            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": I suppose I can wait...");
             return;
          }
-         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": Lets shorten the distance... "@getTaggedString(%target.client.name)@".");
+         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": Lets shorten the distance... "@getTaggedString(%target.client.name)@".");
          %vec = vectorsub(%target.getworldboxcenter(), %zombie.getMuzzlePoint(0));
          %vec = vectoradd(%vec, vectorscale(%target.getvelocity(), vectorlen(%vec)/100));
          InsigniaAttack_FUNC("GravShot", %zombie SPC %vec);
@@ -443,11 +443,11 @@ function InsigniaAttack(%zombie) {
          %target = FindValidTarget(%zombie);
          %target = %target.player;
          if(!isObject(%target) || %target.getState() $= "Dead") {
-            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": I suppose I can wait...");
+            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": I suppose I can wait...");
             return;
          }
          InsigniaAttack_FUNC("GravShot", %zombie SPC "0 0 200");
-         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": Death from above "@getTaggedString(%target.client.name)@".");
+         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": Death from above "@getTaggedString(%target.client.name)@".");
          %vec = vectorsub(%target.getworldboxcenter(),%zombie.getMuzzlePoint(0));
          %vec = vectoradd(%vec, vectorscale(%target.getvelocity(),vectorlen(%vec)/100));
          schedule(1500, 0, InsigniaAttack_FUNC, "GravShot", %zombie SPC %vec);
@@ -456,40 +456,40 @@ function InsigniaAttack(%zombie) {
          %target = FindValidTarget(%zombie);
          %target = %target.player;
          if(!isObject(%target) || %target.getState() $= "Dead") {
-            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": I suppose I can wait...");
+            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": I suppose I can wait...");
             return;
          }
          InsigniaAttack_FUNC("AcidStorm", %zombie SPC %target);
-         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": Acid Storm, just for you... "@getTaggedString(%target.client.name)@".");
+         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": Acid Storm, just for you... "@getTaggedString(%target.client.name)@".");
          
       case 4:
          %target = FindValidTarget(%zombie);
          %target = %target.player;
          if(!isObject(%target) || %target.getState() $= "Dead") {
-            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": I suppose I can wait...");
+            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": I suppose I can wait...");
             return;
          }
          InsigniaAttack_FUNC("LapseStrike", %zombie SPC %target SPC 0);
-         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": Hey, "@getTaggedString(%target.client.name)@". Watch this.");
+         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": Hey, "@getTaggedString(%target.client.name)@". Watch this.");
          
       case 5:
          %target = FindValidTarget(%zombie);
          %target = %target.player;
          if(!isObject(%target) || %target.getState() $= "Dead") {
-            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": I suppose I can wait...");
+            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": I suppose I can wait...");
             return;
          }
          InsigniaAttack_FUNC("AcidMachineGun", %zombie SPC %target);
-         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": ENOUGH, "@getTaggedString(%target.client.name)@". DIE.");
+         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": ENOUGH, "@getTaggedString(%target.client.name)@". DIE.");
 
       case 6:
          %target = FindValidTarget(%zombie);
          %target = %target.player;
          if(!isObject(%target) || %target.getState() $= "Dead") {
-            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": I suppose I can wait...");
+            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": I suppose I can wait...");
             return;
          }
-         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["Insignia"]@": C'Mere, "@getTaggedString(%target.client.name)@".");
+         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["Insignia"]@": C'Mere, "@getTaggedString(%target.client.name)@".");
          InsigniaAttack_FUNC("DropSummon", %target);
          
       case 7:

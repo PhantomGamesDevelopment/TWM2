@@ -108,7 +108,7 @@ function UltraBossAbilities(%drone) {
           MessageAll('MessageAll', "\c4Stormrider: Fire!");
           }
           else {
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Heh, no targets for me!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Heh, no targets for me!");
           }
       case 2:
          %target = DroneFindNearestPilot(2000,%drone);
@@ -155,19 +155,19 @@ function UltraBossAbilities(%drone) {
           schedule(1000, 0, WindshearAttack_FUNC, "MissileDrop", %target.player SPC %p3);
           schedule(1000, 0, WindshearAttack_FUNC, "MissileDrop", %target.player SPC %p4);
 
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Have fun with these "@getTaggedString(%target.name)@"!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Have fun with these "@getTaggedString(%target.name)@"!");
           }
           else {
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Bah, no targets, no fun.");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Bah, no targets, no fun.");
           }
       case 3:
          %target = DroneFindNearestPilot(2000,%drone);
          if(%target.player) {
           HeatLoop(%target.player, 0);
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Lets see what happens when missiles are completely precice on you, "@getTaggedString(%target.name)@"!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Lets see what happens when missiles are completely precice on you, "@getTaggedString(%target.name)@"!");
           }
           else {
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": I guess it's time to start scanning.");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": I guess it's time to start scanning.");
           }
       case 4:
          %target = DroneFindNearestPilot(2000,%drone);
@@ -190,10 +190,10 @@ function UltraBossAbilities(%drone) {
           schedule(6200,0,"WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
           schedule(6400,0,"WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
           schedule(6500,0,"WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Taste my fury "@getTaggedString(%target.name)@"!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Taste my fury "@getTaggedString(%target.name)@"!");
           }
           else {
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Aww, My missiles were ready.");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Aww, My missiles were ready.");
           }
       case 5:
          %target = DroneFindNearestPilot(2000,%drone);
@@ -214,10 +214,10 @@ function UltraBossAbilities(%drone) {
           schedule(8100,0,"WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
           schedule(8200,0,"WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
           schedule(8300,0,"WindshearAttack_FUNC", "SidewinderLaunch", %drone SPC %target.player SPC 1);
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": I have missiles with your name on them "@getTaggedString(%target.name)@"!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": I have missiles with your name on them "@getTaggedString(%target.name)@"!");
           }
           else {
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Aww, My missile strike was ready.");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Aww, My missile strike was ready.");
           }
       case 6:
           schedule(700,0,"WindshearAttack_FUNC", "Flare", %drone);
@@ -235,7 +235,7 @@ function UltraBossAbilities(%drone) {
           schedule(8100,0,"WindshearAttack_FUNC", "Flare", %drone);
           schedule(8200,0,"WindshearAttack_FUNC", "Flare", %drone);
           schedule(8300,0,"WindshearAttack_FUNC", "Flare", %drone);
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Hahaha, Your Missiles are worthless Now!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Hahaha, Your Missiles are worthless Now!");
       case 7:
          %target = DroneFindNearestPilot(2000,%drone);
          if(%target.player) {
@@ -249,10 +249,10 @@ function UltraBossAbilities(%drone) {
           schedule(8100,0,"FireSniperShots",%drone, %target.player);
           schedule(8200,0,"FireSniperShots",%drone, %target.player);
           schedule(8300,0,"FireSniperShots",%drone, %target.player);
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Time to Use My CG, "@getTaggedString(%target.name)@"!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Time to Use My CG, "@getTaggedString(%target.name)@"!");
           }
           else {
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Heh, you fewls cant withstand this.");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Heh, you fewls cant withstand this.");
           }
       case 8:
          %target = DroneFindNearestPilot(2000,%drone);
@@ -262,10 +262,10 @@ function UltraBossAbilities(%drone) {
           schedule(3000,0,"FireSeekerPhotons",%drone,%target.player);
           schedule(4500,0,"FireSeekerPhotons",%drone,%target.player);
           schedule(6000,0,"FireSeekerPhotons",%drone,%target.player);
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Here, "@getTaggedString(%target.name)@", Catch!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Here, "@getTaggedString(%target.name)@", Catch!");
           }
           else {
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Close up the Seekers. No Targets To hit.");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Close up the Seekers. No Targets To hit.");
           }
       case 9:
          %target = DroneFindNearestPilot(2000,%drone);
@@ -276,10 +276,10 @@ function UltraBossAbilities(%drone) {
           schedule(2100,0,"FireSeekerPhotons",%drone,%target.player);
           schedule(2800,0,"FireSeekerPhotons",%drone,%target.player);
           schedule(3500,0,"FireSeekerPhotons",%drone,%target.player);
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Try these out for size, "@getTaggedString(%target.name)@"!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Try these out for size, "@getTaggedString(%target.name)@"!");
           }
           else {
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Heh, No enemies in the area.");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Heh, No enemies in the area.");
           }
       case 10:
          %target = DroneFindNearestPilot(2000,%drone);
@@ -295,16 +295,16 @@ function UltraBossAbilities(%drone) {
           schedule(4000,0,"FireSeekerPhotons",%drone,%target.player);
           schedule(4500,0,"FireSeekerPhotons",%drone,%target.player);
           schedule(5000,0,"FireSeekerPhotons",%drone,%target.player);
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": I have some fun plasma missiles for you, "@getTaggedString(%target.name)@"!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": I have some fun plasma missiles for you, "@getTaggedString(%target.name)@"!");
           }
           else {
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Meh, No targets for my plasma seekers.");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Meh, No targets for my plasma seekers.");
           }
       case 11:
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Engage Stealth!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Engage Stealth!");
           %drone.setCloaked(true);
       case 12:
-          MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": My Buddies will handle You!");
+          MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": My Buddies will handle You!");
          %SPos1 = vectorAdd(%drone.getPosition(),"15 0 0");
          %SPos2 = vectorAdd(%drone.getPosition(),"-15 0 0");
          %SPos3 = vectorAdd(%drone.getPosition(),"0 15 0");
@@ -324,7 +324,7 @@ function UltraBossAbilities(%drone) {
          %d3 = DroneBattle(%SPos2, 500, 1, 6, 6, 100, 0); //his Other Pal
          %d2.isUltrally = 1;
          %d3.isUltrally = 1;
-         MessageAll('MessageAll', "\c4"@$TWM2::BossName["Stormrider"]@": Get Moving, targets to be hunted!");
+         MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Stormrider"]@": Get Moving, targets to be hunted!");
    }
    schedule(30000,0,"UltraBossAbilities",%drone);
 }

@@ -53,7 +53,7 @@ function StartTrevor(%pos){
 
    TrevorDetermineAttack(%tank);
    TrevorMove(%tank);
-   MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": It's time to test the harbinger clan's ultimate siege weapon. ON YOU!");
+   MessageAll('MsgBossBegin', "\c4"@$TWM2::BossNameInternal["Trevor"]@": It's time to test the harbinger clan's ultimate siege weapon. ON YOU!");
 
    return %tank;
 }
@@ -159,7 +159,7 @@ function TrevorMove(%tank) {
       if(%dist < 10 && !%tank.teleporting) {
          //interesting... trying to cut it close?
          %tank.teleporting = 1;
-         MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Trying to do that huhn? I think not!");
+         MessageAll('MsgBossBegin', "\c4"@$TWM2::BossNameInternal["Trevor"]@": Trying to do that huhn? I think not!");
          PhaseShift(%tank);
       }
       %vector = vectorscale(%tank.getForwardVector(), 1150);
@@ -215,13 +215,13 @@ function TrevorDetermineAttack(%tank) {
          //3. Phase Shift: Tank Shifts to collider range
          switch(%attackNum) {
             case 1:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Dodge this "@getTaggedString(%target.name)@"!!!");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossNameInternal["Trevor"]@": Dodge this "@getTaggedString(%target.name)@"!!!");
                RammingSpeed(%tank, %target);
             case 2:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Engage sideswipe boosters");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossNameInternal["Trevor"]@": Engage sideswipe boosters");
                SlideTarget(%tank, %target);
             case 3:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Engage Phase Shift!");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossNameInternal["Trevor"]@": Engage Phase Shift!");
                PhaseShift(%tank);
          }
       }
@@ -230,13 +230,13 @@ function TrevorDetermineAttack(%tank) {
          %attackNum = getRandom(1,3);
          switch(%attackNum) {
             case 1:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Engage missile storm on "@getTaggedString(%target.name)@"!!!");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossNameInternal["Trevor"]@": Engage missile storm on "@getTaggedString(%target.name)@"!!!");
                MissileStorm(%tank, %target);
             case 2:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Let a firey storm of missiles rain upon you, "@getTaggedString(%target.name)@"!!!");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossNameInternal["Trevor"]@": Let a firey storm of missiles rain upon you, "@getTaggedString(%target.name)@"!!!");
                MissileRain(%tank, %target);
             case 3:
-               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossName["Trevor"]@": Engage missile storm on "@getTaggedString(%target.name)@"!!!");
+               MessageAll('MsgBossBegin', "\c4"@$TWM2::BossNameInternal["Trevor"]@": Engage missile storm on "@getTaggedString(%target.name)@"!!!");
                MissileStorm(%tank, %target);
          }
       }

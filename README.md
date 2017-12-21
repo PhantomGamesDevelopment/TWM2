@@ -135,6 +135,8 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
     * Some projectiles are still tied to bosses and killstreaks, these were not altered.
     * For the updated damage types, death messages were added to the system such that PvP kills will be more easily tracked now.
 * Gameplay Changes
+  * All 'Mini-Boss' Zombies will now have green text in their name.
+  * All 'Boss' level enemies will now have gold text in their name.
   * The Helljump 'Oh Lordy' modifier has been changed to 'Reduces the cooldown time of the Zombie Lord's Photon Cannon by 50%'.	
   * The RSA Laser Rifle has been renamed to the 'UR-22 Laser Rifle'
 * General Bug Fixes
@@ -260,3 +262,10 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	  * Increased the number of pellets from 14 to 18
 	  * Reduced the projectile lifetime from 0.5 s to 0.15 seconds
 	  * Added a damage factor of 4.0 to all zombie types
+  * Misc Weapons
+    * Acid Cannon
+      * The weapon that players could only obtain from zombie lords was more of a novelty toy players could pick up an fire back at zombies with
+      * In 3.9.2, players will find the Acid Cannon as an officer promotion award, so therefore some adjustments were made to this weapon
+      * Moved the Zombie Acid pulse out of this weapon, and replaced it with it's own custom projectile
+      * The projectile will flash enemy players when stuck by it, and cause an effective radial damage to serve as a lockdown tool
+      * The weapon projectile has been given a 3.0 damage modifier across all zombie types to be highly effective against zombies	  

@@ -28,7 +28,11 @@ $TWM2::AllyBotsOn = 1; //Enable Ally Bots in the Construction Game Mode
 
 setPerfCounterEnable(0);     //leave this, reduces lag
 
-$TWM2::HostGUID = "SetMeUp"; //Server console to get your GUID
+$TWM2::HostGUID = "SetMeUp"; //Use the server console to get your GUID and place it in here
+                         
+//NOTE: If you would like to enable telnet access, add a password to both of the empty
+// string parameters below and uncomment out the line.
+//telnetSetParameters(28000, "", "");
 
 $TWM2::AllowBossVotes = 1; //0 to disable
 $TWM2::AllowCMVotes = 1;   //0 to disable change mission votes
@@ -139,43 +143,50 @@ $TWM2::ZombieName[2] = "Ravager Zombie";
 $TWM2::ZombieName[3] = "Zombie Lord";
 $TWM2::ZombieName[4] = "Demon Zombie";
 $TWM2::ZombieName[5] = "Air Rapier Zombie";
-$TWM2::ZombieName[6] = "Demon Lord Zombie";
-$TWM2::ZombieName[7] = "Lord Yvex";                   //Yvex
-$TWM2::ZombieName[8] = CollapseEscape("\c7Lord Rog"); //Rog
+$TWM2::ZombieName[6] = CollapseEscape("\c9Demon Lord Zombie");
 $TWM2::ZombieName[9] = "Shifter Zombie";
 $TWM2::ZombieName[10] = "Zombie Summoner";
 $TWM2::ZombieName[11] = "Sniper Zombie";
 $TWM2::ZombieName[12] = "Ultra Demon Zombie";
 $TWM2::ZombieName[13] = "Volatile Ravager";
 $TWM2::ZombieName[14] = "Slingshot AA Zombie";
-$TWM2::ZombieName[15] = "Wraith Zombie";
-$TWM2::ZombieName[16] = "General Rog";
+$TWM2::ZombieName[15] = CollapseEscape("\c9Wraith Zombie");
+$TWM2::ZombieName[16] = CollapseEscape("\c9General Rog");
 $TWM2::ZombieName[17] = "Elite Demon";
+$TWM2::ZombieName[18] = CollapseEscape("\c9FoV Flareguide");
 
-$TWM2::BossName["Windshear"] = "Colonel Windshear";
-$TWM2::BossName["GoL"] = "The Ghost Of Lightning";
-$TWM2::BossName["Vegenor"] = "General Vegenor";
-$TWM2::BossName["Insignia"] = "Major Insignia";
-$TWM2::BossName["Vardison"] = "Lord Vardison";
-$TWM2::BossName["Trevor"] = "Lordranius Trevor";
-$TWM2::BossName["GoF"] = CollapseEscape("\c7The Ghost Of Fire");
-$TWM2::BossName["Stormrider"] = "Commander Stormrider";
+//$TWM2::BossName: These are the names that show on the boss object itself in the game.
+$TWM2::BossName["Yvex"] = CollapseEscape("\c7Lord Yvex");
+$TWM2::BossName["LordRog"] = CollapseEscape("\c7Lord Rog");
+$TWM2::BossName["Windshear"] = CollapseEscape("\c7Colonel Windshear");
+$TWM2::BossName["GhostOfLightning"] = CollapseEscape("\c7The Ghost Of Lightning");
+$TWM2::BossName["Vegenor"] = CollapseEscape("\c7General Vegenor");
+$TWM2::BossName["Insignia"] = CollapseEscape("\c7Major Insignia");
+$TWM2::BossName["Vardison"] = CollapseEscape("\c7Lord Vardison");
+$TWM2::BossName["Vardison1"] = CollapseEscape("\c7Lord Vardison");
+$TWM2::BossName["Vardison2"] = CollapseEscape("\c7Lord Vardison");
+$TWM2::BossName["Vardison3"] = CollapseEscape("\c7Lord Vardison");
+$TWM2::BossName["Trevor"] = CollapseEscape("\c7Lordranius Trevor");
+$TWM2::BossName["GhostOfFire"] = CollapseEscape("\c7The Ghost Of Fire");
+$TWM2::BossName["Stormrider"] = CollapseEscape("\c7Commander Stormrider");
+$TWM2::BossName["ShadeLord"] = CollapseEscape("\c7The Shade Lord");
 
-//lower left names
-$TWM2::BossName["Yvex"] = "Lord Yvex";
-$TWM2::BossName["LordRog"] = "Lord Rog";
-$TWM2::BossName["CnlWindshear"] = "Colonel Windshear";
-$TWM2::BossName["Vegenor"] = "General Vegenor";
-$TWM2::BossName["Insignia"] = "Major Insignia";
-$TWM2::BossName["Vardison"] = "Lord Vardison";
-$TWM2::BossName["Trevor"] = "Lordranius Trevor";
-$TWM2::BossName["GhostOfFire"] = "The Ghost Of Fire";
-$TWM2::BossName["Stormrider"] = "Cmdr. Stormrider";
-$TWM2::BossName["GhostOfLightning"] = "The Ghost Of Lightning";
-$TWM2::BossName["Vardison1"] = "Lord Vardison";
-$TWM2::BossName["Vardison2"] = "Lord Vardison";
-$TWM2::BossName["Vardison3"] = "Lord Vardison";
-$TWM2::BossName["ShadeLord"] = "The Shade Lord";
+//$TWM2::BossNameInternal: These are the names that appear in the chat text box when the boss speaks, or whenever
+// an action message is sent to the chat box.
+$TWM2::BossNameInternal["Yvex"] = "Lord Yvex";
+$TWM2::BossNameInternal["LordRog"] = "Lord Rog";
+$TWM2::BossNameInternal["CnlWindshear"] = "Colonel Windshear";
+$TWM2::BossNameInternal["Vegenor"] = "General Vegenor";
+$TWM2::BossNameInternal["Insignia"] = "Major Insignia";
+$TWM2::BossNameInternal["Vardison"] = "Lord Vardison";
+$TWM2::BossNameInternal["Trevor"] = "Lordranius Trevor";
+$TWM2::BossNameInternal["GhostOfFire"] = "The Ghost Of Fire";
+$TWM2::BossNameInternal["Stormrider"] = "Cmdr. Stormrider";
+$TWM2::BossNameInternal["GhostOfLightning"] = "The Ghost Of Lightning";
+$TWM2::BossNameInternal["Vardison1"] = "Lord Vardison";
+$TWM2::BossNameInternal["Vardison2"] = "Lord Vardison";
+$TWM2::BossNameInternal["Vardison3"] = "Lord Vardison";
+$TWM2::BossNameInternal["ShadeLord"] = "The Shade Lord";
                                                     //-----OFFICIAL VALUES-----\\
 $TWM2::ZombieXPAward[1] = 1;                        //           1
 $TWM2::ZombieXPAward[2] = 10;                       //           10
@@ -192,6 +203,7 @@ $TWM2::ZombieXPAward[14] = 20;                      //           20
 $TWM2::ZombieXPAward[15] = 50;                      //           50
 $TWM2::ZombieXPAward[16] = 1000;                    //          1000
 $TWM2::ZombieXPAward[17] = 25;                      //           25
+$TWM2::ZombieXPAward[18] = 1000;                    //          1000
 
 $TWM2::BossXPAward["Yvex"] = 10000;                 //          10000
 $TWM2::BossXPAward["CnlWindshear"] = 12500;         //          12500

@@ -40,6 +40,18 @@ datablock AudioProfile(ZombieDeathSound3) {
 	preload = true;
 };
 
+datablock AudioProfile(AcidCannonPreFireSound) {
+	filename    = "fx/weapons/targetinglaser_paint.wav";
+	description = AudioClosest3d;
+	preload = true;
+};
+
+datablock AudioProfile(NerfBallExplosionSound) {
+	filename = "fx/weapons/cg_water2.wav";
+	description = AudioClosest3d;
+	preload = true;
+};
+
 //**********************************************
 // PARTICLE DATABLOCKS
 //**********************************************
@@ -261,7 +273,85 @@ datablock ParticleData(PurpleNightmareEmitParticle) {
    times[0]      = 0.0;
    times[1]      = 1.0;
    times[2]      = 5.0;
+};
 
+datablock ParticleData(ZAcidBombParticle) {
+	dragCoeffiecient     = 0.0;
+	gravityCoefficient   = 0.5;
+	inheritedVelFactor   = 0.5;
+
+	lifetimeMS           = 4000;
+	lifetimeVarianceMS   = 500;
+
+	spinRandomMin = -200.0;
+	spinRandomMax =  200.0;
+
+	textureName          = "special/bubbles";
+
+	colors[0]     = "0.0 1.0 0.5 0.3";
+	colors[1]     = "0.0 1.0 0.4 0.2";
+	colors[2]     = "0.0 1.0 0.3 0.1";
+
+	sizes[0]      = 3.0;
+	sizes[1]      = 2.3;
+	sizes[2]      = 2.1;
+
+	times[0]      = 0.0;
+	times[1]      = 0.5;
+	times[2]      = 1.0;
+};
+
+datablock ParticleData(ZAcidBallParticle) {
+	dragCoeffiecient     = 0.0;
+	gravityCoefficient   = 0.5;
+	inheritedVelFactor   = 0.5;
+
+	lifetimeMS           = 2000;
+	lifetimeVarianceMS   = 200;
+
+	spinRandomMin = -200.0;
+	spinRandomMax =  200.0;
+
+	textureName          = "special/bubbles";
+
+	colors[0]     = "0.0 1.0 0.5 0.3";
+	colors[1]     = "0.0 1.0 0.4 0.2";
+	colors[2]     = "0.0 1.0 0.3 0.1";
+
+	sizes[0]      = 0.6;
+	sizes[1]      = 0.3;
+	sizes[2]      = 0.1;
+
+	times[0]      = 0.0;
+	times[1]      = 0.5;
+	times[2]      = 1.0;
+};
+
+datablock ParticleData(FlareguidePurpleStream) {
+	dragCoeffiecient     = 0.0;
+	gravityCoefficient   = 120.0;   // drops quickly
+	inheritedVelFactor   = 0;
+
+	lifetimeMS           = 1550;  // lasts 2 second
+	lifetimeVarianceMS   = 300;   // ...more or less
+
+	textureName          = "snowflake8x8";//"particletest";
+
+	useInvAlpha = true;
+	spinRandomMin = -30.0;
+	spinRandomMax = 30.0;
+
+	colors[0]     = "0.25 0.12 0.40 0.5";
+	colors[1]     = "0.25 0.12 0.40 0.5";
+	colors[2]     = "0.4 0.0 0.5 0.0";
+
+	sizes[0]      = 0.4;
+	sizes[1]      = 0.2;
+	sizes[2]      = 0.2;
+
+	times[0]      = 0.0;
+	times[1]      = 0.4;
+	times[2]      = 1.0;
 };
 
 //**********************************************
@@ -366,9 +456,153 @@ datablock ParticleEmitterData(ThrowerBaseEmitter) {
 	particles = "ThrowerBaseParticle";
 };
 
+datablock ParticleEmitterData(ZAcidBombExplosionEmitter) {
+	lifetimeMS       = 2000;
+
+	ejectionPeriodMS = 1;
+	periodVarianceMS = 0;
+
+	ejectionVelocity = 3.0;
+	velocityVariance = 0.5;
+
+	thetaMin         = 0.0;
+	thetaMax         = 90.0;
+
+	orientParticles  = false;
+	orientOnVelocity = false;
+
+	particles = "ZAcidBombParticle";
+};
+
+datablock ParticleEmitterData(ZAcidBallExplosionEmitter) {
+	lifetimeMS       = 200;
+
+	ejectionPeriodMS = 1;
+	periodVarianceMS = 0;
+
+	ejectionVelocity = 3.0;
+	velocityVariance = 0.5;
+
+	thetaMin         = 0.0;
+	thetaMax         = 90.0;
+
+	orientParticles  = false;
+	orientOnVelocity = false;
+
+	particles = "ZAcidBallParticle";
+};
+
+datablock ParticleEmitterData(FlareguidePurpleStreamEmitter) {
+	ejectionPeriodMS = 15;
+	periodVarianceMS = 5;
+
+	ejectionVelocity = 1.25;
+	velocityVariance = 0.50;
+
+	thetaMin         = 0.0;
+	thetaMax         = 90.0;
+
+	particles = "FlareguidePurpleStream";
+};
+
+//**********************************************
+// EXPLOSION DATABLOCKS
+//**********************************************
+datablock ExplosionData(ZAcidBombExplosion) {
+	emitter[0]   = ZAcidBombExplosionEmitter;
+	soundProfile = NerfBallExplosionSound;
+};
+
+datablock ExplosionData(ZAcidBallExplosion) {
+	emitter[0]   = ZAcidBallExplosionEmitter;
+	soundProfile = NerfBallExplosionSound;
+};
+
 //**********************************************
 // PROJECTILE DATABLOCKS
 //**********************************************
+datablock TracerProjectileData(ZombieAcidPulse) {
+	doDynamicClientHits = true;
+
+	projectileShapeName = "";
+	directDamage        = 0.0;
+	directDamageType    = $DamageType::ZAcid;
+	hasDamageRadius     = true;
+	indirectDamage      = 0.24;
+	damageRadius        = 4.0;
+	kickBackStrength    = 0.0;
+	radiusDamageType    = $DamageType::ZAcid;
+	sound          	   = BlasterProjectileSound;
+	explosion           = ZAcidBallExplosion;
+
+	ImageSource         = "AcidCannonImage";
+
+	dryVelocity       = 100.0;
+	wetVelocity       = 100.0;
+	velInheritFactor  = 1.0;
+	fizzleTimeMS      = 4000;
+	lifetimeMS        = 1000;
+	explodeOnDeath    = false;
+	reflectOnWaterImpactAngle = 0.0;
+	explodeOnWaterImpact      = true;
+	deflectionOnWaterImpact   = 0.0;
+	fizzleUnderwaterMS        = -1;
+
+	activateDelayMS = 100;
+
+	tracerLength    = 5;
+	tracerAlpha     = false;
+	tracerMinPixels = 3;
+	tracerColor     = "0 1 0 1";
+	tracerTex[0]  	 = "special/landSpikeBolt";
+	tracerTex[1]  	 = "special/landSpikeBoltCross";
+	tracerWidth     = 0.5;
+	crossSize       = 0.79;
+	crossViewAng    = 0.990;
+	renderCross     = true;
+	emap = true;
+};
+
+datablock TracerProjectileData(SSZombieAcidBall) {
+	doDynamicClientHits = true;
+
+	projectileShapeName = "";
+	directDamage        = 0.25;
+	directDamageType    = $DamageType::ZAcid;
+	hasDamageRadius     = true;
+	indirectDamage      = 0.1;
+	damageRadius        = 4.0;
+	kickBackStrength    = 0.0;
+	radiusDamageType    = $DamageType::ZAcid;
+	sound          	   = BlasterProjectileSound;
+	explosion           = ZAcidBallExplosion;
+
+	dryVelocity       = 400.0;
+	wetVelocity       = 400.0;
+	velInheritFactor  = 1.0;
+	fizzleTimeMS      = 4000;
+	lifetimeMS        = 4000;
+	explodeOnDeath    = false;
+	reflectOnWaterImpactAngle = 0.0;
+	explodeOnWaterImpact      = true;
+	deflectionOnWaterImpact   = 0.0;
+	fizzleUnderwaterMS        = -1;
+
+	activateDelayMS = 100;
+
+	tracerLength    = 5;
+	tracerAlpha     = false;
+	tracerMinPixels = 3;
+	tracerColor     = "0 1 0 1";
+	tracerTex[0]  	 = "special/landSpikeBolt";
+	tracerTex[1]  	 = "special/landSpikeBoltCross";
+	tracerWidth     = 0.5;
+	crossSize       = 0.79;
+	crossViewAng    = 0.990;
+	renderCross     = true;
+	emap = true;
+};
+
 datablock GrenadeProjectileData(DemonFireball) {
 	projectileShapeName = "plasmabolt.dts";
 	emitterDelay        = -1;
@@ -528,6 +762,109 @@ datablock LinearFlareProjectileData(DMPlasma) {
 	flareColor        = "0.1 0.3 1.0";
 	flareModTexture   = "flaremod";
 	flareBaseTexture  = "flarebase";
+};
+
+datablock TracerProjectileData(SniperZombieAcidShot) {
+	doDynamicClientHits = true;
+
+	projectileShapeName = "";
+	directDamage        = 0.4;
+	directDamageType    = $DamageType::ZAcid;
+	hasDamageRadius     = true;
+	indirectDamage      = 0.25;
+	damageRadius        = 6.0;
+	kickBackStrength    = 0.0;
+	radiusDamageType    = $DamageType::ZAcid;
+	sound          	    = BlasterProjectileSound;
+	explosion           = ZAcidBallExplosion;
+
+	dryVelocity       = 1000.0;
+	wetVelocity       = 1000.0;
+	velInheritFactor  = 1.0;
+	fizzleTimeMS      = 4000;
+	lifetimeMS        = 4000;
+	explodeOnDeath    = false;
+	reflectOnWaterImpactAngle = 0.0;
+	explodeOnWaterImpact      = true;
+	deflectionOnWaterImpact   = 0.0;
+	fizzleUnderwaterMS        = -1;
+
+	activateDelayMS = 100;
+
+	tracerLength    = 5;
+	tracerAlpha     = false;
+	tracerMinPixels = 3;
+	tracerColor     = "0 1 0 1";
+	tracerTex[0]  	 = "special/landSpikeBolt";
+	tracerTex[1]  	 = "special/landSpikeBoltCross";
+	tracerWidth     = 0.3;
+	crossSize       = 0.79;
+	crossViewAng    = 0.990;
+	renderCross     = true;
+	emap = true;
+};
+
+datablock TracerProjectileData(FlareguideSniperZombieAcidShot) {
+	doDynamicClientHits = true;
+
+	projectileShapeName = "";
+	directDamage        = 0.6;
+	directDamageType    = $DamageType::ZAcid;
+	hasDamageRadius     = true;
+	indirectDamage      = 0.25;
+	damageRadius        = 10.0;
+	kickBackStrength    = 0.0;
+	radiusDamageType    = $DamageType::ZAcid;
+	sound          	    = BlasterProjectileSound;
+	explosion           = ZAcidBallExplosion;
+
+	dryVelocity       = 1500.0;
+	wetVelocity       = 1500.0;
+	velInheritFactor  = 1.0;
+	fizzleTimeMS      = 4000;
+	lifetimeMS        = 4000;
+	explodeOnDeath    = true;
+	reflectOnWaterImpactAngle = 0.0;
+	explodeOnWaterImpact      = true;
+	deflectionOnWaterImpact   = 0.0;
+	fizzleUnderwaterMS        = -1;
+
+	activateDelayMS = 100;
+
+	tracerLength    = 5;
+	tracerAlpha     = false;
+	tracerMinPixels = 3;
+	tracerColor     = "1 0 0.5 1";
+	tracerTex[0]  	 = "special/landSpikeBolt";
+	tracerTex[1]  	 = "special/landSpikeBoltCross";
+	tracerWidth     = 0.3;
+	crossSize       = 0.79;
+	crossViewAng    = 0.990;
+	renderCross     = true;
+	emap = true;
+};
+
+datablock GrenadeProjectileData(FlareguideSniperBurstRound) {
+	projectileShapeName = "turret_muzzlepoint.dts"; //Really small and hard to see
+	emitterDelay        = -1;
+	directDamage        = 0.0;
+	hasDamageRadius     = false;
+	indirectDamage      = 0.3;
+	damageRadius        = 4.0;
+	radiusDamageType    = $DamageType::ZAcid;
+	kickBackStrength    = 0;
+	bubbleEmitTime      = 1.0;
+	sound               = BlasterProjectileSound;
+	explosion           = ZAcidBallExplosion;
+	//explodeOnMaxBounce = true;
+	velInheritFactor    = 0.5;
+	baseEmitter[0]         = FlareguidePurpleStreamEmitter;
+
+	grenadeElasticity = 0.4;
+	grenadeFriction   = 0.2;
+	armingDelayMS     = 100; // was 400
+	muzzleVelocity    = 0;
+	drag = 0.1;
 };
 
 datablock SeekerProjectileData(BossMissiles) {

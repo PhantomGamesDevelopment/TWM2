@@ -162,7 +162,7 @@ function SpawnVegenor(%position) {
       Datablock = "VegenorZombieArmor";
    };
    %Cpos = vectorAdd(%position, "0 0 5");
-   MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossName["Vegenor"]@": Time to engage the enemy soldiers!!!");
+   MessageAll('MsgBossSpawn', "\c4"@$TWM2::BossNameInternal["Vegenor"]@": Time to engage the enemy soldiers!!!");
 
    %command = "Vegenormovetotarget";
    %zombie.ticks = 0;
@@ -201,7 +201,7 @@ function Vegenormovetotarget(%zombie){
       %zombie.startFade(1000, 0, false);
       %zombie.setPosition(vectorAdd(vectoradd(%closestclient.player.getPosition(), "0 0 20"), TWM2Lib_MainControl("getRandomPosition", 25 TAB 1)));
       %zombie.setVelocity("0 0 0");
-      MessageAll('msgAntiFall', "\c4"@$TWM2::BossName["Vegenor"]@": Falling, How about no...");
+      MessageAll('msgAntiFall', "\c4"@$TWM2::BossNameInternal["Vegenor"]@": Falling, How about no...");
    }
    %closestDistance = getWord(%closestClient,1);
    %closestClient = getWord(%closestClient,0).Player;
@@ -267,9 +267,9 @@ function VegenorAttack_FUNC(%att, %args) {
          %msg = getrandom(1,2);
          switch(%msg) {
             case 1:
-               messageall('MsgSummon',"\c4"@$TWM2::BossName["Vegenor"]@": Attack the enemy");
+               messageall('MsgSummon',"\c4"@$TWM2::BossNameInternal["Vegenor"]@": Attack the enemy");
             case 2:
-               messageall('MsgSummon',"\c4"@$TWM2::BossName["Vegenor"]@": Hunt them all down");
+               messageall('MsgSummon',"\c4"@$TWM2::BossNameInternal["Vegenor"]@": Hunt them all down");
          }
          for(%i = 0; %i < 6; %i++) {
             %pos = vectoradd(%z.getPosition(), TWM2Lib_MainControl("getRandomPosition", 10 TAB 1));
@@ -313,23 +313,23 @@ function VegenorAttack(%z) {
       case 1:
          %target = FindValidTarget(%z);
          if(isObject(%target.player) && !%target.ignoredbyZombs) {
-            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Vegenor"]@": Flame on "@getTaggedString(%target.name)@"!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Vegenor"]@": Flame on "@getTaggedString(%target.name)@"!");
             VegenorAttack_FUNC("SetFire", %target.player);
          }
          else {
-            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Vegenor"]@": heh, "@getTaggedString(%target.name)@" is already dead!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Vegenor"]@": heh, "@getTaggedString(%target.name)@" is already dead!");
          }
       case 2:
          %target = FindValidTarget(%z);
          if(isObject(%target.player) && !%target.ignoredbyZombs) {
-            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Vegenor"]@": Lets insert some fire into your life, "@getTaggedString(%target.name)@"!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Vegenor"]@": Lets insert some fire into your life, "@getTaggedString(%target.name)@"!");
             VegenorAttack_FUNC("FlameMissileSingle", %target.player);
          }
          else {
-            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Vegenor"]@": Hiding from me "@getTaggedString(%target.name)@"?");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Vegenor"]@": Hiding from me "@getTaggedString(%target.name)@"?");
          }
       case 3:
-         MessageAll('MessageAll', "\c4"@$TWM2::BossName["Vegenor"]@": Fire Missiles For ALL!!");
+         MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Vegenor"]@": Fire Missiles For ALL!!");
          for(%i = 0; %i < ClientGroup.getCount(); %i++) {
             %cl = ClientGroup.getObject(%i);
             if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {
@@ -339,13 +339,13 @@ function VegenorAttack(%z) {
       case 4:
          %target = FindValidTarget(%z);
          if(isObject(%target.player) && !%target.ignoredbyZombs) {
-            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Vegenor"]@": Hey "@getTaggedString(%target.name)@", LOOK UP!!!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Vegenor"]@": Hey "@getTaggedString(%target.name)@", LOOK UP!!!");
             VegenorAttack_FUNC("MeteorDrop", %target.player);
          }
          else {
-            MessageAll('MessageAll', "\c4"@$TWM2::BossName["Vegenor"]@": Hiding does not beat me "@getTaggedString(%target.name)@"!!!");
+            MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Vegenor"]@": Hiding does not beat me "@getTaggedString(%target.name)@"!!!");
          }
       default:
-         MessageAll('MessageAll', "\c4"@$TWM2::BossName["Vegenor"]@": I shall wait!!!");
+         MessageAll('MessageAll', "\c4"@$TWM2::BossNameInternal["Vegenor"]@": I shall wait!!!");
    }
 }

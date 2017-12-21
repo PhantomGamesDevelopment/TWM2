@@ -148,13 +148,13 @@ function SpawnGhostOfLightning(%position) {
 	   Datablock = "LightningGhostArmor";
 	};
 	%Cpos = vectorAdd(%position, "0 0 5");
-    MessageAll('msgBossAlertreturn', "\c4"@$TWM2::BossName["GoL"]@": It's time to show you the shocking power of electricity");
+    MessageAll('msgBossAlertreturn', "\c4"@$TWM2::BossNameInternal["GhostOfLightning"]@": It's time to show you the shocking power of electricity");
 
 	%command = "GoLmovetotarget";
     InitiateBoss(%Ghost, "GhostOfLightning");
 
    %Ghost.team = 30;
-   %zname = CollapseEscape("\c7"@$TWM2::BossName["GoL"]@"");
+   %zname = $TWM2::BossName["GhostOfLightning"];
    DoGoLAttacks(%ghost);
 
    %Ghost.target = createTarget(%Ghost, %zname, "", "Derm3", '', %Ghost.team, PlayerSensor);
@@ -185,12 +185,12 @@ function GoLmovetotarget(%Ghost){
       %Ghost.startFade(1000, 0, false);
       %Ghost.setPosition(vectorAdd(%ghost.getPosition(), "0 0 500"));
       %Ghost.setVelocity("0 0 0");
-      MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoL"]@": I'm back!!!");
+      MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["GhostOfLightning"]@": I'm back!!!");
    }
    %closestDistance = getWord(%closestClient,1);
    %closestClient = getWord(%closestClient,0).Player;
    if(%closestDistance < 20) {
-      MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoL"]@": I don't think so!");
+      MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["GhostOfLightning"]@": I don't think so!");
       //ATTACK
          %p = new ShockLanceProjectile() {
             dataBlock        = GoLShocker;
@@ -243,10 +243,10 @@ function DoGoLAttacks(%ghost) {
          %target = FindValidTarget(%ghost);
          if(!isObject(%target.player)) {
             schedule(35000, 0, "DoGoLAttacks", %ghost);
-            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoL"]@": Meh, no targets for me.");
+            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["GhostOfLightning"]@": Meh, no targets for me.");
             return;
          }
-         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoL"]@": Lightning Strike Away!!!");
+         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["GhostOfLightning"]@": Lightning Strike Away!!!");
 	     %p = discharge2(%target.player.getPosition(),"0 0 -1");
 	     %p.setEnergyPercentage(1);
 	     addToShock(%p);
@@ -255,20 +255,20 @@ function DoGoLAttacks(%ghost) {
          %target = FindValidTarget(%ghost);
          if(!isObject(%target.player)) {
             schedule(35000, 0, "DoGoLAttacks", %ghost);
-            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoL"]@": Meh, no targets for me.");
+            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["GhostOfLightning"]@": Meh, no targets for me.");
             return;
          }
-         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoL"]@": Watch Electricity Chase You!!!");
+         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["GhostOfLightning"]@": Watch Electricity Chase You!!!");
 	     %vec = vectorNormalize(vectorSub(%target.player.getPosition(),%ghost.getPosition()));
          createMissileSeekingProjectile("IonMissile", %target, %ghost, %ghost.getMuzzlePoint(0), %vec, 4, 100);
       case 3:
          %target = FindValidTarget(%ghost);
          if(!isObject(%target.player)) {
             schedule(35000, 0, "DoGoLAttacks", %ghost);
-            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoL"]@": Meh, no targets for me.");
+            MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["GhostOfLightning"]@": Meh, no targets for me.");
             return;
          }
-         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoL"]@": Die Now...");
+         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["GhostOfLightning"]@": Die Now...");
          %target = %target.player;
          %p = new ShockLanceProjectile() {
             dataBlock        = GoLShocker;
@@ -283,10 +283,10 @@ function DoGoLAttacks(%ghost) {
          %totalDamage = 50;
          %target.getDataBlock().damageObject(%target, %ghost, %target.getPosition(), %totalDamage, $DamageType::ShockLance);
       case 4:
-         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoL"]@": Its Storm Time");
+         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["GhostOfLightning"]@": Its Storm Time");
          ionStorm(35 , 1000);
       case 5:
-         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossName["GoL"]@": Lightning Missiles For ALL!!");
+         MessageAll('msgBossAlertAttack', "\c4"@$TWM2::BossNameInternal["GhostOfLightning"]@": Lightning Missiles For ALL!!");
          for(%i = 0; %i < ClientGroup.getCount(); %i++) {
             %cl = ClientGroup.getObject(%i);
             if(isObject(%cl.player) && %cl.player.getState() !$= "dead") {

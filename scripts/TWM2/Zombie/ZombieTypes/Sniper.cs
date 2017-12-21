@@ -1,3 +1,7 @@
+//Phantom139 Note: The sniper zombie prefers to stay away from players, it does not infect on contact, but instead runs away
+$TWM2::ArmorHasCollisionFunction[SniperZombieArmor] = false;
+$TWM2::ArmorHasCollisionFunction[FlareguideSniperZombieArmor] = false;
+
 datablock PlayerData(SniperZombieArmor) : LightMaleHumanArmor {
 	boundingBox = "1.63 1.63 2.6";
 	maxDamage = 2.5;
@@ -18,6 +22,26 @@ datablock PlayerData(SniperZombieArmor) : LightMaleHumanArmor {
 	damageScale[$DamageType::SA2400] = 5.0;
 	damageScale[$DamageType::Model1887] = 4.0;
 	damageScale[$DamageType::CrimsonHawk] = 1.9;
+	damageScale[$DamageType::AcidCannon] = 3.0;
+
+	max[RepairKit]			= 0;
+	max[Mine]				= 0;
+	max[Grenade]			= 0;
+};
+
+datablock PlayerData(FlareguideSniperZombieArmor) : SniperZombieArmor {
+	boundingBox = "1.63 1.63 2.6";
+	maxDamage = 20.0;
+	minImpactSpeed = 35;
+	shapeFile = "bioderm_heavy.dts";
+
+	debrisShapeName = "bio_player_debris.dts";
+
+	//Foot Prints
+	decalData   = HeavyBiodermFootprint;
+	decalOffset = 0.4;
+
+	waterBreathSound = WaterBreathBiodermSound;
 
 	max[RepairKit]			= 0;
 	max[Mine]				= 0;
@@ -34,6 +58,14 @@ datablock ShapeBaseImageData(ZSniperImage2) {
 	shapeFile = "weapon_targeting.dts";
 	offset = "0.0 1.0 0.41";
 	rotation = "90 0 0 90";
+	armThread = looksn;
+	emap = true;
+};
+
+datablock ShapeBaseImageData(ZSniperImage3) {
+	shapeFile = "weapon_elf.dts";
+	offset = "0.0 0.3 0";
+	rotation = "1 0 0 90";
 	armThread = looksn;
 	emap = true;
 };
@@ -113,11 +145,32 @@ function SniperZombieFire(%zombie,%closestclient){
    %accuracy = (vectorlen(%vec) / %num);
    %vec = vectoradd(%vec, vectorscale(%closestclient.getvelocity(), %accuracy));
    %p = new TracerProjectile() { //TWM2 Sniper zombies use ALSWP Snipers :P
-	dataBlock        = ALSWPBullet;
+	dataBlock        = SniperZombieAcidShot;
 	initialDirection = %vec;
 	initialPosition  = %zombie.getMuzzlePoint(4);
 	sourceObject     = %zombie;
 	sourceSlot       = 4;
    };
    ServerPlay3D(ALSWPFireSound, %zombie.getPosition());
+}
+
+
+function FlareguideSniperZombieAcidShot::onExplode(%data, %proj, %pos, %mod) {
+	Parent::OnExplode(%data, %proj, %pos, %mod);
+	//Create the mini-pulses
+	for (%i = 0; %i < 6; %i++) {
+		%x = getRandom(-3, 3);
+		%y = getRandom(-3, 3);
+		%z = 5;
+		%vec = %x SPC %y SPC %z;
+		%vec = VectorScale(%vec, 200);
+		%p = new (GrenadeProjectile)() {
+			dataBlock = FlareguideSniperBurstRound;
+			initialDirection = %vec;
+			initialPosition = %pos;
+		};
+		MissionCleanup.add(%p);
+		%p.sourceObject = %proj.sourceObject;
+		return;
+	}	
 }
