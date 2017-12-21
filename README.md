@@ -163,22 +163,32 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	  * Holding the Plasmasaber will grant you a protective buff preventing zombie infection from impact damage.
 	    * You can still be infected by taking zombie based projectile damage. 
   * Sidearms
-    * At the moment, the two statistical outliers in the pool (Crimson Hawk and Pulse Phaser) feel close to being perfect, some minor tuning will help get them there.
+    * At the moment, the two statistical outliers in the pool (Crimson Hawk and Pulse Phaser) are a bit too strong, so some minor adjustments will help smooth gameplay and bring the others into play
     * Crimson Hawk Pistol
-      * Trevor Haliade's personal sidearm is still pretty high on the lethality end of the spectrum.
+      * Trevor Haliade's personal sidearm is still pretty high on the lethality end of the spectrum as it pertains to both PvP and PvE
+	    * This behavior is intended for PvE, but not for PvP
 	  * Reduced pulse damage from 0.23 to 0.17
-	  * I also tweaked with the weapon's range a bit.
-	    * Reduced the projectile life from 1 second to 0.7 seconds
+	    * Assuming all five pulses hit, this equates to 0.85 damage, or 1.2 bursts to kill
+      * Increased the spread factor from 5:1000 to 7:1000
+        * This combined with the range reduction below will help to keep this weapon in check at the longer ranges	  
+	  * Additionally, the pulses travel quite far at the moment, able to reach across one end of the Christmas Mall map to the other, this will be reduced
+	    * Reduced the projectile life from 1 second to 0.45 seconds
 	  * Added a 1.9 damage modifier to all zombie types
 	    * This works out to ~0.32 damage per shot which is about a 40% damage increase against zombies
+		* I want the Crimson Hawk to be a great PvE choice, but allow the other sidearms a chance to shine in PvP
     * ES-77 Pulse Phaser
       * Last time I touched this weapon, I nearly started I riot amongst the entire Tribes 2 community, lol.
-	  * After looking at how this weapon has performed between 3.3 and 3.9.1, I feel it needs a slight bump.
+	    * Let's not do this again, but instead look at some easy to make and good adjustments
+	  * After looking at how this weapon has performed between 3.3 and 3.9.1, I feel it needs a slight bump in the damage department
 	    * Increased the base damage of the pulse phaser from 0.2 to 0.26
 	    * Increased the damage of the phaser blade pulse from 0.21 to 0.3
-	  * The strength of this weapon was it's incredible reach and long lasting projectile life time, this has been toned down a little
-	    * Reduced the projectile lifetime from 3 seconds to 1.5 seconds
-	    * Increased the projectile base speed from 120 to 160.
+	  * On the flip side, my analysis of why this weapon was selected so much over all other sidearms boils down to two things.
+	    * 1. This is the only sidearm in the mod without a required reload, being completely energy based
+		* 2. The pulses have an extensive reach and can strike targets at a very long distance
+	  * The following adjustments will be made to counter
+	    * Reduced the projectile lifetime from 3 seconds to 0.8 seconds
+	    * Increased the projectile base speed from 120 to 165
+		  * Note: The Phaser Blades pulse is slightly slower at 160 base speed
 	  * The end result with be a stronger pulse phaser at the close range that loses out on the far reach aspect.
   * Sniper Rifles
     * The sniper rifle class has always been one of the stronger ones in TWM2, and I feel no reason to neuter it now.

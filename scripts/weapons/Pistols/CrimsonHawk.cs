@@ -15,8 +15,8 @@ datablock TracerProjectileData(CHawkBullet) {
 	dryVelocity       = 425.0;
 	wetVelocity       = 100.0;
 	velInheritFactor  = 1.0;
-	fizzleTimeMS      = 500;
-	lifetimeMS        = 700;
+	fizzleTimeMS      = 400;
+	lifetimeMS        = 450;
 	explodeOnDeath    = false;
 	reflectOnWaterImpactAngle = 0.0;
 	explodeOnWaterImpact      = false;
@@ -74,7 +74,7 @@ datablock ShapeBaseImageData(CrimsonHawkImage) {
 
 	projectile = CHawkBullet;
 	projectileType = tracerProjectile;
-	projectileSpread = 5.0 / 1000.0;
+	projectileSpread = 7.0 / 1000.0;
 
 	//ClipStuff
 	ClipName = "CrimsonHawkClip";

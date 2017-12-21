@@ -11,11 +11,11 @@ datablock LinearFlareProjectileData(phaserBolt) {
 	explosion           = "BlasterExplosion";
 	kickBackStrength  = 0.0;
 
-	dryVelocity       = 160.0;
+	dryVelocity       = 165.0;
 	wetVelocity       = 40.0;
 	velInheritFactor  = 0.5;
-	fizzleTimeMS      = 1300;
-	lifetimeMS        = 1500;
+	fizzleTimeMS      = 700;
+	lifetimeMS        = 800;
 	explodeOnDeath    = false;
 	reflectOnWaterImpactAngle = 0.0;
 	explodeOnWaterImpact      = false;
@@ -46,8 +46,8 @@ datablock LinearFlareProjectileData(TrevorPhaserBolt) {
 	dryVelocity       = 160.0;
 	wetVelocity       = 40.0;
 	velInheritFactor  = 0.5;
-	fizzleTimeMS      = 1300;
-	lifetimeMS        = 1500;
+	fizzleTimeMS      = 700;
+	lifetimeMS        = 800;
 	explodeOnDeath    = false;
 	reflectOnWaterImpactAngle = 0.0;
 	explodeOnWaterImpact      = false;
