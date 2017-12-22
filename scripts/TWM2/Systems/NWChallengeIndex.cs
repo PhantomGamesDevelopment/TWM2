@@ -332,6 +332,8 @@ $Challenge::Challenge[5, 11] = "HuntersAsPrey";
 $Challenge::Info["HuntersAsPrey"] = "Hunters As Prey\t5\t5000\tNone\tComplete the 'Air Raid' flashpoint operation.";
 $Challenge::IsNotMultiTier["HuntersAsPrey"] = true;
 $Challenge::Challenge[5, 12] = "ThroughTheFlare";
+$Challenge::SetHidden[5, 12] = true;
+$Challenge::HiddenMessage[5, 12] = "<color:BB0000>=== CLASSIFIED: DELTA OPS CLEARANCE LEVEL ===";
 $Challenge::Info["ThroughTheFlare"] = "Through The Flare\t5\t15000\tNLS-22 Acid Sniper\tFind and kill the Flareguide Mini-Boss during a living world session";
 $Challenge::IsNotMultiTier["ThroughTheFlare"] = true;
 

@@ -186,7 +186,7 @@ datablock ShapeBaseImageData(flamerImage) {
    
    GunName = "A|V|X Flamethrower";
    //
-   MedalRequire = 1;
+   MedalRequire = 10;
 
    projectile = FlamethrowerBolt;
    projectileType = LinearFlareProjectile;

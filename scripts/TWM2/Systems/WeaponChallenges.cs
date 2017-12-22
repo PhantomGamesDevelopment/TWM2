@@ -155,7 +155,7 @@ function GenerateCompletedChallegnesMenu(%client, %tag, %index) {
          if(%db.getName().classname $= "Weapon") {
             %Image = %db.getName().image;
             if(%Image.HasChallenges) {
-               if(DoMedalCheck(%client, %image) == 1 && CanUseRankedWeapon(%image, %client) == 1) {
+               if(CanUseWeapon(%image, %client) == 1) {
                   messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tWeaponUpgradesSub\t"@%Image@"\t1>"@%Image.GunName@"</a>");
                   %index++;
                }
@@ -182,7 +182,7 @@ function GenerateWeaponChallegnesMenu(%client, %tag, %index) {
                if(%kills $= "") {
                   %kills = 0;
                }
-               if(DoMedalCheck(%client, %image) == 1 && CanUseRankedWeapon(%image, %client) == 1) {
+               if(CanUseWeapon(%image, %client) == 1) {
                   messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tWeaponTasksSub\t"@%Image@"\t1>"@%Image.GunName@"</a> - Kills: "@%kills@"");
                   %index++;
                }

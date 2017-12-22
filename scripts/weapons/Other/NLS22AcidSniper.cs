@@ -1,8 +1,8 @@
-datablock TracerProjectileData(M1Bullet) {
+datablock TracerProjectileData(NLS22AcidPulse) {
 	doDynamicClientHits = true;
 
 	directDamage        = 0.65;
-	directDamageType    = $DamageType::M1;
+	directDamageType    = $DamageType::AcidSniper;
 	explosion           = "ChaingunExplosion";
 	splash              = ChaingunSplash;
 	HeadMultiplier      = 1.5;
@@ -67,7 +67,7 @@ datablock ShapeBaseImageData(NLS22AcidSniperImage) {
 	mass = 10;
 	item = NLS22AcidSniper;
 	ammo = NLS22AcidSniperAmmo;
-	projectile = M1Bullet;
+	projectile = NLS22AcidPulse;
 	projectileType = TracerProjectile;
 	emap = true;
 
@@ -95,7 +95,8 @@ datablock ShapeBaseImageData(NLS22AcidSniperImage) {
 	GunName = "NLS-22 Acid Sniper Rifle";
 	//
 
-	RankRequire = $TWM2::RankRequire["M1"];
+	ChallengeRequire = "ThroughTheFlare";
+	hideExistence = true;
 
 	casing              = ShellDebris;
 	shellExitDir        = "1.0 0.3 1.0";
@@ -207,7 +208,7 @@ function NLS22AcidSniperImage::onUnmount(%this,%obj,%slot) {
 	%obj.unmountImage(7);
 }
 
-function M1SniperRifleImage::onFire(%data, %obj, %slot) {
+function NLS22AcidSniperImage::onFire(%data, %obj, %slot) {
 	if(!$TWM2::AllowSnipers) {
 		bottomPrint(%obj.client, "The host has disabled sniper weapons.", 2, 2);
 		%obj.throwweapon(1);

@@ -863,7 +863,7 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
                          if(%kills $= "") {
                             %kills = 0;
                          }
-                         if(DoMedalCheck(%client, %image) == 1 && CanUseRankedWeapon(%image, %client) == 1) {
+                         if(CanUseWeapon(%image, %client) == 1) {
                             messageClient( %client, 'SetLineHud', "", %tag, %index, ""@%Image.GunName@" - Kills: "@%kills@"");
                             %index++;
                          }

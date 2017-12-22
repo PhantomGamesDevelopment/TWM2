@@ -2,6 +2,28 @@
 $TWM2::ArmorHasCollisionFunction[SniperZombieArmor] = false;
 $TWM2::ArmorHasCollisionFunction[FlareguideSniperZombieArmor] = false;
 
+datablock ShapeBaseImageData(ZSniperImage1) {
+	shapeFile = "weapon_sniper.dts";
+	emap = true;
+	armThread = looksn;
+};
+
+datablock ShapeBaseImageData(ZSniperImage2) {
+	shapeFile = "weapon_targeting.dts";
+	offset = "0.0 1.0 0.41";
+	rotation = "90 0 0 90";
+	armThread = looksn;
+	emap = true;
+};
+
+datablock ShapeBaseImageData(ZSniperImage3) {
+	shapeFile = "weapon_elf.dts";
+	offset = "0.0 0.3 0";
+	rotation = "1 0 0 90";
+	armThread = looksn;
+	emap = true;
+};
+
 datablock PlayerData(SniperZombieArmor) : LightMaleHumanArmor {
 	boundingBox = "1.63 1.63 2.6";
 	maxDamage = 2.5;
@@ -29,6 +51,99 @@ datablock PlayerData(SniperZombieArmor) : LightMaleHumanArmor {
 	max[Grenade]			= 0;
 };
 
+function SniperZombieArmor::AI(%datablock, %zombie) {
+	//Sniper Zombie AI:
+	// Unlike other zombies, the sniper zombie will continue to hunt their target until killed.
+	//  The sniper zombie will employ preferential targeting against enemy snipers first
+	//
+	// TWM2 3.9.2: Prior to this version, the sniper would run away when approached,
+	//  now, the sniper is armed with a new acid sidearm that fires quick pulses and will
+	//  employ strafing moves as well
+	if(!isObject(%zombie) || %zombie.getState() $= "dead") {
+		return;
+	}	
+	%pos = %zombie.getWorldBoxCenter();
+	if(!%zombie.hasTarget) {
+		%preferSniper = getRandom(1, 10);
+		if(%preferSniper > 3) {
+			for(%i = 0; %i < ClientGroup.getCount(%i); %i++) {
+				%check = ClientGroup.getObject(%i);
+				if(isObject(%check.player) && %check.player.getState() !$= "dead") {
+					//Check their weapon 
+					
+				}
+			}
+		}
+		else {
+			%closestClient = TWM2Lib_Zombie_Core("lookForTarget", %zombie);
+			%closestDistance = getWord(%closestClient, 1);
+			if(isObject(%closestClient.player) && %closestClient.player.getState() !$= "dead") {
+				%zombie.hasTarget = 1;
+				%zombie.targetPlayer = %closestClient.player;
+			}
+		}
+	}
+	
+	%zombie.moveloop = %datablock.Move(%zombie);
+}
+
+function SniperZombieArmor::Move(%datablock, %zombie) {
+	if(!isObject(%zombie) || %zombie.getState() $= "dead") {
+		return;
+	}
+	%pos = %zombie.getWorldBoxCenter();
+	%closestClient = TWM2Lib_Zombie_Core("lookForTarget", %zombie);
+	%closestDistance = getWord(%closestClient, 1);
+	%closestClient = getWord(%closestClient, 0).Player;
+	if(%closestDistance <= $zombie::detectDist) {
+		if(%zombie.hastarget != 1) {
+			%zombie.hastarget = 1;
+		}
+		TWM2Lib_Zombie_Core("playZAudio", %zombie, 100, 40);
+		%vector = TWM2Lib_Zombie_Core("zombieGetFacingDirection", %zombie, %closestClient.getPosition());
+	
+		if(Game.CheckModifier("SuperLunge") == 1) {
+			%ld = $Zombie::LungeDistance * 5;
+		}
+		else {
+			%ld = $Zombie::LungeDistance;
+		}
+		if(%closestDistance <= %ld && %zombie.canjump == 1) {
+			%vector = vectorScale(%vector, 4);
+		}
+		%vector = vectorScale(%vector, %zombie.speed);
+		%upvec = "150";
+		if(%closestDistance <= %ld && %zombie.canjump == 1) {
+			%upvec *= 2;
+			TWM2Lib_Zombie_Core("setZFlag", %zombie, "canJump", 0);
+			schedule($Zombie::BaseJumpCooldown, 0, TWM2Lib_Zombie_Core, "setZFlag", %zombie, "canJump", 1);
+		}
+		%x = Getword(%vector, 0);
+		%y = Getword(%vector, 1);
+		%z = Getword(%vector, 2);
+		if(%z >= 600) {
+			%upvec = (%upvec * 5);
+		}
+		%vector = %x@" "@%y@" "@%upvec;
+		%zombie.applyImpulse(%pos, %vector);
+	}
+	else if(%zombie.hastarget == 1) {
+		%zombie.hastarget = 0;
+		%zombie.zombieRmove = schedule(%zombie.updateTimeFrequency, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
+	}
+	%zombie.moveloop = %datablock.schedule(%zombie.updateTimeFrequency, "Move", %zombie);
+}
+
+//*****************************************************************
+//*****************************************************************
+// FLAREGUIDE SNIPER ZOMBIE
+//
+// This is contained within this file as it requries the sniper zombie
+//  datablock in order to load, therefore we'll just leave it down here
+//
+//*****************************************************************
+//*****************************************************************
+
 datablock PlayerData(FlareguideSniperZombieArmor) : SniperZombieArmor {
 	boundingBox = "1.63 1.63 2.6";
 	maxDamage = 20.0;
@@ -48,27 +163,7 @@ datablock PlayerData(FlareguideSniperZombieArmor) : SniperZombieArmor {
 	max[Grenade]			= 0;
 };
 
-datablock ShapeBaseImageData(ZSniperImage1) {
-	shapeFile = "weapon_sniper.dts";
-	emap = true;
-	armThread = looksn;
-};
 
-datablock ShapeBaseImageData(ZSniperImage2) {
-	shapeFile = "weapon_targeting.dts";
-	offset = "0.0 1.0 0.41";
-	rotation = "90 0 0 90";
-	armThread = looksn;
-	emap = true;
-};
-
-datablock ShapeBaseImageData(ZSniperImage3) {
-	shapeFile = "weapon_elf.dts";
-	offset = "0.0 0.3 0";
-	rotation = "1 0 0 90";
-	armThread = looksn;
-	emap = true;
-};
 
 function SniperZombiemovetotarget(%zombie){
    if(!isobject(%zombie))

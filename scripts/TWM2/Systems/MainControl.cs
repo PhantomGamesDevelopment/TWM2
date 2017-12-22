@@ -481,67 +481,6 @@ function serverCmdCheckendTilt(%client) {
 
 }
 
-function DoMedalCheck(%client, %image) {
-   //
-   if(%client.isAIControlled()) {
-      return 1;
-   }
-   //
-   switch$(%image) {
-      case "BOVImage":
-         if(%client.hasMedal(11)) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case "LD06SavagerImage":
-         if(%client.hasMedal(1)) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case "IonLauncherImage" or "IonRifleImage" or "ConcussionGunImage":
-         if(%client.hasMedal(9)) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case "flamerImage":
-         if(%client.hasMedal(10)) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case "ShadowRifleImage":
-         if(%client.hasMedal(13)) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case "NapalmImage":
-         if(%client.hasMedal(27)) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      case "MiniColliderCannonImage" or "PlasmasaberImage":
-         if(%client.hasMedal(15)) {
-            return 1;
-         }
-         else {
-            return 0;
-         }
-      default:
-         return 1;
-   }
-}
-
 //ARMOR UPDATE
 function updateArmorList(%client, %armorList) {
    if(!$Host::Purebuild) {

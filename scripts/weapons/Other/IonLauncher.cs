@@ -53,7 +53,7 @@ datablock ShapeBaseImageData(IonLauncherImage) {
 	GunName = "LUX-4 Ion Launcher";
 	//
 
-	MedalRequire = 1;
+	MedalRequire = 9;
 
 	isSeeker     = true;
 	seekRadius   = 1000;

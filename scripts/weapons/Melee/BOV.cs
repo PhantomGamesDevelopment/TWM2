@@ -72,7 +72,7 @@ datablock ShapeBaseImageData(BOVImage) {
 	fireEnergy = 20;
 	minEnergy = 30;
 
-	MedalRequire = 1;
+	MedalRequire = 11;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";

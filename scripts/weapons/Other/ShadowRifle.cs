@@ -70,7 +70,7 @@ datablock ShapeBaseImageData(ShadowRifleImage) {
 	projectile = ShadowRifleBolt;
 	projectileType = LinearFlareProjectile;
 
-	MedalRequire = 1;
+	MedalRequire = 13;
 
 	usesEnergy = true;
 	minEnergy = 6;

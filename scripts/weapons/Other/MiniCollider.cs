@@ -9,7 +9,7 @@ datablock ShapeBaseImageData(MiniColliderCannonImage) {
 
 	emap = true;
 
-	MedalRequire = 1;
+	MedalRequire = 15;
 
 	HasChallenges = 1;
 	ChallengeCt = 8;

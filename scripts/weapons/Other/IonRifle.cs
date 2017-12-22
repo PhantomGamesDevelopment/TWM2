@@ -20,7 +20,7 @@ datablock ShapeBaseImageData(IonRifleImage) {
 	projectileType = SniperProjectile;
 	armThread = looksn;
 
-	MedalRequire = 1;
+	MedalRequire = 9;
 
 	usesEnergy = true;
 	minEnergy = 6;

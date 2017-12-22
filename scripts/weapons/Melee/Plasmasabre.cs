@@ -84,7 +84,7 @@ datablock ShapeBaseImageData(PlasmasaberImage) {
 	projectile = EnergyBolt;
 	projectileType = EnergyProjectile;
 
-	MedalRequire = 1;
+	MedalRequire = 15;
 
 	// State Data
 	stateName[0] = "Activate";

@@ -653,562 +653,347 @@ function InventoryScreen::addLine( %this, %tag, %lineNum, %type, %count )
 
 //------------------------------------------------------------------------------
 function InventoryScreen::updateHud( %this, %client, %tag ) {
-   %noSniperRifle = true;
-   %armor = getArmorDatablock( %client, $NameToInv[%client.favorites[0]] );
+	%noSniperRifle = true;
+	%armor = getArmorDatablock( %client, $NameToInv[%client.favorites[0]] );
 	if (!%client.isAdmin && !%client.isSuperAdmin) {
 		if ($Host::Purebuild == 1) {
 			%client.favorites[0] = "Purebuild";
 			%armor = getArmorDatablock( %client , "Pure");
 		}
 		else {
-			if (%client.favorites[0] $= "Purebuild")
+			if (%client.favorites[0] $= "Purebuild") {
 				%client.favorites[0] = "Scout";
+			}
 		}
 	}
-   if ( %client.lastArmor !$= %armor )
-   {
-      %client.lastArmor = %armor;
-      for ( %x = 0; %x < %client.lastNumFavs; %x++ )
-         messageClient( %client, 'RemoveLineHud', "", 'inventoryScreen', %x );
-      %setLastNum = true;
-   }
-   %cmt = $CurrentMissionType;
+	if ( %client.lastArmor !$= %armor ) {
+		%client.lastArmor = %armor;
+		for ( %x = 0; %x < %client.lastNumFavs; %x++ ) {
+			messageClient( %client, 'RemoveLineHud', "", 'inventoryScreen', %x );
+		}
+		%setLastNum = true;
+	}
+	%cmt = $CurrentMissionType;
 
-   //Auto-Inv Load
-    if($Host::PureBuild) {
-       buyFavorites(%client);
-    }
+	//Auto-Inv Load
+	if($Host::PureBuild) {
+		buyFavorites(%client);
+	}
 
-//Create - ARMOR - List
-   %armorList = %client.favorites[0];
-   for ( %y = 0; $InvArmor[%y] !$= ""; %y++ )
-      if ( $InvArmor[%y] !$= %client.favorites[0] )
-         %armorList = %armorList TAB $InvArmor[%y];
-   if($TWM::PlayingInfection)
-      %armorList = InfectionArmors(%client, %armorList);
-   else
-      %armorList = updateArmorList(%client, %armorList);
+	//Create - ARMOR - List
+	%armorList = %client.favorites[0];
+	for ( %y = 0; $InvArmor[%y] !$= ""; %y++ ) {
+		if ( $InvArmor[%y] !$= %client.favorites[0] ) {
+			%armorList = %armorList TAB $InvArmor[%y];
+		}
+	}
+	if($TWM::PlayingInfection) {
+		%armorList = InfectionArmors(%client, %armorList);
+	}
+	else {
+		%armorList = updateArmorList(%client, %armorList);
+	}
 
+	//Create - WEAPON - List
+	for ( %y = 0; $InvWeapon[%y] !$= ""; %y++ ) {
+		%notFound = true;
+		for ( %i = 0; %i < getFieldCount( %client.weaponIndex ); %i++ ) {
+			%WInv = $NameToInv[$InvWeapon[%y]];
+			if ( ( $InvWeapon[%y] $= %client.favorites[getField( %client.weaponIndex,%i )] ) || !%armor.max[%WInv] ) {
+				%notFound = false;
+				break;
+			}
+		}
+		if ( !($InvBanList[%cmt, %WInv]) ) {
+			if ( %notFound && %weaponList $= "" )  {
+				%useCode = CanUseWeapon(%client, %WInv.Image);
+				if(%useCode == 1) {
+					%weaponList = $InvWeapon[%y];
+				}
+			}
+			else if ( %notFound ) {
+				%useCode = CanUseWeapon(%client, %WInv.Image);
+				if(%useCode == 1) {
+					%weaponList = %weaponList TAB $InvWeapon[%y];
+				}
+			}
+		}
+	}
 
-//Create - WEAPON - List
-//You are not permitted to use any part of this code...
-//Find your own method of doing this... If I find this in your
-//code, I will sue you for copywrite infrigment, so shoo :)
-   %prestige = %client.TWM2Core.officer;
-   if(%client.TWM2Core.officer $= "") {
-      %client.TWM2Core.officer = 0;
-      %prestige = %client.TWM2Core.officer;
-   }
-   %xpHas = getCurrentEXP(%client);
-   if(!$Host::RankSystem) { //it's off
-      for ( %y = 0; $InvWeapon[%y] !$= ""; %y++ ) {
-         %notFound = true;
-         for ( %i = 0; %i < getFieldCount( %client.weaponIndex ); %i++ ) {
-            %WInv = $NameToInv[$InvWeapon[%y]];
-            if ( ( $InvWeapon[%y] $= %client.favorites[getField( %client.weaponIndex,%i )] ) || !%armor.max[%WInv] ) {
-               %notFound = false;
-               break;
-            }
-         }
+	//Create - PISTOL - List
+	%pistolList = "";
+	if ( getFieldCount( %client.pistolIndex ) ) {
+		%pistolList = %client.favorites[getField( %client.pistolIndex, 0 )];
+	}
+	else {
+		%pistolList = "EMPTY";
+		%client.numFavs++;
+	}
+	for ( %y = 0; $InvPistol[%y] !$= ""; %y++ ) {
+		%PistolInv = $NameToInv[$InvPistol[%y]];
+		if ( ( $InvPistol[%y] !$= %client.favorites[getField( %client.pistolIndex, 0 )]) && !($InvBanList[%cmt, %PistolInv])) {
+			%useCode = CanUseWeapon(%client, %PistolInv.Image);
+			if(%useCode == 1) {
+				%pistolList = %pistolList TAB $InvPistol[%y];
+			}
+		}
+	}
 
-         if ( !($InvBanList[%cmt, %WInv]) ) {
-            if ( %notFound && %weaponList $= "" )  {
-               if(%WInv.Image.MedalRequire) {
-                  %canUse = DoMedalCheck(%client, %WInv.Image);
-                  if(%canUse) {
-                     %weaponList = $InvWeapon[%y];
-                  }
-               }
-               else {
-                  %weaponList = $InvWeapon[%y];
-               }
-            }
-            else if ( %notFound ) {
-               if(%WInv.Image.MedalRequire) {
-                  %canUse = DoMedalCheck(%client, %WInv.Image);
-                  if(%canUse) {
-                     %weaponList = %weaponList TAB $InvWeapon[%y];
-                  }
-               }
-               else {
-                  %weaponList = %weaponList TAB $InvWeapon[%y];
-               }
-            }
-         }
-      }
-   }
-   else {     //It's on
-      for ( %y = 0; $InvWeapon[%y] !$= ""; %y++ ) {
-         %notFound = true;
-         for ( %i = 0; %i < getFieldCount( %client.weaponIndex ); %i++ ) {
-            %WInv = $NameToInv[$InvWeapon[%y]];
-
-            if ( ( $InvWeapon[%y] $= %client.favorites[getField( %client.weaponIndex,%i )] ) || !%armor.max[%WInv] ) {
-               %notFound = false;
-               break;
-            }
-         }
-
-         if ( !($InvBanList[%cmt, %WInv]) ) {
-            if ( %notFound && %weaponList $= "" ) {
-               //New Rank Check
-               if(%WInv.Image.RankRequire $= "") {
-                  %xpNeed = 0;
-               }
-               else {
-                  %xpNeed = $Ranks::MinPoints[%WInv.Image.RankRequire];
-               }
-               //
-               if(%WInv.Image.PrestigeRequire $= "") {
-                  %prestigeNeed = 0;
-               }
-               else {
-                  %prestigeNeed = %WInv.Image.PrestigeRequire;
-               }
-
-               if(%prestigeNeed $= "" || %prestigeNeed == 0) {
-                  if(%xpNeed $= "" || %xpNeed == 0) {
-                     if(%WInv.Image.MedalRequire) {
-                        %canUse = DoMedalCheck(%client, %WInv.Image);
-                        if(%canUse) {
-                           %weaponList = $InvWeapon[%y];
-                        }
-                     }
-                     else {
-                        %weaponList = $InvWeapon[%y];
-                     }
-                  }
-                  else {
-                     if (%xpHas >= %xpNeed){
-                        if(%WInv.Image.MedalRequire) {
-                           %canUse = DoMedalCheck(%client, %WInv.Image);
-                           if(%canUse) {
-                              %weaponList = $InvWeapon[%y];
-                           }
-                        }
-                        else {
-                           %weaponList = $InvWeapon[%y];
-                        }
-                     }
-                  }
-               }
-               else {
-                  if(%prestige >= %prestigeNeed) {
-                     if(%xpNeed $= "" || %xpNeed == 0) {
-                        if(%WInv.Image.MedalRequire) {
-                           %canUse = DoMedalCheck(%client, %WInv.Image);
-                           if(%canUse) {
-                              %weaponList = $InvWeapon[%y];
-                           }
-                        }
-                        else {
-                           %weaponList = $InvWeapon[%y];
-                        }
-                     }
-                     else {
-                        if (%xpHas >= %xpNeed && (isSet(%WInv.Image.RankRequire) ? %client.TWM2Core.rankNumber >= %WInv.Image.RankRequire: true )){
-                           if(%WInv.Image.MedalRequire) {
-                              %canUse = DoMedalCheck(%client, %WInv.Image);
-                              if(%canUse) {
-                                 %weaponList = $InvWeapon[%y];
-                              }
-                           }
-                           else {
-                              %weaponList = $InvWeapon[%y];
-                           }
-                        }
-                     }
-                  }
-               }
-            }
-            else if ( %notFound ) {
-               //New Rank Check
-               if(%WInv.Image.RankRequire $= "") {
-                  %xpNeed = 0;
-               }
-               else {
-                  %xpNeed = $Ranks::MinPoints[%WInv.Image.RankRequire];
-               }
-               //
-               if(%WInv.Image.PrestigeRequire $= "") {
-                  %prestigeNeed = 0;
-               }
-               else {
-                  %prestigeNeed = %WInv.Image.PrestigeRequire;
-               }
-
-               if(%prestigeNeed $= "" || %prestigeNeed == 0) {
-                  if(%xpNeed == 0) {
-                     if(%WInv.Image.MedalRequire) {
-                        %canUse = DoMedalCheck(%client, %WInv.Image);
-                        if(%canUse) {
-                           %weaponList = %weaponList TAB $InvWeapon[%y];
-                        }
-                     }
-                     else {
-                        %weaponList = %weaponList TAB $InvWeapon[%y];
-                     }
-                  }
-                  else {
-                     if (%xpHas >= %xpNeed){
-                        if(%WInv.Image.MedalRequire) {
-                           %canUse = DoMedalCheck(%client, %WInv.Image);
-                           if(%canUse) {
-                              %weaponList = %weaponList TAB $InvWeapon[%y];
-                           }
-                        }
-                        else {
-                           %weaponList = %weaponList TAB $InvWeapon[%y];
-                        }
-                     }
-                  }
-               }
-               else {
-                  if(%prestige >= %prestigeNeed) {
-                     if(%xpNeed $= "" || %xpNeed == 0) {
-                        if(%WInv.Image.MedalRequire) {
-                           %canUse = DoMedalCheck(%client, %WInv.Image);
-                           if(%canUse) {
-                              %weaponList = %weaponList TAB $InvWeapon[%y];
-                           }
-                        }
-                        else {
-                           %weaponList = %weaponList TAB $InvWeapon[%y];
-                        }
-                     }
-                     else {
-                        if (%xpHas >= %xpNeed && (isSet(%WInv.Image.RankRequire) ? %client.TWM2Core.rankNumber >= %WInv.Image.RankRequire: true )){
-                           if(%WInv.Image.MedalRequire) {
-                              %canUse = DoMedalCheck(%client, %WInv.Image);
-                              if(%canUse) {
-                                 %weaponList = %weaponList TAB $InvWeapon[%y];
-                              }
-                           }
-                           else {
-                              %weaponList = %weaponList TAB $InvWeapon[%y];
-                           }
-                        }
-                     }
-                  }
-               }
-            }
-         }
-      }
-   }
-//Create - PISTOL - List
-//read above
-         %pistolList = "";
-         if ( getFieldCount( %client.pistolIndex ) )
-            %pistolList = %client.favorites[getField( %client.pistolIndex, 0 )];
-         else {
-            %pistolList = "EMPTY";
-            %client.numFavs++;
-         }
-         for ( %y = 0; $InvPistol[%y] !$= ""; %y++ ) {
-            %PistolInv = $NameToInv[$InvPistol[%y]];
-            if ( ( $InvPistol[%y] !$= %client.favorites[getField( %client.pistolIndex, 0 )])
-            && !($InvBanList[%cmt, %PistolInv])) {
-				
-               if(%PistolInv.Image.RankRequire $= "") {
-                  %xpNeed = 0;
-               }
-               else {
-                  %xpNeed = $Ranks::MinPoints[%PistolInv.Image.RankRequire];
-               }
-               //
-               if(%PistolInv.Image.PrestigeRequire $= "")
-                  %prestigeNeed = 0;
-               }
-               else {
-                  %prestigeNeed = %PistolInv.Image.PrestigeRequire;
-               }
-               //
-               if(%PistolInv.Image.MedalRequire) {
-                  %canUse = DoMedalCheck(%client, %PistolInv.Image);
-               }
-               else {
-                  %canUse = 1;
-               }
-
-               if(%canUse) {
-                  //XP Check Here
-                  if(%prestige >= %prestigeNeed) {
-                     if(%xpHas > %xpNeed && (isSet(%PistolInv.Image.RankRequire) ? %client.TWM2Core.rankNumber >= %PistolInv.Image.RankRequire : true )) {
-                        %pistolList = %pistolList TAB $InvPistol[%y];
-                     }
-                  }
-               }
-            }
-//      %pistolList = CheckPistolPrereqs(%client, %pistolList);
-
-//Create - MELEE - List
-//Once again, Read Above
-   if(%client.favorites[0] !$= "Purebuild") {
-         if ( getFieldCount( %client.meleeIndex ) )
-            %meleeList = %client.favorites[getField( %client.meleeIndex, 0 )];
-         else {
-            %meleeList = "EMPTY";
-            %client.numFavs++;
-         }
-         for ( %y = 0; $InvMelee[%y] !$= ""; %y++ ) {
-            %meleeInv = $NameToInv[$InvMelee[%y]];
-            if ( ( $InvMelee[%y] !$= %client.favorites[getField( %client.meleeIndex, 0 )]) &&
-               %armor.max[%meleeInv] && !($InvBanList[%cmt, %meleeInv])) {
-
-               if(%meleeInv.Image.MedalRequire) {
-                  %canUse = DoMedalCheck(%client, %meleeInv.Image);
-               }
-               else {
-                  %canUse = 1;
-               }
-               
-               if(%canUse) {
-                  %meleeList = %meleeList TAB $InvMelee[%y];
-               }
-            }
-         }
-   }
-
-//Create - PACK - List
-      if ( getFieldCount( %client.packIndex ) )
-         %packList = %client.favorites[getField( %client.packIndex, 0 )];
-      else
-      {
-         %packList = "EMPTY";
-         %client.numFavs++;
-      }
-      for ( %y = 0; $InvPack[%y] !$= ""; %y++ )
-      {
-         %PInv = $NameToInv[$InvPack[%y]];
-         if ( ( $InvPack[%y] !$= %client.favorites[getField( %client.packIndex, 0 )]) &&
-         %armor.max[%PInv] && !($InvBanList[%cmt, %PInv]))
-            %packList = %packList TAB $Invpack[%y];
-      }
-
-//Create - Construction - List
-   if(%client.favorites[0] $= "Purebuild" || %client.favorites[0] $= "Tech") {
-	  if ( %noSniperRifle ) {
-		if ( getFieldCount( %client.depIndex ) )
-			%depList = %client.favorites[getField( %client.depIndex, 0 )];
+	//Create - MELEE - List
+	if(%client.favorites[0] !$= "Purebuild") {
+		if ( getFieldCount( %client.meleeIndex ) ) {
+			%meleeList = %client.favorites[getField( %client.meleeIndex, 0 )];
+		}
 		else {
-			%depList = "EMPTY";
+			%meleeList = "EMPTY";
 			%client.numFavs++;
 		}
-		for ( %y = 0; $InvDep[%y] !$= ""; %y++ ) {
-			%DInv = $NameToInv[$InvDep[%y]];
-			if ( ( $InvDep[%y] !$= %client.favorites[getField( %client.depIndex, 0 )]) &&
-			%armor.max[%DInv] && !($InvBanList[%cmt, %DInv]))
-				%depList = %depList TAB $InvDep[%y];
+		for ( %y = 0; $InvMelee[%y] !$= ""; %y++ ) {
+			%meleeInv = $NameToInv[$InvMelee[%y]];
+			if ( ( $InvMelee[%y] !$= %client.favorites[getField( %client.meleeIndex, 0 )]) && %armor.max[%meleeInv] && !($InvBanList[%cmt, %meleeInv])) {
+				%useCode = CanUseWeapon(%client, %meleeInv.Image);
+				if(%useCode == 1) {
+					%meleeList = %meleeList TAB $InvMelee[%y];
+				}
+			}
 		}
-	  }
-   }
+	}
 
-//Create - GRENADE - List
-   for ( %y = 0; $InvGrenade[%y] !$= ""; %y++ )
-   {
-      %notFound = true;
-      for(%i = 0; %i < getFieldCount( %client.grenadeIndex ); %i++)
-      {
-         %GInv = $NameToInv[$InvGrenade[%y]];
-         if ( ( $InvGrenade[%y] $= %client.favorites[getField( %client.grenadeIndex, %i )] ) || !%armor.max[%GInv] )
-         {
-            %notFound = false;
-            break;
-         }
-      }
-      if ( !($InvBanList[%cmt, %GInv]) )
-      {
-         if ( %notFound && %grenadeList $= "" )
-            %grenadeList = $InvGrenade[%y];
-         else if ( %notFound )
-            %grenadeList = %grenadeList TAB $InvGrenade[%y];
-      }
-   }
-//   CheckNadePrereqs(%client, %grenadeList);
+	//Create - PACK - List
+	if ( getFieldCount( %client.packIndex ) ) {
+		%packList = %client.favorites[getField( %client.packIndex, 0 )];
+	}
+	else {
+		%packList = "EMPTY";
+		%client.numFavs++;
+	}
+	for ( %y = 0; $InvPack[%y] !$= ""; %y++ ) {
+		%PInv = $NameToInv[$InvPack[%y]];
+		if ( ( $InvPack[%y] !$= %client.favorites[getField( %client.packIndex, 0 )]) && %armor.max[%PInv] && !($InvBanList[%cmt, %PInv])) {
+			%packList = %packList TAB $Invpack[%y];
+		}
+	}
 
-//Create - MINE - List
-   for ( %y = 0; $InvMine[%y] !$= "" ; %y++ )
-   {
-      %notFound = true;
-      %MInv = $NameToInv[$InvMine[%y]];
-      for ( %i = 0; %i < getFieldCount( %client.mineIndex ); %i++ )
-         if ( ( $InvMine[%y] $= %client.favorites[getField( %client.mineIndex, %i )] ) || !%armor.max[%MInv] )
-         {
-            %notFound = false;
-            break;
-         }
+	//Create - Construction - List
+	if(%client.favorites[0] $= "Purebuild" || %client.favorites[0] $= "Tech") {
+		if ( %noSniperRifle ) {
+			if ( getFieldCount( %client.depIndex ) ) {
+				%depList = %client.favorites[getField( %client.depIndex, 0 )];
+			}
+			else {
+				%depList = "EMPTY";
+				%client.numFavs++;
+			}
+			for ( %y = 0; $InvDep[%y] !$= ""; %y++ ) {
+				%DInv = $NameToInv[$InvDep[%y]];
+				if ( ( $InvDep[%y] !$= %client.favorites[getField( %client.depIndex, 0 )]) && %armor.max[%DInv] && !($InvBanList[%cmt, %DInv])) {
+					%depList = %depList TAB $InvDep[%y];
+				}
+			}
+		}
+	}
 
-      if ( !($InvBanList[%cmt, %MInv]) )
-      {
-         if ( %notFound && %mineList $= "" )
-            %mineList = $InvMine[%y];
-         else if ( %notFound )
-            %mineList = %mineList TAB $InvMine[%y];
-      }
-   }
+	//Create - GRENADE - List
+	for ( %y = 0; $InvGrenade[%y] !$= ""; %y++ ) {
+		%notFound = true;
+		for(%i = 0; %i < getFieldCount( %client.grenadeIndex ); %i++) {
+			%GInv = $NameToInv[$InvGrenade[%y]];
+			if ( ( $InvGrenade[%y] $= %client.favorites[getField( %client.grenadeIndex, %i )] ) || !%armor.max[%GInv] ) {
+				%notFound = false;
+				break;
+			}
+		}
+		if ( !($InvBanList[%cmt, %GInv]) ) {
+			if ( %notFound && %grenadeList $= "" ) {
+				%grenadeList = $InvGrenade[%y];
+			}
+			else if ( %notFound ) {
+				%grenadeList = %grenadeList TAB $InvGrenade[%y];
+			}
+		}
+	}
 
-//Send - ARMOR - List
-   %client.numFavsCount++;
-   messageClient( %client, 'SetLineHud', "", %tag, 0, "Armor:", %armorList, armor, %client.numFavsCount );
-   %lineCount = 1;
+	//Create - MINE - List
+	for ( %y = 0; $InvMine[%y] !$= "" ; %y++ ) {
+		%notFound = true;
+		%MInv = $NameToInv[$InvMine[%y]];
+		for ( %i = 0; %i < getFieldCount( %client.mineIndex ); %i++ ) {
+			if ( ( $InvMine[%y] $= %client.favorites[getField( %client.mineIndex, %i )] ) || !%armor.max[%MInv] ) {
+				%notFound = false;
+				break;
+			}
+		}
+		if ( !($InvBanList[%cmt, %MInv]) ) {
+			if ( %notFound && %mineList $= "" ) {
+				%mineList = $InvMine[%y];
+			}
+			else if ( %notFound ) {
+				%mineList = %mineList TAB $InvMine[%y];
+			}
+		}
+	}
 
-//Send - WEAPONS - List
-//   echo(%armor);
-   %toCount = %armor.MaxWeapons;
-   //if(%client.IsActivePerk("OverKill") == 1) {
-   //   %toCount++;
-   //}
-   for ( %x = 0; %x < %toCount; %x++ )
-   {
-      %client.numFavsCount++;
-      if ( %x < getFieldCount( %client.weaponIndex ) )
-      {
-         %list = %client.favorites[getField( %client.weaponIndex,%x )];
-         if ( %list $= Invalid )
-         {
-            %client.favorites[%client.numFavs] = "INVALID";
-            %client.weaponIndex = %client.weaponIndex TAB %client.numFavs;
-         }
-      }
-      else
-      {
-         %list = "EMPTY";
-         %client.favorites[%client.numFavs] = "EMPTY";
-         %client.weaponIndex = %client.weaponIndex TAB %client.numFavs;
-         %client.numFavs++;
-      }
-      if ( %list $= empty )
-         %list = %list TAB %weaponList;
-      else
-         %list = %list TAB %weaponList TAB "EMPTY";
-      messageClient( %client, 'SetLineHud', "", %tag, %x + %lineCount, "Weapon Slot " @ %x + 1 @ ": ", %list , weapon, %client.numFavsCount );
-   }
-   %lineCount = %lineCount + %toCount;
+	//Send - ARMOR - List
+	%client.numFavsCount++;
+	messageClient( %client, 'SetLineHud', "", %tag, 0, "Armor:", %armorList, armor, %client.numFavsCount );
+	%lineCount = 1;
 
-//Send - PISTOL - List
-   //if(%client.IsActivePerk("OverKill") == 0) {
-         %client.numFavsCount++;
-         if ( getField( %pistolList, 0 ) !$= empty && %noSniperRifle )
-            %pistolList = %pistolList TAB "EMPTY";
-         %pistolText = %pistolList;
-         %pistolOverFlow = "";
-         if ( strlen( %pistolList ) > 255 ) {
-            %pistolText = getSubStr( %pistolList, 0, 255 );
-            %pistolOverFlow = getSubStr( %pistolList, 255, 512 );
-         }
-         messageClient( %client, 'SetLineHud', "", %tag, %lineCount, "Pistol:", %pistolText, pistol, %client.numFavsCount, %pistolOverFlow );
-         %lineCount++;
-   //}
-   //else {
+	//Send - WEAPONS - List
+	//   echo(%armor);
+	%toCount = %armor.MaxWeapons;
+	//if(%client.IsActivePerk("OverKill") == 1) {
+	//   %toCount++;
+	//}
+	for ( %x = 0; %x < %toCount; %x++ ) {
+		%client.numFavsCount++;
+		if ( %x < getFieldCount( %client.weaponIndex ) ) {
+			%list = %client.favorites[getField( %client.weaponIndex,%x )];
+			if ( %list $= Invalid ) {
+				%client.favorites[%client.numFavs] = "INVALID";
+				%client.weaponIndex = %client.weaponIndex TAB %client.numFavs;
+			}
+		}
+		else {
+			%list = "EMPTY";
+			%client.favorites[%client.numFavs] = "EMPTY";
+			%client.weaponIndex = %client.weaponIndex TAB %client.numFavs;
+			%client.numFavs++;
+		}
+		if ( %list $= empty ) {
+			%list = %list TAB %weaponList;
+		}
+		else {
+			%list = %list TAB %weaponList TAB "EMPTY";
+		}
+		messageClient( %client, 'SetLineHud', "", %tag, %x + %lineCount, "Weapon Slot " @ %x + 1 @ ": ", %list, weapon, %client.numFavsCount );
+	}
+	%lineCount = %lineCount + %toCount;
 
-   //}
-   if(%client.favorites[0] !$= "Purebuild") {
-      %client.numFavsCount++;
-      if ( getField( %meleeList, 0 ) !$= empty && %noSniperRifle )
-         %meleeList = %meleeList TAB "EMPTY";
-      %meleeText = %meleeList;
-      %meleeOverFlow = "";
-      if ( strlen( %meleeList ) > 255 ) {
-         %meleeText = getSubStr( %meleeList, 0, 255 );
-         %meleeOverFlow = getSubStr( %meleeList, 255, 512 );
-      }
-      messageClient( %client, 'SetLineHud', "", %tag, %lineCount, "Melee:", %meleeText, melee, %client.numFavsCount, %meleeOverFlow );
-      %lineCount++;
-   }
+	//Send - PISTOL - List
+	//if(%client.IsActivePerk("OverKill") == 0) {
+	%client.numFavsCount++;
+	if ( getField( %pistolList, 0 ) !$= empty && %noSniperRifle ) {
+		%pistolList = %pistolList TAB "EMPTY";
+	}
+	%pistolText = %pistolList;
+	%pistolOverFlow = "";
+	if ( strlen( %pistolList ) > 255 ) {
+		%pistolText = getSubStr( %pistolList, 0, 255 );
+		%pistolOverFlow = getSubStr( %pistolList, 255, 512 );
+	}
+	messageClient( %client, 'SetLineHud', "", %tag, %lineCount, "Sidearm: ", %pistolText, pistol, %client.numFavsCount, %pistolOverFlow );
+	%lineCount++;
+	//}
+	//else {
 
-//Send - PACK - List
-   %client.numFavsCount++;
-   if ( getField( %packList, 0 ) !$= empty && %noSniperRifle )
-      %packList = %packList TAB "EMPTY";
-   %packText = %packList;
-   %packOverFlow = "";
-   if ( strlen( %packList ) > 255 )
-    {
- 	  %packText = getSubStr( %packList, 0, 255 );
- 	  %packOverFlow = getSubStr( %packList, 255, 512 );
-    }
-   messageClient( %client, 'SetLineHud', "", %tag, %lineCount, "Pack:", %packText, pack, %client.numFavsCount, %packOverFlow );
-   %lineCount++;
+	//}
+	if(%client.favorites[0] !$= "Purebuild") {
+		%client.numFavsCount++;
+		if ( getField( %meleeList, 0 ) !$= empty && %noSniperRifle ) {
+			%meleeList = %meleeList TAB "EMPTY";
+		}
+		%meleeText = %meleeList;
+		%meleeOverFlow = "";
+		if ( strlen( %meleeList ) > 255 ) {
+			%meleeText = getSubStr( %meleeList, 0, 255 );
+			%meleeOverFlow = getSubStr( %meleeList, 255, 512 );
+		}
+		messageClient( %client, 'SetLineHud', "", %tag, %lineCount, "Melee: ", %meleeText, melee, %client.numFavsCount, %meleeOverFlow );
+		%lineCount++;
+	}
 
-//Send - Construction - List
-   if(%client.favorites[0] $= "Purebuild" || %client.favorites[0] $= "Tech") {
-	  %client.numFavsCount++;
-	  if ( getField( %depList, 0 ) !$= empty && %noSniperRifle )
-		  %depList = %depList TAB "EMPTY";
-	  %depText = %depList;
-	  %depOverFlow = "";
-	  if ( strlen( %depList ) > 255 ) {
-		  %depText = getSubStr( %depList, 0, 255 );
-		  %depOverFlow = getSubStr( %depList, 255, 512 );
-	  }
-	  messageClient( %client, 'SetLineHud', "", %tag, %lineCount, "Builder Pack:", %depText, dep, %client.numFavsCount, %depOverFlow );
-	  %lineCount++;
-   }
+	//Send - PACK - List
+	%client.numFavsCount++;
+	if ( getField( %packList, 0 ) !$= empty && %noSniperRifle ) {
+		%packList = %packList TAB "EMPTY";
+	}
+	%packText = %packList;
+	%packOverFlow = "";
+	if ( strlen( %packList ) > 255 ) {
+		%packText = getSubStr( %packList, 0, 255 );
+		%packOverFlow = getSubStr( %packList, 255, 512 );
+	}
+	messageClient( %client, 'SetLineHud', "", %tag, %lineCount, "Pack: ", %packText, pack, %client.numFavsCount, %packOverFlow );
+	%lineCount++;
 
-   for( %x = 0; %x < %armor.maxGrenades; %x++ )
-   {
-      %client.numFavsCount++;
-      if ( %x < getFieldCount( %client.grenadeIndex ) )
-      {
-         %list = %client.favorites[getField( %client.grenadeIndex, %x )];
-         if (%list $= Invalid)
-         {
-            %client.favorites[%client.numFavs] = "INVALID";
-            %client.grenadeIndex = %client.grenadeIndex TAB %client.numFavs;
-         }
-      }
-      else
-      {
-         %list = "EMPTY";
-         %client.favorites[%client.numFavs] = "EMPTY";
-         %client.grenadeIndex = %client.grenadeIndex TAB %client.numFavs;
-         %client.numFavs++;
-      }
+	//Send - Construction - List
+	if(%client.favorites[0] $= "Purebuild" || %client.favorites[0] $= "Tech") {
+		%client.numFavsCount++;
+		if ( getField( %depList, 0 ) !$= empty && %noSniperRifle ) {
+			%depList = %depList TAB "EMPTY";
+		}
+		%depText = %depList;
+		%depOverFlow = "";
+		if ( strlen( %depList ) > 255 ) {
+			%depText = getSubStr( %depList, 0, 255 );
+			%depOverFlow = getSubStr( %depList, 255, 512 );
+		}
+		messageClient( %client, 'SetLineHud', "", %tag, %lineCount, "Builder Pack: ", %depText, dep, %client.numFavsCount, %depOverFlow );
+		%lineCount++;
+	}
 
-      if ( %list $= empty )
-         %list = %list TAB %grenadeList;
-      else
-         %list = %list TAB %grenadeList TAB "EMPTY";
+	//Send - GRENADE - List
+	for( %x = 0; %x < %armor.maxGrenades; %x++ ) {
+		%client.numFavsCount++;
+		if ( %x < getFieldCount( %client.grenadeIndex ) ) {
+			%list = %client.favorites[getField( %client.grenadeIndex, %x )];
+			if (%list $= Invalid) {
+				%client.favorites[%client.numFavs] = "INVALID";
+				%client.grenadeIndex = %client.grenadeIndex TAB %client.numFavs;
+			}
+		}
+		else {
+			%list = "EMPTY";
+			%client.favorites[%client.numFavs] = "EMPTY";
+			%client.grenadeIndex = %client.grenadeIndex TAB %client.numFavs;
+			%client.numFavs++;
+		}
 
-      messageClient( %client, 'SetLineHud', "", %tag, %x + %lineCount, "Grenade:", %list, grenade, %client.numFavsCount );
-   }
-   %lineCount = %lineCount + %armor.maxGrenades;
+		if ( %list $= empty ) {
+			%list = %list TAB %grenadeList;
+		}
+		else {
+			%list = %list TAB %grenadeList TAB "EMPTY";
+		}
+		messageClient( %client, 'SetLineHud', "", %tag, %x + %lineCount, "Grenade: ", %list, grenade, %client.numFavsCount );
+	}
+	%lineCount = %lineCount + %armor.maxGrenades;
 
-   for ( %x = 0; %x < %armor.maxMines; %x++ )
-   {
-      %client.numFavsCount++;
-      if ( %x < getFieldCount( %client.mineIndex ) )
-      {
-         %list = %client.favorites[getField( %client.mineIndex, %x )];
-         if ( %list $= Invalid )
-         {
-            %client.favorites[%client.numFavs] = "INVALID";
-            %client.mineIndex = %client.mineIndex TAB %client.numFavs;
-         }
-      }
-      else
-      {
-         %list = "EMPTY";
-         %client.favorites[%client.numFavs] = "EMPTY";
-         %client.mineIndex = %client.mineIndex TAB %client.numFavs;
-         %client.numFavs++;
-      }
+	//Send - MINE - List
+	for ( %x = 0; %x < %armor.maxMines; %x++ ) {
+		%client.numFavsCount++;
+		if ( %x < getFieldCount( %client.mineIndex ) ) {
+			%list = %client.favorites[getField( %client.mineIndex, %x )];
+			if ( %list $= Invalid ) {
+				%client.favorites[%client.numFavs] = "INVALID";
+				%client.mineIndex = %client.mineIndex TAB %client.numFavs;
+			}
+		}
+		else {
+			%list = "EMPTY";
+			%client.favorites[%client.numFavs] = "EMPTY";
+			%client.mineIndex = %client.mineIndex TAB %client.numFavs;
+			%client.numFavs++;
+		}
 
-      if ( %list !$= Invalid )
-      {
-         if ( %list $= empty )
-            %list = %list TAB %mineList;
-         else if ( %mineList !$= "" )
-            %list = %list TAB %mineList TAB "EMPTY";
-         else
-            %list = %list TAB "EMPTY";
-      }
+		if ( %list !$= Invalid ) {
+			if ( %list $= empty ) {
+				%list = %list TAB %mineList;
+			}
+			else if ( %mineList !$= "" ) {
+				%list = %list TAB %mineList TAB "EMPTY";
+			}
+			else {
+				%list = %list TAB "EMPTY";
+			}
+		}
 
-      messageClient( %client, 'SetLineHud', "", %tag, %x + %lineCount, "Mine:", %list, mine, %client.numFavsCount );
-   }
+		messageClient( %client, 'SetLineHud', "", %tag, %x + %lineCount, "Mine: ", %list, mine, %client.numFavsCount );
+	}
 
-   if ( %setLastNum )
-      %client.lastNumFavs = %client.numFavs;
+	if ( %setLastNum ) {
+		%client.lastNumFavs = %client.numFavs;
+	}
 }
 
 //------------------------------------------------------------------------------

@@ -1,87 +1,136 @@
 //
-function CanUseRankedWeapon(%WImg, %client) {
-   if(%client.isHarb || %client.isAIControlled()) {
-      return 1;
-   }
-   //
-   if(!$TWM2::AllowSnipers) {
-      if(strstr(%WImg.getName(), "SniperRifle") != -1) {
-         return 0;
-      }
-   }
-   //
-   %clientController = %client.TWM2Core;
-   %WImg2 = %WImg.getName();
-   if($Host::RankSystem == 0) {
-      return 1;
-   }
-   else {
-      //PRESTIGE CHECKS (added 2.4)
-      if(%WImg2.PrestigeRequire $= "") {
-         if(%WImg2.RankRequire $= "") {
-            return 1;
-         }
-         else {
-            %xpHas = getCurrentEXP(%client);
-            %xpNeed = $Ranks::MinPoints[%WImg2.RankRequire];
-            if(%xpNeed > %xpHas || (isSet(%WImg2.RankRequire) ? %clientController.rankNumber < %WImg2.RankRequire : false )) {
-               return 0;
-            }
-            else {
-               return 1;
-            }
-         }
-      }
-      else {
-         %prestige = %clientController.officer;
-         %prestigeNeed = %WImg2.PrestigeRequire;
-         if(%prestige < %prestigeNeed) {
-            return 2; //new case check
-         }
-         else {
-            if(%WImg2.RankRequire $= "") {
-               return 1;
-            }
-            else {
-               %xpHas = getCurrentEXP(%client);
-               %xpNeed = $Ranks::MinPoints[%WImg2.RankRequire];
-               if(%xpNeed > %xpHas || (isSet(%WImg2.RankRequire) ? %clientController.rankNumber < %WImg2.RankRequire: false )) {
-                  return 0;
-               }
-               else {
-                  return 1;
-               }
-            }
-         }
-      }
-   }
+function CanUseWeapon(%WImg, %client) {
+	if(%client.isHarb || %client.isAIControlled()) {
+		return 1;
+	}
+	//
+	if(!$TWM2::AllowSnipers) {
+		if(strstr(%WImg.getName(), "SniperRifle") != -1) {
+			return 0;
+		}
+	}
+	%clientController = %client.TWM2Core;
+	%WImg2 = %WImg.getName();   
+	//Medal Tests
+	if(%WImg2.MedalRequire) {
+		if(!%client.hasMedal(%WImg2.MedalRequire)) {
+			//Deny access by medal.
+			return 3;
+		}
+	}
+	//Challenge Tests
+	if(%WImg2.ChallengeRequire !$= "") {
+		if(!%client.CheckNWChallengeCompletion(%WImg2.ChallengeRequire)) {
+			//Deny access by challenge.
+			return 4;
+		}
+	}
+	//Rank Tests
+	if($Host::RankSystem == 0) {
+		return 1;
+	}
+	else {
+		//PRESTIGE CHECKS (added 2.4)
+		if(%WImg2.PrestigeRequire $= "") {
+			if(%WImg2.RankRequire $= "") {
+				return 1;
+			}
+			else {
+				%xpHas = getCurrentEXP(%client);
+				%xpNeed = $Ranks::MinPoints[%WImg2.RankRequire];
+				if(%xpNeed > %xpHas || (isSet(%WImg2.RankRequire) ? %clientController.rankNumber < %WImg2.RankRequire : false )) {
+					return 0;
+				}
+				else {
+					return 1;
+				}
+			}
+		}
+		else {
+			%prestige = %clientController.officer;
+			%prestigeNeed = %WImg2.PrestigeRequire;
+			if(%prestige < %prestigeNeed) {
+				return 2; //new case check
+			}
+			else {
+				if(%WImg2.RankRequire $= "") {
+					return 1;
+				}
+				else {
+					%xpHas = getCurrentEXP(%client);
+					%xpNeed = $Ranks::MinPoints[%WImg2.RankRequire];
+					if(%xpNeed > %xpHas || (isSet(%WImg2.RankRequire) ? %clientController.rankNumber < %WImg2.RankRequire: false )) {
+						return 0;
+					}
+					else {
+						return 1;
+					}
+				}
+			}
+		}
+	}
 }
 
-function PerformWeaponRankCheck(%WImg, %Plyr, %slot) {
-   if(%Plyr.isZombie || %Plyr.isSoldier || %Plyr.client.isAiControlled()) {
-      return; //Wraith AI
-   }
-   %clientController = %plyr.client.TWM2Core;
-   %xpHas = getCurrentEXP(%Plyr.client);
-   %xpNeed = $Ranks::MinPoints[%WImg.RankRequire];
-   %prestigeNeed = %WImg.PrestigeRequire;
-   if(CanUseRankedWeapon(%WImg, %Plyr.client) == 2) {
-      BottomPrint(%Plyr.client, "Officer Level Required \nYou need Officer Level: "@%prestigeNeed@" to use this weapon", 3, 3);
-      %Plyr.use(%WImg.Item);
-      %Plyr.throwweapon(1);
-      %Plyr.throwweapon(0);
-      return;
-   }
-   else if(CanUseRankedWeapon(%WImg, %Plyr.client) == 0) {
-      BottomPrint(%Plyr.client, "You cannot use this weapon, XP too low \nYou need: "@%xpNeed - %xpHas@" More XP to use this weapon", 3, 3);
-      %Plyr.use(%WImg.Item);
-      %Plyr.throwweapon(1);
-      %Plyr.throwweapon(0);
-      return;
-   }
-   else {
-      //lalala, we can use it!
-   }
+function PerformWeaponMountChecks(%WImg, %Plyr, %slot) {
+	if(%Plyr.isZombie || %Plyr.isSoldier || %Plyr.client.isAiControlled()) {
+		return; //Wraith AI
+	}
+	%client = %plyr.client;
+	%clientController = %client.TWM2Core;
+	//Perform Rank Checks
+	%xpHas = getCurrentEXP(%Plyr.client);
+	%xpNeed = $Ranks::MinPoints[%WImg.RankRequire];
+	%prestigeNeed = %WImg.PrestigeRequire;
+	
+	%hideReason = %WImg.hideExistence;
+	
+	%weaponTestReturnCode = CanUseWeapon(%WImg, %Plyr.client);
+	if(%weaponTestReturnCode != 1) {
+		%Plyr.use(%WImg.Item);
+		%Plyr.throwweapon(1);
+		%Plyr.throwweapon(0);
+		switch(%weaponTestReturnCode) {
+			//Return Code 0: XP Too Low
+			case 0:
+				if(%hideReason == true) {
+					BottomPrint(%Plyr.client, "Weapon Access Denied\nYou cannot use this weapon\nFurther information is classified", 3, 3);		
+				}
+				else {
+					BottomPrint(%Plyr.client, "Weapon Access Denied\nRequired Rank\nYou need: "@%xpNeed - %xpHas@" More XP to use this weapon", 3, 3);			
+				}
+				break;
+			
+			//Return Code 2: Officer Level Too Low
+			case 2:
+				if(%hideReason == true) {
+					BottomPrint(%Plyr.client, "Weapon Access Denied\nYou cannot use this weapon\nFurther information is classified", 3, 3);		
+				}
+				else {			
+					BottomPrint(%Plyr.client, "Weapon Access Denied\nOfficer Level Required\nYou need Officer Level: "@%prestigeNeed@" to use this weapon", 3, 3);
+				}
+				break;
+			
+			//Return Code 3: Player does not have required medal
+			case 3:
+				if(%hideReason == true) {
+					BottomPrint(%Plyr.client, "Weapon Access Denied\nYou cannot use this weapon\nFurther information is classified", 3, 3);		
+				}
+				else {			
+					BottomPrint(%Plyr.client, "Weapon Access Denied\nMedal Required\nYou do not own the '"@$MedalName[%WImg.MedalRequire]@"' Medal", 3, 3);
+				}
+				break;			
+			
+			//Return Code 4: Player does not have required challenge
+			case 4:
+				if(%hideReason == true) {
+					BottomPrint(%Plyr.client, "Weapon Access Denied\nYou cannot use this weapon\nFurther information is classified", 3, 3);		
+				}
+				else {			
+					BottomPrint(%Plyr.client, "Weapon Access Denied\nChallenge Required\nYou do not own the '"@getField($Challenge::Info[%WImg.ChallengeRequire], 0)@"' Medal", 3, 3);
+				}
+				break;
+		}
+	}
 }
 
 function AttemptReload(%WImg, %Plyr, %slot) {

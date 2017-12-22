@@ -28,7 +28,7 @@ datablock ShapeBaseImageData(NapalmImage) {
 	projectileType = LinearProjectile;
 
 	RankRequire = $TWM2::RankRequire["NapalmLauncher"];
-	MedalRequire = 1;
+	MedalRequire = 27;
 
 	//ClipStuff
 	ClipName = "NapalmClip";

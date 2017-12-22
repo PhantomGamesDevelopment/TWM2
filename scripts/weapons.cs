@@ -384,13 +384,7 @@ function WeaponImage::onMount(%this,%obj,%slot) {
       return;
    }
 
-   if(!DoMedalCheck(%obj.client, %this.getName()) && !%obj.client.isHarb) {
-      BottomPrint(%obj.client, "You cannot use this weapon, Medal Required.", 3, 3);
-      %obj.throwweapon(1);
-      %obj.throwweapon(0);
-   }
-
-   PerformWeaponRankCheck(%this, %obj, %slot);
+   PerformWeaponMountChecks(%this, %obj, %slot);
    PerformUpgradeCheck(%this.getName(), %obj);
 
    //messageClient(%obj.client, 'MsgWeaponMount', "", %this, %obj, %slot);

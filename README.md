@@ -129,6 +129,9 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 * General Enhancements
   * Centralized some of the datablocks that were shared across the mod to allow for easier access / modification
   * Centralized the demon lord's missile seeking logic that was used across multiple zombies & bosses to allow for easier access and editing
+  * Streamlined all weapon rank, medal checks into one single function
+    * Added the capability to restrict via challenge as well
+	* Re-did the inventory hud logic to be much cleaner and readable  
   * Modified the vote logic in admin.cs to clean up a ton of redundant if/else paths
   * Re-did the player collision logic in player.cs to make things a whole lot easier to modify in the future
   * Did a pass through all of the weapon files, cleaning the code up and making each unique weapon have its own damage type.
@@ -139,6 +142,7 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
   * All 'Boss' level enemies will now have gold text in their name.
   * The Helljump 'Oh Lordy' modifier has been changed to 'Reduces the cooldown time of the Zombie Lord's Photon Cannon by 50%'.	
   * The RSA Laser Rifle has been renamed to the 'UR-22 Laser Rifle'
+  * The Pistol Weapon Slot is now called the Sidearm Slot
 * General Bug Fixes
   * Addressed the issue when gaining more than 1 million EXP that would result in your total EXP being reset by the difference between 1 million exp and your current exp.
   * Fixed the bug in which picking up weapon clips with an empty weapon would not automatically trigger weapon reload on that weapon.

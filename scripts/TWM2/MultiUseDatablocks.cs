@@ -804,6 +804,48 @@ datablock TracerProjectileData(SniperZombieAcidShot) {
 	emap = true;
 };
 
+datablock TracerProjectileData(SniperZombieAcidSidearmShot) {
+	doDynamicClientHits = true;
+
+	projectileShapeName = "";
+	directDamage        = 0.0;
+	directDamageType    = $DamageType::ZAcid;
+	hasDamageRadius     = true;
+	indirectDamage      = 0.06;
+	damageRadius        = 2.0;
+	kickBackStrength    = 0.0;
+	radiusDamageType    = $DamageType::ZAcid;
+	sound          	    = BlasterProjectileSound;
+	explosion           = ZAcidBallExplosion;
+
+	ImageSource         = "AcidCannonImage";
+
+	dryVelocity       = 100.0;
+	wetVelocity       = 100.0;
+	velInheritFactor  = 1.0;
+	fizzleTimeMS      = 400;
+	lifetimeMS        = 500;
+	explodeOnDeath    = false;
+	reflectOnWaterImpactAngle = 0.0;
+	explodeOnWaterImpact      = true;
+	deflectionOnWaterImpact   = 0.0;
+	fizzleUnderwaterMS        = -1;
+
+	activateDelayMS = 100;
+
+	tracerLength    = 5;
+	tracerAlpha     = false;
+	tracerMinPixels = 3;
+	tracerColor     = "0 1 0 1";
+	tracerTex[0]  	 = "special/landSpikeBolt";
+	tracerTex[1]  	 = "special/landSpikeBoltCross";
+	tracerWidth     = 0.3;
+	crossSize       = 0.79;
+	crossViewAng    = 0.990;
+	renderCross     = true;
+	emap = true;
+};
+
 datablock TracerProjectileData(FlareguideSniperZombieAcidShot) {
 	doDynamicClientHits = true;
 
