@@ -113,7 +113,7 @@ function UpdateClientRank(%client) {
 	%newMillions = %scriptController.millionxp + %millions;
 	
 	%scriptController.millionxp = %newMillions;
-	%scriptController.xp += %newNonMillions;
+	%scriptController.xp = %newNonMillions;
 	//End
 	checkForXPAwards(%client);
 	%j = $Rank::RankCount;

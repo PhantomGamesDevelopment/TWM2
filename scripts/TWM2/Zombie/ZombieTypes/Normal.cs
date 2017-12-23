@@ -111,7 +111,7 @@ function ZombieArmor::Move(%datablock, %zombie) {
 	}
 	else if(%zombie.hastarget == 1) {
 		%zombie.hastarget = 0;
-		%zombie.zombieRmove = schedule(%zombie.updateTimeFrequency, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
+		%zombie.zombieRmove = schedule(500, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
 	}
-	%zombie.moveloop = %datablock.schedule(%zombie.updateTimeFrequency, "Move", %zombie);
+	%zombie.moveloop = %datablock.schedule(500, "Move", %zombie);
 }

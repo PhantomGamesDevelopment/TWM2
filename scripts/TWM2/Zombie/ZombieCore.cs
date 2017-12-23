@@ -36,14 +36,14 @@ $Zombie::TypeInfectedMultiplier[1] = 1.5;
 
 //$Zombie::BaseSpeed: The default speed setting on zombies, any zombie that does not have a TypeSpeed var. set will default to the BaseSpeed
 // Be mindful of the $Zombie::SpeedUpdateTime[#] value when tuning, these two numbers augment closely so you need to be careful on tweaking
-$Zombie::BaseSpeed = 150;
+$Zombie::BaseSpeed = 750;
 //$Zombie::TypeSpeed[#]: The speed of a specific zombie type instance, overrides BaseSpeed for that specific type
-$Zombie::TypeSpeed[2] = 300;
+$Zombie::TypeSpeed[2] = 1500;
 $Zombie::TypeSpeed[3] = 4000;
-$Zombie::TypeSpeed[4] = 240;
+$Zombie::TypeSpeed[4] = 1200;
 $Zombie::TypeSpeed[5] = 1500;
 $Zombie::TypeSpeed[6] = 1200;
-$Zombie::TypeSpeed[11] = 240;
+$Zombie::TypeSpeed[11] = 1200;
 
 //$Zombie::BaseJumpCooldown: The time zombies must elapse before jumping / lunging
 $Zombie::BaseJumpCooldown = 1500;
@@ -52,13 +52,6 @@ $Zombie::BaseJumpCooldown = 1500;
 $Zombie::SpeedMultiplier[2] = 0.6;
 $Zombie::SpeedMultiplier[3] = 0.8;
 $Zombie::SpeedMultiplier[4] = 0.75;
-
-//$Zombie::BaseSpeedUpdateTime: How long (in ms) between each zombie update. The lower the number, the smoother the movement, but the more processing needed
-$Zombie::BaseSpeedUpdateTime = 100;
-//$Zombie::SpeedUpdateTime[#]: An override to the base update type, use for specific types that need slower or faster processing between AI steps
-$Zombie::SpeedUpdateTime[3] = 500;
-$Zombie::SpeedUpdateTime[5] = 500;
-$Zombie::SpeedUpdateTime[6] = 500;
 
 //$Zombie::LungeDistance: How far (m) a zombie must be to lunge at a target
 $Zombie::LungeDistance = 10;
@@ -410,7 +403,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 				return;
 			}
 			//
-			if(!isSet(%arg2)) {
+			if(%arg2 $= "") {
 				%tPos = TWM2Lib_MainControl("RMPG");
 			}
 			else {
@@ -418,8 +411,8 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			}
 			//
 			%vec = vectorNormalize(vectorSub(%tPos, %arg1.getWorldBoxCenter()));
-			%vx = getWord(%vector, 0);
-			%vy = getWord(%vector, 1);
+			%vx = getWord(%vec, 0);
+			%vy = getWord(%vec, 1);
 			%nvx = %vy;
 			%nvy = (%vx * -1);
 			%lookVector = %nvx @ " " @ %nvy @ " " @ 0;
@@ -693,10 +686,10 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			}
 			//Define Speed Parameters
 			%zombie.speed = TWM2Lib_Zombie_Core("defineZSpeed", %spawnType);		
-			if(!isSet($Zombie::SpeedUpdateTime[%spawnType])) {
-				%zombie.updateTimeFrequency = $Zombie::BaseSpeedUpdateTime;
-			}
-			%zombie.updateTimeFrequency = $Zombie::SpeedUpdateTime[%spawnType];			
+			//if(!isSet($Zombie::SpeedUpdateTime[%spawnType])) {
+			//	%zombie.updateTimeFrequency = $Zombie::BaseSpeedUpdateTime;
+			//}
+			//%zombie.updateTimeFrequency = $Zombie::SpeedUpdateTime[%spawnType];			
 			//Define Damage Parameters
 			if(!isSet($Zombie::InfectOnCollide[%spawnType])) {
 				%zombie.damage_infectOnTouch = true;

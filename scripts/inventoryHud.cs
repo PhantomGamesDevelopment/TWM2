@@ -706,13 +706,13 @@ function InventoryScreen::updateHud( %this, %client, %tag ) {
 		}
 		if ( !($InvBanList[%cmt, %WInv]) ) {
 			if ( %notFound && %weaponList $= "" )  {
-				%useCode = CanUseWeapon(%client, %WInv.Image);
+				%useCode = CanUseWeapon(%WInv.Image, %client);
 				if(%useCode == 1) {
 					%weaponList = $InvWeapon[%y];
 				}
 			}
 			else if ( %notFound ) {
-				%useCode = CanUseWeapon(%client, %WInv.Image);
+				%useCode = CanUseWeapon(%WInv.Image, %client);
 				if(%useCode == 1) {
 					%weaponList = %weaponList TAB $InvWeapon[%y];
 				}
@@ -732,7 +732,7 @@ function InventoryScreen::updateHud( %this, %client, %tag ) {
 	for ( %y = 0; $InvPistol[%y] !$= ""; %y++ ) {
 		%PistolInv = $NameToInv[$InvPistol[%y]];
 		if ( ( $InvPistol[%y] !$= %client.favorites[getField( %client.pistolIndex, 0 )]) && !($InvBanList[%cmt, %PistolInv])) {
-			%useCode = CanUseWeapon(%client, %PistolInv.Image);
+			%useCode = CanUseWeapon(%PistolInv.Image, %client);
 			if(%useCode == 1) {
 				%pistolList = %pistolList TAB $InvPistol[%y];
 			}
@@ -751,7 +751,7 @@ function InventoryScreen::updateHud( %this, %client, %tag ) {
 		for ( %y = 0; $InvMelee[%y] !$= ""; %y++ ) {
 			%meleeInv = $NameToInv[$InvMelee[%y]];
 			if ( ( $InvMelee[%y] !$= %client.favorites[getField( %client.meleeIndex, 0 )]) && %armor.max[%meleeInv] && !($InvBanList[%cmt, %meleeInv])) {
-				%useCode = CanUseWeapon(%client, %meleeInv.Image);
+				%useCode = CanUseWeapon(%meleeInv.Image, %client);
 				if(%useCode == 1) {
 					%meleeList = %meleeList TAB $InvMelee[%y];
 				}
