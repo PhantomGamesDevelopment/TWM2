@@ -49,7 +49,7 @@ $Zombie::TypeSpeed[11] = 1200;
 $Zombie::BaseJumpCooldown = 1500;
 
 //$Zombie::SpeedMultiplier[#]: An additional multiplier to be applied to the zombie's base speed when calculating the impulse, used to fine tune speed values
-$Zombie::SpeedMultiplier[2] = 0.6;
+$Zombie::SpeedMultiplier[2] = 0.95;
 $Zombie::SpeedMultiplier[3] = 0.8;
 $Zombie::SpeedMultiplier[4] = 0.75;
 

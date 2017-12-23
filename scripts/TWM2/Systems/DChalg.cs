@@ -101,30 +101,36 @@ function ChallengeDownload::onLine(%this, %line) {
 //////////////////////////////////////////////////
 
 function doChallengeKillRecording(%sourceObject, %targetObject) {
-   if(%sourceObject.team == %targetObject.team) {
-      //Teamkill = no recorded challenge :)
-      return;
-   }
-   //killed a player?
-   if(isClientControlledPlayer(%targetObject)) {
-      //echo("Kill: "@%sourceObject.client@"/"@%targetObject.lastDamagedImage@"");
-      recordAction(%sourceObject.client, "PKC", "single\t"@%targetObject.lastDamagedImage@"\t1");
-      recordAction(%sourceObject.client, "PKC", "total\t1");
-   }
-   else {
-      //killed a zombie
-      %zType = %targetObject.type;
-      if(!isSet(%zType)) {
-         //illegal target for challenge set, end here
-         return;
-      }
-      recordAction(%sourceObject.client, "ZKC", "total\t1");
-      recordAction(%sourceObject.client, "ZKC", "single\t"@%zType@"\t1");
-      recordAction(%sourceObject.client, "ZKC", "single\t"@%targetObject.lastDamagedImage@"\t"@%zType@"\t1");
-   }
+	if(%sourceObject $= "" || %targetObject $= "") {
+		return;
+	}
+	if(%sourceObject.team == %targetObject.team) {
+		//Teamkill = no recorded challenge :)
+		return;
+	}
+	//killed a player?
+	if(isClientControlledPlayer(%targetObject)) {
+		//echo("Kill: "@%sourceObject.client@"/"@%targetObject.lastDamagedImage@"");
+		recordAction(%sourceObject.client, "PKC", "single\t"@%targetObject.lastDamagedImage@"\t1");
+		recordAction(%sourceObject.client, "PKC", "total\t1");
+	}
+	else {
+		//killed a zombie
+		%zType = %targetObject.type;
+		if(!isSet(%zType)) {
+			//illegal target for challenge set, end here
+			return;
+		}
+		recordAction(%sourceObject.client, "ZKC", "total\t1");
+		recordAction(%sourceObject.client, "ZKC", "single\t"@%zType@"\t1");
+		recordAction(%sourceObject.client, "ZKC", "single\t"@%targetObject.lastDamagedImage@"\t"@%zType@"\t1");
+	}
 }
 
 function recordAction(%client, %action, %variables) {
+	if(!%client || %client $= "") {
+		return;
+	}
 	%ymd = formattimestring("yymmdd");
 	%so = %client.TWM2Controller;
 	checkDateOnChallenge(%client);
@@ -236,6 +242,9 @@ function allCheckCompletion(%client) {
 }
 
 function checkCompletion(%client, %cID) {
+	if(!%client || %client $= "") {
+		return;
+	}	
 	%challenge = $Challenges::Challenge[%cID];
 	%cType = trim(getField(%challenge, 0));
 	%cCond = getsubstr(getField(%challenge, 3), 1, strlen(getField(%challenge, 3)));

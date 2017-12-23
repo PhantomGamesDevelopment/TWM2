@@ -59,15 +59,32 @@ function RavagerZombieArmor::AI(%datablock, %zombie) {
 	if(!isObject(%zombie) || %zombie.getState() $= "dead") {
 		return;
 	}
-	if(isSet(%zombie.targetedPlayer)) {
+	if(%zombie.targetedPlayer !$= "") {
 		if(!isObject(%zombie.targetedPlayer) || %zombie.targetedPlayer.getState() $= "dead") {
 			%zombie.ambushing = 0;
 			%zombie.fullAttack = 0;
 			%zombie.ambushPosition = 0;
-			%zombie.targetedPlayer = 0;
+			%zombie.targetedPlayer = "";
 			%zombie.hasTarget = 0;
 		}
 	}	
+	else {
+		%targetParams = TWM2Lib_Zombie_Core("lookForTarget", %zombie);
+		%target = getWord(%targetParams, 0);
+		%distance = getWord(%targetParams, 1);
+		if(isObject(%target.player)) {
+			if(%distance <= $zombie::detectDist) {
+				%zombie.hasTarget = 1;
+				%zombie.targetedPlayer = %target.player;
+			}
+		}
+		else {
+			//No target, random movement.
+			%zombie.zombieRmove = schedule(500, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
+			%zombie.setActionThread("ski", true);		
+		}
+	}
+	//
 	if(%zombie.ambushing) {
 		//We're currently in an ambush maneuver, continue moving to position
 		if(vectorDist(%zombie.getPosition(), %zombie.ambushPosition) < 10) {
@@ -78,31 +95,37 @@ function RavagerZombieArmor::AI(%datablock, %zombie) {
 		}
 		else {
 			//If the target is near us, break off the ambush and go in for the kill...
-			%distanceToTarget = vectorDist(%zombie.getPosition(), %zombie.targetedPlayer.getPosition());
-			if(%distanceToTarget < 20) {
+			if(!isObject(%zombie.targetedPlayer)) {
+				//Target is dead... Look for a new one.
+				%zombie.targetedPlayer = "";
+				%zombie.hasTarget = 0;
 				%zombie.ambushing = 0;
-				%zombie.fullAttack = 1;
-				%zombie.ambushPosition = 0;
+				%zombie.fullAttack = 0;
+				%zombie.ambushPosition = 0;				
 			}
-			//Otherwise, keep moving...
-			%datablock.move(%zombie);
+			else {
+				%distanceToTarget = vectorDist(%zombie.getPosition(), %zombie.targetedPlayer.getPosition());
+				if(%distanceToTarget < 20) {
+					%zombie.ambushing = 0;
+					%zombie.fullAttack = 1;
+					%zombie.ambushPosition = 0;
+				}
+				//Otherwise, keep moving...
+				%datablock.move(%zombie);
+			}
 		}
 	}
 	else {
-		if(!%zombie.hasTarget) {
-			%targetParams = TWM2Lib_Zombie_Core("lookForTarget", %zombie);
-			%target = getWord(targetParams, 0);
-			%distance = getWord(%targetParams, 1);
-			if(isObject(%target.player)) {
-				if(%distance <= $zombie::detectDist) {
-					%zombie.hasTarget = 1;
-					%zombie.targetedPlayer = %target.player;
-				}
-			}
-			//Outside targeting range, ignore...
-		}
-		if(%zombie.hasTarget) {
-			//Ambush logic, determine if the best plan of action is a ambush, or a direct approach
+		//Ambush logic, determine if the best plan of action is a ambush, or a direct approach
+		if(!isObject(%zombie.targetedPlayer)) {
+			//Target is dead... Look for a new one.
+			%zombie.targetedPlayer = "";
+			%zombie.hasTarget = 0;
+			%zombie.ambushing = 0;
+			%zombie.fullAttack = 0;
+			%zombie.ambushPosition = 0;				
+		}	
+		else {
 			%distanceToTarget = vectorDist(%zombie.getPosition(), %zombie.targetedPlayer.getPosition());
 			if(%distanceToTarget > 50 && getRandom(1,10) == 1 && !%zombie.ambushing && !%zombie.fullAttack) {
 				//Ambush: Move to a side position from the target, then strike.
@@ -117,11 +140,6 @@ function RavagerZombieArmor::AI(%datablock, %zombie) {
 				//Continue moving to attack.
 				%datablock.move(%zombie);
 			}
-		}
-		else {
-			//No target, random movement.
-			%zombie.zombieRmove = schedule(500, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
-			%zombie.setActionThread("ski", true);
 		}
 	}
 	%datablock.schedule(500, "AI", %zombie);

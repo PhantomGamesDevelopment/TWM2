@@ -186,6 +186,10 @@ function postObjectDestroyed(%source, %targetObject, %dType, %dLoc) {
 		//Skip terrain and interiors
 		return;
 	}
+	if((%source.isZombie || %source.isBoss) && !%source.isPlayerZombie) {
+		//Stop here.
+		return;
+	}
 	if(!isObject(%source) || %source $= "") {
 		%SDB = "";
 		%sourceObject = 0;

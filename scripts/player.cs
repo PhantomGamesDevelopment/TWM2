@@ -2805,7 +2805,7 @@ function Armor::onCollision(%this, %obj, %col, %forceVehicleNode) {
 			%obj.onfire = 1;
 			schedule(10, %obj, "burnloop", %obj);
 		}
-		if(%col.getState() $= "Dead" && (!%obj.isZombie && !%col.isZombie)) {
+		if(%col.getState() $= "Dead" && (!%obj.isZombie && !%obj.isBoss)) {
 			%obj.lasttouchedcorpse = %col;
 			%gotSomething = false;
 			// it's corpse-looting time!

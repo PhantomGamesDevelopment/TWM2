@@ -4,6 +4,9 @@
 //Handles the successive and specific weapon kill listing
 
 function PerformSuccessiveKills(%player, %damageType) {
+   if(!isObject(%player) || !%player.isAlive()) {
+      return;
+   }	
    cancel(%player.successiveReset);
    %currentKills = %player.killsinarow2;
    %currentDTKills = %player.kills[%damageType];
@@ -47,6 +50,9 @@ function DoStreakPrint(%player, %kills, %damageType) {
 }
 
 function DoSuccessivePrint(%player) {
+   if(!isObject(%player) || !%player.isAlive()) {
+      return;
+   }	
    %client = %player.client;
    messageClient(%client, 'msgSoundFX', "~wfx/misc/MA1.wav");
    recordAction(%client, "SKC", %player.successive@"\t1");

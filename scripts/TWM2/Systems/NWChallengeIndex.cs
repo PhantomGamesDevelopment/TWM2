@@ -770,6 +770,9 @@ $Challenge::IsNotMultiTier["SoulsticeBombard"] = true;
 
 //Core Functions
 function GameConnection::AllowedToDoNW(%client, %name) {
+	if(!%client || %client $= "") {
+		return 0;
+	}
 	if($Challenge::FlagDisabled[%name]) {
 		return 0;
 	}
@@ -798,6 +801,9 @@ function GameConnection::AllowedToDoNW(%client, %name) {
 }
 
 function GameConnection::CheckNWChallengeCompletion(%client, %name) {
+	if(!%client || %client $= "") {
+		return false;
+	}	
 	%scriptController = %client.TWM2Core;
 	if(%scriptController.challengeComplete[%name] == 1) {
 		return true;
