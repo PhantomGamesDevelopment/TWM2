@@ -63,15 +63,51 @@ function SniperZombieArmor::AI(%datablock, %zombie) {
 		return;
 	}	
 	%pos = %zombie.getWorldBoxCenter();
+	//Target update.
+	if(%zombie.hadTarget) {
+		if(!isObject(%zombie.targetPlayer) || %zombie.targetPlayer.getState() $= "dead") {
+			//Target is down for the count, let's move on.
+			%zombie.hasTarget = 0;
+			%zombie.CQCTarget = 0;
+			%zombie.reallyFarTarget = 0;
+			%zombie.targetPlayer = 0;
+		}
+	}
+	//Do I have a target, but it's far out (IE: Running or Pilot?)
+	if(%zombie.hasTarget && %zombie.reallyFarTarget) {
+		//Throw a 1 in 25 chance to abort and re-search
+		if(getRandom(1, 25) == 19) {
+			%zombie.hasTarget = 0;
+			%zombie.targetPlayer = 0;
+			%zombie.CQCTarget = 0;
+			%zombie.reallyFarTarget = 0;
+		}
+	}
+	//Are there any targets?
 	if(!%zombie.hasTarget) {
 		%preferSniper = getRandom(1, 10);
-		if(%preferSniper > 3) {
+		if(%preferSniper > 4) {
 			for(%i = 0; %i < ClientGroup.getCount(%i); %i++) {
 				%check = ClientGroup.getObject(%i);
 				if(isObject(%check.player) && %check.player.getState() !$= "dead") {
 					//Check their weapon 
-					
+					%w = %check.player.getMountedImage($WeaponSlot).getName();
+					if(!strStr(strlwr(%w), "sniper")) {
+						//Bingo!
+						%zombie.hasTarget = 1;
+						%zombie.targetPlayer = %check.player;
+						break;
+					}
 				}
+			}
+			//No enemy snipers found... Look for a new target.
+			if(!%zombie.hasTarget) {
+				%closestClient = TWM2Lib_Zombie_Core("lookForTarget", %zombie);
+				%closestDistance = getWord(%closestClient, 1);
+				if(isObject(%closestClient.player) && %closestClient.player.getState() !$= "dead") {
+					%zombie.hasTarget = 1;
+					%zombie.targetPlayer = %closestClient.player;
+				}	
 			}
 		}
 		else {
@@ -83,8 +119,48 @@ function SniperZombieArmor::AI(%datablock, %zombie) {
 			}
 		}
 	}
-	
-	%zombie.moveloop = %datablock.Move(%zombie);
+	//Do I have a target?
+	if(%zombie.hasTarget) {
+		//Check the distance...
+		%tPos = %zombie.targetPlayer.getPosition();
+		%dist = vectorDist(%pos, %tPos);
+		if(%dist < $Zombie::Sniper_SidearmRange) {
+			//Target is getting into sidearm range... engage close range attacks
+			%zombie.reallyFarTarget = 0;
+			%zombie.CQCTarget = 1;
+			%datablock.Move(%zombie);
+			if(%zombie.canAltFire) {
+				TWM2Lib_Zombie_Core("setZFlag", %zombie, "canAltFire", 0);
+				schedule($Zombie::Sniper_RifleCooldown, 0, TWM2Lib_Zombie_Core, "setZFlag", %zombie, "canAltFire", 1);		
+				for(%i = 0; %i < $Zombie::Sniper_SidearmBurstCount; %i++) {
+					%timeDelay = ($Zombie::Sniper_SidearmBurstTime / $Zombie::Sniper_SidearmBurstCount) * %i;
+					%datablock.schedule(%timeDelay, "zFire_Alternate", %zombie);
+				}
+			}			
+		}
+		else if(%dist < $Zombie::Sniper_MaximumEngageRange && %dist > $Zombie::Sniper_SidearmRange) {
+			//Target is in Sniper Range... engage.
+			%zombie.reallyFarTarget = 0;
+			%zombie.CQCTarget = 0;
+			if(vectorDist(%pos, %tPos) > $Zombie::Sniper_PreferedDistanceFromTarget) {
+				//I'm a bit far out myself, let's move up while we engage.
+				%datablock.Move(%zombie);
+			}
+			if(%zombie.canFireWeapon) {
+				TWM2Lib_Zombie_Core("setZFlag", %zombie, "canFireWeapon", 0);
+				schedule($Zombie::Sniper_RifleCooldown, 0, TWM2Lib_Zombie_Core, "setZFlag", %zombie, "canFireWeapon", 1);	
+				%datablock.zFire(%zombie);
+			}
+		}
+		else {
+			//Target's a bit too far out, let's move up, but flag our AI to begin thinking about a new target
+			%zombie.reallyFarTarget = 1;
+			%zombie.CQCTarget = 0;
+			%datablock.Move(%zombie);
+		}
+	}
+	//No targets... Let's just wait.
+	%zombie.aiLoop = %datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
 }
 
 function SniperZombieArmor::Move(%datablock, %zombie) {
@@ -92,46 +168,63 @@ function SniperZombieArmor::Move(%datablock, %zombie) {
 		return;
 	}
 	%pos = %zombie.getWorldBoxCenter();
-	%closestClient = TWM2Lib_Zombie_Core("lookForTarget", %zombie);
-	%closestDistance = getWord(%closestClient, 1);
-	%closestClient = getWord(%closestClient, 0).Player;
-	if(%closestDistance <= $zombie::detectDist) {
-		if(%zombie.hastarget != 1) {
-			%zombie.hastarget = 1;
-		}
-		TWM2Lib_Zombie_Core("playZAudio", %zombie, 100, 40);
-		%vector = TWM2Lib_Zombie_Core("zombieGetFacingDirection", %zombie, %closestClient.getPosition());
-	
-		if(Game.CheckModifier("SuperLunge") == 1) {
-			%ld = $Zombie::LungeDistance * 5;
-		}
-		else {
-			%ld = $Zombie::LungeDistance;
-		}
-		if(%closestDistance <= %ld && %zombie.canjump == 1) {
-			%vector = vectorScale(%vector, 4);
-		}
-		%vector = vectorScale(%vector, %zombie.speed);
-		%upvec = "150";
-		if(%closestDistance <= %ld && %zombie.canjump == 1) {
-			%upvec *= 2;
-			TWM2Lib_Zombie_Core("setZFlag", %zombie, "canJump", 0);
-			schedule($Zombie::BaseJumpCooldown, 0, TWM2Lib_Zombie_Core, "setZFlag", %zombie, "canJump", 1);
-		}
+	%tPos = %zombie.targetPlayer.getPosition();
+	%upVec = "250";
+	//Are we fighting in close quarters or not?
+	if(%zombie.CQCTarget) {
+		%zombie.setVelocity("0 0 0");
+		//FaceTarget(%zombie, %target);
+		TWM2Lib_Zombie_Core("zombieGetFacingDirection", %zombie, %tPos);
+		%vector = vectorNormalize(vectorSub(%tPos, %zombie.getPosition()));
+		%vector = vectorscale(%vector, %zombie.speed);
 		%x = Getword(%vector, 0);
 		%y = Getword(%vector, 1);
-		%z = Getword(%vector, 2);
-		if(%z >= 600) {
-			%upvec = (%upvec * 5);
-		}
+		%nv1 = %y;
+		%nv2 = (%x * -1);
+		%vector = %nv1@" "@%nv2@" 0";
+		%zombie.applyImpulse(%zombie.getPosition(), %vector);		
+	}
+	else {
+		%vector = TWM2Lib_Zombie_Core("zombieGetFacingDirection", %zombie, %tPos);
+		//Scale to speed
+		%vector = vectorScale(%vector, %zombie.speed);
+		%x = getWord(%vector, 0);
+		%y = getWord(%vector, 1);	
 		%vector = %x@" "@%y@" "@%upvec;
-		%zombie.applyImpulse(%pos, %vector);
+		%zombie.applyImpulse(%pos, %vector);		
 	}
-	else if(%zombie.hastarget == 1) {
-		%zombie.hastarget = 0;
-		%zombie.zombieRmove = schedule(%zombie.updateTimeFrequency, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
-	}
-	%zombie.moveloop = %datablock.schedule(%zombie.updateTimeFrequency, "Move", %zombie);
+}
+
+function SniperZombieArmor::zFire(%datablock, %zombie) {
+	%target = %zombie.targetPlayer;
+	%num = getRandom(250, 1000);
+	%vec = vectorsub(VectorAdd(%target.getPosition(), "0 0 2.2"), %zombie.getMuzzlePoint(4));
+	%accuracy = (vectorlen(%vec) / %num);
+	%vec = vectoradd(%vec, vectorscale(%target.getvelocity(), %accuracy));
+	%p = new TracerProjectile() { 
+		dataBlock        = SniperZombieAcidShot;
+		initialDirection = %vec;
+		initialPosition  = %zombie.getMuzzlePoint(4);
+		sourceObject     = %zombie;
+		sourceSlot       = 4;
+	};
+	ServerPlay3D(CentaurArtilleryFireSound, %zombie.getPosition());
+}
+
+function SniperZombieArmor::zFire_Alternate(%datablock, %zombie) {
+	%target = %zombie.targetPlayer;
+	%num = getRandom(250, 1000);
+	%vec = vectorsub(VectorAdd(%target.getPosition(), "0 0 1"), %zombie.getMuzzlePoint(4));
+	%accuracy = (vectorlen(%vec) / %num);
+	%vec = vectoradd(%vec, vectorscale(%target.getvelocity(), %accuracy));
+	%p = new TracerProjectile() { 
+		dataBlock        = SniperZombieAcidSidearmShot;
+		initialDirection = %vec;
+		initialPosition  = %zombie.getMuzzlePoint(4);
+		sourceObject     = %zombie;
+		sourceSlot       = 4;
+	};
+	ServerPlay3D(CentaurArtilleryFireSound, %zombie.getPosition());	
 }
 
 //*****************************************************************
@@ -162,93 +255,6 @@ datablock PlayerData(FlareguideSniperZombieArmor) : SniperZombieArmor {
 	max[Mine]				= 0;
 	max[Grenade]			= 0;
 };
-
-
-
-function SniperZombiemovetotarget(%zombie){
-   if(!isobject(%zombie))
-	return;
-   if(%zombie.getState() $= "dead")
-	return;
-   %pos = %zombie.getworldboxcenter();
-   %closestClient = ZombieLookForTarget(%zombie);
-   %closestDistance = getWord(%closestClient,1);
-   %closestClient = getWord(%closestClient,0).Player;
-   if(%closestDistance <= $zombie::detectDist){
-
-    if(%closestDistance < 50) {    //runz0rs
-       %TPos = %closestClient.getPosition();
-       %tvel = %closestclient.getvelocity();
-       %vec = vectorsub(%tpos,%pos);
-       %dist = vectorlen(%vec);
-       %velpredict = vectorscale(%tvel,(%dist / 50));
-       %vector = vectoradd(%vec,%velpredict);
-       %vector = vectornormalize(%vector);
-       %x = getWord(%vector, 0);
-       %y = getWord(%vector, 1);
-       %finX = %x * -1;
-       %finY = %y * -1;
-       %finalVec = %finX SPC %finY SPC 0;
-       %finalVec = VectorScale(%finalVec, $Zombie::DForwardSpeed * 3);
-       //Z is unimportant
-       %zombie.applyImpulse(%pos, %finalVec);
-    }
-    else {
-	   if(%zombie.hastarget != 1 && %closestdistance >= 50){
-	      SniperZombieFire(%zombie,%closestclient);
-	      %zombie.canjump = 0;
-	      schedule(4000, %zombie, "Zsetjump", %zombie);
-	   }
-	   if(%zombie.hastarget != 1){
-          serverPlay3d("ZombieHOWL",%zombie.getWorldBoxCenter());
-	      %zombie.hastarget = 1;
-	   }
-	   %chance = (getrandom() * 20);
-   	   if(%chance >= 19)
-          serverPlay3d("ZombieMoan",%zombie.getWorldBoxCenter());
-
-       %vector = ZgetFacingDirection(%zombie,%closestClient,%pos);
-
-       if (%closestdistance >= 50 && %zombie.canjump == 1){
-	      SniperZombieFire(%zombie,%closestclient);
-	      %zombie.canjump = 0;
-	      schedule(4000, %zombie, "Zsetjump", %zombie);
-	   }
-       if(%closestdistance > 175) {    //only move toward my foe, if he is too
-	      %vector = vectorscale(%vector, $Zombie::DForwardSpeed); //far away
-	      %upvec = "150";
-	      %x = Getword(%vector,0);
-    	  %y = Getword(%vector,1);
-	      %z = Getword(%vector,2);
-	      if(%z >= ($Zombie::DForwardSpeed / 3 * 2))
-	         %upvec = (%upvec * 5);
-          %vector = %x@" "@%y@" "@%upvec;
-	      %zombie.applyImpulse(%pos, %vector);
-       }
-      }
-   }
-   else if(%zombie.hastarget == 1){
-      %zombie.hastarget = 0;
-      %zombie.zombieRmove = schedule(100, %zombie, "ZSetRandomMove", %zombie);
-   }
-   %zombie.moveloop = schedule(500, %zombie, "SniperZombiemovetotarget", %zombie);
-}
-
-function SniperZombieFire(%zombie,%closestclient){
-   %num = getRandom(250, 1000);
-   %vec = vectorsub(VectorAdd(%closestclient.getPosition(), "0 0 2.2"),%zombie.getMuzzlePoint(4));
-   %accuracy = (vectorlen(%vec) / %num);
-   %vec = vectoradd(%vec, vectorscale(%closestclient.getvelocity(), %accuracy));
-   %p = new TracerProjectile() { //TWM2 Sniper zombies use ALSWP Snipers :P
-	dataBlock        = SniperZombieAcidShot;
-	initialDirection = %vec;
-	initialPosition  = %zombie.getMuzzlePoint(4);
-	sourceObject     = %zombie;
-	sourceSlot       = 4;
-   };
-   ServerPlay3D(ALSWPFireSound, %zombie.getPosition());
-}
-
 
 function FlareguideSniperZombieAcidShot::onExplode(%data, %proj, %pos, %mod) {
 	Parent::OnExplode(%data, %proj, %pos, %mod);

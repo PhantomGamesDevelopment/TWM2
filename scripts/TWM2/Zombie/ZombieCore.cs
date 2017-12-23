@@ -105,6 +105,22 @@ $Zombie::Shifter_Teleport_Cooldown = 12500;
 //$Zombie::Summoner_Cooldown: The cooldown of the summoner zombie's summon ability
 $Zombie::Summoner_Cooldown = 25000;
 
+//$Zombie::Sniper_MaximumEngageRange: The maximum range at which the sniper zombie will fire at. 
+// NOTE: If the target is outside of this range, the sniper will begin "consideration" to look for a new target
+$Zombie::Sniper_MaximumEngageRange = 450;
+//$Zombie::Sniper_PreferedDistanceFromTarget: The range at which the sniper zombie will move up to try to reach
+$Zombie::Sniper_PreferedDistanceFromTarget = 300;
+//$Zombie::Sniper_SidearmRange: The range at which the sniper zombie engages CQC combat with it's sidearm
+$Zombie::Sniper_SidearmRange = 50;
+//$Zombie::Sniper_RifleCooldown: The reload time of the sniper zombie's rifle (MS)
+$Zombie::Sniper_RifleCooldown = 7000;
+//$Zombie::Sniper_SidearmBurstCount: The amount of shots in a sidearm burst
+$Zombie::Sniper_SidearmBurstCount = 10;
+//$Zombie::Sniper_SidearmBurstTime: The amount of time to fire off the full burst
+$Zombie::Sniper_SidearmBurstTime = 600;
+//$Zombie::Sniper_SidearmCooldown: The reload time of the sniper zombie's sidearm (MS)
+$Zombie::Sniper_SidearmCooldown = 5000;
+
 //MISC Globals, Do not edit.
 $Zombie::killpoints = 5;
 $Zombie::RogThread = "cel1";
@@ -173,7 +189,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			%vec = %rx @ " " @ %ry @ " " @ 0;
 			%arg1.direction = vectorNormalize(%vec);
 			%arg1.Mnum = getRandom(1, 20);
-			%arg1.zombieRmove = schedule($Zombie::SpeedUpdateTime, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
+			%arg1.zombieRmove = schedule(%arg1.updateTimeFrequency, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
 			
 		//zrandommoveloop(%zombie): Moves the zombies around in a random direction
 		case "zrandommoveloop":
@@ -193,10 +209,10 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 				%vector = vectorScale(%vec, %speed);
 				%arg1.applyImpulse(%arg1.direction, %vector);
 				%arg1.Mnum -= 1;
-				%arg1.zombieRmove = schedule($Zombie::SpeedUpdateTime, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
+				%arg1.zombieRmove = schedule(%arg1.updateTimeFrequency, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
 			}
 			else {
-				%arg1.zombieRmove = schedule($Zombie::SpeedUpdateTime, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
+				%arg1.zombieRmove = schedule(%arg1.updateTimeFrequency, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
 			}
 			
 		//cureInfection(%player): Cures the zombie infection
@@ -304,6 +320,8 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%arg1.firingWeapon = %arg3;
 				case "canfireweapon":
 					%arg1.canFireWeapon = %arg3;
+				case "canaltfire":
+					%arg1.canAltFire = %arg3;
 			}
 					
 		//lookForTarget(%zombie, [%pilot], [%groundVeh]): Identify the closest target, and the distance to that target
@@ -560,6 +578,8 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%zombie.mountImage(ZSniperImage1, 4);
 					%zombie.mountImage(ZSniperImage2, 5);
 					%zombie.mountImage(ZSniperImage3, 6);
+					%zombie.canFireWeapon = 1;
+					%zombie.canAltFire = 1;
 				
 				//Ultra-Demon Zombie
 				case 12:
@@ -616,7 +636,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 					%zombie.mountImage(ZdummyslotImg, 4);	
 
 				//Flareguide Sniper Zombie (Mini-Boss)
-				case 11:
+				case 18:
 					%zombie = new player(){
 						Datablock = "FlareguideSniperZombieArmor";
 					};

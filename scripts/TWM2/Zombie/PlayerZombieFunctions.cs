@@ -1,3 +1,24 @@
+//**********************************************
+//**********************************************
+// Player Zombie Functioning
+// 
+// Updated TWM2 3.9.2
+//  Cleaned up all of the functions and converted it into a library style
+//  system to reduce the function count
+//**********************************************
+//**********************************************
+
+function TWM2Lib_Zombie_PlayerFunctions(%functionName, %arg1, %arg2, %arg3, %arg4) {
+	switch$(strlwr(%functionName)) {
+		case "zombieattackimpulse":
+		
+		case "makepersonzombie":
+		
+		default:
+			error("TWM2Lib_Zombie_PlayerFunctions(): Unknown function name "@%functionName@" sent to call.");
+	}
+}
+
 function makePersonHumanFZomb(%trans, %client){
    %client.player.delete();
    %player = new Player() {

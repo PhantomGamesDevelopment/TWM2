@@ -99,6 +99,11 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	* Increased the maximum targeting range of the teleport attack from 200m to 400m
 	* Increased the cooldown of the teleport attack from 7 seconds to 12.5 seconds
 	* Shifter zombies will now have to "lock down" for a 1.5 seconds before teleporting, during this time they will be easily targetable	
+  * Sniper
+    * The sniper zombie is now armed with two new weapons. 
+	  * The first is an acid sniper rifle which infects players on striking
+	  * The second is a rapid fire sidearm that the sniper will use when targets move too close
+	* Reduced the health of Sniper Zombies from 40 (4.0) to 25 (2.5)	
 * Added Boss Proficiency
   * Hidden challenges embedded in boss fights that award additional experience for completing tough feats
   * For example: Defeat the shade lord without dying by the elemental shades

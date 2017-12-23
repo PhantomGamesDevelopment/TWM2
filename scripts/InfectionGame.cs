@@ -513,6 +513,7 @@ $ZArmor[1, 2] = "Rav\t0\tRavenger Zombie\tAbility: Jet Key To Speed Forward/Lung
 $ZArmor[2, 2] = "Lord\t0\tZombie Lord\tAbilities: Jet Key To Fire, Mine Key To Lift";
 $ZArmor[3, 2] = "Demon\t0\tDemon Zombie\tAbility: Jet Key To Throw Fireball";
 $ZArmor[4, 2] = "Rap\t1\tAir Rapier Zombie\tAbility: Jet Key Flies";
+$ZArmor[5, 2] = "VolRav\t1\tVolatile Ravenger Zombie\tAbility: Jet Key To Detonate C4";
 
 $ZArmor[0, 3] = "Norm\t0\tNormal Zombie\tAbility: Jet Key To Lunge";
 $ZArmor[1, 3] = "Rav\t0\tRavenger Zombie\tAbility: Jet Key To Speed Forward/Lunge";
@@ -521,7 +522,7 @@ $ZArmor[3, 3] = "Demon\t0\tDemon Zombie\tAbility: Jet Key To Throw Fireball";
 $ZArmor[4, 3] = "Rap\t0\tAir Rapier Zombie\tAbility: Jet Key Flies";
 $ZArmor[5, 3] = "VolRav\t0\tVolatile Ravenger Zombie\tAbility: Jet Key To Detonate C4";
 $ZArmor[6, 3] = "UDem\t1\tUltra Demon Zombie\tAbility: Jet Key To Fire, Mine To Charge Forward";
-$ZArmor[7, 3] = "Wraith\t1\tWraith Spec-Ops Zombie\tAbility: Jet Key To Charge, Armed with MP26-CMDO";
+//$ZArmor[7, 3] = "Wraith\t1\tWraith Spec-Ops Zombie\tAbility: Jet Key To Charge, Armed with MP26-CMDO";
 
 $ZArmor[0, 4] = "Norm\t0\tNormal Zombie\tAbility: Jet Key To Lunge";
 $ZArmor[1, 4] = "Rav\t0\tRavenger Zombie\tAbility: Jet Key To Speed Forward/Lunge";
@@ -530,8 +531,8 @@ $ZArmor[3, 4] = "Demon\t0\tDemon Zombie\tAbility: Jet Key To Throw Fireball";
 $ZArmor[4, 4] = "Rap\t0\tAir Rapier Zombie\tAbility: Jet Key Flies";
 $ZArmor[5, 4] = "VolRav\t0\tVolatile Ravenger Zombie\tAbility: Jet Key To Detonate C4";
 $ZArmor[6, 4] = "UDem\t0\tUltra Demon Zombie\tAbility: Jet Key To Fire, Mine To Charge Forward";
-$ZArmor[7, 4] = "Wraith\t0\tWraith Spec-Ops Zombie\tAbility: Jet Key To Charge, Armed with MP26-CMDO";
-$ZArmor[8, 4] = "Rog\t1\tGeneral Rog\tAbilities: Jet Key To fire zMG42, Shielded, Armed with BoV";
+//$ZArmor[7, 4] = "Flareguide\t0\tFist of Vengeance Flareguide\tAbility: Armed with the Bursting NLS-22 Rifle, Grenade to Vanish";
+//$ZArmor[8, 4] = "Rog\t1\tGeneral Rog\tAbilities: Jet Key To fire zMG42, Shielded, Armed with BoV";
 
 //Score Hud
 $ScoreHudMaxVisible = 19;
