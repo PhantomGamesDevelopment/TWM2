@@ -180,7 +180,7 @@ function LordZombieArmor::AI(%datablock, %zombie) {
 	%zPos = %zombie.getPosition();
 	//Are we currently in the firing weapon state?
 	if(%zombie.firingWeapon) {
-		%datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
+		%datablock.schedule(500, "AI", %zombie);
 		return;
 	}	
 	//Check if we are currently shielding
@@ -209,7 +209,7 @@ function LordZombieArmor::AI(%datablock, %zombie) {
 			TWM2Lib_Zombie_Core("setZFlag", %zombie, "canShield", 0);
 			schedule(25000, 0, TWM2Lib_Zombie_Core, "setZFlag", %zombie, "canShield", 1);			
 		}
-		%datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
+		%datablock.schedule(500, "AI", %zombie);
 		return;
 	}
 	//Am I engaged with something?
@@ -220,7 +220,7 @@ function LordZombieArmor::AI(%datablock, %zombie) {
 			%zombie.hasTarget = 0;
 			%zombie.movePoint = 0;
 			%zombie.movingToPosition = 0;
-			%datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
+			%datablock.schedule(500, "AI", %zombie);
 			return;			
 		}		
 		//Is it a tank?
@@ -344,10 +344,10 @@ function LordZombieArmor::AI(%datablock, %zombie) {
 		}
 		//Nothing to hunt... random movement...
 		if(!%zombie.hasTarget) {
-			%zombie.zombieRmove = schedule(%zombie.updateTimeFrequency, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
+			%zombie.zombieRmove = schedule(500, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
 		}
 	}
-	%datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
+	%datablock.schedule(500, "AI", %zombie);
 }
 
 function LordZombieArmor::Move(%datablock, %zombie) {

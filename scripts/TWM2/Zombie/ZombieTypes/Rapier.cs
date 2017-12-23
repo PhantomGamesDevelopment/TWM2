@@ -94,8 +94,10 @@ function RapierZombieArmor::armorCollisionFunction(%datablock, %zombie, %colPlay
 	else {
 		%colPlayer.damage(0, %colPlayer.getPosition(), %total, $DamageType::Zombie);
 		if(%causeInfect) {
-			%colPlayer.Infected = 1;
-			%colPlayer.InfectedLoop = schedule(10, %colPlayer, "TWM2Lib_Zombie_Core", "InfectLoop", %colPlayer, "impact");	
+			if(!%colPlayer.Infected) {
+				%colPlayer.Infected = 1;
+				%colPlayer.InfectedLoop = schedule(10, %colPlayer, "TWM2Lib_Zombie_Core", "InfectLoop", %colPlayer, "impact");
+			}
 		}
 	}
 }
@@ -108,7 +110,7 @@ function RapierZombieArmor::AI(%datablock, %zombie) {
 	%zombie.setHeat(999);
 	%zombie.setActionThread("scoutRoot",true);
 	%datablock.move(%zombie);
-	%datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
+	%datablock.schedule(500, "AI", %zombie);
 }
 
 function RapierZombieArmor::move(%datablock, %zombie) {

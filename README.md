@@ -69,10 +69,6 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 * Zombie Changes
   * Global
     * Massive "spring cleaning" of the zombie code files, fixing a bunch of bad coding practices and a few logic errors.
-    * Redid the zombie targeting and movement methods to make them much "smoother"
-	  * Scaled down zombie movement times on some types to smooth movement
-	  * To compensate for speed, these zombies saw a reduction of total speed to match the factor
-	  * This should result in smoother looking movement at the same speed
 	* Moved all functioning into a core control script, added additional modifiers and flags to grant more customizability to zombies
 	* **WARNING: Only specific zombies are functional at this moment in time**
   * Ravager

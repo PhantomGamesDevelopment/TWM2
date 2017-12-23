@@ -182,7 +182,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			%vec = %rx @ " " @ %ry @ " " @ 0;
 			%arg1.direction = vectorNormalize(%vec);
 			%arg1.Mnum = getRandom(1, 20);
-			%arg1.zombieRmove = schedule(%arg1.updateTimeFrequency, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
+			%arg1.zombieRmove = schedule(500, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
 			
 		//zrandommoveloop(%zombie): Moves the zombies around in a random direction
 		case "zrandommoveloop":
@@ -202,10 +202,10 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 				%vector = vectorScale(%vec, %speed);
 				%arg1.applyImpulse(%arg1.direction, %vector);
 				%arg1.Mnum -= 1;
-				%arg1.zombieRmove = schedule(%arg1.updateTimeFrequency, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
+				%arg1.zombieRmove = schedule(500, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
 			}
 			else {
-				%arg1.zombieRmove = schedule(%arg1.updateTimeFrequency, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
+				%arg1.zombieRmove = schedule(500, %arg1, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %arg1);
 			}
 			
 		//cureInfection(%player): Cures the zombie infection

@@ -58,8 +58,10 @@ function SummonerZombieArmor::armorCollisionFunction(%datablock, %zombie, %colPl
 	%pushVector = vectorscale(%colPlayer.getvelocity(), 100);
 	%colPlayer.applyimpulse(%colPlayer.getposition(), %pushVector);
 	if(%causeInfect) {
-		%colPlayer.Infected = 1;
-		%colPlayer.InfectedLoop = schedule(10, %colPlayer, "TWM2Lib_Zombie_Core", "InfectLoop", %colPlayer, "impact");
+		if(!%colPlayer.Infected) {
+			%colPlayer.Infected = 1;
+			%colPlayer.InfectedLoop = schedule(10, %colPlayer, "TWM2Lib_Zombie_Core", "InfectLoop", %colPlayer, "impact");
+		}
 	}
 	%colPlayer.damage(0, %colPlayer.getPosition(), %total, $DamageType::Zombie);	
 }
@@ -102,7 +104,7 @@ function SummonerZombieArmor::AI(%datablock, %zombie) {
 			schedule($Zombie::Summoner_Cooldown, 0, TWM2Lib_Zombie_Core, "setZFlag", %zombie, "canSummon", 1);
 		}	
 	}
-	%datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
+	%datablock.schedule(500, "AI", %zombie);
 }
 
 function SummonerZombieArmor::Move(%datablock, %zombie) {

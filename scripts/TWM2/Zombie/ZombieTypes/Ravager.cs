@@ -39,8 +39,10 @@ function RavagerZombieArmor::armorCollisionFunction(%datablock, %zombie, %colPla
 	%pushVector = vectorscale(%colPlayer.getvelocity(), 100);
 	%colPlayer.applyimpulse(%colPlayer.getposition(), %pushVector);
 	if(%causeInfect) {
-		%colPlayer.Infected = 1;
-		%colPlayer.InfectedLoop = schedule(10, %colPlayer, "TWM2Lib_Zombie_Core", "InfectLoop", %colPlayer, "impact");
+		if(!%colPlayer.Infected) {
+			%colPlayer.Infected = 1;
+			%colPlayer.InfectedLoop = schedule(10, %colPlayer, "TWM2Lib_Zombie_Core", "InfectLoop", %colPlayer, "impact");
+		}
 	}
 	%colPlayer.damage(0, %colPlayer.getPosition(), %total, $DamageType::Zombie);	
 }
@@ -118,11 +120,11 @@ function RavagerZombieArmor::AI(%datablock, %zombie) {
 		}
 		else {
 			//No target, random movement.
-			%zombie.zombieRmove = schedule(%zombie.updateTimeFrequency, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
+			%zombie.zombieRmove = schedule(500, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
 			%zombie.setActionThread("ski", true);
 		}
 	}
-	%datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
+	%datablock.schedule(500, "AI", %zombie);
 }
 
 function RavagerZombieArmor::Move(%datablock, %zombie) {

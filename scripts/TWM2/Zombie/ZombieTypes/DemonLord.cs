@@ -179,7 +179,7 @@ function DemonMotherZombieArmor::AIRoutine(%datablock, %zombie) {
 		%zombie.justmelee = 0;
 	}
 	else {
-		%zombie.aiRoutine = %datablock.schedule(%zombie.updateTimeFrequency, 0, "AIRoutine", %zombie);
+		%zombie.aiRoutine = %datablock.schedule(500, 0, "AIRoutine", %zombie);
 	}	
 }
 
@@ -196,7 +196,7 @@ function DemonMotherZombieArmor::Move(%datablock, %zombie) {
 	%vector = %x@" "@%y@" 150";
 	%zombie.applyImpulse(%zombie.getPosition(), %vector);
 
-	%zombie.aiRoutine = %datablock.schedule(%zombie.updateTimeFrequency, 0, "AIRoutine", %zombie);
+	%zombie.aiRoutine = %datablock.schedule(500, 0, "AIRoutine", %zombie);
 }
 
 function DemonMotherZombieArmor::AttackFunction(%datablock, %zombie, %attackFunction, %target) {

@@ -160,7 +160,7 @@ function SniperZombieArmor::AI(%datablock, %zombie) {
 		}
 	}
 	//No targets... Let's just wait.
-	%zombie.aiLoop = %datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
+	%zombie.aiLoop = %datablock.schedule(500, "AI", %zombie);
 }
 
 function SniperZombieArmor::Move(%datablock, %zombie) {

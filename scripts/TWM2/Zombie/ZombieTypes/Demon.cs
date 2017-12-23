@@ -74,7 +74,7 @@ function DemonZombieArmor::AI(%datablock, %zombie) {
 		if(!isObject(%zombie.targetedPlayer) || %zombie.targetedPlayer.getState() $= "dead") {
 			%zombie.targetedPlayer = 0;
 			%zombie.hasTarget = 0;
-			%datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
+			%datablock.schedule(500, "AI", %zombie);
 			return;			
 		}
 		%tPos = %zombie.targetedPlayer.getPosition();		
@@ -100,10 +100,10 @@ function DemonZombieArmor::AI(%datablock, %zombie) {
 		}
 		//Nothing to hunt... random movement...
 		if(!%zombie.hasTarget) {
-			%zombie.zombieRmove = schedule(%zombie.updateTimeFrequency, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
+			%zombie.zombieRmove = schedule(500, %zombie, "TWM2Lib_Zombie_Core", "zRandomMoveLoop", %zombie);
 		}	
 	}
-	%datablock.schedule(%zombie.updateTimeFrequency, "AI", %zombie);
+	%datablock.schedule(500, "AI", %zombie);
 }
 
 function DemonZombieArmor::move(%datablock, %zombie) {
