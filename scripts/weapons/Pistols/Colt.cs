@@ -11,7 +11,7 @@ datablock AudioProfile(PistolFireSound) {
 datablock TracerProjectileData(coltBullet) {
 	doDynamicClientHits = true;
 
-	directDamage        = 0.15; // z0dd - ZOD, 9-27-02. Was 0.0825
+	directDamage        = 0.15;
 	directDamageType    = $DamageType::pistol;
 	explosion           = "ChaingunExplosion";
 	splash              = ChaingunSplash;

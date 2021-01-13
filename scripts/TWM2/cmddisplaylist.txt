@@ -4,7 +4,6 @@ CMD PersControl Settings
 CMD Missions Operations
 CMD PC Piece Count
 CMD ContSave Content Saving System
-CMD BL15 Blacklist 15
 CMD Challenge Challenges
 CMD Ranks Player Info Listings
 CMD TWM TWM Mod Website

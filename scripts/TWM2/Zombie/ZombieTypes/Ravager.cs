@@ -12,6 +12,7 @@ datablock PlayerData(RavagerZombieArmor) : LightMaleBiodermArmor {
 	damageScale[$DamageType::Model1887] = 4.0;
 	damageScale[$DamageType::CrimsonHawk] = 1.9;
 	damageScale[$DamageType::AcidCannon] = 3.0;
+	damageScale[$DamageType::deserteagle] = 2.5;
 
 	max[RepairKit]			= 0;
 	max[Mine]			= 0;

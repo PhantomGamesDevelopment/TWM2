@@ -1,14 +1,14 @@
 datablock TracerProjectileData(S3SBullet) {
 	doDynamicClientHits = true;
 
-	directDamage        = 0.45;
+	directDamage        = 0.44;
 	directDamageType    = $DamageType::S3;
 	explosion           = "ChaingunExplosion";
 	splash              = ChaingunSplash;
-	HeadMultiplier      = 1.5;
+	HeadMultiplier      = 1.7;
 	LegsMultiplier      = 0.35;
 
-	HeadShotKill        = 1;
+	HeadShotKill        = 0;
 
 	kickBackStrength  = 15.0;
 	sound 		   = ChaingunProjectile;
@@ -83,7 +83,7 @@ datablock ShapeBaseImageData(S3SRifleImage) {
 	shellExitVariance   = 15.0;
 	shellVelocity       = 3.0;
 
-	projectileSpread = 2.0 / 1000.0;
+	projectileSpread = 4.0 / 1000.0;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";
@@ -132,7 +132,7 @@ datablock ShapeBaseImageData(S3SRifleImage) {
 	stateName[6] = "Reload";
 	stateTransitionOnNoAmmo[6] = "NoAmmo";
 	stateTransitionOnTimeout[6] = "Ready";
-	stateTimeoutValue[6] = 0.9;
+	stateTimeoutValue[6] = 0.4;
 	stateAllowImageChange[6] = false;
 	stateSequence[6] = "Reload";
 

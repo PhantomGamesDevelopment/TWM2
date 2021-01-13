@@ -2,12 +2,6 @@ $TWM::RanksDirectory = "Server/TWM/Saved";
 // This is where all of the ranks will be saved
 // I highly recommend leaving this alone
 
-function LoadRanksBase() {
-   echo("Loading The Ranking System Base");
-   findTopRanks();
-   //Modified 2.6, top ranks handled by PGD now
-}
-
 function CreateClientRankFile(%client) {
    if(!isSet(%client) || %client.guid $= "") {
       return;
@@ -131,7 +125,7 @@ function runRankUpdateLoop(%client, %j, %continue) {
 	%scriptController = %client.TWM2Core;   
 	//perform rank update
 	if(getCurrentEXP(%client) >= $Ranks::MinPoints[%j]){
-		if(%scriptController.rank !$= $Ranks::NewRank[%j] && !fetchCap("Level", ((%scriptController.officer)*$Rank::RankCount)+%j)) {
+		if(%scriptController.rank !$= $Ranks::NewRank[%j]) {
 			%scriptController.rankNumber = %j;
 			if($TWM2::UseRankTags) {
 				DoNameChangeChecks(%client);
@@ -148,51 +142,11 @@ function runRankUpdateLoop(%client, %j, %continue) {
 				messageclient(%client, 'Msgclient', "\c5Congratulations, you have reached the maximum rank in TWM2 and have unlocked the ability to enter an officer rank. To proceed, open the [F2] menu and select the Settings option.");
 			}
 			SaveClientFile(%client);
-			//
-			if(!$TWM2::PGDConnectDisabled) {
-				PrepareUpload(%client);
-			}
-			//Phantom139: 10/17/17: Why is this block here??? It's just a NOP on the next call...
-			//%j = 1;
-			//runRankUpdateLoop(%client, %j, 0);
 		}
 	}
 	else {
 		%j--;
 		runRankUpdateLoop(%client, %j, 1);
-	}
-}
-
-function fetchCap(%type, %index) {
-	if(%type $= "Officer") {
-		if(!isSet($OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) || $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] <= 0) {
-			return false;
-		}
-		else {
-			if(%index >= $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}    
-	}
-	else if(%type $= "Level") {
-		if(!isSet($RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) || $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))] <= 0) {
-			return false;
-		}
-		else {
-			if(%index >= $RankCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}       
-	}
-	else if(%type $= "EXP") {
-		echo("fetchCap(): Call to EXP cap made, however the EXP cap has been depricated. use trace(1) to log the call stack.");
-		return false;
 	}
 }
 
@@ -235,14 +189,6 @@ function PromoteToPrestige(%client) {
    }
    else {
       %next = %scriptController.officer++;
-   }
-   
-   if(fetchCap("Officer", %next)) {
-      error("Client "@%client@"["@%client.getAddress()@"]("@%client.namebase@":"@%client.guid@") attempting to hack past cap.");
-      error("It is recommended you report these details to Phantom139 (phantom139@phantomdev.net) ASAP.");
-      error("Client has been informed of this, if it is reported to be a mistake, inform Phantom139 of possible code error");
-      messageClient(%client, 'msgAlert', "\c3Alert! You have performed an Illegal action(trying to promote to an officer rank beyond cap level)\nIf you believe this is a mistake, you should inform the server host ASAP.");
-	  return;
    }
 
    //Phantom139 TWM2 3.9.2: Removed the "reset" of progression, we only reset EXP and the rank for office progression now.
@@ -294,22 +240,22 @@ function DumpStats(%c) {
 //Direct calls to needed function, replaces
 //old system.
 function GainExperience(%client, %variable, %tagToGain) {
-   %todaysDate = sha1sum(formattimestring("yymmdd"));
+   //%todaysDate = sha1sum(formattimestring("yymmdd"));
    %script = %client.TWM2Core;
    //
-   %multi = $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB TWM2Lib_MainControl("FormatTWM2Time", formattimestring("yymmdd")))];
-   if(!isSet(%multi) || %multi < 1) {
-      %multi = 1;
-   }
-   %variable *= %multi;
+   //%multi = $EXPMulti[$TWM2Core_Code, formattimestring("yymmdd"), sha1sum($TWM2Core_Code TAB TWM2Lib_MainControl("FormatTWM2Time", formattimestring("yymmdd")))];
+   //if(!isSet(%multi) || %multi < 1) {
+   //   %multi = 1;
+   //}
+   //%variable *= %multi;
    %variable = mFloor(%variable);
    //
-   if(%multi > 1) {
-      messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP (Bonus Multiplier: "@%multi@")");
-   }
-   else {
-      messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP");
-   }
+   //if(%multi > 1) {
+   //   messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP (Bonus Multiplier: "@%multi@")");
+   //}
+   //else {
+   messageClient(%client, 'msgClient', "\c5TWM2: "@%tagToGain@"\c3+"@%variable@" EXP");
+   //}
    $XPArray[%client] += %variable;
    updateClientRank(%client);
 }

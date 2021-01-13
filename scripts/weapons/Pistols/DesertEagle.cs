@@ -8,7 +8,7 @@ datablock TracerProjectileData(DeagleBullet)
 {
    doDynamicClientHits = true;
 
-   directDamage        = 0.3; //reduced .6
+   directDamage        = 0.38;
    directDamageType    = $DamageType::deserteagle;
    explosion           = "ChaingunExplosion";
    splash              = ChaingunSplash;
@@ -99,7 +99,7 @@ datablock ShapeBaseImageData(DeagleImage) {
    projectile = DeagleBullet;
    projectileType = tracerProjectile;
    
-   ProjectileSpread = 6.0 / 1000.0;   //2.5 spread added
+   ProjectileSpread = 4.0 / 1000.0;   //2.5 spread added
    
    //ClipStuff
    ClipName = "DesertEagleClip";

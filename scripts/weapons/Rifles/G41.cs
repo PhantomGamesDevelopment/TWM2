@@ -99,7 +99,7 @@ datablock ShapeBaseImageData(G41RifleImage) {
 	shellExitVariance   = 15.0;
 	shellVelocity       = 3.0;
 
-	projectileSpread = 2.0 / 1000.0;
+	projectileSpread = 3.0 / 1000.0;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";
@@ -128,7 +128,7 @@ datablock ShapeBaseImageData(G41RifleImage) {
 	stateName[4] = "Reload";
 	stateTransitionOnNoAmmo[4] = "NoAmmo";
 	stateTransitionOnTimeout[4] = "Ready";
-	stateTimeoutValue[4] = 0.15;
+	stateTimeoutValue[4] = 0.25;
 	stateAllowImageChange[4] = false;
 	stateSequence[4] = "Reload";
 

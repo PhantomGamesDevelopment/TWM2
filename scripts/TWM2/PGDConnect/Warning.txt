@@ -1,3 +1,0 @@
-All files in this folder are the basic functioning for PGD services. 
-
-Do not delete these files.

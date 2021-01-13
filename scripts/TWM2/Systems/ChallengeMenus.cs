@@ -10,8 +10,6 @@ function GenerateChallengesMenu(%client, %tag, %index) {
 	messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:16>Select a category to view challenges:");
 	%index++;
 	//
-	messageClient( %client, 'SetLineHud', "", %tag, %index, "<font:arial:14><a:gamelink\tOtherTasksSub\t1>PGD Challenges (Daily/Weekly/Monthly)</a>");
-	%index++;
 	for(%i = 2; $Challenge::Category[%i] !$= ""; %i++) {
 		%categoryReq = getField($Challenge::Category[%i], 2);
 		if(getWord(%categoryReq, 0) $= "Officer") {

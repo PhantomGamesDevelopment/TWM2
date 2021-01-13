@@ -997,7 +997,6 @@ function parsePublicCommands(%sender, %command, %args) {
             messageClient(%sender, 'WhoisReply', "\c2\t" SPC %name @   "'s GUID is" SPC %guid);
             messageClient(%sender, 'WhoisReply', "\c2\t" SPC %name SPC "is connecting from" SPC %ip);
             messageClient(%sender, 'WhoisReply', "\c2\t" SPC %name SPC (%reqcl.isAIControlled() ? "is" : "isn't") SPC "a bot");
-            messageClient(%sender, 'WhoisReply', "\c2\t" SPC %name SPC (%reqcl.isPGDConnected() ? "is" : "isn't") SPC "PGD Connected");
             messageClient(%sender, 'WhoisReply', "\c2\t" SPC %name SPC "last connected on" SPC %lastjoin);
             messageClient(%sender, 'WhoisReply', "\c2\t" SPC %name SPC %isastr);
          }
@@ -1012,92 +1011,23 @@ function parsePublicCommands(%sender, %command, %args) {
       
       //uSave: univerally save a building in a CSS slot
       case "usave":
-         if($TWM2::PGDConnectDisabled) {
-            messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been disabled.");
-            return 1;
-         }
-         if(!%sender.IsPGDConnected()) {
-            messageClient(%client, 'msgPGDRequired', "\c5PGD: PGD Connect account required to perform this action.");
-            return 1;
-         }
-         else {
-            echo("Client:" SPC %sender.namebase SPC "requests universal save.");
-            %file = strReplace(%args, ".cs", "");
-            %file = %file @ ".cs";
-            %file = "Buildings/Admin/"@%sender.guid@"/" @ %file;
-            if(isFile(%file)) {
-               MessageAll('MsgAdminForce', "\c3"@%sender.namebase@" is universally saving a building.");
-               Univ_ServerConnect(%sender, %file, "Save");
-            }
-            else {
-               messageClient(%client, 'msgPGDRequired', "\c5PGD: That slot/file does not exist");
-            }
-            return 1;
-         }
+		messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been shut down as of June 2019, this command no longer functions.");
+		return 1;
       
       //uLoad: load a universally saved building
       case "uload":
-         if($TWM2::PGDConnectDisabled) {
-            messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been disabled.");
-            return 1;
-         }
-         if(!%sender.IsPGDConnected()) {
-            messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect account required to perform this action.");
-            return 1;
-         }
-         if(%sender.cantLoad) {
-            messageClient(%sender, 'msgPGDRequired', "\c5PGD: You have only recently loaded.");
-            return 1;
-         }
-         $SaveTime::TimeLeft[%sender.guid, "Load"] = $TWM::CSSTimeLoad*60; //5 mins
-         %sender.cantLoad = 1;
-         schedule(1,0,"ResetLoad",%sender);
-         %args = strReplace(%args, ".cs", "");
-         LoadUniversalBuilding(%sender, %args);
-         return 1;
+		messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been shut down as of June 2019, this command no longer functions.");
+		return 1;
       
       //saveRank: save your rank to PGD
       case "saverank":
-         if($TWM2::PGDConnectDisabled) {
-            messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been disabled.");
-            return 1;
-         }
-         if(!%sender.canSaveRank) {
-            messageClient(%sender, 'MsgClient', "\c5PGD: You have only recently saved your rank.");
-            return 1;
-         }
-         if(!%sender.IsPGDConnected()) {
-            messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect account required to perform this action.");
-            return;
-         }
-         if($IsAuthed $= false) {
-            messageClient(%sender, 'msgPGDRequired', "\c5PGD: This is a Satellite Server, only core servers can save ranks.");
-            return;
-         }
-         SaveClientFile(%sender);
-         PrepareUpload(%sender);
-         %sender.canSaveRank = 0;
-         schedule(60000 * 5, 0, "eval", ""@%sender@".canSaveRank = 1;");
-         return 1;
+		messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been shut down as of June 2019, this command no longer functions.");
+		return 1;
       
       //loadRank: load your rank from PGD
       case "loadrank":
-         if($TWM2::PGDConnectDisabled) {
-            messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been disabled.");
-            return 1;
-         }
-         if(!%sender.canLoadRank) {
-            messageClient(%sender, 'MsgClient', "\c5PGD: You have only recently re-loaded your rank.");
-            return 1;
-         }
-         if(!%sender.IsPGDConnected()) {
-            messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect account required to perform this action.");
-            return;
-         }
-         LoadUniversalRank(%sender);
-         %sender.canLoadRank = 0;
-         schedule(60000 * 5, 0, "eval", ""@%sender@".canLoadRank = 1;");
-         return 1;
+		messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been shut down as of June 2019, this command no longer functions.");
+		return 1;
 
       //checkStats: check the current rank information on a player
       case "checkstats":
@@ -1146,12 +1076,8 @@ function parsePublicCommands(%sender, %command, %args) {
          
         //setEmail: used for the PGD IGC interface
         case "setemail":
-         if(!isSet(%args)) {
-            return 1;
-         }
-         %sender.emailSet = %args;
-         messageClient(%sender, 'msgSent', "\c3SERVER: Email set to "@%args@"");
-         return 1;
+			messageClient(%sender, 'msgPGDRequired', "\c5PGD: PGD Connect has been shut down as of June 2019, this command no longer functions.");
+			return 1;
          
       //None Matching Case:
       default:
@@ -1200,8 +1126,8 @@ addCMD("Public", "Timer", "Usage: /Timer [time > 1.5]: sets the switch delay on 
 addCMD("Public", "DepSec", "Usage: /DepSec: secure deploy rights on your pieces.");
 addCMD("Public", "undo", "Usage: /undo: undo your last construction action.");
 addCMD("Public", "checkStats", "Usage: /checkStats [name or blank]: check the current rank info on a player.");
-addCMD("Public", "uSave", "Usage: /uSave [slot #]: Save a building on the PGD server for loading in other servers.");
-addCMD("Public", "uLoad", "Usage: /uLoad [slot #]: Load a universally saved building.");
-addCMD("Public", "LoadRank", "Usage: /LoadRank: load your universal rank if it failed.");
-addCMD("Public", "SaveRank", "Usage: /SaveRank: save your universal rank if it failed.");
-addCMD("Public", "setEmail", "Usage: /setEmail [email]: set email for PGD IGC.");
+addCMD("Public", "uSave", "[Depricated].");
+addCMD("Public", "uLoad", "[Depricated].");
+addCMD("Public", "LoadRank", "[Depricated].");
+addCMD("Public", "SaveRank", "[Depricated].");
+addCMD("Public", "setEmail", "[Depricated].");

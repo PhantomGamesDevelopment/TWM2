@@ -6,7 +6,6 @@ Total Warfare Mod 2 for Tribes 2, Conversion mod built on a base mix of Construc
 Web Sites/Pages:
 * http://www.tribesnext.com : Tribes 2 / TN Page
 * https://github.com/PhantomGamesDevelopment/TWM2/ : Official Git Repostitory
-* http://www.phantomdev.net : Offical Website
 
 Current Version: 3.92 {Development}
 
@@ -50,15 +49,6 @@ objects to modify server settings. For starters, set the host GUID to your GUID.
 start up the dedicated server. Join it, once in game, type ListGUIDS(); in the server console
 to obtain your GUID. Then modify the line: $TWM2::HostGUID = "SetMeUp";, to match your GUID.
 
-TWM2 Servers:
-
-TWM2 uses a inter-server connectivity system known as PGD Connect. This system will allow users who
-play TWM2 to transfer their rank/progression as well as load in buildings created in other servers
-in your server. While PGD Connect itself is manditory across all TWM2 servers, saving information is
-only permitted in what we designate as a "Core Server". This requires the server host to abide by the
-TWM2 PGD Connect Core rules established by Phantom139. If you are interested in hosting a server with
-this level of authority, please contact Phantom139 on the PGD Forums, or by email.
-
 ====
 
 MOD DEVELOPMENT HISTORY (GIT VERSIONS):
@@ -66,6 +56,16 @@ MOD DEVELOPMENT HISTORY (GIT VERSIONS):
 PLEASE NOTE: I've moved all old changelogs into the version_history folder. This file will now only track the current update's changes
 
 3.91 -> 3.92 (In Progress):
+* PGD Connect
+  * As I have closed down the Phantom Games Development website, PGD Connect services are no longer active, I have removed all functioning of PGD Connect from the mod to allow users to continue to enjoy TWM2 without requiring this.
+  * The Mod Load Menu has been updated, removing old links to PGD and now showing the mod's GitHub Repository Page.
+  * The following mod features have been depricated and no longer available due to the removal of PGD Connect:
+    * Cross-Server Rank Files
+    * Cross-Server Buildings
+    * Daily Challenges
+    * PGD Events (Including XP Events)
+    * News Panel
+    * Top-15 Players List
 * Zombie Changes
   * Global
     * Massive "spring cleaning" of the zombie code files, fixing a bunch of bad coding practices and a few logic errors.
@@ -144,6 +144,9 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
   * The Helljump 'Oh Lordy' modifier has been changed to 'Reduces the cooldown time of the Zombie Lord's Photon Cannon by 50%'.	
   * The RSA Laser Rifle has been renamed to the 'UR-22 Laser Rifle'
   * The Pistol Weapon Slot is now called the Sidearm Slot
+  * Adjusted the mod's XP table:
+	* The final rank (Master Commander) now only requires 2,500,000 XP
+	* The earlier ranks will now progress much more quickly, with the mid-point now occuring at 14,000 XP instead of 20,000 XP
 * General Bug Fixes
   * Addressed the issue when gaining more than 1 million EXP that would result in your total EXP being reset by the difference between 1 million exp and your current exp.
   * Fixed the bug in which picking up weapon clips with an empty weapon would not automatically trigger weapon reload on that weapon.
@@ -182,7 +185,7 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	    * This works out to ~0.32 damage per shot which is about a 40% damage increase against zombies
 		* I want the Crimson Hawk to be a great PvE choice, but allow the other sidearms a chance to shine in PvP
     * ES-77 Pulse Phaser
-      * Last time I touched this weapon, I nearly started I riot amongst the entire Tribes 2 community, lol.
+      * Last time I touched this weapon, I nearly started a riot amongst the entire Tribes 2 community, lol.
 	    * Let's not do this again, but instead look at some easy to make and good adjustments
 	  * After looking at how this weapon has performed between 3.3 and 3.9.1, I feel it needs a slight bump in the damage department
 	    * Increased the base damage of the pulse phaser from 0.2 to 0.26
@@ -195,6 +198,10 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	    * Increased the projectile base speed from 120 to 165
 		  * Note: The Phaser Blades pulse is slightly slower at 160 base speed
 	  * The end result with be a stronger pulse phaser at the close range that loses out on the far reach aspect.
+    * Desert Eagle
+	  * Increased bullet damage from 0.3 to 0.38
+	  * Reduced spread factor from 6:1000 to 4:1000
+	  * Added a damage multiplier of 2.5 against all Zombie types
   * Sniper Rifles
     * The sniper rifle class has always been one of the stronger ones in TWM2, and I feel no reason to neuter it now.
     * The goal of this update is to tweak the other sniper options to add more viable choices instead of just dropping the R700 as soon as you get it.	
@@ -220,8 +227,7 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
       * For the most part, this rifle has been collecting dust in the bin of unused weapons due to other tools such as the S3 and R700 in the pool
 	  * This weapon has been in need of a long coming tweak of power to make it a more viable choice
 	    * Increased the bullet impact damage from 0.3 to 0.44
-	    * Reduced the round rechamber time from 0.3 seconds to 0.15 seconds
-	    * Reduced the spread factor of the weapon from 3:1000 to 2:1000
+	    * Reduced the round rechamber time from 0.3 seconds to 0.25 seconds
     * M4A1
       * This jack of all trades weapon currently sits as a power outlier in the assault rifle bin due to the various attachments it has
 	  * Coupled with a high base round damage, this weapon would have turned into the go-to gun without adjustments
@@ -231,19 +237,22 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
       * As it stands right now, the pulse rifle is one of the weakest weapons in the mod, with the only advantage being the fastest and most accurate semi-auto in the pool
 	  * With the enhancements to the G-41, the pulse rifle will also follow suit, which should make it a more viable choice in mid to long range fights
 	  * Increased the shot damage from 0.2 to 0.38
-	  * Reduced the round rechamber time from 0.3 seconds to 0.1 seconds
+	  * Reduced the round rechamber time from 0.3 seconds to 0.2 seconds
     * S3 Rifle
       * The weapon every player starts with in the mod has remained untouched since the first release of the mod.
 	  * However, after a long hard thought on this one, I feel as if this weapon has actually been acting more like a sniper rifle than a semi-auto.
 	  * With the changes to the G-41 and the Pulse Rifle however, the S3 still needs to be a viable tool, otherwise it will fall flat in the endgame
 	  * The following adjustments have been made
-	    * Reduced the direct impact damage from 0.7 to 0.5
+	    * Reduced the direct impact damage from 0.7 to 0.44
+		* Increased the headshot multiplier from 1.5 to 1.7
+		* Removed the OSK from S3 Rifle Headshots (Sorry!)
 	    * Reduced the round rechamber time from 0.9 seconds to 0.4 seconds
 	    * Removed the delay between round fire and round rechambering (Shaving another 0.2 seconds off the rechamber time)
-	    * Reduced the spread factor from 3:1000 to 2.5:1000
+	    * Increased the spread factor from 3:1000 to 5:1000
+	  * The Specialist S3 Rifle (S3S) for Helljump has recieved the same adjustments
   * Shotguns
     * The buckshot tools of TWM2 have always been in a good place in terms of PvP, however I've noticed a sad trend of these being tossed aside in PvE aspects
-	* This update will mainly focus on tuning the damage up a bit in PvE, but balancing the range and spread for PvP.
+    * This update will mainly focus on tuning the damage up a bit in PvE, but balancing the range and spread for PvP.
 	* M1700
 	  * The mod's first shotgun is a powerhouse in close range, with a heavy hitting OHK lurking for anyone foolish enough to come close.
 	  * It's a bit strong in PvP right now, but it doesn't do quite enough in PvE
@@ -251,7 +260,7 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	  * Increased the clip reload time from 2 seconds to 3 seconds
 	  * Increased the damage modifier against zombies from 2.0/3.0 (Depending on the type) to a flat 4.5 across all types
 	  * Cut the projectile lifetime from 1 second to 0.15 seconds
-	* Wp-400
+	* Wp-400 / LD06 Savager (Sidearm)
 	  * The semi-auto powerhouse shotgun is also getting some tuning done on it.
 	  * Reduced the projectile lifetime from 1 second to 0.1 seconds (Slightly less range than the M1700)
 	  * Increased the spread factor from 10:1000 to 15:1000
@@ -277,7 +286,11 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	  * Increased the number of pellets from 14 to 18
 	  * Reduced the projectile lifetime from 0.5 s to 0.15 seconds
 	  * Added a damage factor of 4.0 to all zombie types
-  * Misc Weapons
+  * Other Weapons
+    * Flamethrower
+	  * Although "pretty" in the effects department, and with a powerful burn effect, the Flamethrower itself is rather weak in terms of damage.
+	  * Increased the direct impact damage of fire "bolts" from 0.02 to 0.07.
+	    * This is kind of a "first pass" test to see how it feels.
     * Acid Cannon
       * The weapon that players could only obtain from zombie lords was more of a novelty toy players could pick up an fire back at zombies with
       * In 3.9.2, players will find the Acid Cannon as an officer promotion award, so therefore some adjustments were made to this weapon

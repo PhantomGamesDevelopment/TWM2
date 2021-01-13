@@ -176,44 +176,6 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
              %index++;
              return;
-             
-        case "PGDConn1":
-             %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "PGD Connect" );
-             if($TWM2::PGDConnectDisabled) {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "PGD Connect is disabled on this server.");
-                %index++;
-                messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
-                %index++;
-                return;
-             }
-             messageClient( %client, 'SetLineHud', "", %tag, %index, "Set email with: /setEmail");
-             %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, "Current Email: "@%client.emailSet);
-             %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPGDConn2\t1>Connect Account</a>');
-             %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
-             %index++;
-             return;
-             
-        case "PGDConn2":
-             %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "PGD Connect" );
-             if($TWM2::PGDConnectDisabled) {
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "PGD Connect is disabled on this server.");
-                %index++;
-                messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
-                %index++;
-                return;
-             }
-             messageClient( %client, 'SetLineHud', "", %tag, %index, "Connecting... please wait for response");
-             %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
-             %index++;
-             
-             PGDConnect_FromInGame(%client);
-             return;
 
         case "TWM":
              %client.SCMPage = "SM";
@@ -531,15 +493,6 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
 					%index++;
 					
 				case 2:
-					if(fetchCap("Officer", %next)) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "*** This officer rank level is currently locked ***");
-						%index++;				
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "***  Please try again at some other time/date  ***");
-						%index++;							
-						messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Return To Controls</a>');
-						%index++;			
-						return;
-					}
 					messageClient( %client, 'SetLineHud', "", %tag, %index, "Although you will restart at the level 1, you gain");
 					%index++;
 					messageClient( %client, 'SetLineHud', "", %tag, %index, "the "@trim($Prestige::Name[%scriptController.officer + 1])@" title with your rank.");
@@ -563,16 +516,7 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
 					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPrestigeWarn\t3>Yes</a>');
 					%index++;
 					
-				case 3:
-					if(fetchCap("Officer", %next)) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "*** This officer rank level is currently locked ***");
-						%index++;				
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "***  Please try again at some other time/date  ***");
-						%index++;							
-						messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Return To Controls</a>');
-						%index++;			
-						return;
-					}			
+				case 3:		
 					messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000>WARNING</color> This action CANNOT be undone!!!");
 					%index++;
 					messageClient( %client, 'SetLineHud', "", %tag, %index, "This is your last chance to turn back");
@@ -582,16 +526,7 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
 					messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPrestigeWarn\t4>Shut Up And Promote Me Now!</a>');
 					%index++;
 					
-				case 4:
-					if(fetchCap("Officer", %next)) {
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "*** This officer rank level is currently locked ***");
-						%index++;				
-						messageClient( %client, 'SetLineHud', "", %tag, %index, "***  Please try again at some other time/date  ***");
-						%index++;							
-						messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPersControl\t1>Return To Controls</a>');
-						%index++;			
-						return;
-					}			
+				case 4:			
 					PromoteToPrestige(%client);
 					messageClient( %client, 'SetLineHud', "", %tag, %index, "Congratulations, you have promoted to a new officer rank!!!");
 					%index++;
@@ -635,14 +570,6 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tUpdateSettings\t1>Save Game Settings</a>');
              %index++;
-			 if(!%client.IsPGDConnected()) {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tPGDConn1\t1>PGD Connect - In Game</a>');
-				%index++;
-			 }
-			 else {
-				messageClient( %client, 'SetLineHud', "", %tag, %index, 'PGD Connect Status: <color:33FF00>Connected');
-				%index++;			 
-			 }
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
@@ -947,26 +874,6 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
              %index++;
              return;
 
-        case "BL15":
-             messageClient( %client, 'SetScoreHudSubheader', "", "The Blacklist 15" );
-             %client.SCMPage = "SM";
-             messageClient( %client, 'SetLineHud', "", %tag, %index, "Top 15 Ranks");
-             %index++;
-             for(%i = 1; %i < 16; %i++) {
-                if(%client.namebase $= $Rank::Top[%i]) {
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:33FF00>"@%i@". "@$Rank::Top[%i]@" - "@$Rank::TopRank[%i]@" - "@$Rank::TopXP[%i]@"XP");
-                   %index++;
-                   //CompleteNWChallenge(%client, "Acceptance");
-                }
-                else {
-                   messageClient( %client, 'SetLineHud', "", %tag, %index, ""@%i@". "@$Rank::Top[%i]@" - "@$Rank::TopRank[%i]@" - "@$Rank::TopXP[%i]@"XP");
-                   %index++;
-                }
-             }
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
-             %index++;
-             return;
-
         case "PC":
              %client.SCMPage = "SM";
              messageClient( %client, 'SetScoreHudSubheader', "", "Piece Count" );
@@ -1047,66 +954,66 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
 }
 
 //Skin & bot set
-function SetSkin(%client,%newskin) {
-if (!IsObject(%client))
-return "Invalid client!";
+function SetSkin(%client, %newskin) {
+	if (!IsObject(%client))
+		return "Invalid client!";
 
-FreeClientTarget(%client);
-%client.skin = addtaggedstring(%newskin);
-%client.target = allocClientTarget(%client, %client.name, %client.skin, %client.voiceTag, '_ClientConnection', %client.team, 0, %client.voicePitch);
+	FreeClientTarget(%client);
+	%client.skin = addtaggedstring(%newskin);
+	%client.target = allocClientTarget(%client, %client.name, %client.skin, %client.voiceTag, '_ClientConnection', %client.team, 0, %client.voicePitch);
 
-if (IsObject(%client.player))
-%client.player.setTarget(%client.target);
+	if (IsObject(%client.player))
+		%client.player.setTarget(%client.target);
 
-return %client SPC %newskin;
+	return %client SPC %newskin;
 }
 
-function customizebot(%bot,%race,%sex,%name,%skin,%voicetag,%pitch)
-{
-    %bot.race = %race;
-    %bot.sex = %sex;
-    %bot.voice = addtaggedstring(%voicetag);
-    freeclienttarget(%bot);
-   %bot.target = allocClientTarget(%bot, %bot.name, %bot.skin, %bot.voiceTag, '_ClientConnection', 0, 0, %bot.voicePitch);
+function customizebot(%bot, %race, %sex, %name, %skin, %voicetag, %pitch) {
+	%bot.race = %race;
+	%bot.sex = %sex;
+	%bot.voice = addtaggedstring(%voicetag);
+	freeclienttarget(%bot);
+	%bot.target = allocClientTarget(%bot, %bot.name, %bot.skin, %bot.voiceTag, '_ClientConnection', 0, 0, %bot.voicePitch);
 }
 //End
 
 function closeScoreHudFSERV(%client) {
-serverCmdHideHud(%client, 'scoreScreen');
-//ResetQuiz(%client, $TagToUseForScoreMenu, "ALL", 1);
-commandToClient(%client, 'setHudMode', 'Standard', "", 0);
-%client.SCMPage = 1;
-%client.notFirstUse = 1;
+	serverCmdHideHud(%client, 'scoreScreen');
+	//ResetQuiz(%client, $TagToUseForScoreMenu, "ALL", 1);
+	commandToClient(%client, 'setHudMode', 'Standard', "", 0);
+	%client.SCMPage = 1;
+	%client.notFirstUse = 1;
 }
 
 function scoreCmdMainMenu(%game,%client,%tag,%page) {
-messageClient( %client, 'ClearHud', "", %tag, 1 );
-if (!isobject(cmdobject)) generateCMDObj();
-   messageClient( %client, 'SetScoreHudSubheader', "", "Main Menu Page " @ %page);
-if (%page > 1) {
-   %pgToGo = %page - 1;
-   messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t%1>Previous Page</a>',%pgToGo);
-   %index++;
-   }
-%cmdsToDisp = 15 * %page;
-%start = (%page - 1) * 15;
-for (%i=%start; %i < %cmdsToDisp;%i++) {
-    %line = CmdObject.cmd[%i];
-    if (%line !$= "") {
-       messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\t%1>%2</a>',getword(%line,0),getwords(%line,1));
-       %index++;
-    }
-}
-if (%cmdsToDisp < (CmdObject.commands + 1)) {
-   %pgToGo = %page + 1;
-   messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t%1>Next Page</a>',%pgToGo);
-   %index++;
-   }
-if (%page > 1) {
-   messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tGTP\t1>First Page</a>");
-   %index++;
-   }
-messageClient( %client, 'ClearHud', "", %tag, %index );
+	messageClient( %client, 'ClearHud', "", %tag, 1 );
+	if (!isobject(cmdobject)) 
+		generateCMDObj();
+	messageClient( %client, 'SetScoreHudSubheader', "", "Main Menu Page " @ %page);
+	if (%page > 1) {
+		%pgToGo = %page - 1;
+		messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t%1>Previous Page</a>',%pgToGo);
+		%index++;
+	}
+	%cmdsToDisp = 15 * %page;
+	%start = (%page - 1) * 15;
+	for (%i = %start; %i < %cmdsToDisp; %i++) {
+		%line = CmdObject.cmd[%i];
+		if (%line !$= "") {
+			messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\t%1>%2</a>',getword(%line,0),getwords(%line,1));
+			%index++;
+		}
+	}
+	if (%cmdsToDisp < (CmdObject.commands + 1)) {
+		%pgToGo = %page + 1;
+		messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t%1>Next Page</a>',%pgToGo);
+		%index++;
+	}
+	if (%page > 1) {
+		messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tGTP\t1>First Page</a>");
+		%index++;
+	}
+	messageClient( %client, 'ClearHud', "", %tag, %index );
 }
 
 
@@ -1116,20 +1023,22 @@ messageClient( %client, 'ClearHud', "", %tag, %index );
 //after noobs get their hands on the base script first
 
 function GenerateCMDObj() {
-new fileobject("fIn");
-fIn.openforread("scripts/TWM2/cmddisplaylist.txt");
-if (isobject(cmdobject)) cmdobject.delete();
-   new scriptObject("CmdObject") {commands=0;};
-while (!fIn.iseof()) {
-      %line = fIn.readline();
-      if (getword(%line,0) $= "CMD") {
-         CmdObject.cmd[CmdObject.commands] = getwords(%line,1);
-         CmdObject.commands++;
-      }
-}
-
-fIn.close();
-fIn.delete();
+	new fileobject("fIn");
+	fIn.openforread("scripts/TWM2/cmddisplaylist.txt");
+	if (isobject(cmdobject)) 
+		cmdobject.delete();
+	new scriptObject("CmdObject") {
+		commands=0;
+	};
+	while (!fIn.iseof()) {
+		%line = fIn.readline();
+		if (getword(%line,0) $= "CMD") {
+			CmdObject.cmd[CmdObject.commands] = getwords(%line,1);
+			CmdObject.commands++;
+		}
+	}
+	fIn.close();
+	fIn.delete();
 }
 
 // CONTENT SAVING
@@ -1146,115 +1055,37 @@ function CheckSlotStatus(%cl,%slot) {
 //Checks to see if the file CAN, or Should be loaded
 function RunLoadCheck(%cl, %slot, %PC) {
    if(%cl.cantLoad || $SaveFile::PieceCT[%client.guid,%slot] > %PC) {
-   %str = "<color:FF0000><a:gamelink\tLoad\t"@%slot@">Load</a>"; //Return the Red Link
-   return %str;
+	   %str = "<color:FF0000><a:gamelink\tLoad\t"@%slot@">Load</a>"; //Return the Red Link
+	   return %str;
    }
    else {
-   %str = "<color:33FF00><a:gamelink\tLoad\t"@%slot@">Load</a>"; //Return the Green Link
-   return %str;
+	   %str = "<color:33FF00><a:gamelink\tLoad\t"@%slot@">Load</a>"; //Return the Green Link
+	   return %str;
    }
 }
 
 function RunSaveCheck(%cl, %slot) {
    if(%cl.cantSave) {
-   %str = "<color:FF0000><a:gamelink\tSaveWarn\t"@%slot@">Save</a>"; //Return the Red Link
-   return %str;
+	   %str = "<color:FF0000><a:gamelink\tSaveWarn\t"@%slot@">Save</a>"; //Return the Red Link
+	   return %str;
    }
    else if($SaveFile::Save[%cl.guid,%slot] $= "" && !%cl.cantSave && $Phantom::CSSEnabled) {
-   %str = "<color:33FF00><a:gamelink\tSaveWarn\t"@%slot@">Save</a>"; //Return the Green Link
-   return %str;
+	   %str = "<color:33FF00><a:gamelink\tSaveWarn\t"@%slot@">Save</a>"; //Return the Green Link
+	   return %str;
    }
    else {
-   %str = "<color:FFFF66><a:gamelink\tSaveWarn\t"@%slot@">Save</a>"; //Return the Yellow Link
-   return %str;
+	   %str = "<color:FFFF66><a:gamelink\tSaveWarn\t"@%slot@">Save</a>"; //Return the Yellow Link
+	   return %str;
    }
 }
 
 function RunDeleteCheck(%cl, %slot) {
    if($SaveFile::Save[%cl.guid,%slot] $= "") {
-   %str = "<color:FF0000><a:gamelink\tDeleteWarn\t"@%slot@">Delete</a>"; //Return the Red Link
-   return %str;
+	   %str = "<color:FF0000><a:gamelink\tDeleteWarn\t"@%slot@">Delete</a>"; //Return the Red Link
+	   return %str;
    }
    else {
-   %str = "<color:FFFF66><a:gamelink\tDeleteWarn\t"@%slot@">Delete</a>"; //Return the Yellow Link
-   return %str;
+	   %str = "<color:FFFF66><a:gamelink\tDeleteWarn\t"@%slot@">Delete</a>"; //Return the Yellow Link
+	   return %str;
    }
 }
-
-
-
-
-
-
-
-
-
-
-
-//------------------------------------
-function PGDConnect_FromInGame(%client) {
-   if($TWM2::PGDConnectDisabled) {
-      echo("PGD Connect is disabled.");
-      return;
-   }
-   %guid = %client.guid;
-   %email = %client.emailSet;
-   if(!isSet(%email)) {
-      MessageClient(%client, 'msgClient', "\c3SERVER: Must set an email address");
-      return;
-   }
-   //======
-   $PGD::IsPGDConnected[%guid] = 0; //some funky setting always brings this to 1 before reg. happens
-   %tcp = new TCPObject(TCPIGCObject);
-   
-   %tcp.client = %client;
-   %tcp.guid = %client.guid;
-   %tcp.email = %client.emailSet;
-   %tcp.connect("www.phantomdev.net:80");
-   
-   %tcp.timeout = %tcp.schedule(10000, disconnect);
-}
-
-function TCPIGCObject::onConnected(%this) {
-
-   %sep = getRandomSeparator(16);
-   %loc = "/public/Univ/submit.php";
-   %header1 = "POST" SPC %loc SPC "HTTP/1.1\r\n";
-   %host = "Host: www.phantomdev.net\r\n";
-   %header2 = "Connection: close\r\nUser-Agent: Tribes 2\r\n";
-   %contType = "Content-Type: multipart/form-data; boundary="@%sep@"\r\n";
-   %guidReq = "--"@%sep@"\r\nContent-Disposition: form-data; name=\"guid\"\r\n\r\n"@%this.guid@"";
-   %emailReq = "--"@%sep@"\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n"@%this.email@"";
-   %payload = %guidReq@"\r\n"@%emailReq@"\r\n--"@%sep@"--";
-   %qlen = strLen(%payload);
-   %contentLeng = "Content-Length: "@%qlen@"\r\n\r\n";
-   %query = %header1@%host@%header2@%contType@%contentLeng@%payload;
-   echo("Connected to Phantom Games Server, Sending Connection Data...");
-   if($debugmode == 1) {
-      echo(%query);
-   }
-   %this.send(%query);
-}
-
-function TCPIGCObject::onLine(%this, %line) {
-   echo(%line);
-   if(strstr(%line, "Data added to PGD Connect") != -1) {
-      MessageClient(%this.client, 'msgClient', "\c3SERVER: Data registered to PGD Connect...");
-      %this.disconnect();
-      $PGD::IsPGDConnected[%this.guid] = 1;
-   }
-   else if(strstr(%line, "This account is already registered") != -1) {
-      MessageClient(%this.client, 'msgClient', "\c3SERVER: You have already registered to PGD connect.");
-      %this.disconnect();
-      $PGD::IsPGDConnected[%this.guid] = 1;
-   }
-   else {
-
-   }
-}
-
-function TCPIGCObject::onDisconnect(%this) {
-   closeScoreHudFSERV(%this.client);
-   %this.delete();
-}
-

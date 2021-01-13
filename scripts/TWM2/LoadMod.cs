@@ -17,7 +17,6 @@ exec("scripts/TWM2/Systems/ObjectDamage.cs");       //Object Damage Functioning
 exec("scripts/TWM2/Systems/Scoremenucmds.cs");      //Score Menu
 exec("scripts/TWM2/Systems/BossSystem.cs");         //Bosses
 exec("scripts/TWM2/Systems/Medals.cs");             //Medals
-exec("scripts/TWM2/Systems/NewsPanel.cs");          //Scoremenu News Page
 exec("scripts/TWM2/Systems/Perks.cs");              //Special Perks
 exec("scripts/TWM2/Systems/WeaponChallenges.cs");   //Weapon Challenges
 exec("scripts/TWM2/Systems/NWChallengeIndex.cs");   //Non-Weapon Challenges
@@ -32,7 +31,6 @@ exec("scripts/TWM2/Missions/MissionCore.cs");       //Missions
 exec("scripts/TWM2/Systems/Scoremenucmds.cs");      //Score Menu load again to update the inv. changes
 exec("scripts/TWM2/Systems/SuccessiveKills.cs");    //Successive Kills
 exec("scripts/TWM2/Systems/PieceData.cs");          //Piece Data, /undo Command
-exec("scripts/TWM2/Systems/DChalg.cs");             //Daily Challenges
 exec("scripts/TWM2/Systems/ArmorEnergyShields.cs"); //Armor Shields
 exec("scripts/TWM2/Systems/weaponModes.cs");        //Global Defines for Weapon Modes
 exec("scripts/TWM2/AI/DroneAI.cs");                 //Drones
@@ -51,16 +49,6 @@ exec("scripts/TWM2/CustomArmors.cs");               //TWM2 Armors
 exec("scripts/TWM2/ArmorFunctions.cs");             //TWM2 Armors Functions
 exec("scripts/TWM2/VehicleReticles.cs");            //Vehicle Reticles
 
-                                                    //Universal Systems
-exec("scripts/TWM2/PGDConnect/ConnectionQueue.cs");       //TCP Connection List
-exec("scripts/TWM2/PGDConnect/UniversalSupport.cs");      //Support Script
-exec("scripts/TWM2/PGDConnect/UniversalSaving_Client.cs");//Saver
-exec("scripts/TWM2/PGDConnect/UniversalLoading.cs");      //Loading
-exec("scripts/TWM2/PGDConnect/UniversalRanks.cs");        //Ranks
-exec("scripts/TWM2/PGDConnect/ServerInteraction.cs");     //Server Connection
-
-schedule(1000, 0, "CheckCore");
-
                                                    //Exterior Functioning
 
 exec("scripts/TWM2/ExteriorFunctioning/PulseStuff.cs");  //Aid Pulses
@@ -76,10 +64,6 @@ exec("scripts/TWM2/ChatCommands/Public.cs");       //Public CCs
 exec("scripts/TWM2/ChatCommands/Admin.cs");        //Admin CCs
 exec("scripts/TWM2/ChatCommands/SuperAdmin.cs");   //SuperAdmin CCs
 exec("scripts/TWM2/ChatCommands/DevAndHost.cs");   //Dev/Host CCs
-
-                                                   //Server Dependancies
-LoadRanksBase();                                   //Load Ranks
-DownloadNewsPage();                                //Load News Page
 
                                                    //Weapons
 exec("scripts/weapons/Pistols/Colt.cs");           //Colt Pistol
@@ -140,12 +124,6 @@ exec("scripts/TWM2/Bosses/LordVardison.cs"); //load him last
 
 echo("Loading custom scripts");
 exec("scripts/Customize/CustomScripts.cs");
-
-schedule(5500, 0, "establishPGDConnection");
-
-cleanChallenges();
-$ChallengeIndex = 0;
-schedule(7000, 0, "downloadChallenges");
 
 echo("********************************************");
 echo("********************************************");

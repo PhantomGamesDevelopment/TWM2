@@ -60,16 +60,9 @@ package loadmodinfo
 	messageClient( %client, 'MsgGameOver', "");
     messageClient( %client, 'MsgClearDebrief', "" );
 
-    if($ServerType $= "") {
-       %STO = "Checking PGD...";
-    }
-    else {
-       %STO = $ServerType;
-    }
-
     messageClient(%client, 'MsgDebriefResult', "", "<Font:Arial Bold:18><Just:CENTER>"@$Host::GameName);
     messageClient(%client, 'MsgDebriefResult', "", "<Font:Arial Bold:14><Just:CENTER>Total Warfare Mod 2 : Advanced Warfare");
-    messageClient(%client, 'MsgDebriefResult', "", "<Font:Arial Bold:14><Just:CENTER>Server Type: "@%STO@"");
+	messageClient(%client, 'MsgDebriefResult', "", "<Font:Arial Bold:14><Just:CENTER>Mod Version: "@$TWM2::ModVersionString);
 
     %Credits = "\n<Font:Arial:16>Version v"@$TWM2::ModVersionString@"" @
                "\n<Font:Arial:14>TWM 2 Creator (Lead Developer): Phantom139"@
@@ -79,7 +72,7 @@ package loadmodinfo
     // this callback adds content to the bulk of the gui
     messageClient(%client, 'MsgDebriefAddLine', "", %Credits);
     
-    %Site = "\n<Font:Arial:16>Site: Http://www.phantomdev.net\n";
+    %Site = "\n<Font:Arial:16>Site: https://github.com/PhantomGamesDevelopment/TWM2\n";
 
     // this callback adds content to the bulk of the gui
     messageClient(%client, 'MsgDebriefAddLine', "", %Site);
@@ -88,26 +81,6 @@ package loadmodinfo
                "\n";
     messageClient(%client, 'MsgDebriefAddLine', "", %Thanks);
 
-    if($Rank::Top[1] $= "") {
-       %TopRanks = "\n<Font:Arial:14>Top 5 Ranks:" @
-               "\nRanks Not Yet Discovered, run FindTopRanks(); in console";
-
-       messageClient(%client, 'MsgDebriefAddLine', "", %TopRanks);
-    }
-    else {
-       %TopRanks = "\n<Font:Arial:14>Top 5 Ranks" @
-               "\n<Font:Arial:12>First: "@$Rank::Top[1]@", "@$Rank::TopRank[1]@" ,"@$Rank::TopXP[1]@"XP"@
-               "\nSecond: "@$Rank::Top[2]@", "@$Rank::TopRank[2]@" ,"@$Rank::TopXP[2]@"XP"@
-               "\nThird: "@$Rank::Top[3]@", "@$Rank::TopRank[3]@" ,"@$Rank::TopXP[3]@"XP";
-
-       messageClient(%client, 'MsgDebriefAddLine', "", %TopRanks);
-       //It cuts off sometimes, so this prevents that from happening
-       %TopRanks2 = "<Font:Arial:12>Fourth: "@$Rank::Top[4]@", "@$Rank::TopRank[4]@" ,"@$Rank::TopXP[4]@"XP"@
-                 "\nFifth: "@$Rank::Top[5]@", "@$Rank::TopRank[5]@" ,"@$Rank::TopXP[5]@"XP"@
-                 "\n";
-
-       messageClient(%client, 'MsgDebriefAddLine', "", %TopRanks2);
-    }
     %tip = GetTipMessage();
     %tipMsg = "\n<Font:Arial:14>Heres a tip for you:" @
                "\n<Font:Arial:12>"@%tip@"."@
@@ -118,10 +91,6 @@ package loadmodinfo
                "\n<Font:Arial:12>"@$Server::MOTD@"."@
                "\n\n\n";
     messageClient(%client, 'MsgDebriefAddLine', "", %MOTDMsg);
-    
-    %PGDMsg = "\n<Font:Arial:14>Join the Phantom Games Development community for up to the minute news on TWM2 and our other projects! " @
-    "\n http://www.forums.phantomdev.net";
-    messageClient(%client, 'MsgDebriefAddLine', "", %PGDMsg);
 
     %gettingStarted = "\n<Font:Arial:14>First time playing TWM2? Use the /help command for a list of chat commands and access the " @
     "\n Command menu with your [F2] key to get started!";

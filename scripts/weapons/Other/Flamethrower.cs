@@ -91,7 +91,7 @@ datablock LinearFlareProjectileData(FlamethrowerBolt) {
    projectileShapeName = "turret_muzzlepoint.dts";
    scale               = "1.0 1.0 1.0";
    faceViewer          = true;
-   directDamage        = 0.02;
+   directDamage        = 0.07;
    hasDamageRadius     = true;
    indirectDamage      = 0.02;
    damageRadius        = 4.0;

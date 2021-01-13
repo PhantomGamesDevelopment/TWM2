@@ -7,14 +7,14 @@ datablock AudioProfile(S3FireSound) {
 datablock TracerProjectileData(S3Bullet) {
 	doDynamicClientHits = true;
 
-	directDamage        = 0.5;
+	directDamage        = 0.44;
 	directDamageType    = $DamageType::S3;
 	explosion           = "ChaingunExplosion";
 	splash              = ChaingunSplash;
-	HeadMultiplier      = 1.5;
+	HeadMultiplier      = 1.7;
 	LegsMultiplier      = 0.35;
 
-	HeadShotKill        = 1;
+	HeadShotKill        = 0;
 
 	kickBackStrength  = 15.0;
 	sound 		   = ChaingunProjectile;
@@ -107,7 +107,7 @@ datablock ShapeBaseImageData(S3RifleImage) {
 	shellExitVariance   = 15.0;
 	shellVelocity       = 3.0;
 
-	projectileSpread = 2.5 / 1000.0;
+	projectileSpread = 5.0 / 1000.0;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";

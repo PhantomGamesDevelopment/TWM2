@@ -7,9 +7,7 @@ function TWM2Lib_MainControl(%functionName, %arguments) {
         case "clientconnectionfunction":
             %client = %arguments;
             $XPArray[%client] = 0;
-            %client.CheckPGDConnect();  // <-- Used for Universal features
-            TWM2Lib_PGDConnect_Support("performFileCheck", "Data/"@%client.guid@"/Ranks/TWM2/Saved.TWMSave");
-            schedule(5000, 0, "LoadUniversalRank", %client);
+            schedule(100, 0, LoadClientRankFile, %client);
 
             setDefaultInventory(%client);
             TWM2Lib_MainControl("CheckGUID", %client);
@@ -28,7 +26,6 @@ function TWM2Lib_MainControl(%functionName, %arguments) {
         case "clientdropfunction_preclientkill":
             %client = %arguments;
             SaveClientFile(%client);
-            PrepareUpload(%client);   //universally upload it (if we can)
             LogConnection(%client, 4);
             MessageAll('MsgAllPlayers', "\c4"@$ChatBot::Name@": Removing Orphaned Deployables in "@MFloor($TWM2::RemoveOrphansTime / 60)@" Minutes");
             schedule(1000, 0, "TWM2Lib_MainControl", "RemoveOrphansLoop", 1);

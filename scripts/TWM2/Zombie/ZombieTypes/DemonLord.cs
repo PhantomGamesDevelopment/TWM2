@@ -25,6 +25,7 @@ datablock PlayerData(DemonMotherZombieArmor) : LightMaleHumanArmor {
 	damageScale[$DamageType::Burn] = 0.001;
 	damageScale[$DamageType::Fire] = 0.001;	
 	damageScale[$DamageType::AcidCannon] = 3.0;	
+	damageScale[$DamageType::deserteagle] = 2.5;
 
 	max[RepairKit]			= 0;
 	max[Mine]				= 0;
