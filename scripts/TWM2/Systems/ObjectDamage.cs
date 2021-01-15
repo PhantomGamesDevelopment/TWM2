@@ -370,7 +370,7 @@ function postObjectDestroyed(%source, %targetObject, %dType, %dLoc) {
 				}
 			}
 			//Challenges, Successive Kills, Killstreaks
-			doChallengeCheck(%sourceClient, %targetClient);
+			//doChallengeCheck(%sourceClient, %targetClient);
 			%sourceObject.killsinarow++;
 			%sourceObject.killsinarow2++;
 			//TWM2 3.2 -> Successive Kills
@@ -391,7 +391,7 @@ function postObjectDestroyed(%source, %targetObject, %dType, %dLoc) {
 		}
 	}
 	//Record Challenge Kill
-	doChallengeKillRecording(%sourceObject, %targetObject);
+	//doChallengeKillRecording(%sourceObject, %targetObject);
 	//martydom
 	if(%targetClient !$= "" && %targetClient != 0 && %targetClient.IsActivePerk("Martydom")) {
 		serverPlay3d(SatchelChargeActivateSound, %targetObject.getPosition());

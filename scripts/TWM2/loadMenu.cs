@@ -3,8 +3,7 @@
 // and Modified later by the T2CC
 //-------------------------------------------
 
-package loadmodinfo
-{
+package loadmodinfo {
 
    function GetTipMessage() {
        %r = getRandom(1,19);
@@ -52,8 +51,8 @@ package loadmodinfo
    }
 
    function sendLoadInfoToClient( %client ) {
-	Parent::sendLoadInfoToClient(%client);
-	schedule(1000, 0, "sendLoadscreen", %client);
+      Parent::sendLoadInfoToClient(%client);
+	  schedule(1000, 0, "sendLoadscreen", %client);
    }
 
    function sendLoadscreen(%client){
@@ -64,8 +63,7 @@ package loadmodinfo
     messageClient(%client, 'MsgDebriefResult', "", "<Font:Arial Bold:14><Just:CENTER>Total Warfare Mod 2 : Advanced Warfare");
 	messageClient(%client, 'MsgDebriefResult', "", "<Font:Arial Bold:14><Just:CENTER>Mod Version: "@$TWM2::ModVersionString);
 
-    %Credits = "\n<Font:Arial:16>Version v"@$TWM2::ModVersionString@"" @
-               "\n<Font:Arial:14>TWM 2 Creator (Lead Developer): Phantom139"@
+    %Credits = "\n<Font:Arial:14>TWM 2 Creator (Lead Developer): Phantom139"@
                "\n<Font:Arial:14>TWM 2 Co-Devs: Dark Dragon DX, DarknessOfLight, and Signal360"@
                "\n<Font:Arial:14>CCM Developers: Dondelium_X, FalconBlade, and Ur_A_Dum";
 

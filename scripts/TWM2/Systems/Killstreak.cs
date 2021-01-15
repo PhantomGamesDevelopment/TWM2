@@ -90,7 +90,8 @@ function GetRequiredKills(%client, %streakVal, %plZ) {
 }
 
 function GameConnection::OnUseKillstreak(%client, %ID) {
-   recordAction(%client, "KSCC", %ID@"\t1");
+   //TWM2 3.9.2: Depricated, but keeping this callback in case we'd like it in the future.
+   //recordAction(%client, "KSCC", %ID@"\t1");
 }
 
 //Handles Player Based Killstreaks

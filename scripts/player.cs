@@ -1399,7 +1399,7 @@ datablock PlayerData(LightMaleHumanArmor) : LightPlayerDamageProfile
 	max[G41Rifle]			= 1;
 	max[G41RifleAmmo]			= 20;
 	max[R700SniperRifle]			= 1;
-	max[R700SniperRifleAmmo]			= 4;
+	max[R700SniperRifleAmmo]			= 7;
 	max[Javelin]			= 0;
 	max[JavelinAmmo]			= 0;
 	max[Stinger]			= 0;
@@ -2017,7 +2017,7 @@ datablock PlayerData(HeavyMaleHumanArmor) : HeavyPlayerDamageProfile
 	max[G41Rifle]			= 0;
 	max[G41RifleAmmo]			= 0;
 	max[R700SniperRifle]			= 1;
-	max[R700SniperRifleAmmo]			= 4;
+	max[R700SniperRifleAmmo]			= 7;
 	max[MiniChaingun]			= 1;
 	max[MiniChaingunAmmo]			= 100;
 	max[MiniColliderCannon]			= 1;

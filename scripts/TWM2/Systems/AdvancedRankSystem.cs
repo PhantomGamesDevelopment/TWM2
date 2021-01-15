@@ -215,7 +215,7 @@ function PromoteToPrestige(%client) {
    SaveClientFile(%client);
 
    MessageAll('msgSpecial', "\c5"@%client.namebase@" has promoted to Officer level "@%next@".");
-   recordAction(%client, "", ""); //record blank action for the challenges to pick off any officer challenges
+   //recordAction(%client, "", ""); //record blank action for the challenges to pick off any officer challenges
    
    for(%i = %next; %i > 0; %i--) {
       %oChN = "Prestige"@%i;

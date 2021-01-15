@@ -42,36 +42,52 @@ datablock ParticleEmitterData(R700SmokeEmitter) {
 	particles = "R700SmokeParticle";
 };
 
-datablock GrenadeProjectileData(R700Bullet) {
-	projectileShapeName = "weapon_missile_projectile.dts";
-	emitterDelay        = -1;
-	directDamage        = 0.62;
-	hasDamageRadius     = false;
-	directDamageType    = $DamageType::R700;
-	kickBackStrength    = 6400;
-	bubbleEmitTime      = 1.0;
+datablock LinearFlareProjectileData(R700Bullet)
+{
+   projectileShapeName = "weapon_missile_projectile.dts";
+   scale               = "1.0 1.0 1.0";
+   faceViewer          = true;
+   directDamage        = 0.6;
+   kickBackStrength    = 6400;
+   radiusDamageType    = $DamageType::R700;
 
-	HeadMultiplier      = 1.5;
-	LegsMultiplier      = 0.35;
+   LegsMultiplier      = 0.35;
 
-	HeadShotKill        = 1;   
+   HeadShotKill        = 1;
 
-	ImageSource         = "R700SniperRifleImage";
+   ImageSource         = "R700SniperRifleImage";
 
-	sound               = ChaingunProjectile;
-	explosion           = "ChaingunExplosion";
-	underwaterExplosion = "ChaingunExplosion";
-	velInheritFactor    = 0.5;
-	splash              = ChaingunSplash;
+   explosion           = "ChaingunExplosion";
+   splash              = ChaingunSplash;
 
-	baseEmitter         = R700SmokeEmitter;
-	bubbleEmitter       = R700SmokeEmitter;
+   baseEmitter        = R700SmokeEmitter;
 
-	grenadeElasticity = 0.35;
-	grenadeFriction   = 0.2;
-	armingDelayMS     = 1;
-	muzzleVelocity    = 2000.00;
-	drag = 0.1;	
+   dryVelocity       = 2000.0;
+   wetVelocity       = 2000.0;
+   velInheritFactor  = 1.0;
+   fizzleTimeMS      = 1000;
+   lifetimeMS        = 1000;
+   explodeOnDeath    = false;
+   reflectOnWaterImpactAngle = 0.0;
+   explodeOnWaterImpact      = false;
+   deflectionOnWaterImpact   = 0.0;
+   fizzleUnderwaterMS        = 3000;
+
+   //activateDelayMS = 100;
+   activateDelayMS = -1;
+
+   size[0]           = 0.2;
+   size[1]           = 0.5;
+   size[2]           = 0.1;
+
+   numFlares         = 5;   //less flares = less lag
+   flareColor        = "1 0.18 0.03";
+   flareModTexture   = "flaremod";
+   flareBaseTexture  = "flarebase";
+
+   hasLight    = true;
+   lightRadius = 10.0;
+   lightColor  = "0.94 0.03 0.12";
 };
 
 datablock ItemData(R700SniperRifleAmmo) {
@@ -98,7 +114,7 @@ datablock ShapeBaseImageData(R700SniperRifleImage) {
 	item = R700SniperRifle;
 	ammo = R700SniperRifleAmmo;
 	projectile = R700Bullet;
-	projectileType = GrenadeProjectile;
+	projectileType = LinearFlareProjectile;
 	emap = true;
 
 	armThread = looksn;
@@ -108,7 +124,7 @@ datablock ShapeBaseImageData(R700SniperRifleImage) {
 	ClipPickupName["R700Clip"] = "A Few Boxes Of R700 Sniper Bullets";
 	ShowsClipInHud = 1;
 	ClipReloadTime = 7;
-	ClipReturn = 4;
+	ClipReturn = 7;
 	InitialClips = 6;
 	//
 	//Challenges

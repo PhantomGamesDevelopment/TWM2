@@ -59,7 +59,7 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 * PGD Connect
   * As I have closed down the Phantom Games Development website, PGD Connect services are no longer active, I have removed all functioning of PGD Connect from the mod to allow users to continue to enjoy TWM2 without requiring this.
   * The Mod Load Menu has been updated, removing old links to PGD and now showing the mod's GitHub Repository Page.
-  * The following mod features have been depricated and no longer available due to the removal of PGD Connect:
+  * The following mod features have been depricated and are no longer available due to the removal of PGD Connect:
     * Cross-Server Rank Files
     * Cross-Server Buildings
     * Daily Challenges
@@ -71,26 +71,33 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
     * Massive "spring cleaning" of the zombie code files, fixing a bunch of bad coding practices and a few logic errors.
 	* Moved all functioning into a core control script, added additional modifiers and flags to grant more customizability to zombies
 	* **WARNING: Only specific zombies are functional at this moment in time**
+  * Normal
+    * Reduced HP from 280 (2.8) to 200 (2.0)
+      * Given damage number reductions in a large amount of the mod's arsenal to balance things, zombie HP needed to be cut across the board for the most part.
   * Ravager
     * Ravagers will now perform ambush style attacks on targets, making them much more challenging
 	* Increased the XP reward from killing ravager zombies	
   * Lord
+    * Reduced HP from 1800 (18.0) to 1250 (12.5)
     * Modified the behavior of zombie lords
-	* Replaced the acid cannon with an anti-tank photon cannon
-	* Zombie lords will now preferential target enemy ground armor before infantry, and engage their photon cannon on targets
-	* Zombie lords can now activate a defensive barrier to protect themselves and allies from damage temporarily... enjoy this new rage inducing mechanic :)	
+	  * Replaced the acid cannon with an anti-tank photon cannon
+	  * Zombie lords will now preferential target enemy ground armor before infantry, and engage their photon cannon on targets
+	  * Zombie lords can now activate a defensive barrier to protect themselves and allies from damage temporarily... enjoy this new rage inducing mechanic :)	
   * Demon
+    * Reduced HP from 400 (4.0) to 300 (3.0)
     * Increased resistance to fire damage to 1000% from 3%
     * Demon Zombies now light players on fire instead of infecting them on collision
     * Players will be knocked back with a higher force when hit by demon zombies		
   * Air Rapier
 	* Modified the damage scalar of missiles to be a OHK on rapier zombies	
   * Demon Lord
+    * Reduced HP from 900 (9.0) to 750 (7.5)
     * Cleaned up this script file substantially
 	* Replaced the standard lunge with a fire lunge which creates a firey explosion on impact
 	* Reduced the hit damage of the demon lord from 0.8 to 0.5
 	* Demon Lords, like the regular demons will no longer infect on collision, but set the player on fire instead	
   * Shifter
+    * Reduced HP from 280 (2.8) to 225 (2.25)
     * The change to the shifter teleportation in 3.91 made these zombies ridiculously overpowered, they will be tuned down
 	* Increased the maximum targeting range of the teleport attack from 200m to 400m
 	* Increased the cooldown of the teleport attack from 7 seconds to 12.5 seconds
@@ -99,7 +106,7 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
     * The sniper zombie is now armed with two new weapons. 
 	  * The first is an acid sniper rifle which infects players on striking
 	  * The second is a rapid fire sidearm that the sniper will use when targets move too close
-	* Reduced the health of Sniper Zombies from 40 (4.0) to 25 (2.5)	
+	* Reduced the health of Sniper Zombies from 400 (4.0) to 250 (2.5)	
 * Added Boss Proficiency
   * Hidden challenges embedded in boss fights that award additional experience for completing tough feats
   * For example: Defeat the shade lord without dying by the elemental shades
@@ -215,11 +222,11 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	  * Reduced the clip reload time from 5 seconds to 4 seconds
 	  * Reduced the round rechamber time from 1.1 seconds to 0.9 seconds
     * R700 
-      * The monstrous R700 sniper rifle has for the most part, gone completely unchallenged since the release of the mod
-	  * This weapon is about to get a lesson in Newton's Law of Gravity.
-	  * Changed the projectile type from Tracer to Grenade
-	    * Bullets will now drop as they travel, reducing the effective range with the same look angle.
-	    * Players will now need to aim their shots based on distance too.	
+      * The monstrous R700 sniper rifle has for the most part, gone completely unchallenged since the release of the mod, and it's time for it to be reigned in.
+      * Reduced direct impact damage from 0.62 to 0.6
+      * Removed the headshot multiplier on the projectile (The weapon still OHK on headshot, but this will affect high-tier PvE combatants)
+      * Increased the ammo per clip from 4 to 7
+      * The goal of this adjustment pass is to make the R700 a high-end choice in regards to having moderate damage and the largest magazine size, but allow the other two snipers to be competitive in choice.	  
   * Assault Rifles
     * Assault Rifles have always felt good in TWM2, the strong jack of all trade weapons good for most ranges, while being outperformed in the range of other tools
 	* Only minor tweaking is needed here to help some of the unused tools get up to speed

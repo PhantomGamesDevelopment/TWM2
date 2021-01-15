@@ -29,7 +29,7 @@ function ResetSuccessive(%player) {
 
 function DoStreakPrint(%player, %kills, %damageType) {
    %client = %player.client;
-   recordAction(%client, "SKSC", %kills@"\t1");
+   //recordAction(%client, "SKSC", %kills@"\t1");
    switch(%kills) {
       case 5:
          BottomPrint(%client, "<color:EE0000><Font:Arial Bold:18>KILLING SPREE", 3, 3);
@@ -55,7 +55,7 @@ function DoSuccessivePrint(%player) {
    }	
    %client = %player.client;
    messageClient(%client, 'msgSoundFX', "~wfx/misc/MA1.wav");
-   recordAction(%client, "SKC", %player.successive@"\t1");
+   //recordAction(%client, "SKC", %player.successive@"\t1");
    switch(%player.successive) {
       case 2:
          CenterPrint(%client, "<color:EE0000><Font:Arial Bold:18>DOUBLE KILL", 3, 3);

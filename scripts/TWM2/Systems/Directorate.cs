@@ -33,6 +33,5 @@ function LoadClientFile(%client) {
    exec(%file);
    ClientContainer(%client);
    //
-   loadChallengeData(%client);
    loadSettings(%client);
 }

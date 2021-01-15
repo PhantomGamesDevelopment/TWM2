@@ -5,11 +5,6 @@ $TWM2::DisabledMissionTypes = "";  //Horde\tHorde4
 
 $ScoreHudInventory::Active = 0; //0 returns the inv. hud to the normal one
 
-//This global variable can disable the features of PGD Connect on the server. If the service
-// goes down at any time, please set this to 1. All PGD Connect Servive info may be viewed on
-// the PGD fourms (http://forums.phantomdev.net)
-$TWM2::PGDConnectDisabled = 0;
-$TWM2::PGDCredentials = "";
 $TWM2::RestartOnEmpty = 0;
 
 //CHAT BOT
@@ -238,10 +233,10 @@ $Host::UseGlobalBanList = 1;
 
 $TWM2::UseGoreMod = 0; //set this to 1 for bl00d
 
-$Server::MOTD = "Welcome To Total Warfare Mod 2 : Advanced Warfare, Please Enjoy your time, but behave, Advertisers and spam bots are not accepted here and will be punshised with kick/ban.";
+$Server::MOTD = "Set a MOTD for the mod's load window and in-game menu here.";
 
 //This is center printed when a client enters the game window (Observer)
-$Host::ServerPopup = "<just:center><color:ffffff>http://www.phantomdev.net \n Home of TWM2 \n Hosted by: Phantom139";
+$Host::ServerPopup = "<just:center><color:ffffff>Place your desired text here";
 
 $TWM2::FFAMode = 0; // the /tkToggle command Sets This too
 

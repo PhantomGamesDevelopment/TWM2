@@ -2,7 +2,7 @@ $TWM2::ArmorHasCollisionFunction[DemonMotherZombieArmor] = true;
 
 datablock PlayerData(DemonMotherZombieArmor) : LightMaleHumanArmor {
 	boundingBox = "1.5 1.5 2.6";
-	maxDamage = 9.0;
+	maxDamage = 7.5;
 	minImpactSpeed = 35;
 	shapeFile = "medium_female.dts";
 

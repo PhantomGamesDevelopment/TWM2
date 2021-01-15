@@ -10,7 +10,7 @@ datablock PlayerData(ShifterZombieArmor) : LightMaleHumanArmor {
 
 	jumpForce = 14.0 * 90;
 
-	maxDamage = 2.8;
+	maxDamage = 2.25;
 	minImpactSpeed = 35;
 	shapeFile = "bioderm_light.dts";
 	jetEmitter = BiodermArmorJetEmitter;

@@ -15,7 +15,7 @@ datablock AudioProfile(HZLordFootSound) {
 datablock PlayerData(LordZombieArmor) : HeavyMaleBiodermArmor {
 	shapefile = "TR2medium_male.dts";
 	mass = 500;
-	maxDamage = 18.0;
+	maxDamage = 12.5;
 	minImpactSpeed = 50;
 	speedDamageScale = 0.015;
 	boundingBox = "2.9 2.9 4.8";

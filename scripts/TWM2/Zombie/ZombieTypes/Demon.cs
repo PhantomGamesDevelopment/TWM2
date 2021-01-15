@@ -2,7 +2,7 @@ $TWM2::ArmorHasCollisionFunction[DemonZombieArmor] = true;
 
 datablock PlayerData(DemonZombieArmor) : LightMaleHumanArmor {
 	boundingBox = "1.63 1.63 2.6";
-	maxDamage = 4.0;
+	maxDamage = 3.0;
 	minImpactSpeed = 35;
 	shapeFile = "bioderm_heavy.dts";
 

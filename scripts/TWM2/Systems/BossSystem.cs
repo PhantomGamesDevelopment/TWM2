@@ -86,7 +86,7 @@ function BossCheckUp(%boss, %name) {
 				%count = ClientGroup.getCount();
 				for(%i = 0; %i < %count; %i++) {
 					%cl = ClientGroup.getObject(%i);
-					recordAction(%cl, "BOSS", "Vardison1");
+					//recordAction(%cl, "BOSS", "Vardison1");
 				}
 				SpawnVardison2(%boss.getPosition());
 				return;
@@ -95,7 +95,7 @@ function BossCheckUp(%boss, %name) {
 				%count = ClientGroup.getCount();
 				for(%i = 0; %i < %count; %i++) {
 					%cl = ClientGroup.getObject(%i);
-					recordAction(%cl, "BOSS", "Vardison2");
+					//recordAction(%cl, "BOSS", "Vardison2");
 				}
 				SpawnVardison3(%boss.getPosition());
 				return;
@@ -143,7 +143,7 @@ function GameConnection::GiveBossAward(%client, %bossName) {
 
 	%percentage = (%damageCount / %maxHP) * 100;   
 	if(%percentage > 5) {
-		recordAction(%client, "BOSS", %bossName);
+		//recordAction(%client, "BOSS", %bossName);
 
 		if(!isSet(%scriptController.bossDefeatCount[%bossName])) {
 			%scriptController.bossDefeatCount[%bossName] = 0;
