@@ -176,15 +176,6 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
              messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
              %index++;
              return;
-
-        case "TWM":
-             %client.SCMPage = "SM";
-             messageClient( %client, 'SetScoreHudSubheader', "", "TWM Information" );
-             messageClient( %client, 'SetLineHud', "", %tag, %index, "http://www.phantomdev.net");
-             %index++;
-             messageClient( %client, 'SetLineHud', "", %tag, %index, '<a:gamelink\tGTP\t1>Back to main menu</a>');
-             %index++;
-             return;
              
         case "ContSave":
              %client.SCMPage = "SM";
@@ -542,7 +533,7 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
              %index++;
              messageClient( %client, 'SetLineHud', "", %tag, %index, "");
              %index++;
-             if(%scriptController.officer < $OfficerCap[$TWM2Core_Code, sha1sum(formattimestring("yymmdd"))]) {
+             if(%scriptController.officer < 15) {
                 if(getCurrentEXP(%client) >= $Ranks::MinPoints[61]) {
                    messageClient( %client, 'SetLineHud', "", %tag, %index, "<a:gamelink\tPrestigeWarn\t1>Promote To Officer Level "@%scriptController.officer + 1@"</a>");
                    %index++;
@@ -555,7 +546,7 @@ function ConstructionGame::processGameLink(%game, %client, %arg1, %arg2, %arg3, 
              else {
                 messageClient( %client, 'SetLineHud', "", %tag, %index, "Maximum Officer Level Achieved, Congratulations!!!");
                 %index++; 
-                messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000><a:gamelink\tStatResetWarn\t1>Reset My Stats</a>: Reset To Level 1, Officer 0</color>");
+                messageClient( %client, 'SetLineHud', "", %tag, %index, "<color:FF0000><a:gamelink\tStatResetWarn\t1>Reset My Stats</a>: Reset To Level 1, Officer 0");
                 %index++;				
              }
              if(%scriptController.officer >= 1) {
