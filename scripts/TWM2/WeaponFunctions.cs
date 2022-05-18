@@ -170,14 +170,8 @@ function AttemptReload(%WImg, %Plyr, %slot) {
          %plyr.ClipCount[%WImg.ClipName]--;
       }
       %Plyr.Reloading[%WImg] = 1;
-      if(%client.IsActivePerk("Clip Boxes")) {
+      if(%client.IsActivePerk("Reflexive Reloader")) {
          %ReloadTime = %WImg.ClipReloadTime - (%WImg.ClipReloadTime * 0.33);
-      }
-      else if(%client.IsActivePerk("Double Time")) {
-         %ReloadTime = %WImg.ClipReloadTime - (%WImg.ClipReloadTime * 0.5);
-      }
-      else if(%client.IsActivePerk("Ammo Vet")) {
-         %ReloadTime = %WImg.ClipReloadTime - (%WImg.ClipReloadTime * 0.75);
       }
       else {
          %ReloadTime = %WImg.ClipReloadTime;

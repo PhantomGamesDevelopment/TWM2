@@ -19,7 +19,7 @@ $Prestige::Name[14] = "Masterful ";
 $Prestige::Name[15] = "Harbinger ";
 
 $Prestige::Rewards[0] = "";
-$Prestige::Rewards[1] = "Fission Bomb Strike, Double Down Perk";
+$Prestige::Rewards[1] = "Fission Bomb Strike";
 $Prestige::Rewards[2] = "Pulse Rifle";
 $Prestige::Rewards[3] = "Pulse SMG";
 $Prestige::Rewards[4] = "XVD4 Acid Launcher";

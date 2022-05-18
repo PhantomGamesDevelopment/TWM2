@@ -110,6 +110,7 @@ datablock ShapeBaseImageData(Model1887Image) {
 	//
 
 	projectileSpread = 7.0 / 1000.0;
+	handleExpertReduce = 1.33;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";

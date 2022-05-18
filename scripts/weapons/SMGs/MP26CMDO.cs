@@ -101,6 +101,7 @@ datablock ShapeBaseImageData(Mp26CMDOImage)
    shellVelocity       = 3.0;
 
    projectileSpread = 3.2 / 1000.0;
+   handleExpertReduce = 1.33;
 
    //--------------------------------------
    stateName[0]             = "Activate";

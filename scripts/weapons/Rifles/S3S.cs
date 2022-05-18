@@ -84,6 +84,7 @@ datablock ShapeBaseImageData(S3SRifleImage) {
 	shellVelocity       = 3.0;
 
 	projectileSpread = 4.0 / 1000.0;
+	handleExpertReduce = 1.33;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";

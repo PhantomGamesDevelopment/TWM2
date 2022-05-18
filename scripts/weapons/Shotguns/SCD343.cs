@@ -106,6 +106,7 @@ datablock ShapeBaseImageData(SCD343Image) {
 	//
 
 	projectileSpread = 10.0 / 1000.0;
+	handleExpertReduce = 1.3;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";

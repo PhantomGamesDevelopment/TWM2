@@ -157,6 +157,7 @@ datablock ShapeBaseImageData(lasergunImage) {
 	RankRequire = $TWM2::RankRequire["RSALaserRifle"];
 
 	maxSpread = 10.0 / 1000.0;
+	handleExpertReduce = 1.5;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";

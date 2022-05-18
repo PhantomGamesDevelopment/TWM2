@@ -486,6 +486,7 @@ datablock ShapeBaseImageData(MiniChaingunImage)
    shellVelocity       = 3.0;
 
    projectileSpread = 8.0 / 1000.0;
+   handleExpertReduce = 1.5;
 
    //--------------------------------------
    stateName[0]             = "Activate";

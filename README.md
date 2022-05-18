@@ -99,9 +99,9 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
   * Shifter
     * Reduced HP from 280 (2.8) to 225 (2.25)
     * The change to the shifter teleportation in 3.91 made these zombies ridiculously overpowered, they will be tuned down
-	* Increased the maximum targeting range of the teleport attack from 200m to 400m
-	* Increased the cooldown of the teleport attack from 7 seconds to 12.5 seconds
-	* Shifter zombies will now have to "lock down" for a 1.5 seconds before teleporting, during this time they will be easily targetable	
+	  * Increased the maximum targeting range of the teleport attack from 200m to 400m
+	  * Increased the cooldown of the teleport attack from 7 seconds to 12.5 seconds
+	  * Shifter zombies will now have to "lock down" for 1.5 seconds before teleporting, during this time they will be easily targetable	
   * Sniper
     * The sniper zombie is now armed with two new weapons. 
 	  * The first is an acid sniper rifle which infects players on striking
@@ -154,6 +154,7 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
   * Adjusted the mod's XP table:
 	* The final rank (Master Commander) now only requires 2,500,000 XP
 	* The earlier ranks will now progress much more quickly, with the mid-point now occuring at 14,000 XP instead of 20,000 XP
+  * Perks are no longer locked by rank, and all non-game mode / boss related perks are unlocked to all players at the start.
 * General Bug Fixes
   * Addressed the issue when gaining more than 1 million EXP that would result in your total EXP being reset by the difference between 1 million exp and your current exp.
   * Fixed the bug in which picking up weapon clips with an empty weapon would not automatically trigger weapon reload on that weapon.
@@ -304,3 +305,91 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
       * Moved the Zombie Acid pulse out of this weapon, and replaced it with it's own custom projectile
       * The projectile will flash enemy players when stuck by it, and cause an effective radial damage to serve as a lockdown tool
       * The weapon projectile has been given a 3.0 damage modifier across all zombie types to be highly effective against zombies	  
+* Perk Balancing / Rework Pass (3.9.2)
+  * The next batch of balance / reworks comes to the perk system.
+  * A highly "outdated clone" approach for additional player bonuses, perks in TWM2 have been very disjointed in many cases, offering significant bonuses to the point that things become best-in-slot by a long mile leaving everything else to be binned.
+  * While the "future" (If one ever does come about for this mod) would likely see the entire system removed, the goal here is to bring things down from the Over 9000 power level they exist at now to a more "reasonable" 6 or 7.
+  * Primary Perks
+    * Primary Perks provide direct bonuses to player gear (Gear defined as weapons and equipment).
+	* AP Bullets
+	  * Old Perk: Bullets do 50% More Damage
+	  * New Perk: Bullets deal 15% increased damage, damage to armored targets increased by 33%.
+	  * Discussion: AP Bullets was one of those "BIS" perks that was almost always grabbed because of the flat damage buff to literally "everything". Now this perk gives a small damage buff and a bonus to armored targets (Vehicles / Turrets) to focus more-so on those.
+	* Advanced Grip
+	  * Old Perk: Improves Weapon Accuracy by 250%
+	  * New Perk: [Renamed: Handling Expert] Reduces weapon spread by a varying amount (Dependent on the weapon)
+	  * Discussion: This perk was kind of "strangely" worded as a "mega accuracy" increase, when in reality it just significantly cut down "spread" on weapons, I still think a spread reduction perk is neat, but this perk is much more toned down now.
+	    * An example: The S3 Rifle's Spread Reduction has been reduced from 250% to 133%
+    * Wind Break Beacon
+	  * Unchanged
+	  * Discussion: This one has one of those "niche" places in the mod, good for those "oh sh*t" moments when Major Insignia / Lord Vardison launches you to Orbit
+	* 3 Second C4
+	  * Unchanged
+	  * Discussion: For now I don't think anything is needed here, but I am exploring potentially making usage of this perk reduce the maximum number of C4s you can hold at once.
+	* Blade Sweep
+	  * Removed From Mod
+	  * Discussion: Blade Sweep is one of those really strange perks I made just "for the hell of it", that never sees any use because it quite literally is pointless, and thus, it is gone.
+	* Martydom
+	  * Old Perk: Your armor explodes 4 seconds after death
+	  * New Perk: Upon death, drop a live grenade or C4 charge (if available) (Dependent on which grenade type you have equipped).
+	  * Discussion: This one was so much fun to play around with in the sandbox, but I always felt like it was just the "No U" perk for Shotgun Countering, so now it will instead be a bit more counterable, while still being funny when that C4 explosion goes off.
+	* Pistol God
+	  * Removed From Mod
+	  * Discussion: This one's kind of unnecessary given the adjustment to Advanced Grip, plus I want Sidearms to not be a completely dominant weapon, so Advanced Grip does not apply to them.
+	* Double Down
+	  * Removed From Mod
+	  * Discussion: A relic from the old days of PGD Connect with EXP events and "rank ups", given the other big adjustment to perks mentioned earlier, this is no longer needed.
+	* New Perks:
+	  * Powder Keg
+	    * Increases explosion damage you deal by 25%
+		* Discussion: A good addition to go alongside AP Bullets for players who prefer explosive weapons.
+  * Secondary Perks
+    * Secondary Perks are seen as "defensive" in nature, providing direct bonuses to your player object, for the most part these perks are fairly well made, and just need minor tuning.
+	* Kevlar Armor
+	  * Old Perk: Increase Shielding to 150%
+	  * New Perk: Reduce incoming damage from bullets by 20%, explosions by 25%
+	  * Discussion: The values on this perk were just a "wee bit" high for damage reduction, so I've brought them down a little.
+	* Head Guard
+	  * Old Perk: Prevents you from being Headshot Killed
+	  * New Perk: [Renamed: Armored Helmet] Removes the headshot multiplier on incoming rounds
+	  * Discussion: Ah yes, the days of old where Sniper Rifles were godly weapons in PvP on our long range maps. Then I made smaller close quarters maps and people stopped using snipers in everything except wartower. This perk completely nullified an aspect of the projectile targeting game and I think that should be avoided, so sorry but no more blocking those OSK sniper hits, but this will help in rifle fights.
+	    * Yes, I just made sniper zombies that much more lethal... enjoy ;)
+	* Storm Barrier
+	  * Unchanged
+	  * Discussion: This perk is meant to be a counter to The Ghost of Lightning and the Ion Weapons earned from it, no need to adjust what isn't broken.
+	* Lim Zombie Shield
+	  * Old Perk: 20% Chance that Zombies Will Be Repeled upon attack
+	  * New Perk: Enhanced your armor with a specialized Lim-Zombie barrier, repelling incoming attackers before requiring a recharge
+		* Note: This functionality only applies to 'Normal', 'Ravager', and 'Shifter' Zombies.
+	  * Discussion: A bit of an oddity here that few people used because of the RNG element on it, Lim was meant to be a bit of a "get out of jail" card in hectic moments, but it was a bit weak, so now I've changed the functionality to repel a few (2) incoming hits before requiring a 25 second recharge
+	* No-Infect Armor
+	  * Unchanged: Perk Renamed to 'Undead Resistant Plating'
+	  * Discussion: In the new age of perks, 'No-Infect Armor' sounds like a "cheat-code", so I'm just giving it a slight name alteration without changing the functioning.
+	* Radar Phantom
+	  * Unchanged
+	  * Discussion: Nothing to do here, this just wraps up the Tribes 2 Jamming Pack into a perk.
+	* Bomb Shadower & Second Chance
+	  * These two perks used to belong to the Tertiary category, but I've decided to move them to the secondary category.
+  * Tertiary Perks
+    * This category is where the bets kind of went all over the map in terms of things, These perks were meant to be your "wildcard" bonus, but instead just became these crazy as hell buffs that had strange "growth" mechanics to them, this category needed the most work.
+	* These changes are kind of a "start", but I'm looking to hit this category a bit harder later down the line.
+	* Clip Boxes, Double Time, Ammo Vet
+	  * These three perks did the same thing but had a growth of bonus mechanic as you leveled up, but the old perks stayed in your toolbox, making them completely irrelevant. 
+	  * I want to eventually change these perks to be category based (IE: Clip Boxes would give a reload benefit to large-mag guns, like machine guns), but this requires a big rework of the weapon reload system.
+	  * So for now, I'm going to just absolve these three perks into one perk...
+	  * Removed 'Clip Boxes', 'Double Time', and 'Ammo Vet' from the mod
+	  * Added 'Reflexive Reloader': Reduces reload time by 33%.
+	* UAV Disabler
+	  * Unchanged
+	  * Discussion: This one's fine as is. This perk counters the UAV strike package.
+	* Team Gain
+	  * Unchanged (For Now)
+	  * Discussion: I'm looking at a rework of this perk, right now it functions as an "assist" perk where your kills grant nearby allies XP for your actions. I like this concept, but want to tweak how the perk considers you to be "nearby".
+	* Bandolier
+	  * Description Change: Increases Clips To 200% > Doubles your maximum clip capacity
+	  * Discussion: Just being a bit more descriptive as to what this perk does.
+	* Hardline
+	  * Upcoming Removal
+	  * Discussion: For now this perk will remain in the mod, but I'm going to be "doing away" with Killstreaks in 3.9.3, this will be wrapped up into a new system called Strike Packages, but much more on this later.
+	* Notes
+	  * Tertiary Perks will be getting another pass later on, seeing as I've effectively reduced this category to 3, maybe 4 usable options, I'm going to likely add more choices here.

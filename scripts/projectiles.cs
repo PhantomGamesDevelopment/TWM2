@@ -144,12 +144,15 @@ function ShapeBaseImageData::onFire(%data, %obj, %slot) {
       //
       %spread = %data.projectileSpread;
       if(%obj.client !$= "") {
-         if(%obj.client.IsActivePerk("Advanced Grip")) {
-            %spread = %spread / 2.5;
-         }
          if(%obj.client.UpgradeOn("Grip", %data.getName())) {
             %spread = %spread / 1.7;
          }
+		 %handleExpertReduce = %data.handleExpertReduce;
+		 if(%handleExpertReduce !$= "") {
+		    if(%obj.client.IsActivePerk("Handling Expert")) {
+			   %spread = %spread / 1.33;
+		    }	
+         }		 
       }
       //
       %vec = %obj.getMuzzleVector(%slot);
@@ -158,14 +161,6 @@ function ShapeBaseImageData::onFire(%data, %obj, %slot) {
       %z = (getRandom() - 0.5) * 2 * 3.1415926 * %spread;
       %mat = MatrixCreateFromEuler(%x @ " " @ %y @ " " @ %z);
       %vector = MatrixMulVector(%mat, %vec);
-      
-      if(%obj.client !$= "") {
-         if(%obj.client.IsActivePerk("Pistol God")) {
-            if(%data.getName() $= "PistolImage" || %data.getName() $= "DeagleImage") {
-               %vector = %obj.getMuzzleVector(%slot);
-            }
-         }
-      }
    }
    else {
       %vector = %obj.getMuzzleVector(%slot);

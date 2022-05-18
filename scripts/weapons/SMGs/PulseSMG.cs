@@ -104,6 +104,7 @@ datablock ShapeBaseImageData(PulseSMGImage)
    shellVelocity       = 3.0;
 
    projectileSpread = 3.0 / 1000.0;
+   handleExpertReduce = 1.20;
 
    //--------------------------------------
    stateName[0]             = "Activate";

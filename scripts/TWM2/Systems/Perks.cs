@@ -1,151 +1,121 @@
-//The Perks
-//LIST
-$PerkRequire[1] = $Ranks::MinPoints[32];
-$PerkRequire[2] = $Ranks::MinPoints[40];
-$PerkRequire[7] = $Ranks::MinPoints[54];
-$PerkRequire[9] = $Ranks::MinPoints[43];
-$PerkRequire[10] = $Ranks::MinPoints[18];
-$PerkRequire[11] = $Ranks::MinPoints[36];
-$PerkRequire[15] = $Ranks::MinPoints[60];
-$PerkRequire[16] = $Ranks::MinPoints[46];
-$PerkRequire[21] = $Ranks::MinPoints[4];
-$PerkRequire[22] = $Ranks::MinPoints[45];
+// Perks.cs
+// 3.9.2 =: Major Rework
 
 //PRIMARY - Weapon Modifications
-// AP Bullets [c] - Increase Damage to 150%
-// Advanced Grip [c] - Increase Accuracy On All Guns with Spread
+// AP Bullets [c] - Bullets deal 15% increased damage, damage to armored targets increased by 33%
+// Handling Expert [c] - Reduces weapon spread by a varying amount (Dependent on the weapon)
 // Wind Brake Beacon [c] - Beacon Key Stops Your Fall Instantly
 // 3 Second C4 [c] - C4 Detonates in 3 Seconds, not 10
-// Blade Sweep [c] - BoV Affects a small area instead of a single attack
-// Martydom [c] - Your armor explodes 4 seconds after death
-// Pistol God [c] - Removes All Spread On Certain Pistols
-// Double Down [c] - Gain double EXP for non boss Kills.
+// Martydom [c] - Upon death, drop a live grenade or C4 charge (if available)
+// Powder Keg [c] - Explosions deal 25% increased damage
 
 //SECONDARY - Armor And Defense
-// OverKill [b] - Replaces your Pistol Slot with an Additional Weapon Slot
-// Kevlar Armor [c] - Increase Shielding to 150%
-// Head Guard [c] - Blocks Headshot Kills
+// Kevlar Armor [c] - Reduce incoming damage from bullets by 20%, explosions by 25%
+// Armored Helmet [c] - Removes the headshot multiplier on incoming rounds
 // Storm Barrier [c] - Reduce Electrical Damage, blocks lightning
-// Lim Zombie Shield [c] - 20% Chance that Zombies Will Be Repeled upon attack
-// No-Infect Armor [c] - Zombie Attacks will not infect you
+// Lim Zombie Shield [c] - Enhanced your armor with a specialized Lim-Zombie barrier, repelling incoming attackers before requiring a recharge
+// Undead Resistant Plating [c] - Zombie Attacks will not infect you
 // Radar Phantom [c] - Jam enemy sensors
-
-//TERTIARY - Assets
-// Clip Boxes [c] - Cuts Reload Time By 33%
-// UAV Disabler [c] - You will not show on enemy UAVs
-// Team Gain [c] - All Teammates within 20M Of the Killer Gain XP
-// Double Time [c] - Cuts Reload Time By 50%
-// Ammo Vet [c] - Cuts Reload Time By 75%
-// Bandolier [c] - Increases Clips To 200%
-// Hardline [c] - Killstreaks require 1 less kill
 // Bomb Shadower [c] - You do not show a Sabotage Waypoint
 // Second Chance [c] - Spend a team revive to respawn in horde
 
-$Perk::PerkCount[1] = 8;
-$Perk::PerkCount[2] = 6;
-$Perk::PerkCount[3] = 9;
+//TERTIARY - Assets
+// Reflexive Reloader [c] - Reduces weapon reload time by 33%
+// UAV Disabler [c] - You will not show on enemy UAVs
+// Team Gain [c] - All Teammates within 20M Of the Killer Gain XP
+// Bandolier [c] - Doubles your maximum clip capacity
+// Hardline [c] - Killstreaks require 1 less kill
+
+$Perk::PerkCount[1] = 6;
+$Perk::PerkCount[2] = 8;
+$Perk::PerkCount[3] = 5;
 
 $Perk::TotalPerks = $Perk::PerkCount[1] + $Perk::PerkCount[2] + $Perk::PerkCount[3];
 
 $Perk::Perk[1] = "AP Bullets";
-$Perk::Perk[2] = "Advanced Grip";
+$Perk::Perk[2] = "Handling Expert";
 $Perk::Perk[3] = "Wind Brake Beacon";
 $Perk::Perk[4] = "3 Second C4";
-$Perk::Perk[5] = "Blade Sweep";
-$Perk::Perk[6] = "Martydom";
-$Perk::Perk[7] = "Pistol God";
-$Perk::Perk[8] = "Double Down";
-//$Perk::Perk[9] = "OverKill";
-$Perk::Perk[9] = "Kevlar Armor";
-$Perk::Perk[10] = "Head Guard";
-$Perk::Perk[11] = "Storm Barrier";
-$Perk::Perk[12] = "Lim Zombie Shield";
-$Perk::Perk[13] = "No-Infect Armor";
-$Perk::Perk[14] = "Radar Phantom";
-$Perk::Perk[15] = "Clip Boxes";
+$Perk::Perk[5] = "Martydom";
+$Perk::Perk[6] = "Powder Keg";
+$Perk::Perk[7] = "Kevlar Armor";
+$Perk::Perk[8] = "Armored Helmet";
+$Perk::Perk[9] = "Storm Barrier";
+$Perk::Perk[10] = "Lim Zombie Shield";
+$Perk::Perk[11] = "Undead Resistant Plating";
+$Perk::Perk[12] = "Radar Phantom";
+$Perk::Perk[13] = "Bomb Shadower";
+$Perk::Perk[14] = "Second Chance";
+$Perk::Perk[15] = "Reflexive Reloader";
 $Perk::Perk[16] = "UAV Disabler";
 $Perk::Perk[17] = "Team Gain";
-$Perk::Perk[18] = "Double Time";
-$Perk::Perk[19] = "Ammo Vet";
-$Perk::Perk[20] = "Bandolier";
-$Perk::Perk[21] = "Hardline";
-$Perk::Perk[22] = "Bomb Shadower";
-$Perk::Perk[23] = "Second Chance";
+$Perk::Perk[18] = "Bandolier";
+$Perk::Perk[19] = "Hardline";
 
 $Perk::PerkToID["AP Bullets"] = 1;
-$Perk::PerkToID["Advanced Grip"] = 2;
+$Perk::PerkToID["Handling Expert"] = 2;
 $Perk::PerkToID["Wind Brake Beacon"] = 3;
 $Perk::PerkToID["3 Second C4"] = 4;
-$Perk::PerkToID["Blade Sweep"] = 5;
-$Perk::PerkToID["Martydom"] = 6;
-$Perk::PerkToID["Pistol God"] = 7;
-$Perk::PerkToID["Double Down"] = 8;
-//$Perk::PerkToID["OverKill"] = 9;
-$Perk::PerkToID["Kevlar Armor"] = 9;
-$Perk::PerkToID["Head Guard"] = 10;
-$Perk::PerkToID["Storm Barrier"] = 11;
-$Perk::PerkToID["Lim Zombie Shield"] = 12;
-$Perk::PerkToID["No-Infect Armor"] = 13;
-$Perk::PerkToID["Radar Phantom"] = 14;
-$Perk::PerkToID["Clip Boxes"] = 15;
+$Perk::PerkToID["Martydom"] = 5;
+$Perk::PerkToID["Powder Keg"] = 6;
+$Perk::PerkToID["Kevlar Armor"] = 7;
+$Perk::PerkToID["Armored Helmet"] = 8;
+$Perk::PerkToID["Storm Barrier"] = 9;
+$Perk::PerkToID["Lim Zombie Shield"] = 10;
+$Perk::PerkToID["Undead Resistant Plating"] = 11;
+$Perk::PerkToID["Radar Phantom"] = 12;
+$Perk::PerkToID["Bomb Shadower"] = 13;
+$Perk::PerkToID["Second Chance"] = 14;
+$Perk::PerkToID["Reflexive Reloader"] = 15;
 $Perk::PerkToID["UAV Disabler"] = 16;
 $Perk::PerkToID["Team Gain"] = 17;
-$Perk::PerkToID["Double Time"] = 18;
-$Perk::PerkToID["Ammo Vet"] = 19;
-$Perk::PerkToID["Bandolier"] = 20;
-$Perk::PerkToID["Hardline"] = 21;
-$Perk::PerkToID["Bomb Shadower"] = 22;
-$Perk::PerkToID["Second Chance"] = 23;
+$Perk::PerkToID["Bandolier"] = 18;
+$Perk::PerkToID["Hardline"] = 19;
 
-$Perk::Descrip[1] = "Bullets do 50% More Damage";
-$Perk::Descrip[2] = "Improves Weapon Accuracy by 250%";
+
+$Perk::Descrip[1] = "Bullets deal 15% increased damage, damage to armored targets increased by 33%";
+$Perk::Descrip[2] = "Reduces weapon spread by a varying amount (Dependent on the weapon)";
 $Perk::Descrip[3] = "Instantly Stop a fall with your beacon key";
-$Perk::Descrip[4] = "Your C4 Detonates in 3 Seconds, not 10";
-$Perk::Descrip[5] = "The BoV Affects a small area, not 1 target";
-$Perk::Descrip[6] = "Your armor explodes 4 seconds after death";
-$Perk::Descrip[7] = "Makes certain pistols 100% accurate";
-$Perk::Descrip[8] = "Gain Double EXP for non boss kills";
-//$Perk::Descrip[9] = "Adds an additional weapon slot to your armor";
-$Perk::Descrip[9] = "Increases your armor by 50%";
-$Perk::Descrip[10] = "Prevents you from being Headshot Killed";
-$Perk::Descrip[11] = "Protects you from electrical attacks";
-$Perk::Descrip[12] = "20% chance to deflect zombie attackers";
-$Perk::Descrip[13] = "Prevents you from being infected";
-$Perk::Descrip[14] = "Jam enemy sensors";
-$Perk::Descrip[15] = "Reduces reload time by 33%";
+$Perk::Descrip[4] = "Your C4 Detonates in 3 seconds instead of 10 seconds";
+$Perk::Descrip[5] = "Upon death, drop a live grenade or C4 charge (if available)";
+$Perk::Descrip[6] = "Explosions deal 25% increased damage";
+$Perk::Descrip[7] = "Reduce incoming damage from bullets by 20%, explosions by 25%";
+$Perk::Descrip[8] = "Removes the headshot multiplier on incoming rounds";
+$Perk::Descrip[9] = "Protects you from electrical attacks";
+$Perk::Descrip[10] = "Enhanced your armor with a specialized Lim-Zombie barrier, repelling incoming attackers before requiring a recharge";
+$Perk::Descrip[11] = "Prevents you from being infected";
+$Perk::Descrip[12] = "Jam enemy sensors";
+$Perk::Descrip[13] = "You do not show a Sabotage Waypoint";
+$Perk::Descrip[14] = "Spend a team revive to respawn in horde";
+$Perk::Descrip[15] = "Reduces weapon reload time by 33%";
 $Perk::Descrip[16] = "You will not show on enemy UAVs";
 $Perk::Descrip[17] = "Allies near you will gain XP for your kills";
-$Perk::Descrip[18] = "Reduces reload time by 50%";
-$Perk::Descrip[19] = "Reduces reload time by 75%";
-$Perk::Descrip[20] = "Doubles your initial clip count";
-$Perk::Descrip[21] = "Killstreaks require 1 less kill to earn";
-$Perk::Descrip[22] = "You do not show a Sabotage Waypoint";
-$Perk::Descrip[23] = "Spend a team revive to respawn in horde";
+$Perk::Descrip[18] = "Doubles your maximum clip capacity";
+$Perk::Descrip[19] = "Killstreaks require 1 less kill to earn";
+
 
 $Perk::PerkToGroup["AP Bullets"] = 1;
-$Perk::PerkToGroup["Advanced Grip"] = 1;
+$Perk::PerkToGroup["Handling Expert"] = 1;
 $Perk::PerkToGroup["Wind Brake Beacon"] = 1;
 $Perk::PerkToGroup["3 Second C4"] = 1;
-$Perk::PerkToGroup["Blade Sweep"] = 1;
 $Perk::PerkToGroup["Martydom"] = 1;
-$Perk::PerkToGroup["Pistol God"] = 1;
-$Perk::PerkToGroup["Double Down"] = 1;
-//$Perk::PerkToGroup["OverKill"] = 2;
+$Perk::PerkToGroup["Powder Keg"] = 1;
+//----------------------------------------
 $Perk::PerkToGroup["Kevlar Armor"] = 2;
-$Perk::PerkToGroup["Head Guard"] = 2;
+$Perk::PerkToGroup["Armored Helmet"] = 2;
 $Perk::PerkToGroup["Storm Barrier"] = 2;
 $Perk::PerkToGroup["Lim Zombie Shield"] = 2;
-$Perk::PerkToGroup["No-Infect Armor"] = 2;
+$Perk::PerkToGroup["Undead Resistant Plating"] = 2;
 $Perk::PerkToGroup["Radar Phantom"] = 2;
-$Perk::PerkToGroup["Clip Boxes"] = 3;
+$Perk::PerkToGroup["Bomb Shadower"] = 2;
+$Perk::PerkToGroup["Second Chance"] = 2;
+//----------------------------------------
+$Perk::PerkToGroup["Reflexive Reloader"] = 3;
 $Perk::PerkToGroup["UAV Disabler"] = 3;
 $Perk::PerkToGroup["Team Gain"] = 3;
-$Perk::PerkToGroup["Double Time"] = 3;
-$Perk::PerkToGroup["Ammo Vet"] = 3;
 $Perk::PerkToGroup["Bandolier"] = 3;
 $Perk::PerkToGroup["Hardline"] = 3;
-$Perk::PerkToGroup["Bomb Shadower"] = 3;
-$Perk::PerkToGroup["Second Chance"] = 3;
+
 
 //Asset Function
 function GameConnection::IsActivePerk(%client, %perk) {
@@ -197,20 +167,6 @@ function GameConnection::CanUsePerk(%client, %perkVal) {
    %scriptController = %client.TWM2Core;
    %xp = getCurrentEXP(%client);
    switch(%perkVal) {
-      case 1:
-         if(%xp >= $PerkRequire[1]) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 2:
-         if(%xp >= $PerkRequire[2]) {
-            return true;
-         }
-         else {
-            return false;
-         }
       case 3:
          if(%client.hasMedal(8)) {
             return true;
@@ -218,133 +174,21 @@ function GameConnection::CanUsePerk(%client, %perkVal) {
          else {
             return false;
          }
-      case 4 or 5:
-         if(%client.hasMedal(11)) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 6:
-         if(%client.hasMedal(13)) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 7:
-         if(%xp >= $PerkRequire[7]) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 8:
-         if(%scriptController.officer >= 1) {
-            return true;
-         }
-         else {
-            return false;
-         }
-//      case 9:
-//         if(%xp >= $PerkRequire[9]) {
-//            return true;
-//         }
-//         else {
-//            return false;
-//         }
       case 9:
-         if(%xp >= $PerkRequire[10]) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 10:
-         if(%xp >= $PerkRequire[11]) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 11:
          if(%client.hasMedal(9)) {
             return true;
          }
          else {
             return false;
          }
-      case 12:
-         if(%client.hasMedal(10)) {
-            return true;
-         }
-         else {
-            return false;
-         }
       case 13:
-         if(%client.hasMedal(12)) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 14:
-         if(%xp >= $PerkRequire[15]) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 15:
-         if(%xp >= $PerkRequire[16]) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 16:
-         if(%client.hasMedal(14)) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 17 or 19:
-         if(%client.hasMedal(5)) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 18:
-         if(%client.hasMedal(7)) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 20:
-         if(%xp >= $PerkRequire[21]) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 21:
-         if(%xp >= $PerkRequire[22]) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      case 22:
          if(%client.CheckNWChallengeCompletion("3For5Sabo")) {
             return true;
          }
          else {
             return false;
          }
-      case 23:
+      case 14:
          if(%client.CheckNWChallengeCompletion("ArmyOf50Stopped")) {
             return true;
          }
@@ -445,6 +289,9 @@ function DoPerksStuff(%client, %player) {
    if(%client.IsActivePerk("Wind Brake Beacon")) {
       %client.player.AirBrakes = 3;
    }
+   if(%client.IsActivePerk("Lim Zombie Shield")) {
+      %client.player.LimHits = 2;
+   }   
 }
 
 
@@ -463,18 +310,9 @@ function RepelZombie(%zombie, %player) {
    %zombie.playShieldEffect("1 1 1");
 }
 
-function MartydomExplode(%position, %client) {
-   ServerPlay3D("SatchelChargeExplosionSound", %position);
-   %c4 = new Item() {
-      datablock = C4Deployed;
-      position = %position;
-      scale = ".1 .1 .1";
-      owner = %client;
-   };
-   MissionCleanup.add(%c4);
-   %c4.theClient = %client;
-   
-   //echo("DEBUG: C4 mine dropped: "@%position TAB %client TAB %c4@"");
-   
-   schedule(770, 0, "C4GoBoom", %c4);
+function resetLimCharges(%player) {
+	if(!isObject(%player) || %player.getState() $= "dead") {
+	   return;
+	}
+	%player.LimHits = 2;
 }

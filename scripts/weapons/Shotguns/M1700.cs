@@ -111,6 +111,7 @@ datablock ShapeBaseImageData(M1700Image) {
 	//
 
 	projectileSpread = 11.0 / 1000.0;
+	handleExpertReduce = 1.2;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";

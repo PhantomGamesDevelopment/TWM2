@@ -443,12 +443,7 @@ function GameConnection::AwardZombieKill(%client, %zombie, %implement) {
 		%xpGain = $TWM2::ZombieXPAward[%zombieType];
 	}
 	//
-	if(%client.IsActivePerk("Double Down")) {
-		GainExperience(%client, %xpGain*2, "[D-D]"@$TWM2::ZombieName[%zombieType]@" Killed ");
-	}
-	else {
-		GainExperience(%client, %xpGain, ""@$TWM2::ZombieName[%zombieType]@" Killed ");
-	}
+	GainExperience(%client, %xpGain, ""@$TWM2::ZombieName[%zombieType]@" Killed ");
 	//Team Gain Perk
 	if(%client.IsActivePerk("Team Gain")) {
 		%TargetSearchMask = $TypeMasks::PlayerObjectType;

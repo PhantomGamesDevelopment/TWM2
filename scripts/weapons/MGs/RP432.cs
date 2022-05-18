@@ -110,6 +110,7 @@ datablock ShapeBaseImageData(RP432Image) {
    shellVelocity       = 4.5;
 
    projectileSpread = 10.0 / 1000.0;
+   handleExpertReduce = 1.4;
 
 
    //--------------------------------------

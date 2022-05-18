@@ -36,12 +36,15 @@ function CalculateProjectileDamage(%projectile, %target, %amount, %dType, %damLo
 		//Projectiles...
 		case "projectile":
 			%target.headShot = 0; //Reset first
-			if(%sourceClient.ActivePerk["AP Bullets"]) {
-				%total *= 1.5;
+			if(%sourceClient.IsActivePerk("AP Bullets")) {
+				%total *= 1.15;
+				if(strStr(%TDB.getClassName() $= "Turret") != -1 || && %TDB.getClassName() $= "VehicleData") {
+					%total *= 1.33;
+				}
 			}
 			if(%targetClient != 0) {
 				if(%targetClient.IsActivePerk("Kevlar Armor")) {
-					%total *= 0.5;
+					%total *= 0.8;
 				}
 			}
 			if(%target.isZombie) {
@@ -74,6 +77,11 @@ function CalculateProjectileDamage(%projectile, %target, %amount, %dType, %damLo
 			if(%damLoc $= "head" && %TDB.getClassName() $= "PlayerData") {
 				if(%data.HeadMultiplier !$= "") {
 					%modifier *= %data.HeadMultiplier;
+					if(%targetClient !$= "") {
+						if(%targetClient.IsActivePerk("Armored Helmet")) {
+							%modifier /= %data.HeadMultiplier;
+						}
+					}					
 				}
 				if(%data.HeadShotKill && $TWM2::HeadshotKill) {
 					%target.headShot = 1;
@@ -84,44 +92,39 @@ function CalculateProjectileDamage(%projectile, %target, %amount, %dType, %damLo
 					}
 				}
 				if(%target.headShot) {
-					if(%targetClient != 0 && %targetClient.ActivePerk["Head Guard"]) {
-						%target.headShot = 0;
-					}
-					else {
-						if((!%target.isBoss && !%target.noHS) && !(%target.getShieldHealth() > 0)) {
-							if(%target.isZombie) {
-								if(%TDB $= "FZombieArmor") {
-									AwardClient(%sourceClient, "16");
-								}
-								//
-								if(Game.CheckModifier("WheresMyHead") == 1) {
-									%target.headShot = 0;
-								}
-								else {
-									%total *= 1000;
-								}
+					if((!%target.isBoss && !%target.noHS) && !(%target.getShieldHealth() > 0)) {
+						if(%target.isZombie) {
+							if(%TDB $= "FZombieArmor") {
+								AwardClient(%sourceClient, "16");
+							}
+							//
+							if(Game.CheckModifier("WheresMyHead") == 1) {
+								%target.headShot = 0;
 							}
 							else {
-								if(%target.isPilot() || %target.vehicleMounted) {
-									%target.headShot = 0;
-								}
-								else {
-									%total *= 1000;
-									if(%targetClient != 0) {
-										BottomPrint(%targetClient, "You Lost Your Head!!!", 3, 1);
-										//Recording...
-										if(%sourceClient !$= "") {
-											%sourceClient.TWM2Core.PvPHeadshotKills++;
-											if(%sourceClient.TWM2Core.PvPHeadshotKills >= 100) {
-												CompleteNWChallenge(%sourceClient, "HSHoncho1");
-												if(%sourceClient.TWM2Core.PvPHeadshotKills >= 200) {
-													CompleteNWChallenge(%sourceClient, "HSHoncho2");
-													if(%sourceClient.TWM2Core.PvPHeadshotKills >= 300) {
-														CompleteNWChallenge(%sourceClient, "HSHoncho3");
-													}
+								%total *= 1000;
+							}
+						}
+						else {
+							if(%target.isPilot() || %target.vehicleMounted) {
+								%target.headShot = 0;
+							}
+							else {
+								%total *= 1000;
+								if(%targetClient != 0) {
+									BottomPrint(%targetClient, "You Lost Your Head!!!", 3, 1);
+									//Recording...
+									if(%sourceClient !$= "") {
+										%sourceClient.TWM2Core.PvPHeadshotKills++;
+										if(%sourceClient.TWM2Core.PvPHeadshotKills >= 100) {
+											CompleteNWChallenge(%sourceClient, "HSHoncho1");
+											if(%sourceClient.TWM2Core.PvPHeadshotKills >= 200) {
+												CompleteNWChallenge(%sourceClient, "HSHoncho2");
+												if(%sourceClient.TWM2Core.PvPHeadshotKills >= 300) {
+													CompleteNWChallenge(%sourceClient, "HSHoncho3");
 												}
-											}									 
-										}
+											}
+										}									 
 									}
 								}
 							}
@@ -137,6 +140,14 @@ function CalculateProjectileDamage(%projectile, %target, %amount, %dType, %damLo
 			
 		case "explosion":
 			%total = 1;
+			if(%sourceClient.IsActivePerk("Powder Keg")) {
+				%total *= 1.25;
+			}
+			if(%targetClient != 0) {
+				if(%targetClient.IsActivePerk("Kevlar Armor")) {
+					%total *= 0.75;
+				}
+			}			
 			if(%dType == $DamageType::RapierShield) {
 				if(%target == %sourceObject || %target.isZombie || %target.isBoss) {
 					%total = 0;
@@ -394,8 +405,12 @@ function postObjectDestroyed(%source, %targetObject, %dType, %dLoc) {
 	//doChallengeKillRecording(%sourceObject, %targetObject);
 	//martydom
 	if(%targetClient !$= "" && %targetClient != 0 && %targetClient.IsActivePerk("Martydom")) {
-		serverPlay3d(SatchelChargeActivateSound, %targetObject.getPosition());
-		schedule(2200, 0, "MartydomExplode", %targetObject.getPosition(), %targetClient);
+		if(%targetObject.inv[Grenade] > 0 || %targetObject.inv[ConcussionGrenade] > 0 || %targetObject.inv[FlashGrenade] > 0 || %targetObject.inv[StaticGrenade] > 0) {
+			%targetObject.use(Grenade);
+		}
+		if(%targetObject.inv[C4] > 0) {
+			%targetObject.use(Mine);
+		}		
 	}		
 }
 

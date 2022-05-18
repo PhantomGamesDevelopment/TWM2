@@ -93,6 +93,7 @@ datablock ShapeBaseImageData(PulseRifleImage) {
 	shellVelocity       = 3.0;
 
 	projectileSpread = 2.0 / 1000.0;
+	handleExpertReduce = 1.15;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";

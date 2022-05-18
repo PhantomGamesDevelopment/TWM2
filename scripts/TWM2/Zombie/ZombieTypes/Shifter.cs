@@ -49,6 +49,19 @@ function ShifterZombieArmor::armorCollisionFunction(%datablock, %zombie, %colPla
 	if(%colPlayer.isBoss || %colPlayer.isZombie || %colPlayer.rapierShield) {
 		return;
 	}
+	
+	if(%colPlayer.client !$= "") {
+		if(%colPlayer.client.IsActivePerk("Lim Zombie Shield")) {
+			if(%colPlayer.limHits > 0) { 
+			   RepelZombie(%zombie, %colPlayer);
+			   %colPlayer.limHits--;
+			}
+			if(%colPlayer.limHits == 0) {
+				schedule(25000, 0, "resetLimCharges", %colPlayer);
+			}
+		}
+	}	
+	
 	//Damage.
 	%causeInfect = %zombie.damage_infectOnTouch;
 	%baseDamage = %zombie.damage_amountOnTouch;

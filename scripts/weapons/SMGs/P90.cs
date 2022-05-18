@@ -112,6 +112,7 @@ datablock ShapeBaseImageData(P90Image)
    shellVelocity       = 3.0;
 
    projectileSpread = 4.0 / 1000.0;
+   handleExpertReduce = 1.15;
 
    //--------------------------------------
    stateName[0]             = "Activate";

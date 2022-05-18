@@ -237,7 +237,7 @@ function TWM2Lib_Zombie_Core(%functionName, %arg1, %arg2, %arg3, %arg4) {
 			}
 			//Additional checks...
 			if(%arg1.client !$= "") {
-				if(%arg1.client.isActivePerk("No-Infect Armor")) {
+				if(%arg1.client.isActivePerk("Undead Resistant Plating")) {
 					%arg1.playShieldEffect("1 1 1");
 					%arg1.infected = 0;
 					return;

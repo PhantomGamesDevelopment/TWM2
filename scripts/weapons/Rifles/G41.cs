@@ -100,6 +100,7 @@ datablock ShapeBaseImageData(G41RifleImage) {
 	shellVelocity       = 3.0;
 
 	projectileSpread = 3.0 / 1000.0;
+	handleExpertReduce = 1.25;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";

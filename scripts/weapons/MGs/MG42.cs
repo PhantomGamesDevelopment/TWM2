@@ -108,6 +108,7 @@ datablock ShapeBaseImageData(MG42Image) {
 	RankRequire = $TWM2::RankRequire["MG42"];
 
 	projectileSpread = 12.5 / 1000.0;
+	handleExpertReduce = 1.5;
 
 	//--------------------------------------
 	stateName[0]             = "Activate";

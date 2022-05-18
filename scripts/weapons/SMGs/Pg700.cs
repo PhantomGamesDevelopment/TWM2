@@ -117,6 +117,7 @@ datablock ShapeBaseImageData(Pg700Image)
    shellVelocity       = 3.0;
 
    projectileSpread = 3.0 / 1000.0;
+   handleExpertReduce = 1.40;
 
    //--------------------------------------
    stateName[0]             = "Activate";

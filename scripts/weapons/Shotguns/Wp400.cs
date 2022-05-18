@@ -106,6 +106,7 @@ datablock ShapeBaseImageData(Wp400Image) {
 	//
 
 	projectileSpread = 15.0 / 1000.0;
+	handleExpertReduce = 1.33;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";

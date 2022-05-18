@@ -114,6 +114,7 @@ datablock ShapeBaseImageData(M4A1Image) {
 	shellVelocity       = 3.0;
 
 	projectileSpread = 8.0 / 1000.0;
+	handleExpertReduce = 1.25;
 
 	//--------------------------------------
 	stateName[0]             = "Activate";

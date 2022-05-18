@@ -108,6 +108,7 @@ datablock ShapeBaseImageData(S3RifleImage) {
 	shellVelocity       = 3.0;
 
 	projectileSpread = 5.0 / 1000.0;
+	handleExpertReduce = 1.33;
 
 	stateName[0] = "Activate";
 	stateTransitionOnTimeout[0] = "ActivateReady";
@@ -179,8 +180,8 @@ function S3RifleImage::OnFire(%data, %obj, %slot) {
 	if(%obj.client.UpgradeOn("Burst Clip", %data.getName())) {
 		%spread = %data.projectileSpread;
 		if(%obj.client !$= "") {
-			if(%obj.client.IsActivePerk("Advanced Grip")) {
-				%spread = %spread / 2.5;
+			if(%obj.client.IsActivePerk("Handling Expert")) {
+				%spread = %spread / 1.33;
 			}
 		}
 		%vec2 = %obj.getMuzzleVector(%slot);
