@@ -145,15 +145,50 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
   * Did a pass through all of the weapon files, cleaning the code up and making each unique weapon have its own damage type.
     * Some projectiles are still tied to bosses and killstreaks, these were not altered.
     * For the updated damage types, death messages were added to the system such that PvP kills will be more easily tracked now.
+  * Modified the default save-slot count limits:
+    * All Players: 15 > 50
+	* Admins: +10
+	* Super Admins: +15
+	* Discussion: Most modern hardware nowadays can handle a much larger number of save files. This may induce some load-delay when opening the menu, but I doubt people will care too much.
 * Gameplay Changes
   * All 'Mini-Boss' Zombies will now have green text in their name.
   * All 'Boss' level enemies will now have gold text in their name.
   * The Helljump 'Oh Lordy' modifier has been changed to 'Reduces the cooldown time of the Zombie Lord's Photon Cannon by 50%'.	
   * The RSA Laser Rifle has been renamed to the 'UR-22 Laser Rifle'
   * The Pistol Weapon Slot is now called the Sidearm Slot
-  * Adjusted the mod's XP table:
-	* The final rank (Master Commander) now only requires 2,500,000 XP
-	* The earlier ranks will now progress much more quickly, with the mid-point now occuring at 14,000 XP instead of 20,000 XP
+  * Adjusted the rank/progression system:
+    * Updated XP Gains:
+	  * PvP Kill (Enemy Player Defeated): 15 > 150
+	  * Normal Zombie: 1 > 25
+	  * Ravager Zombie: 10 > 100
+	  * Zombie Lord: 20 > 250
+	  * Demon Zombie: 10 > 150
+	  * Air Rapier Zombie: 10 > 175
+	  * Demon Lord Zombie: 100 > 1500
+	  * Shifter Zombie: 3 > 100
+	  * Zombie Summoner: 65 > 750
+	  * Sniper Zombie: 10 >  250
+	  * Ultra Demon Zombie: 25 > 300
+	  * Volatile Ravager Zombie: 7 > 150
+	  * Slingshot Zombie: 20 > 250
+	  * Wraith Zombie: 25 > 500
+	  * Elite Demon (Vardison Summon): 20 > 250
+	  * Lord Yvex: 10,000 > 25,000
+	  * Colonel Windshear: 12,500 > 25,000
+	  * Ghost of Lightning: 20,000 > 35,000
+	  * General Vegenor: 25,000 > 50,000
+	  * Lordranius Trevor: 25,000 > 40,000
+	  * Lord Rog: 30,000 > 50,000
+	  * Major Insignia: 35,000 > 65,000
+	  * Stormrider: 45,000 > 75,000
+	  * Ghost of Fire: 65,000 > 100,000
+	  * Shade Lord: 75,000 > 100,000
+	  * Lord Vardison: 75,000 > 150,000
+	* Updated the Level Table:
+	  * The final rank (Master Commander) now only requires 2,000,000 XP (Down from 3,000,000)
+	  * The earlier ranks now have higher XP requirements, but later ranks are earned a bit more quickly.
+	  * The "middle-rank" (Captain Grade 3) now occurs at 130,000 XP. 
+	  * Discussion: Given the update to XP values across the board, and the introduction of new challenges, this should streamline the rank system to be quicker to complete. In addition, when earning huge chunks of XP (IE: Bosses), this should reduce the loop calls to level-ups in some cases.
   * Perks are no longer locked by rank, and all non-game mode / boss related perks are unlocked to all players at the start.
 * General Bug Fixes
   * Addressed the issue when gaining more than 1 million EXP that would result in your total EXP being reset by the difference between 1 million exp and your current exp.

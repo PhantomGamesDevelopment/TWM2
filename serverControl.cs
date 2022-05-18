@@ -128,7 +128,7 @@ $dFlag[3] = "Charlie";
 
 //XP Stuffz
 $TWM2::TeamKillDeduct = 10; //Lose this Much For TK
-$TWM2::KillXPGain = 15;      //Gain for killing PLAYERS not zombies
+$TWM2::KillXPGain = 150;      //Gain for killing PLAYERS not zombies
 
 $TWM2::MaxZombies = 150; //You can set this now too :)
 $TWM2::CanSpawnZ = 1;    //0 Disables Zombie Spawning
@@ -183,35 +183,35 @@ $TWM2::BossNameInternal["Vardison2"] = "Lord Vardison";
 $TWM2::BossNameInternal["Vardison3"] = "Lord Vardison";
 $TWM2::BossNameInternal["ShadeLord"] = "The Shade Lord";
                                                     //-----OFFICIAL VALUES-----\\
-$TWM2::ZombieXPAward[1] = 1;                        //           1
-$TWM2::ZombieXPAward[2] = 10;                       //           10
-$TWM2::ZombieXPAward[3] = 20;                       //           20
-$TWM2::ZombieXPAward[4] = 5;                        //           5
-$TWM2::ZombieXPAward[5] = 10;                       //           10
-$TWM2::ZombieXPAward[6] = 100;                      //           100
-$TWM2::ZombieXPAward[9] = 3;                        //           3
-$TWM2::ZombieXPAward[10] = 65;                      //           65
-$TWM2::ZombieXPAward[11] = 10;                      //           10
-$TWM2::ZombieXPAward[12] = 25;                      //           25
-$TWM2::ZombieXPAward[13] = 7;                       //           7
-$TWM2::ZombieXPAward[14] = 20;                      //           20
-$TWM2::ZombieXPAward[15] = 50;                      //           50
+$TWM2::ZombieXPAward[1] = 25;                       //           25
+$TWM2::ZombieXPAward[2] = 100;                      //           100
+$TWM2::ZombieXPAward[3] = 250;                      //           250
+$TWM2::ZombieXPAward[4] = 150;                      //           150
+$TWM2::ZombieXPAward[5] = 175;                      //           175
+$TWM2::ZombieXPAward[6] = 1500;                     //          1500
+$TWM2::ZombieXPAward[9] = 100;                      //           100
+$TWM2::ZombieXPAward[10] = 750;                     //           750
+$TWM2::ZombieXPAward[11] = 250;                     //           250
+$TWM2::ZombieXPAward[12] = 300;                     //           300
+$TWM2::ZombieXPAward[13] = 150;                     //           150
+$TWM2::ZombieXPAward[14] = 250;                     //           250
+$TWM2::ZombieXPAward[15] = 500;                     //           500
 $TWM2::ZombieXPAward[16] = 1000;                    //          1000
-$TWM2::ZombieXPAward[17] = 25;                      //           25
+$TWM2::ZombieXPAward[17] = 250;                     //           250
 $TWM2::ZombieXPAward[18] = 1000;                    //          1000
 
-$TWM2::BossXPAward["Yvex"] = 10000;                 //          10000
-$TWM2::BossXPAward["CnlWindshear"] = 12500;         //          12500
+$TWM2::BossXPAward["Yvex"] = 25000;                 //          25000
+$TWM2::BossXPAward["CnlWindshear"] = 25000;         //          25000
 $TWM2::BossXPAward["CnlWindshearAlly"] = 1000;      //           1000
-$TWM2::BossXPAward["GhostOfLightning"] = 20000;     //          20000
-$TWM2::BossXPAward["Vengenor"] = 25000;             //          25000
-$TWM2::BossXPAward["Trevor"] = 25000;               //          25000
-$TWM2::BossXPAward["LordRog"] = 30000;              //          30000
-$TWM2::BossXPAward["Insignia"] = 35000;             //          35000
-$TWM2::BossXPAward["Stormrider"] = 45000;           //          45000
-$TWM2::BossXPAward["GhostOfFire"] = 65000;          //          65000
-$TWM2::BossXPAward["ShadeLord"] = 70000;            //          70000
-$TWM2::BossXPAward["Vardison3"] = 75000;            //          75000
+$TWM2::BossXPAward["GhostOfLightning"] = 35000;     //          35000
+$TWM2::BossXPAward["Vengenor"] = 50000;             //          50000
+$TWM2::BossXPAward["Trevor"] = 40000;               //          40000
+$TWM2::BossXPAward["LordRog"] = 50000;              //          50000
+$TWM2::BossXPAward["Insignia"] = 65000;             //          65000
+$TWM2::BossXPAward["Stormrider"] = 75000;           //          75000
+$TWM2::BossXPAward["GhostOfFire"] = 100000;         //         100000
+$TWM2::BossXPAward["ShadeLord"] = 100000;           //         100000
+$TWM2::BossXPAward["Vardison3"] = 150000;           //         150000
 
 
 $TWM2::HarbingerSentryName[1] = "H1-CMS Drone";
@@ -220,10 +220,10 @@ $TWM2::HarbingerSentryName[3] = "H3-MSEDS Drone";
 $TWM2::HarbingerSentryName[4] = "HX-SHADOW Drone";
 
                                                     //-----OFFICIAL VALUES-----\\
-$TWM2::HarbingerDroneXPAward[1] = 20;               //            20
-$TWM2::HarbingerDroneXPAward[2] = 50;               //            50
-$TWM2::HarbingerDroneXPAward[3] = 175;              //            175
-$TWM2::HarbingerDroneXPAward[4] = 300;              //            300
+$TWM2::HarbingerDroneXPAward[1] = 500;              //           500
+$TWM2::HarbingerDroneXPAward[2] = 1500;             //           1500
+$TWM2::HarbingerDroneXPAward[3] = 3250;             //           3250
+$TWM2::HarbingerDroneXPAward[4] = 7500;             //           7500
 
 $Host::UseDevelopersList = 1;
 
@@ -245,9 +245,9 @@ $Phantom::CSSEnabled = 1;
 
 //Obviously don't make this some insanely large number, you'r server will never be able
 //to count all the slots in reasonable time (I'd say anything over 150-200 is bad)
-$TWM2::PlayerSaveSlots = 15;     //start with this
-$TWM2::AdminSaveSlots = 5;       //Admins get 5 additional slots
-$TWM2::SuperAdminSaveSlots = 10; //SAs get 10 more than admins
+$TWM2::PlayerSaveSlots = 50;     //start with this
+$TWM2::AdminSaveSlots = 10;       //Admins get 10 additional slots
+$TWM2::SuperAdminSaveSlots = 15; //SAs get 15 more than admins
 
 $TWM::CSSTimeSave = 5;
 //Time in Minutes to re-allow a building save
