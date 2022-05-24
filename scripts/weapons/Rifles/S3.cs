@@ -137,7 +137,7 @@ datablock ShapeBaseImageData(S3RifleImage) {
 	stateName[4] = "Reload";
 	stateTransitionOnNoAmmo[4] = "NoAmmo";
 	stateTransitionOnTimeout[4] = "Ready";
-	stateTimeoutValue[4] = 0.4;
+	stateTimeoutValue[4] = 0.6;
 	stateAllowImageChange[4] = false;
 	stateSequence[4] = "Reload";
 

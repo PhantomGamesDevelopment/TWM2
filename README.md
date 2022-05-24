@@ -213,6 +213,10 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	  * Reduced the melee attack cooldown from 1.5 seconds to 0.8 seconds.
 	  * Holding the Plasmasaber will grant you a protective buff preventing zombie infection from impact damage.
 	    * You can still be infected by taking zombie based projectile damage. 
+    * Gun Blade
+	  * Increased the damage from 0.45 to 0.75
+	  * Increased the headshot multiplier to 10.0!!!
+	  * Alright, the starting melee option. This one was a tricky one to adjust for, but I'm happy with this. The generic melee attack will now deal a hefty punch to targets, but if you land that headshot, you'll get a massive 10.0 multiplier making it the strongest hitting attack you have. Obviously this is a risk/reward play since you'll be right in the face of your target, but I feel like this should be the benefit you get for doing so.
   * Sidearms
     * At the moment, the two statistical outliers in the pool (Crimson Hawk and Pulse Phaser) are a bit too strong, so some minor adjustments will help smooth gameplay and bring the others into play
     * Crimson Hawk Pistol
@@ -251,30 +255,35 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
     * G17 Sniper Rifle
       * This heavy marksman rifle for the longest time has stood in the shadow of the almighty R700, I figured it's time to power it up a bit
 	  * Increased the direct impact damage of the bullet from 0.25 to 0.55
-	  * Reduced the round rechamber time from 1.1 seconds to 0.7 seconds
+	  * Increased the headshot multiplier from 1.5 to 2.25
+	  * Reduced the round rechamber time from 1.1 seconds to 0.9 seconds
     * M1 Sniper Rifle
       * As with the G17, the M1 typically goes into the bin once players unlock the R700, this should still be a viable choice in the arsenal
 	  * Increased the direct impact damage from 0.3 to 0.65
+	  * Increased the headshot multiplier from 1.5 to 2.5
 	  * Reduced the clip reload time from 5 seconds to 4 seconds
-	  * Reduced the round rechamber time from 1.1 seconds to 0.9 seconds
     * R700 
       * The monstrous R700 sniper rifle has for the most part, gone completely unchallenged since the release of the mod, and it's time for it to be reigned in.
-      * Reduced direct impact damage from 0.62 to 0.6
-      * Removed the headshot multiplier on the projectile (The weapon still OHK on headshot, but this will affect high-tier PvE combatants)
+      * Reduced direct impact damage from 0.62 to 0.575
+      * Removed the headshot multiplier on the projectile (The weapon still OHKs on headshot, but this will affect high-tier PvE combatants that cannot be headshot killed)
+	  * Increased the round rechamber time from 1.2 seconds to 1.7 seconds
       * Increased the ammo per clip from 4 to 7
-      * The goal of this adjustment pass is to make the R700 a high-end choice in regards to having moderate damage and the largest magazine size, but allow the other two snipers to be competitive in choice.	  
+	  * Reduced the clip capacity from 6 to 3
+      * The goal of this adjustment pass is to make the R700 a high-end choice in regards to having moderate damage and the largest magazine size, but allow the other two snipers to be competitive in choice. Namely, while the R700 will still be great in PvP engagements, it will no longer be the top sniper rifle in some PvE engagements (Specifically boss fights, where historically players took advantage of the R700's enormous headshot multiplier to knock down bosses from long range).
   * Assault Rifles
     * Assault Rifles have always felt good in TWM2, the strong jack of all trade weapons good for most ranges, while being outperformed in the range of other tools
 	* Only minor tweaking is needed here to help some of the unused tools get up to speed
     * G-41
       * For the most part, this rifle has been collecting dust in the bin of unused weapons due to other tools such as the S3 and R700 in the pool
 	  * This weapon has been in need of a long coming tweak of power to make it a more viable choice
-	    * Increased the bullet impact damage from 0.3 to 0.44
+	    * Increased the bullet impact damage from 0.3 to 0.4
+		* Increased the headshot multiplier from 1.1 to 1.3
 	    * Reduced the round rechamber time from 0.3 seconds to 0.25 seconds
     * M4A1
-      * This jack of all trades weapon currently sits as a power outlier in the assault rifle bin due to the various attachments it has
-	  * Coupled with a high base round damage, this weapon would have turned into the go-to gun without adjustments
-	  * Reduced the damage of the rounds from 0.09 to 0.085
+      * This jack of all trades weapon currently sits for the most part unused in the mod over numerous SMG and other rifle choices.
+	  * I orginally planned on tuning down since the adjustments to the other weapons would have made this a "best in slot" weapon, but I decided against this and to offer it a nice buff regardless.
+	  * Coupled with the numerous weapon attachments (Don't forget to use the F2 menu folks!), this weapon should now be a very competitive choice, but not "oppressively" so, I'll keep an eye on it though.
+	  * Increased the damage of the rounds from 0.085 to 0.14
 	  * Increased the clip reload time from 4 seconds to 6 seconds
     * Pulse Rifle 
       * As it stands right now, the pulse rifle is one of the weakest weapons in the mod, with the only advantage being the fastest and most accurate semi-auto in the pool
@@ -289,7 +298,7 @@ PLEASE NOTE: I've moved all old changelogs into the version_history folder. This
 	    * Reduced the direct impact damage from 0.7 to 0.44
 		* Increased the headshot multiplier from 1.5 to 1.7
 		* Removed the OSK from S3 Rifle Headshots (Sorry!)
-	    * Reduced the round rechamber time from 0.9 seconds to 0.4 seconds
+	    * Reduced the round rechamber time from 0.9 seconds to 0.6 seconds
 	    * Removed the delay between round fire and round rechambering (Shaving another 0.2 seconds off the rechamber time)
 	    * Increased the spread factor from 3:1000 to 5:1000
 	  * The Specialist S3 Rifle (S3S) for Helljump has recieved the same adjustments

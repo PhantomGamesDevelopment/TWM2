@@ -6,11 +6,11 @@ datablock TracerProjectileData(meleehit)
 {
    doDynamicClientHits = true;
 
-   directDamage        = 0.45;
+   directDamage        = 0.75;
    directDamageType    = $DamageType::melee;
    explosion           = ChaingunExplosion;
    splash              = ChaingunSplash;
-   HeadMultiplier = 5.0;
+   HeadMultiplier      = 10.0;
 
    hasDamageRadius     = true;
    indirectDamage      = 0.001;

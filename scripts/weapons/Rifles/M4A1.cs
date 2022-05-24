@@ -1,7 +1,7 @@
 datablock TracerProjectileData(M4A1Bullet) {
 	doDynamicClientHits = true;
 
-	directDamage        = 0.085;
+	directDamage        = 0.14;
 	directDamageType    = $DamageType::M4A1;
 	explosion           = "ChaingunExplosion";
 	splash              = ChaingunSplash;

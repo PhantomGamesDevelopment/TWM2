@@ -1,11 +1,11 @@
 datablock TracerProjectileData(G41Bullet) {
 	doDynamicClientHits = true;
 
-	directDamage        = 0.44;
+	directDamage        = 0.4;
 	directDamageType    = $DamageType::G41;
 	explosion           = "ChaingunExplosion";
 	splash              = ChaingunSplash;
-	HeadMultiplier      = 1.1;
+	HeadMultiplier      = 1.3;
 	LegsMultiplier      = 0.35;
 
 	ImageSource         = "G41RifleImage";

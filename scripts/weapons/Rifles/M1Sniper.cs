@@ -11,7 +11,7 @@ datablock TracerProjectileData(M1Bullet) {
 	directDamageType    = $DamageType::M1;
 	explosion           = "ChaingunExplosion";
 	splash              = ChaingunSplash;
-	HeadMultiplier      = 1.5;
+	HeadMultiplier      = 2.5;
 	LegsMultiplier      = 0.35;
 
 	HeadShotKill        = 1;
@@ -138,7 +138,7 @@ datablock ShapeBaseImageData(M1SniperRifleImage) {
 	stateName[4] = "Reload";
 	stateTransitionOnNoAmmo[4] = "NoAmmo";
 	stateTransitionOnTimeout[4] = "Ready";
-	stateTimeoutValue[4] = 0.9;
+	stateTimeoutValue[4] = 1.1;
 	stateAllowImageChange[4] = false;
 	stateSequence[4] = "Reload";
 

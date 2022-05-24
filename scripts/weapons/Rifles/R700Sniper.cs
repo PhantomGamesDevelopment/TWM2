@@ -47,7 +47,7 @@ datablock LinearFlareProjectileData(R700Bullet)
    projectileShapeName = "weapon_missile_projectile.dts";
    scale               = "1.0 1.0 1.0";
    faceViewer          = true;
-   directDamage        = 0.6;
+   directDamage        = 0.575;
    kickBackStrength    = 6400;
    radiusDamageType    = $DamageType::R700;
 
@@ -125,7 +125,7 @@ datablock ShapeBaseImageData(R700SniperRifleImage) {
 	ShowsClipInHud = 1;
 	ClipReloadTime = 7;
 	ClipReturn = 7;
-	InitialClips = 6;
+	InitialClips = 3;
 	//
 	//Challenges
 	HasChallenges = 1;
@@ -178,7 +178,7 @@ datablock ShapeBaseImageData(R700SniperRifleImage) {
 	stateName[4] = "Reload";
 	stateTransitionOnNoAmmo[4] = "NoAmmo";
 	stateTransitionOnTimeout[4] = "Ready";
-	stateTimeoutValue[4] = 1.2;
+	stateTimeoutValue[4] = 1.7;
 	stateAllowImageChange[4] = false;
 	stateSequence[4] = "Reload";
 

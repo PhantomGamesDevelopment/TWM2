@@ -11,7 +11,7 @@ datablock TracerProjectileData(G17Bullet){
 	directDamageType    = $DamageType::G17;
 	explosion           = "ChaingunExplosion";
 	splash              = ChaingunSplash;
-	HeadMultiplier      = 1.5;
+	HeadMultiplier      = 2.25;
 	LegsMultiplier      = 0.35;
 
 	HeadShotKill        = 1;

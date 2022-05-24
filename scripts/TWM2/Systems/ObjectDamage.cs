@@ -330,12 +330,7 @@ function postObjectDestroyed(%source, %targetObject, %dType, %dLoc) {
 	//PvP Checks
 	else {
 		if(%targetObject.team != %sourceClient.team && !%targetObject.isBoss) {
-			if(isObject(%sourceClient) && %sourceClient.IsActivePerk("Double Down")) {
-				GainExperience(%sourceClient, $TWM2::KillXPGain * 2, "[D-D]Enemy Killed ");
-			}
-			else {
-				GainExperience(%sourceClient, $TWM2::KillXPGain, "Enemy Killed ");
-			}
+			GainExperience(%sourceClient, $TWM2::KillXPGain, "Enemy Killed ");
 			//Zombie Kills Player
 			if(!%targetObject.isZombie && %sourceObject.isZombie) {
 				%sourceClient.TWM2Core.PvPHumanKills++;
